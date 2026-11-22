@@ -1,4 +1,5 @@
 // @vitest-environment jsdom
+import { StrictMode } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { cleanup, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
@@ -236,5 +237,34 @@ describe("UploadDropzone", () => {
     expect(mocks.start).toHaveBeenCalledTimes(1);
     expect(mocks.put).toHaveBeenCalledTimes(2);
     expect(mocks.finalize).toHaveBeenCalledTimes(2);
+  });
+
+  it("still uploads when React runs the effect twice (development): one reservation, one PUT", async () => {
+    const user = userEvent.setup();
+    // Like the real putFile: a transfer asked for with an aborted signal does not happen.
+    mocks.put.mockImplementation(
+      (
+        _url: string,
+        _file: File,
+        _type: string,
+        onProgress: (p: number) => void,
+        signal?: AbortSignal,
+      ) => {
+        if (signal?.aborted) return Promise.resolve(false);
+        onProgress(100);
+        return Promise.resolve(true);
+      },
+    );
+    renderWithIntl(
+      <StrictMode>
+        <UploadDropzone usedBytes={0} />
+      </StrictMode>,
+    );
+    await user.upload(screen.getByLabelText("Pilih berkas"), pdf());
+    expect(await screen.findByText(/Buku guru.pdf tersimpan/)).toBeTruthy();
+    expect(mocks.start).toHaveBeenCalledTimes(1);
+    expect(mocks.put).toHaveBeenCalledTimes(1);
+    expect((mocks.put.mock.calls[0][4] as AbortSignal).aborted).toBe(false);
+    expect(mocks.finalize).toHaveBeenCalledTimes(1);
   });
 });
