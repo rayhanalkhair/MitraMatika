@@ -680,6 +680,15 @@
       "unknownPage": "Source: {title}"
     }
   },
+  "approval": {
+    "title": "Waiting for admin approval",
+    "account": "Account",
+    "body": "Your account has been created and your email is verified. It is waiting for the admin to approve it.",
+    "adminNotified": "The admin was told when your email was verified. You can close this page; once you are approved, sign in again or reload this page.",
+    "recheck": "Check again",
+    "signOut": "Sign out",
+    "privacy": "Privacy notice"
+  },
   "auth": {
     "title": "Sign in",
     "subtitle": "Sign in to continue to MitraMatika.",
@@ -750,6 +759,7 @@
       "resend": "Send the link again",
       "resendIn": "Send again in {seconds, number} s",
       "sent": "If that address is waiting for confirmation, a new link is on its way.",
+      "approvalNote": "A new account needs the admin's approval before it can be used, unless your email is already approved. The admin is told once your email is verified.",
       "backToSignIn": "Back to sign in"
     },
     "forgot": {

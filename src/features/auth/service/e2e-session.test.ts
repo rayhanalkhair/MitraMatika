@@ -1,10 +1,12 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   E2E_COOKIE,
+  E2E_FAKE_PENDING_USER,
   E2E_FAKE_USER,
   fakeSessionUser,
   isFakeAuthEnabled,
 } from "./e2e-session";
+import { resolveAccess } from "./access";
 
 afterEach(() => {
   vi.unstubAllEnvs();
@@ -113,4 +115,47 @@ describe("fakeSessionUser", () => {
 
 it("uses the cookie name the Playwright helper sets", () => {
   expect(E2E_COOKIE).toBe("e2e-user");
+});
+
+describe("E2E_FAKE_PENDING_USER", () => {
+  it("is a second fixed identity with its own id", () => {
+    expect(E2E_FAKE_PENDING_USER).toEqual({
+      id: "00000000-0000-4000-8000-000000000002",
+      email: "pending@example.test",
+    });
+    expect(E2E_FAKE_PENDING_USER.id).not.toBe(E2E_FAKE_USER.id);
+  });
+
+  it("is accepted by its exact cookie value only, and only when the seam is on", () => {
+    enable();
+    const user = fakeSessionUser("pending@example.test");
+    expect(user).toMatchObject({
+      id: E2E_FAKE_PENDING_USER.id,
+      email: E2E_FAKE_PENDING_USER.email,
+    });
+    expect(user?.sessionCreatedAt).toBeInstanceOf(Date);
+    for (const value of [
+      "PENDING@example.test",
+      " pending@example.test",
+      "pending@example.test ",
+      "pending@example.test\u0000",
+      "other@example.test",
+    ]) {
+      expect(fakeSessionUser(value), JSON.stringify(value)).toBeNull();
+    }
+    vi.stubEnv("E2E_FAKE_AUTH", "");
+    expect(fakeSessionUser("pending@example.test")).toBeNull();
+    vi.stubEnv("E2E_FAKE_AUTH", "1");
+    vi.stubEnv("NODE_ENV", "production");
+    expect(fakeSessionUser("pending@example.test")).toBeNull();
+  });
+
+  it("is never approved by the seam itself: it carries no approval, the environment decides", () => {
+    enable();
+    vi.stubEnv("ADMIN_EMAIL", "teacher@example.test");
+    const user = fakeSessionUser("pending@example.test");
+    expect(resolveAccess(user).status).toBe("pending");
+    expect(resolveAccess(fakeSessionUser("teacher@example.test")).status).toBe("allowed");
+    expect(Object.keys(user ?? {})).not.toContain("status");
+  });
 });

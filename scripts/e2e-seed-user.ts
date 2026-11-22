@@ -1,18 +1,18 @@
 import postgres from "postgres";
 import { assertLocalE2eDatabase } from "./e2e-guard";
-import { seedFakeUser } from "./e2e-user";
+import { seedFakePendingUser, seedFakeUser } from "./e2e-user";
 
-// CI-only: seeds the fake e2e teacher. Refuses anything but a local database with E2E_CI=1.
+// CI-only: seeds the fake e2e teacher and the pending account. Refuses anything but a local database with E2E_CI=1.
 async function main(): Promise<void> {
   assertLocalE2eDatabase(process.env);
   const databaseUrl = process.env.DATABASE_URL;
   if (!databaseUrl) throw new Error("DATABASE_URL is not set");
   const client = postgres(databaseUrl, { max: 1 });
   try {
-    const id = await seedFakeUser((query, params) =>
-      client.unsafe(query, params as postgres.ParameterOrJSON<never>[]),
-    );
-    console.log(`Pengguna e2e siap: ${id}`);
+    const run = (query: string, params: unknown[]) =>
+      client.unsafe(query, params as postgres.ParameterOrJSON<never>[]);
+    console.log(`Pengguna e2e siap: ${await seedFakeUser(run)}`);
+    console.log(`Pengguna e2e menunggu siap: ${await seedFakePendingUser(run)}`);
   } finally {
     await client.end();
   }

@@ -680,6 +680,15 @@
       "unknownPage": "Sumber: {title}"
     }
   },
+  "approval": {
+    "title": "Menunggu persetujuan admin",
+    "account": "Akun",
+    "body": "Akun kamu sudah dibuat, email sudah terverifikasi, dan menunggu persetujuan admin.",
+    "adminNotified": "Admin sudah diberi tahu saat emailmu terverifikasi. Kamu bisa menutup halaman ini; setelah disetujui, masuk lagi atau muat ulang halaman ini.",
+    "recheck": "Cek lagi",
+    "signOut": "Keluar",
+    "privacy": "Pemberitahuan privasi"
+  },
   "auth": {
     "title": "Masuk",
     "subtitle": "Masuk untuk melanjutkan ke MitraMatika.",
@@ -750,6 +759,7 @@
       "resend": "Kirim ulang tautan",
       "resendIn": "Kirim ulang dalam {seconds, number} detik",
       "sent": "Jika alamat itu menunggu konfirmasi, tautan baru sudah dikirim.",
+      "approvalNote": "Akun baru perlu disetujui admin sebelum bisa dipakai, kecuali emailmu sudah disetujui. Admin diberi tahu setelah emailmu terverifikasi.",
       "backToSignIn": "Kembali ke halaman masuk"
     },
     "forgot": {

@@ -5,9 +5,12 @@ import { sql } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/pglite";
 import { migrate } from "drizzle-orm/pglite/migrator";
 import { describe, expect, it } from "vitest";
-import { E2E_FAKE_USER } from "../src/features/auth/service/e2e-session";
+import {
+  E2E_FAKE_PENDING_USER,
+  E2E_FAKE_USER,
+} from "../src/features/auth/service/e2e-session";
 import { runAsUser } from "../src/lib/db/client";
-import { seedFakeUser } from "./e2e-user";
+import { seedFakePendingUser, seedFakeUser } from "./e2e-user";
 
 // Mirrors the CI e2e job: a stock Postgres with nothing pre-created is migrated with the real
 // migrations, then the fake teacher is seeded.
@@ -23,6 +26,15 @@ describe("e2e database setup", () => {
     const id = await seedFakeUser(run);
     await seedFakeUser(run); // ON CONFLICT DO NOTHING
     expect(id).toBe(E2E_FAKE_USER.id);
+    expect(await seedFakePendingUser(run)).toBe(E2E_FAKE_PENDING_USER.id);
+    await seedFakePendingUser(run);
+    const users = await client.query<{ email: string }>(
+      'select email from "user" order by email',
+    );
+    expect(users.rows.map((row) => row.email)).toEqual([
+      E2E_FAKE_PENDING_USER.email,
+      E2E_FAKE_USER.email,
+    ]);
 
     const uid = await runAsUser(db, id, async (tx) => {
       const r = await tx.execute(sql`select auth.uid()::text as uid`);

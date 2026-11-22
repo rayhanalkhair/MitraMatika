@@ -60,6 +60,10 @@ export const PUBLIC_ALLOWLIST: Readonly<Record<string, string>> = {
 // The only entries that may use the signed-in guards alone: what a pending account may do
 // (ADR-0022, decision 5). Keys are repo-relative paths, or `path#exportedFunction`.
 export const PENDING_ALLOWED: Readonly<Record<string, string>> = {
+  "src/app/(pending)/layout.tsx":
+    "the pending group's layout: only a signed-in account (pending or approved) may be here",
+  "src/app/(pending)/waiting-approval/page.tsx":
+    "/waiting-approval: what a pending account sees; an approved one is sent to /home",
   "src/features/auth/actions/actions.ts#signOutAction":
     "a pending account must be able to sign out",
   "src/features/settings/actions/delete-account.ts#deleteAccountAction":
@@ -247,11 +251,40 @@ describe("route guard inventory (real tree)", () => {
 
   it("lists exactly the signed-in-only entries that exist today, each with a reason", () => {
     expect(Object.keys(PENDING_ALLOWED).sort()).toEqual([
+      "src/app/(pending)/layout.tsx",
+      "src/app/(pending)/waiting-approval/page.tsx",
       "src/features/auth/actions/actions.ts#signOutAction",
       "src/features/settings/actions/delete-account.ts#deleteAccountAction",
     ]);
     for (const reason of Object.values(PENDING_ALLOWED)) {
       expect(reason.trim()).not.toBe("");
+    }
+  });
+
+  it("uses the signed-in guards in exactly those entries and nowhere else", () => {
+    const users = Object.entries(readTree())
+      .flatMap(([path, source]) => {
+        const keys = isServerActionFile(source)
+          ? actionChunks(source)
+              .filter((chunk) => SIGNED_IN_CALL.test(chunk.body))
+              .map((chunk) => `${path}#${chunk.name}`)
+          : [];
+        return isAppEntry(path) && callsSignedIn(source) ? [path, ...keys] : keys;
+      })
+      .sort();
+    expect(users).toEqual(Object.keys(PENDING_ALLOWED).sort());
+  });
+
+  it("keeps the (shell) pages behind the approved guard through the shell layout", () => {
+    const tree = readTree();
+    expect(callsGuard(tree[SHELL_LAYOUT] ?? "")).toBe(true);
+    expect(callsSignedIn(tree[SHELL_LAYOUT] ?? "")).toBe(false);
+    const shellPages = Object.keys(tree).filter(
+      (path) => path.startsWith(SHELL_DIR) && path.endsWith("/page.tsx"),
+    );
+    expect(shellPages.length).toBeGreaterThan(10);
+    for (const path of shellPages) {
+      expect(callsSignedIn(tree[path]), path).toBe(false);
     }
   });
 

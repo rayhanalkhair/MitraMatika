@@ -82,6 +82,9 @@ jobs:
       E2E_CI: "1"
       E2E_FAKE_AI: "1"
       E2E_FAKE_AUTH: "1"
+      # The access gate (ADR-0022): the fake teacher is approved, pending@example.test is not.
+      ALLOWED_EMAILS: teacher@example.test
+      ADMIN_EMAIL: admin@example.test
       DATABASE_URL: postgres://postgres:postgres@localhost:5432/mitramatika
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
