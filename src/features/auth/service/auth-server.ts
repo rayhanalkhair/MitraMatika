@@ -15,6 +15,7 @@ import {
   RESET_LINK_EXPIRES_IN_SECONDS,
   VERIFICATION_LINK_EXPIRES_IN_SECONDS,
 } from "./auth-emails";
+import { createAdminNotifier } from "./admin-notice";
 import { runAfterResponse } from "./background";
 import { CLIENT_IP_HEADER } from "./client-ip";
 import { prepareGoogleLink } from "./link-guard";
@@ -397,6 +398,55 @@ export function createSignUpProfileWriter(
   };
 }
 
+const VERIFY_EMAIL_PATH = "/verify-email";
+
+/**
+ * The places an account becomes verified, each handing the user id to `schedule` (the admin
+ * notice, admin-notice.ts, which claims it once and only for a pending account, so scheduling
+ * twice is harmless). Better Auth 1.7.25 calls `emailVerification.afterEmailVerification` at
+ * runtime but its types do not expose it, so the password path uses `databaseHooks.user.update.after`
+ * on /verify-email (that route is the only place the library verifies an email). A Google user is
+ * created verified (user.create.after, any path but the sign-up), and a Google link to an existing
+ * user may have just verified it in the pre-hijack guard (account.create.after, which runs after
+ * the transaction commits). The hooks never throw and never wait: `schedule` is background work.
+ */
+export function createVerifiedAccountTriggers(schedule: (userId: string) => void) {
+  const safely = (userId: string) => {
+    try {
+      schedule(userId);
+    } catch (error) {
+      logger.error(
+        { module: "auth", errorName: error instanceof Error ? error.name : "unknown" },
+        "auth: the admin notice could not be scheduled",
+      );
+    }
+  };
+  return {
+    userCreated: (
+      created: { id: string; emailVerified?: unknown },
+      context: HookContext,
+    ): Promise<void> => {
+      if (context?.path !== SIGN_UP_PATH && created.emailVerified === true) {
+        safely(created.id);
+      }
+      return Promise.resolve();
+    },
+    userUpdated: (
+      updated: { id: string; emailVerified?: unknown },
+      context: HookContext,
+    ): Promise<void> => {
+      if (context?.path === VERIFY_EMAIL_PATH && updated.emailVerified === true) {
+        safely(updated.id);
+      }
+      return Promise.resolve();
+    },
+    accountCreated: (created: { providerId: string; userId: string }): Promise<void> => {
+      if (created.providerId === "google") safely(created.userId);
+      return Promise.resolve();
+    },
+  };
+}
+
 // databaseHooks.session.create.before: no session starts for a user whose email is not verified
 // (or who cannot be found), whatever the sign-in method.
 export function createSessionCreateGuard(
@@ -534,6 +584,14 @@ export function createAuth<
     return found?.emailVerified ?? null;
   };
   const runInBackground = deps.runInBackground ?? runAfterResponse;
+  const adminNotifier = createAdminNotifier({
+    db: deps.db,
+    getSender: deps.getSender ?? getEmailSender,
+    now: deps.now,
+  });
+  const verifiedTriggers = createVerifiedAccountTriggers((userId) => {
+    runInBackground(adminNotifier.notify(userId));
+  });
   const signInLimiter = createSignInFailureLimiter(deps.db, deps.secret, deps.now);
   const emails = createAuthEmails({
     db: deps.db,
@@ -545,6 +603,15 @@ export function createAuth<
     allowFromIp: (path, ip) =>
       createIpDailyLimiter(deps.db, deps.secret, deps.now).allow(path, ip),
   });
+
+  const writeSignUpProfile = createSignUpProfileWriter((profile) =>
+    insertProfile(deps.db, {
+      userId: profile.userId,
+      email: profile.email,
+      displayName: profile.name,
+      schoolName: profile.schoolName,
+    }),
+  );
 
   const auth = betterAuth({
     appName: "MitraMatika",
@@ -670,14 +737,13 @@ export function createAuth<
       user: {
         create: {
           before: createUserCreateGuard(),
-          after: createSignUpProfileWriter((profile) =>
-            insertProfile(deps.db, {
-              userId: profile.userId,
-              email: profile.email,
-              displayName: profile.name,
-              schoolName: profile.schoolName,
-            }),
-          ),
+          after: async (created, context) => {
+            await writeSignUpProfile(created, context);
+            await verifiedTriggers.userCreated(created, context);
+          },
+        },
+        update: {
+          after: (updated, context) => verifiedTriggers.userUpdated(updated, context),
         },
       },
       account: {
@@ -685,6 +751,7 @@ export function createAuth<
           before: createGoogleLinkGuard(findEmailVerified, (userId) =>
             prepareGoogleLink(deps.db, { userId }),
           ),
+          after: (created) => verifiedTriggers.accountCreated(created),
         },
       },
       session: { create: { before: createSessionCreateGuard(findEmailVerified) } },

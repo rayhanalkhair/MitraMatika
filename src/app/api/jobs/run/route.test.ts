@@ -107,6 +107,7 @@ describe("/api/jobs/run", () => {
     expect(runTickMock.mock.calls[0][0].housekeeping.map((step) => step.name)).toEqual([
       "settleRegenerations",
       "pruneAccounts",
+      "sendAdminNotices",
       "backfillSearchText",
       "purgeTrash",
       "purgeExports",

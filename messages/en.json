@@ -783,7 +783,11 @@
       "resetSubject": "Reset your MitraMatika password",
       "resetBody": "Hello,\n\nOpen this link to choose a new password for your MitraMatika account:\n\n{url}\n\nThe link is valid for {minutes, number, ::group-off} minutes and works only once. If you did not ask for it, ignore this email; your password stays the same.",
       "accountExistsSubject": "You already have a MitraMatika account",
-      "accountExistsBody": "Hello,\n\nSomeone tried to sign up for MitraMatika with this email address, but an account already exists. No new account was created.\n\nSign in with Google or your password at {signInUrl}\n\nIf you forgot your password, choose a new one at {resetUrl}\n\nIf this was not you, ignore this email. Your account is safe."
+      "accountExistsBody": "Hello,\n\nSomeone tried to sign up for MitraMatika with this email address, but an account already exists. No new account was created.\n\nSign in with Google or your password at {signInUrl}\n\nIf you forgot your password, choose a new one at {resetUrl}\n\nIf this was not you, ignore this email. Your account is safe.",
+      "adminNoticeSubject": "New account waiting for approval on MitraMatika",
+      "adminNoticeBody": "Hello,\n\nA new account with a verified email is waiting for approval:\n\nEmail: {email}\nName: {name}\nSchool: {school}\nSigned up: {time}\n\nTo approve it, add this email to ALLOWED_EMAILS in the Vercel project settings (environment variables, Production), then redeploy. The account works from its next request.",
+      "adminDigestSubject": "Summary of new accounts waiting for approval on MitraMatika",
+      "adminDigestBody": "Hello,\n\n{count, number} accounts with a verified email are waiting for approval (email | name | school | signed up):\n\n{list}\n\nTo approve one, add its email to ALLOWED_EMAILS in the Vercel project settings (environment variables, Production), then redeploy."
     }
   },
   "settings": {

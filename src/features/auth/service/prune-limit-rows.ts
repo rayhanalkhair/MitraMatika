@@ -11,6 +11,7 @@ import { verification } from "@/lib/db/schema";
 export const LIMIT_ROW_PREFIXES = [
   "email-sent:",
   "auth-email-day:",
+  "admin-notice-day:",
   "sign-up-ip:",
   "reset-request-ip:",
   "verification-resend-ip:",

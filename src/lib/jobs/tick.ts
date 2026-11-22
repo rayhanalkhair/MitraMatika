@@ -8,8 +8,8 @@
 // sweeps) takes no new batch or row after its own cap or the cutoff, whichever comes first
 // (stepBudgetMs). Only one bounded store call may still be in flight past the cutoff (at most 45 s,
 // the trash purge's), so the runner gets at least about 240 - 120 - 45 = 75 s, usually about
-// 120 s. The two uncapped database steps (settling regenerations, 200 rows; pruning accounts, 500
-// users) are single bounded statements that run first. A step that throws is logged and the next
+// 120 s. The uncapped database steps (settling regenerations, 200 rows; pruning accounts, 500
+// users; the admin digest, one email for at most 25 accounts) are single bounded statements that run first. A step that throws is logged and the next
 // one runs; a runner that throws is logged by name and recorded. With less than MIN_RUNNER_MS
 // left, no job runs this time.
 import "server-only";
@@ -32,6 +32,7 @@ export const MIN_STEP_MS = 5_000;
 export type StepName =
   | "settleRegenerations"
   | "pruneAccounts"
+  | "sendAdminNotices"
   | "backfillSearchText"
   | "purgeTrash"
   | "purgeExports"

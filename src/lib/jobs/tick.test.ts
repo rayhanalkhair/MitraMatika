@@ -28,6 +28,7 @@ const SUMMARY: RunSummary = {
 const NAMES: StepName[] = [
   "settleRegenerations",
   "pruneAccounts",
+  "sendAdminNotices",
   "backfillSearchText",
   "purgeTrash",
   "purgeExports",
@@ -70,14 +71,14 @@ describe("runTick", () => {
   });
 
   it("all fast steps run in order and the runner gets about 240 s", async () => {
-    const t = setup([100, 100, 100, 100, 100, 100, 100]);
+    const t = setup([100, 100, 100, 100, 100, 100, 100, 100]);
     const result = await runTick(t);
-    expect(t.order).toEqual([...NAMES, `jobs:${String(TICK_BUDGET_MS - 700)}`]);
+    expect(t.order).toEqual([...NAMES, `jobs:${String(TICK_BUDGET_MS - 800)}`]);
     expect(result.steps).toEqual(
       NAMES.map((name) => ({ name, outcome: "ran", ms: 100 })),
     );
     expect(result.jobs).toBe(SUMMARY);
-    expect(result.budgetMs).toBe(TICK_BUDGET_MS - 700);
+    expect(result.budgetMs).toBe(TICK_BUDGET_MS - 800);
   });
 
   it("counts the time since the request, not since the first step", async () => {
@@ -97,13 +98,13 @@ describe("runTick", () => {
       `jobs:${String(TICK_BUDGET_MS - HOUSEKEEPING_CUTOFF_MS)}`,
     ]);
     expect(result.steps[2]).toEqual({
-      name: "backfillSearchText",
+      name: "sendAdminNotices",
       outcome: "skipped",
       ms: 0,
       backlogLeft: true,
     });
     expect(warn).toHaveBeenCalledWith(
-      { module: "jobs", skipped: ["backfillSearchText"] },
+      { module: "jobs", skipped: ["sendAdminNotices"] },
       "jobs: housekeeping steps skipped after the cutoff; they run on the next daily run",
     );
   });
@@ -133,10 +134,10 @@ describe("runTick", () => {
     vi.spyOn(logger, "warn").mockImplementation(() => undefined);
     expect(MIN_STEP_MS).toBe(5_000);
     // The trash purge would start at 118 s: it is skipped, so it cannot claim the day.
-    const t = setup([5_000, 5_000, 108_000, 1_000]);
+    const t = setup([5_000, 5_000, 1_000, 107_000, 1_000]);
     const result = await runTick(t);
     expect(t.order).not.toContain("purgeTrash");
-    expect(result.steps[3]).toEqual({
+    expect(result.steps[4]).toEqual({
       name: "purgeTrash",
       outcome: "skipped",
       ms: 0,
@@ -150,14 +151,15 @@ describe("runTick", () => {
     expect(result.steps.map((s) => s.outcome)).toEqual(["ran", "ran"]);
   });
 
-  it("worst case (5, 5, 5, 105, 45, 32, 25 s) runs the first four, skips the rest and gives the runner at least 90 s", async () => {
+  it("worst case (5, 5, 1, 4, 105, 45, 32, 25 s) runs the first five, skips the rest and gives the runner at least 90 s", async () => {
     vi.spyOn(logger, "warn").mockImplementation(() => undefined);
-    const t = setup([5_000, 5_000, 5_000, 105_000, 45_000, 32_000, 25_000]);
+    const t = setup([5_000, 5_000, 1_000, 4_000, 105_000, 45_000, 32_000, 25_000]);
     const result = await runTick(t);
     expect(result.steps.map((s) => [s.name, s.outcome, s.ms])).toEqual([
       ["settleRegenerations", "ran", 5_000],
       ["pruneAccounts", "ran", 5_000],
-      ["backfillSearchText", "ran", 5_000],
+      ["sendAdminNotices", "ran", 1_000],
+      ["backfillSearchText", "ran", 4_000],
       ["purgeTrash", "ran", 105_000],
       ["purgeExports", "skipped", 0],
       ["sweepMaterials", "skipped", 0],
@@ -187,6 +189,23 @@ describe("runTick", () => {
       module: "jobs",
       step: "settleRegenerations",
     });
+  });
+
+  it("a throwing admin digest step is reported failed and the steps after it still run", async () => {
+    vi.spyOn(logger, "error").mockImplementation(() => undefined);
+    const t = setup([1_000, 1_000, 1_000, 1_000]);
+    const housekeeping = t.housekeeping.map((step) =>
+      step.name === "sendAdminNotices"
+        ? { ...step, run: () => Promise.reject(new Error("boom")) }
+        : step,
+    );
+    const result = await runTick({ ...t, housekeeping });
+    expect(result.steps.map((s) => [s.name, s.outcome])).toEqual([
+      ["settleRegenerations", "ran"],
+      ["pruneAccounts", "ran"],
+      ["sendAdminNotices", "failed"],
+      ["backfillSearchText", "ran"],
+    ]);
   });
 
   it("a step that reports its own failure is recorded failed", async () => {

@@ -48,6 +48,7 @@ beforeEach(() => {
   vi.spyOn(logger, "warn").mockImplementation(() => undefined);
 });
 afterEach(() => {
+  vi.unstubAllEnvs();
   vi.useRealTimers();
   vi.restoreAllMocks();
 });
@@ -941,4 +942,64 @@ describe("withResponseFloors", () => {
     }
     expect(sleep).not.toHaveBeenCalled();
   });
+});
+
+describe("the admin notice trigger (ADR-0022, hook: databaseHooks.user.update.after on /verify-email)", () => {
+  const ADMIN = "admin@example.test";
+  const toAdmin = (fake: FakeEmailSender) =>
+    fake.messages.filter((m) => m.subject.startsWith("Akun baru menunggu"));
+
+  it(
+    "mere sign-up sends no notice; opening the verification link sends exactly one, even twice",
+    async () => {
+      vi.stubEnv("ADMIN_EMAIL", ADMIN);
+      const { fake, post, get } = await harness();
+      await post(
+        "/sign-up/email",
+        signUpBody("guru@example.test", { schoolName: "SMP 9" }),
+      );
+      expect(toAdmin(fake)).toEqual([]);
+      const link = linkFrom(fake);
+      expect(sessionCookie(await get(link))).toBe(true);
+      expect(toAdmin(fake)).toHaveLength(1);
+      expect(toAdmin(fake)[0].subject).toBe(
+        "Akun baru menunggu persetujuan di MitraMatika",
+      );
+      expect(toAdmin(fake)[0].text).toContain("guru@example.test");
+      expect(toAdmin(fake)[0].text).toContain("SMP 9");
+      await get(link);
+      expect(toAdmin(fake)).toHaveLength(1);
+    },
+    DB_TEST_TIMEOUT,
+  );
+
+  it(
+    "an account whose address is the admin's own (approved) is verified without a notice",
+    async () => {
+      vi.stubEnv("ADMIN_EMAIL", ADMIN);
+      const { t, fake, post, get } = await harness();
+      await post("/sign-up/email", signUpBody(ADMIN));
+      await get(linkFrom(fake));
+      expect(toAdmin(fake)).toEqual([]);
+      const [user] = await usersWithEmail(t, ADMIN);
+      const [profile] = await t.db
+        .select()
+        .from(profiles)
+        .where(eq(profiles.id, user.id));
+      expect(profile.adminNotifiedAt).toBeInstanceOf(Date);
+    },
+    DB_TEST_TIMEOUT,
+  );
+
+  it(
+    "without ADMIN_EMAIL nothing is sent and the response is unchanged",
+    async () => {
+      const { fake, post, get } = await harness();
+      await post("/sign-up/email", signUpBody("guru@example.test"));
+      const response = await get(linkFrom(fake));
+      expect(response.status).toBe(302);
+      expect(fake.messages).toHaveLength(1);
+    },
+    DB_TEST_TIMEOUT,
+  );
 });

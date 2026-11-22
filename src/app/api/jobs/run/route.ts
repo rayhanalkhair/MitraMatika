@@ -1,5 +1,5 @@
 import { after } from "next/server";
-import { pruneUnverifiedAccounts } from "@/features/auth";
+import { pruneUnverifiedAccounts, sendPendingDigest } from "@/features/auth";
 import { backfillBankSearchText } from "@/features/bank";
 import { settleStrandedRegenerations } from "@/features/generation";
 import { purgeExports } from "@/features/export";
@@ -56,7 +56,8 @@ function handle(request: Request, trigger: RunTrigger): Promise<Response> {
       },
       // Cheap database-only steps first, then the storage ones (decision 11): settle approvals
       // left by regenerations that died (R19); delete unverified sign-ups older than 7 days and
-      // expired limit rows; fill the search text of questions that predate it; once per Jakarta
+      // expired limit rows; email the admin one digest of the verified accounts no single notice
+      // went out for (ADR-0022); fill the search text of questions that predate it; once per Jakarta
       // day purge the expired trash (at most 60 s of new rows plus one 45 s store call); delete
       // the exported files whose 7 days are over (30 s + 15 s); fail materials whose ingestion
       // died and sweep expired upload reservations (20 s + 10 s); delete solver photos 7 days
@@ -69,6 +70,7 @@ function handle(request: Request, trigger: RunTrigger): Promise<Response> {
           housekeeping: [
             { name: "settleRegenerations", run: () => settleStrandedRegenerations() },
             { name: "pruneAccounts", run: () => pruneUnverifiedAccounts() },
+            { name: "sendAdminNotices", run: () => sendPendingDigest() },
             // The capped steps get the time left before the cutoff as their budget ceiling.
             { name: "backfillSearchText", run: (left) => backfillBankSearchText(left) },
             { name: "purgeTrash", run: (left) => purgeTrash(new Date(), left) },

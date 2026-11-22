@@ -783,7 +783,11 @@
       "resetSubject": "Atur ulang kata sandi MitraMatika",
       "resetBody": "Halo,\n\nBuka tautan berikut untuk membuat kata sandi baru akun MitraMatika kamu:\n\n{url}\n\nTautan ini berlaku {minutes, number, ::group-off} menit dan hanya bisa dipakai sekali. Jika kamu tidak memintanya, abaikan email ini; kata sandimu tidak berubah.",
       "accountExistsSubject": "Akun MitraMatika kamu sudah ada",
-      "accountExistsBody": "Halo,\n\nAda yang mencoba mendaftar di MitraMatika dengan alamat email ini, padahal akunnya sudah ada. Tidak ada akun baru yang dibuat.\n\nMasuk dengan Google atau kata sandi kamu di {signInUrl}\n\nJika lupa kata sandi, buat yang baru di {resetUrl}\n\nJika bukan kamu yang mencoba mendaftar, abaikan email ini. Akunmu tetap aman."
+      "accountExistsBody": "Halo,\n\nAda yang mencoba mendaftar di MitraMatika dengan alamat email ini, padahal akunnya sudah ada. Tidak ada akun baru yang dibuat.\n\nMasuk dengan Google atau kata sandi kamu di {signInUrl}\n\nJika lupa kata sandi, buat yang baru di {resetUrl}\n\nJika bukan kamu yang mencoba mendaftar, abaikan email ini. Akunmu tetap aman.",
+      "adminNoticeSubject": "Akun baru menunggu persetujuan di MitraMatika",
+      "adminNoticeBody": "Halo,\n\nAda akun baru dengan email yang sudah terverifikasi dan menunggu persetujuan:\n\nEmail: {email}\nNama: {name}\nSekolah: {school}\nDaftar: {time}\n\nUntuk menyetujui, tambahkan email ini ke ALLOWED_EMAILS di Vercel (Settings, Environment Variables, Production), lalu redeploy. Setelah itu akun bisa dipakai pada permintaan berikutnya.",
+      "adminDigestSubject": "Ringkasan akun baru yang menunggu persetujuan di MitraMatika",
+      "adminDigestBody": "Halo,\n\n{count, number} akun dengan email yang sudah terverifikasi menunggu persetujuan (email | nama | sekolah | daftar):\n\n{list}\n\nUntuk menyetujui, tambahkan email ke ALLOWED_EMAILS di Vercel (Settings, Environment Variables, Production), lalu redeploy."
     }
   },
   "settings": {

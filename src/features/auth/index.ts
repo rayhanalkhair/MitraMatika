@@ -4,6 +4,7 @@ export type { AuthPort, AuthPortGetter, SessionUser } from "./service/auth-port"
 export { auditSignIn } from "./service/audit";
 export { getAuth } from "./service/auth-server";
 export { pruneUnverifiedAccounts } from "./service/maintenance";
+export { sendPendingDigest } from "./service/admin-notice";
 export { isOwnerApproved } from "./service/owner-approval";
 export { CLIENT_IP_HEADER, requestWithClientIp } from "./service/client-ip";
 export { resolvePostSignInRedirect, signOutUser } from "./service/core";

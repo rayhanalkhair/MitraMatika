@@ -2,6 +2,7 @@ import { eq } from "drizzle-orm";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   account as accountTable,
+  profiles,
   session as sessionTable,
   user as userTable,
 } from "@/lib/db/schema";
@@ -37,6 +38,7 @@ beforeEach(() => {
   vi.spyOn(logger, "warn").mockImplementation(() => undefined);
 });
 afterEach(() => {
+  vi.unstubAllEnvs();
   vi.unstubAllGlobals();
   vi.restoreAllMocks();
 });
@@ -727,6 +729,63 @@ describe("Google sign-in and account linking (decision 5)", () => {
       expect(await providersOf(h.t, user.id)).toEqual(["credential", "google"]);
       expect(await allUsersExceptSeed(h.t)).toHaveLength(1);
       expect((await signIn(h, "pak@example.test", NEW_PASSWORD)).status).toBe(200);
+    },
+    DB_TEST_TIMEOUT,
+  );
+});
+
+describe("the admin notice trigger for Google accounts (ADR-0022)", () => {
+  const ADMIN = "admin@example.test";
+  const toAdmin = (fake: FakeEmailSender) =>
+    fake.messages.filter((m) => m.subject.startsWith("Akun baru menunggu"));
+
+  it(
+    "a new Google user (verified at creation) schedules exactly one notice",
+    async () => {
+      vi.stubEnv("ADMIN_EMAIL", ADMIN);
+      const h = await harness();
+      await h.google({ sub: "sub-n", email: "baru@example.test", email_verified: true });
+      expect(toAdmin(h.fake)).toHaveLength(1);
+      expect(toAdmin(h.fake)[0].text).toContain("baru@example.test");
+      // Signing in again later sends nothing more.
+      await h.google({ sub: "sub-n", email: "baru@example.test", email_verified: true });
+      expect(toAdmin(h.fake)).toHaveLength(1);
+    },
+    DB_TEST_TIMEOUT,
+  );
+
+  it(
+    "the link guard verifying a squatted, unverified account schedules one notice",
+    async () => {
+      vi.stubEnv("ADMIN_EMAIL", ADMIN);
+      const h = await harness();
+      const userId = await unverifiedPasswordUser(h, VICTIM, ATTACKER_PASSWORD);
+      expect(toAdmin(h.fake)).toEqual([]);
+      await h.google({ sub: "sub-victim", email: VICTIM, email_verified: true });
+      expect(toAdmin(h.fake)).toHaveLength(1);
+      expect(toAdmin(h.fake)[0].text).toContain(VICTIM);
+      const [profile] = await h.t.db
+        .select()
+        .from(profiles)
+        .where(eq(profiles.id, userId));
+      expect(profile.adminNotifiedAt).toBeInstanceOf(Date);
+    },
+    DB_TEST_TIMEOUT,
+  );
+
+  it(
+    "linking Google to an already verified password account sends nothing new once it was announced",
+    async () => {
+      vi.stubEnv("ADMIN_EMAIL", ADMIN);
+      const h = await harness();
+      await verifiedPasswordUser(h, "guru@example.test");
+      expect(toAdmin(h.fake)).toHaveLength(1);
+      await h.google({
+        sub: "sub-guru",
+        email: "guru@example.test",
+        email_verified: true,
+      });
+      expect(toAdmin(h.fake)).toHaveLength(1);
     },
     DB_TEST_TIMEOUT,
   );
