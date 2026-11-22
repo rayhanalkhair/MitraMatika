@@ -5,9 +5,15 @@ import { describe, expect, it } from "vitest";
 // Route inventory: every page, layout, route handler and Server Action under src must reach the
 // authoritative guard (requireAllowedUser() or authorizeAction() from the auth feature), or sit
 // on the explicit allowlist below with a reason. A new file with neither fails this test.
+// "Guard" means signed in AND approved. The signed-in pair (requireSignedInUser(),
+// authorizeSignedIn()) also lets a pending account through, so it counts only for entries on
+// PENDING_ALLOWED. Server Actions may not read the session themselves: only the guard decides.
 
 // A call, or the guard handed to a handler as a value (`authorize: authorizeAction`).
 const GUARD_CALL = /\b(?:requireAllowedUser|authorizeAction)\b/;
+const SIGNED_IN_CALL = /\b(?:requireSignedInUser|authorizeSignedIn)\b/;
+// A direct session read (calls; the port handed over as a value for sign-out is not one).
+const SESSION_READ = /\bgetSessionUser\b|\bauth\.api\.getSession\b|\bgetAuthPort\s*\(/;
 const SHELL_DIR = "src/app/(shell)/";
 const SHELL_LAYOUT = "src/app/(shell)/layout.tsx";
 
@@ -51,6 +57,15 @@ export const PUBLIC_ALLOWLIST: Readonly<Record<string, string>> = {
     "writes only the locale cookie, also used on the public sign-in page",
 };
 
+// The only entries that may use the signed-in guards alone: what a pending account may do
+// (ADR-0022, decision 5). Keys are repo-relative paths, or `path#exportedFunction`.
+export const PENDING_ALLOWED: Readonly<Record<string, string>> = {
+  "src/features/auth/actions/actions.ts#signOutAction":
+    "a pending account must be able to sign out",
+  "src/features/settings/actions/delete-account.ts#deleteAccountAction":
+    "a pending account must be able to delete itself (same credential rules as Settings)",
+};
+
 // Comments and import statements never count as using the guard.
 function stripComments(source: string): string {
   return source
@@ -60,6 +75,8 @@ function stripComments(source: string): string {
 }
 
 const callsGuard = (source: string) => GUARD_CALL.test(stripComments(source));
+const callsSignedIn = (source: string) => SIGNED_IN_CALL.test(stripComments(source));
+const isAuthFeature = (path: string) => path.startsWith("src/features/auth/");
 
 const isAppEntry = (path: string) =>
   /^src\/app\/(?:.*\/)?(?:page\.tsx|layout\.tsx|route\.ts)$/.test(path);
@@ -85,12 +102,24 @@ function actionChunks(source: string): { name: string; body: string }[] {
 export function checkGuards(
   files: Readonly<Record<string, string>>,
   allowlist: Readonly<Record<string, string>> = PUBLIC_ALLOWLIST,
+  pendingAllowed: Readonly<Record<string, string>> = {},
 ): string[] {
   const problems: string[] = [];
   const shellGuarded = callsGuard(files[SHELL_LAYOUT] ?? "");
 
   for (const [path, source] of Object.entries(files)) {
-    if (isAppEntry(path) && !(path in allowlist) && !callsGuard(source)) {
+    if (
+      isAppEntry(path) &&
+      !(path in allowlist) &&
+      !callsGuard(source) &&
+      callsSignedIn(source)
+    ) {
+      if (!(path in pendingAllowed)) {
+        problems.push(
+          `${path}: uses only the signed-in guard (pending accounts get through) and is not on PENDING_ALLOWED`,
+        );
+      }
+    } else if (isAppEntry(path) && !(path in allowlist) && !callsGuard(source)) {
       // A page under (shell) inherits the shell layout's guard, unless it opts out of rendering
       // inside the layout's request-time scope by exporting `dynamic`.
       const inherits =
@@ -102,10 +131,22 @@ export function checkGuards(
     }
     if (isServerActionFile(source)) {
       for (const action of actionChunks(source)) {
-        if (!GUARD_CALL.test(action.body) && !(`${path}#${action.name}` in allowlist)) {
-          problems.push(
-            `${path}#${action.name}: Server Action without a guard call and not on the allowlist`,
-          );
+        const key = `${path}#${action.name}`;
+        if (!GUARD_CALL.test(action.body) && !(key in allowlist)) {
+          if (SIGNED_IN_CALL.test(action.body)) {
+            if (!(key in pendingAllowed)) {
+              problems.push(
+                `${key}: Server Action uses only the signed-in guard (pending accounts get through) and is not on PENDING_ALLOWED`,
+              );
+            }
+          } else {
+            problems.push(
+              `${key}: Server Action without a guard call and not on the allowlist`,
+            );
+          }
+        }
+        if (!isAuthFeature(path) && SESSION_READ.test(action.body)) {
+          problems.push(`${key}: session read outside the guard`);
         }
       }
     }
@@ -116,6 +157,13 @@ export function checkGuards(
     if (!(path in files))
       problems.push(`${key}: allowlist entry for a file that is gone`);
     if (reason.trim() === "") problems.push(`${key}: allowlist entry without a reason`);
+  }
+  for (const [key, reason] of Object.entries(pendingAllowed)) {
+    const [path] = key.split("#");
+    if (!(path in files))
+      problems.push(`${key}: PENDING_ALLOWED entry for a file that is gone`);
+    if (reason.trim() === "")
+      problems.push(`${key}: PENDING_ALLOWED entry without a reason`);
   }
   return problems;
 }
@@ -152,7 +200,17 @@ describe("route guard inventory (real tree)", () => {
   });
 
   it("has every page, layout, route handler and Server Action guarded or allowlisted", () => {
-    expect(checkGuards(readTree())).toEqual([]);
+    expect(checkGuards(readTree(), PUBLIC_ALLOWLIST, PENDING_ALLOWED)).toEqual([]);
+  });
+
+  it("lists exactly the signed-in-only entries that exist today, each with a reason", () => {
+    expect(Object.keys(PENDING_ALLOWED).sort()).toEqual([
+      "src/features/auth/actions/actions.ts#signOutAction",
+      "src/features/settings/actions/delete-account.ts#deleteAccountAction",
+    ]);
+    for (const reason of Object.values(PENDING_ALLOWED)) {
+      expect(reason.trim()).not.toBe("");
+    }
   });
 
   it("guards the shell layout directly", () => {
@@ -283,6 +341,83 @@ describe("checkGuards (synthetic inputs)", () => {
         { "src/features/x/actions/a.ts#open": "public form" },
       ),
     ).toEqual([]);
+  });
+
+  describe("signed-in guards (pending accounts)", () => {
+    const handler = "const a = await authorizeSignedIn();";
+    const route = "src/app/api/p/route.ts";
+
+    it("FAILS a route handler that calls only authorizeSignedIn unless listed", () => {
+      expect(checkGuards({ [route]: handler }, {}, {})).toEqual([
+        `${route}: uses only the signed-in guard (pending accounts get through) and is not on PENDING_ALLOWED`,
+      ]);
+    });
+
+    it("passes the same file when it is on PENDING_ALLOWED", () => {
+      expect(checkGuards({ [route]: handler }, {}, { [route]: "pending may" })).toEqual(
+        [],
+      );
+    });
+
+    it("FAILS a page that calls requireSignedInUser but is not listed", () => {
+      expect(
+        checkGuards(
+          { "src/app/(pending)/x/page.tsx": "await requireSignedInUser();" },
+          {},
+          {},
+        ),
+      ).toHaveLength(1);
+    });
+
+    it("FAILS a Server Action using only the signed-in guard unless listed", () => {
+      const source =
+        '"use server";\nexport async function f() { await authorizeSignedIn(); }';
+      const path = "src/features/x/actions/a.ts";
+      expect(checkGuards({ [path]: source }, {}, {})).toHaveLength(1);
+      expect(checkGuards({ [path]: source }, {}, { [`${path}#f`]: "why" })).toEqual([]);
+    });
+
+    it("accepts a file that has both guards", () => {
+      expect(
+        checkGuards(
+          { [route]: "await authorizeAction(); await authorizeSignedIn();" },
+          {},
+          {},
+        ),
+      ).toEqual([]);
+    });
+
+    it("flags a stale PENDING_ALLOWED entry and one without a reason", () => {
+      expect(checkGuards({}, {}, { "src/app/gone/page.tsx": "" })).toHaveLength(2);
+    });
+  });
+
+  describe("session reads outside the guard", () => {
+    const path = "src/features/x/actions/a.ts";
+    it.each([
+      "const u = await getSessionUser();",
+      "const s = await auth.api.getSession({ headers });",
+      "const p = await getAuthPort();",
+    ])("FAILS a Server Action that does %s", (read) => {
+      const source = `"use server";\nexport async function f() { await authorizeAction(); ${read} }`;
+      expect(checkGuards({ [path]: source }, {}, {})).toEqual([
+        `${path}#f: session read outside the guard`,
+      ]);
+    });
+
+    it("allows the same read inside src/features/auth/", () => {
+      const source =
+        '"use server";\nexport async function f() { await authorizeAction(); await getAuthPort(); }';
+      expect(checkGuards({ "src/features/auth/actions/a.ts": source }, {}, {})).toEqual(
+        [],
+      );
+    });
+
+    it("does not flag the port handed over as a value (sign-out)", () => {
+      const source =
+        '"use server";\nexport async function f() { await authorizeSignedIn(); await signOutUser(getAuthPort); }';
+      expect(checkGuards({ [path]: source }, {}, { [`${path}#f`]: "why" })).toEqual([]);
+    });
   });
 
   it("flags a stale allowlist entry and an entry without a reason", () => {

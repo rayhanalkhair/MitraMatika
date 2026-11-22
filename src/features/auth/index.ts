@@ -9,7 +9,12 @@ export { resolvePostSignInRedirect, signOutUser } from "./service/core";
 export { E2E_FAKE_USER } from "./service/e2e-session";
 export { clearFakeSession } from "./service/e2e-session-server";
 export { createFakeAuthPort } from "./service/fake-port";
-export { authorizeAction, requireAllowedUser } from "./service/guard";
+export {
+  authorizeAction,
+  authorizeSignedIn,
+  requireAllowedUser,
+  requireSignedInUser,
+} from "./service/guard";
 export type { ActionAuthorization } from "./service/guard";
 export { getAuthPort } from "./service/port-server";
 export { decideProxy, protect } from "./service/protect";

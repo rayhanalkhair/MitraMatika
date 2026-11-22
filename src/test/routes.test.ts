@@ -108,6 +108,13 @@ describe("public and protected routes", () => {
     expect(decideProxy(route, anonymous)).toEqual({ action: "next" });
   });
 
+  it("/waiting-approval is not public: it needs a session cookie", () => {
+    expect(decideProxy("/waiting-approval", anonymous)).toEqual({
+      action: "redirect",
+      to: "/sign-in",
+    });
+  });
+
   it("every (shell) route still redirects anonymous users", () => {
     const routes = shellRoutes();
     expect(routes).toEqual(expect.arrayContaining(["/home", "/generate", "/settings"]));

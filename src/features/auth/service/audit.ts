@@ -34,6 +34,6 @@ export function auditSignIn(
   };
 }
 
-export async function auditSignOut(user: AllowedUser): Promise<void> {
+export async function auditSignOut(user: AllowedUser | PendingUser): Promise<void> {
   await audit({ ownerId: user.userId, action: AUDIT_SIGN_OUT });
 }
