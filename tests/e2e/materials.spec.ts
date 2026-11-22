@@ -120,6 +120,17 @@ async function chooseRadio(page: Page, name: string) {
   await expect(page.getByRole("radio", { name, exact: true })).toBeChecked();
 }
 
+/**
+ * The card of the scripted question "n + n" (the fake AI writes question n as n + n and cites the
+ * offered passages in turn, so question n cites the (n-1) mod 2-th of P2, P3). The cards are NOT
+ * in the order the questions were written: a batch shares one created_at and the list breaks the
+ * tie by a random id, so "Soal 1" is any of them.
+ */
+function questionCard(page: Page, n: number) {
+  const sum = new RegExp(String(n) + /\s*\+\s*/.source + String(n));
+  return page.getByRole("article").filter({ hasText: sum });
+}
+
 /** On /generate: topic SPLDV, source "Dari materi", the PDF, pages 2-3; then submits. */
 async function generateFromPages(page: Page) {
   await page.goto("/generate");
@@ -285,12 +296,10 @@ test.describe("learning materials, OCR and cited generation", () => {
     await waitForReviewReady(page, 5);
 
     // The scripted answer cites the offered passages in turn: P2, P3, P2, ...
-    const first = page.getByRole("article", { name: "Soal 1", exact: true });
+    const first = questionCard(page, 1);
     await expect(first.getByText(`Sumber: ${TITLE}, hal. 2`)).toBeVisible();
     await expect(
-      page
-        .getByRole("article", { name: "Soal 2", exact: true })
-        .getByText(`Sumber: ${TITLE}, hal. 3`),
+      questionCard(page, 2).getByText(`Sumber: ${TITLE}, hal. 3`),
     ).toBeVisible();
     await expect(first.getByText(T.verified, { exact: true })).toBeVisible();
 
@@ -322,15 +331,13 @@ test.describe("learning materials, OCR and cited generation", () => {
     await generateFromPages(page);
     await waitForReviewReady(page, 5);
 
-    const first = page.getByRole("article", { name: "Soal 1", exact: true });
+    const first = questionCard(page, 1);
     await expect(
       first.getByText("Belum dapat diverifikasi", { exact: true }),
     ).toBeVisible();
     await expect(first.getByText(/^Sumber:/)).toHaveCount(0);
     await expect(
-      page
-        .getByRole("article", { name: "Soal 2", exact: true })
-        .getByText(`Sumber: ${TITLE}, hal. 3`),
+      questionCard(page, 2).getByText(`Sumber: ${TITLE}, hal. 3`),
     ).toBeVisible();
   });
 
