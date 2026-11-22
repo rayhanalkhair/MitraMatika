@@ -20,10 +20,10 @@ async function leaveDeletedAccount(): Promise<never> {
   redirect("/sign-in?notice=accountDeleted");
 }
 
-// Settings > Akun, also open to a pending account (ADR-0022): deletes the signed-in user's account and everything it owns (decision 9). The
-// account comes from the session only; the typed address must be the session's, and a fresh
-// credential is needed (ruling S11): the current password, or for an account without one a
-// session from the last 10 minutes.
+// Settings > Akun, also open to a pending account (ADR-0022). Deletes the signed-in user's
+// account and everything it owns (decision 9). The account comes from the session only; the
+// typed address must be the session's, and a fresh credential is needed (ruling S11): the
+// current password, or for an account without one a session from the last 10 minutes.
 export async function deleteAccountAction(
   _previous: DeleteAccountState,
   data: FormData,

@@ -98,6 +98,33 @@ function actionChunks(source: string): { name: string; body: string }[] {
   }));
 }
 
+const HTTP_METHODS = "GET|POST|PUT|PATCH|DELETE|HEAD|OPTIONS";
+const ROUTE_EXPORT = new RegExp(
+  String.raw`export\s+(?:async\s+function\s+(${HTTP_METHODS})\b|const\s+(${HTTP_METHODS})\s*=)`,
+  "g",
+);
+// A handler exported another way (`export { h as POST }`, destructuring) cannot be cut into
+// chunks, so it fails closed.
+const UNREADABLE_ROUTE_EXPORT = new RegExp(
+  String.raw`export\s*\{[^}]*\b(?:${HTTP_METHODS})\b|export\s+const\s*\{|export\s*\*`,
+);
+
+// One chunk per exported HTTP handler: a guard elsewhere in the file (a helper, another
+// method) never counts for it.
+function routeChunks(source: string): { name: string; body: string }[] {
+  const body = stripComments(source);
+  const starts = [...body.matchAll(ROUTE_EXPORT)].map((match) => ({
+    name: match[1] || match[2],
+    index: match.index,
+  }));
+  return starts.map((start, i) => ({
+    name: start.name,
+    body: body.slice(start.index, starts[i + 1]?.index ?? body.length),
+  }));
+}
+
+const NOT_LISTED = "(pending accounts get through) and is not on PENDING_ALLOWED";
+
 /** Returns one message per violation. `files` maps repo-relative path to source. */
 export function checkGuards(
   files: Readonly<Record<string, string>>,
@@ -108,42 +135,57 @@ export function checkGuards(
   const shellGuarded = callsGuard(files[SHELL_LAYOUT] ?? "");
 
   for (const [path, source] of Object.entries(files)) {
-    if (
-      isAppEntry(path) &&
-      !(path in allowlist) &&
-      !callsGuard(source) &&
-      callsSignedIn(source)
-    ) {
-      if (!(path in pendingAllowed)) {
+    if (isAppEntry(path) && !(path in allowlist)) {
+      const chunks = path.endsWith("/route.ts") ? routeChunks(source) : [];
+      if (
+        path.endsWith("/route.ts") &&
+        UNREADABLE_ROUTE_EXPORT.test(stripComments(source))
+      ) {
         problems.push(
-          `${path}: uses only the signed-in guard (pending accounts get through) and is not on PENDING_ALLOWED`,
+          `${path}: exports a route handler in a form the inventory cannot check`,
         );
       }
-    } else if (isAppEntry(path) && !(path in allowlist) && !callsGuard(source)) {
-      // A page under (shell) inherits the shell layout's guard, unless it opts out of rendering
-      // inside the layout's request-time scope by exporting `dynamic`.
-      const inherits =
-        shellGuarded &&
-        path.startsWith(SHELL_DIR) &&
-        path.endsWith("/page.tsx") &&
-        !/export\s+const\s+dynamic\b/.test(stripComments(source));
-      if (!inherits) problems.push(`${path}: no guard call and not on the allowlist`);
+      if (chunks.length > 0) {
+        for (const chunk of chunks) {
+          const key = `${path}#${chunk.name}`;
+          const signedIn = SIGNED_IN_CALL.test(chunk.body);
+          if (signedIn && !(key in pendingAllowed) && !(path in pendingAllowed)) {
+            problems.push(`${key}: uses the signed-in guard ${NOT_LISTED}`);
+          } else if (!signedIn && !GUARD_CALL.test(chunk.body)) {
+            problems.push(
+              `${key}: route handler without a guard call and not on the allowlist`,
+            );
+          }
+        }
+      } else if (callsSignedIn(source)) {
+        if (!(path in pendingAllowed)) {
+          problems.push(
+            callsGuard(source)
+              ? `${path}: uses the signed-in guard ${NOT_LISTED}`
+              : `${path}: uses only the signed-in guard ${NOT_LISTED}`,
+          );
+        }
+      } else if (!callsGuard(source)) {
+        // A page under (shell) inherits the shell layout's guard, unless it opts out of
+        // rendering inside the layout's request-time scope by exporting `dynamic`.
+        const inherits =
+          shellGuarded &&
+          path.startsWith(SHELL_DIR) &&
+          path.endsWith("/page.tsx") &&
+          !/export\s+const\s+dynamic\b/.test(stripComments(source));
+        if (!inherits) problems.push(`${path}: no guard call and not on the allowlist`);
+      }
     }
     if (isServerActionFile(source)) {
       for (const action of actionChunks(source)) {
         const key = `${path}#${action.name}`;
-        if (!GUARD_CALL.test(action.body) && !(key in allowlist)) {
-          if (SIGNED_IN_CALL.test(action.body)) {
-            if (!(key in pendingAllowed)) {
-              problems.push(
-                `${key}: Server Action uses only the signed-in guard (pending accounts get through) and is not on PENDING_ALLOWED`,
-              );
-            }
-          } else {
-            problems.push(
-              `${key}: Server Action without a guard call and not on the allowlist`,
-            );
-          }
+        const signedIn = SIGNED_IN_CALL.test(action.body);
+        if (signedIn && !(key in pendingAllowed)) {
+          problems.push(`${key}: Server Action uses the signed-in guard ${NOT_LISTED}`);
+        } else if (!signedIn && !GUARD_CALL.test(action.body) && !(key in allowlist)) {
+          problems.push(
+            `${key}: Server Action without a guard call and not on the allowlist`,
+          );
         }
         if (!isAuthFeature(path) && SESSION_READ.test(action.body)) {
           problems.push(`${key}: session read outside the guard`);
@@ -377,18 +419,77 @@ describe("checkGuards (synthetic inputs)", () => {
       expect(checkGuards({ [path]: source }, {}, { [`${path}#f`]: "why" })).toEqual([]);
     });
 
-    it("accepts a file that has both guards", () => {
-      expect(
-        checkGuards(
-          { [route]: "await authorizeAction(); await authorizeSignedIn();" },
-          {},
-          {},
-        ),
-      ).toEqual([]);
-    });
-
     it("flags a stale PENDING_ALLOWED entry and one without a reason", () => {
       expect(checkGuards({}, {}, { "src/app/gone/page.tsx": "" })).toHaveLength(2);
+    });
+  });
+
+  describe("each route handler is checked separately", () => {
+    const route = "src/app/api/m/route.ts";
+    const both = [
+      "export async function GET() { await authorizeAction(); }",
+      "export async function POST() { await authorizeSignedIn(); }",
+    ].join("\n");
+
+    it("FAILS an unguarded POST next to a guarded GET", () => {
+      const source = [
+        "export async function GET() { await authorizeAction(); }",
+        "export async function POST() { return Response.json({}); }",
+      ].join("\n");
+      expect(checkGuards({ [route]: source }, {}, {})).toEqual([
+        `${route}#POST: route handler without a guard call and not on the allowlist`,
+      ]);
+    });
+
+    it("FAILS an unguarded handler written as a const", () => {
+      const source = [
+        "export const GET = () => authorize(authorizeAction);",
+        "export const DELETE = async () => Response.json({});",
+      ].join("\n");
+      expect(checkGuards({ [route]: source }, {}, {})).toEqual([
+        `${route}#DELETE: route handler without a guard call and not on the allowlist`,
+      ]);
+    });
+
+    it("FAILS a signed-in-only POST next to a guarded GET unless that handler is listed", () => {
+      expect(checkGuards({ [route]: both }, {}, {})).toEqual([
+        `${route}#POST: uses the signed-in guard (pending accounts get through) and is not on PENDING_ALLOWED`,
+      ]);
+      expect(checkGuards({ [route]: both }, {}, { [`${route}#POST`]: "why" })).toEqual(
+        [],
+      );
+    });
+
+    it("lets a whole-file PENDING_ALLOWED key cover every handler of that file", () => {
+      expect(checkGuards({ [route]: both }, {}, { [route]: "why" })).toEqual([]);
+    });
+
+    it("FAILS a handler that uses both guards in one body unless listed", () => {
+      const source =
+        "export async function GET() { await authorizeAction(); await authorizeSignedIn(); }";
+      expect(checkGuards({ [route]: source }, {}, {})).toHaveLength(1);
+    });
+
+    it("does not let a guard call outside the handler (a helper) count", () => {
+      const source = [
+        "async function helper() { await authorizeAction(); }",
+        "export async function GET() { return Response.json({}); }",
+      ].join("\n");
+      expect(checkGuards({ [route]: source }, {}, {})).toHaveLength(1);
+    });
+
+    it("FAILS a handler exported in a way it cannot read", () => {
+      const source = ["const h = () => authorizeAction();", "export { h as POST };"].join(
+        "\n",
+      );
+      expect(checkGuards({ [route]: source }, {}, {})).toEqual([
+        `${route}: exports a route handler in a form the inventory cannot check`,
+      ]);
+    });
+
+    it("an allowlisted route file covers all its handlers", () => {
+      const source = ["export function GET(){}", "export function POST(){}"].join("\n");
+      expect(checkGuards({ [route]: source }, { [route]: "public" }, {})).toEqual([]);
     });
   });
 

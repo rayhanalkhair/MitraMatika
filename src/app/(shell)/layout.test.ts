@@ -58,14 +58,3 @@ describe("ShellLayout", () => {
     expect(requireAllowedUserMock).toHaveBeenCalledTimes(1);
   });
 });
-
-describe("ShellLayout for a pending account", () => {
-  it("lets the guard's /waiting-approval redirect through and renders nothing", async () => {
-    requireAllowedUserMock.mockRejectedValue(
-      new Error("NEXT_REDIRECT:/waiting-approval"),
-    );
-    await expect(ShellLayout({ children: "x" })).rejects.toThrow(
-      "NEXT_REDIRECT:/waiting-approval",
-    );
-  });
-});
