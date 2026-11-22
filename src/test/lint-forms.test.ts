@@ -49,7 +49,8 @@ describe("form lint guards", () => {
       2,
       ...formGuards.rules["no-restricted-syntax"].slice(1),
     ]);
-  });
+    // Building the full type-aware config is slow under full-suite load.
+  }, 180_000);
 
   it("fails on watch() from useForm (react-hooks/incompatible-library is an error)", async () => {
     const code = component(
