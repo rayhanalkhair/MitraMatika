@@ -105,9 +105,14 @@ export function MaterialDetail({
           onSubmit={(event) => void move(event)}
           className="flex min-w-0 flex-col gap-2"
         >
-          <label className="flex min-w-0 flex-col gap-1 text-sm font-medium">
-            {t("detail.move.label")}
+          {/* A label of its own, not one around the select: the name stays "Pindahkan ke folder"
+              instead of also holding every option's text. */}
+          <div className="flex min-w-0 flex-col gap-1">
+            <label htmlFor={`${id}-folder`} className="text-sm font-medium">
+              {t("detail.move.label")}
+            </label>
             <select
+              id={`${id}-folder`}
               name="folderId"
               defaultValue={detail.folderId ?? TOP}
               className={control}
@@ -124,7 +129,7 @@ export function MaterialDetail({
                 </optgroup>
               ))}
             </select>
-          </label>
+          </div>
           <button
             type="submit"
             disabled={busy}

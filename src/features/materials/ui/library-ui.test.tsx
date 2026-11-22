@@ -255,6 +255,15 @@ describe("MaterialDetail", () => {
     flaggedPages: [3],
   };
 
+  it("labels the folder select by a label of its own, whose text is only the name", () => {
+    renderWithIntl(<MaterialDetail detail={detail} folders={FOLDERS} />);
+    const select = screen.getByRole("combobox", { name: "Pindahkan ke folder" });
+    const label = document.querySelector(`label[for="${select.id}"]`);
+    // A label that wraps the select also holds its option texts, and a test that looks the
+    // control up by the exact label text (getByLabel in Playwright) then never finds it.
+    expect(label?.textContent).toBe("Pindahkan ke folder");
+  });
+
   it("shows the facts and text quality, and moves the material into a folder", async () => {
     mocks.moveMaterial.mockResolvedValue({ ok: true });
     renderWithIntl(<MaterialDetail detail={detail} folders={FOLDERS} />);
