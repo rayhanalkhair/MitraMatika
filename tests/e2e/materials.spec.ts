@@ -410,6 +410,8 @@ test.describe("learning materials, OCR and cited generation", () => {
     // it, so repeat the click until the refusal shows.
     await expect(async () => {
       await title.fill("");
+      // A fill that races hydration can leave a cut title, which is a valid save: click on empty.
+      await expect(title).toHaveValue("", { timeout: 1_000 });
       await editor.getByRole("button", { name: "Simpan struktur" }).click();
       await expect(title).toHaveAttribute("aria-invalid", "true", { timeout: 2_000 });
     }).toPass({ timeout: NAVIGATION_TIMEOUT, intervals: [500, 1_000, 2_000] });
