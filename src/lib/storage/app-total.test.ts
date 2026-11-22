@@ -11,6 +11,7 @@ import {
 } from "@/lib/db/test-harness";
 import {
   APP_STORAGE_CAP_BYTES,
+  AppStorageBusyError,
   appStorageUsage,
   assertAppStorageRoom,
   lockAppStorage,
@@ -266,4 +267,32 @@ describe("lockAppStorage", () => {
     },
     DB_TEST_TIMEOUT,
   );
+
+  it(
+    "bounds the wait with a lock_timeout that is reset once the lock is held",
+    async () => {
+      const timeouts = await database.db.transaction(async (tx) => {
+        await lockAppStorage(tx);
+        return tx.execute(sql`show lock_timeout`);
+      });
+      expect(timeouts.rows).toEqual([{ lock_timeout: "0" }]);
+    },
+    DB_TEST_TIMEOUT,
+  );
+
+  it("turns a lock timeout (55P03) into AppStorageBusyError and passes other errors on", async () => {
+    const failing = (error: Error) =>
+      ({
+        execute: (query: { queryChunks?: unknown[] }) =>
+          JSON.stringify(query).includes("pg_advisory_xact_lock")
+            ? Promise.reject(error)
+            : Promise.resolve({ rows: [] }),
+      }) as unknown as AppTotalDb;
+    await expect(
+      lockAppStorage(failing(Object.assign(new Error("x"), { code: "55P03" }))),
+    ).rejects.toBeInstanceOf(AppStorageBusyError);
+    await expect(
+      lockAppStorage(failing(Object.assign(new Error("boom"), { code: "XX000" }))),
+    ).rejects.toThrow("boom");
+  });
 });

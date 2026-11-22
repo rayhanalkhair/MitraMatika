@@ -10,7 +10,16 @@ import {
   type TestDatabase,
 } from "@/lib/db/test-harness";
 import { logger } from "@/lib/logger";
-import { APP_STORAGE_CAP_BYTES, appStorageUsage } from "@/lib/storage/app-total";
+import {
+  APP_STORAGE_CAP_BYTES,
+  AppStorageBusyError,
+  appStorageUsage,
+} from "@/lib/storage/app-total";
+import {
+  APP_LOCK_EVENT,
+  lockTimeoutError,
+  recordLocks,
+} from "@/lib/storage/lock-recorder";
 import { createMemoryStore } from "@/lib/storage/memory";
 import type { ObjectStore } from "@/lib/storage";
 import { uploadLogo } from "./logo";
@@ -111,6 +120,84 @@ describe("uploadLogo and the app-wide cap", () => {
       // The same size replaces it in a full app; a larger one does not fit.
       expect((await upload(png())).ok).toBe(true);
       expect(await upload(png(64))).toEqual({ ok: false, error: "appFull" });
+      expect((await row()).logo_bytes).toBe(first.length);
+    },
+    DB_TEST_TIMEOUT,
+  );
+
+  it(
+    "puts the object first and takes the app lock once, only afterwards, under a short lock_timeout",
+    async () => {
+      const events: string[] = [];
+      const spied = new Proxy(store, {
+        get(target, prop, receiver) {
+          if (prop !== "put") return Reflect.get(target, prop, receiver) as unknown;
+          return async (...args: Parameters<ObjectStore["put"]>) => {
+            events.push("put");
+            await target.put(...args);
+          };
+        },
+      });
+      const result = await uploadLogo(spied, recordLocks(db(), events), {
+        ownerId: USER_A,
+        templateId: TEMPLATE,
+        bytes: png(),
+        declaredType: "image/png",
+      });
+      expect(result.ok).toBe(true);
+      expect(events).toEqual(["put", "timeout:'3000ms'", APP_LOCK_EVENT, "timeout:0"]);
+    },
+    DB_TEST_TIMEOUT,
+  );
+
+  it(
+    "gives up with AppStorageBusyError when the app lock is busy and removes the object it put",
+    async () => {
+      const busy = recordLocks(db(), [], (statement) => {
+        if (statement.includes("app_storage_cap")) throw lockTimeoutError();
+        return Promise.resolve();
+      });
+      await expect(
+        uploadLogo(store, busy, {
+          ownerId: USER_A,
+          templateId: TEMPLATE,
+          bytes: png(),
+          declaredType: "image/png",
+        }),
+      ).rejects.toBeInstanceOf(AppStorageBusyError);
+      expect(await row()).toEqual({ logo_key: null, logo_bytes: null });
+      expect(await store.get(`templates/${USER_A}/${TEMPLATE}/logo.png`)).toBeNull();
+    },
+    DB_TEST_TIMEOUT,
+  );
+
+  it(
+    "puts the previous logo back when a same-key replacement loses the race for the last room",
+    async () => {
+      const first = png();
+      await upload(first);
+      const key = `templates/${USER_A}/${TEMPLATE}/logo.png`;
+      // The room vanishes between the early check and the locked one: another teacher's file
+      // is stored (in the same transaction, as a stand-in for a concurrent commit) right before
+      // the app lock is taken.
+      const bigger = png(64);
+      const { usedBytes } = await appStorageUsage(db());
+      const filler = crypto.randomUUID();
+      const racing = recordLocks(db(), [], async (statement, tx) => {
+        if (!statement.includes("app_storage_cap")) return;
+        await tx.execute(
+          sql`insert into materials (id, owner_id, title, kind, mime, size_bytes, sha256, object_key) values (${filler}, ${USER_B}, 'Buku', 'pdf', 'application/pdf', ${APP_STORAGE_CAP_BYTES - usedBytes}, ${"0".repeat(64)}, ${`materials/${USER_B}/${filler}/source.pdf`})`,
+        );
+      });
+      expect(
+        await uploadLogo(store, racing, {
+          ownerId: USER_A,
+          templateId: TEMPLATE,
+          bytes: bigger,
+          declaredType: "image/png",
+        }),
+      ).toEqual({ ok: false, error: "appFull" });
+      expect(await store.get(key)).toEqual(first);
       expect((await row()).logo_bytes).toBe(first.length);
     },
     DB_TEST_TIMEOUT,

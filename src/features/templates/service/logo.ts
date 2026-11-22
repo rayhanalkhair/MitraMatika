@@ -162,10 +162,28 @@ export async function uploadLogo(
 
   const key = logoKey(ownerId, templateId, valid.data.ext);
   // Set inside the transaction callback.
-  const progress: { stored: boolean; previousKey: string | null; full: boolean } = {
-    stored: false,
-    previousKey: null,
-    full: false,
+  const progress: {
+    stored: boolean;
+    previousKey: string | null;
+    /** The bytes a same-key upload overwrote, to put back when the write is undone. */
+    previousBody: Uint8Array | null;
+    full: boolean;
+  } = { stored: false, previousKey: null, previousBody: null, full: false };
+  // Undoes the put of an upload that did not commit: the new object goes, or, when it overwrote
+  // the previous logo (same extension, same key), the previous bytes come back.
+  const undoPut = async () => {
+    if (!progress.stored) return;
+    progress.stored = false;
+    if (key !== progress.previousKey) return deleteQuietly(store, key);
+    if (progress.previousBody === null) return deleteQuietly(store, key);
+    try {
+      await store.put(key, progress.previousBody, valid.data.contentType);
+    } catch (error) {
+      logger.warn(
+        { module: "templates", err: error instanceof Error ? error.name : typeof error },
+        "templates: could not restore the previous logo object",
+      );
+    }
   };
   try {
     // The service connection (Ruling R9 pattern): the authenticated role may not write logo_key, so
@@ -190,21 +208,28 @@ export async function uploadLogo(
       if (!row) return false;
       // Only an object of this template may be replaced (and later deleted).
       progress.previousKey = ownLogoKeyOrNull(ownerId, templateId, row.logoKey);
-      // The app-wide cap (ADR-0022): the template row lock is held, so the global lock comes
-      // second (one fixed order). Held until commit, it covers the row update below. A
-      // replacement needs only the growth over the logo it replaces.
-      await lockAppStorage(tx);
-      const room = await assertAppStorageRoom(
-        tx,
-        Math.max(0, valid.data.bytes.length - (row.logoBytes ?? 0)),
-        "logo",
-      );
-      if (!room.ok) {
+      // The app-wide cap (ADR-0022). A replacement needs only the growth over the logo it
+      // replaces. First without the app lock, so a full app stores nothing at all...
+      const growth = Math.max(0, valid.data.bytes.length - (row.logoBytes ?? 0));
+      const early = await assertAppStorageRoom(tx, growth, "logo");
+      if (!early.ok) {
         progress.full = true;
         return false;
       }
+      if (key === progress.previousKey) progress.previousBody = await store.get(key);
+      // ...then the put, outside the app-wide lock (a slow object store must not stall every
+      // other upload), and only then the lock for the authoritative check and the row write: the
+      // template row lock is held, so the app lock comes second (one fixed order).
       await store.put(key, valid.data.bytes, valid.data.contentType);
       progress.stored = true;
+      await lockAppStorage(tx);
+      const room = await assertAppStorageRoom(tx, growth, "logo");
+      if (!room.ok) {
+        // Lost a race for the last room between the two checks.
+        progress.full = true;
+        await undoPut();
+        return false;
+      }
       await tx
         .update(schoolTemplates)
         .set({
@@ -223,8 +248,8 @@ export async function uploadLogo(
     });
     if (!saved) return err(progress.full ? "appFull" : "notFound");
   } catch (error) {
-    // The row still points at the previous logo: remove the new object unless it replaced it.
-    if (progress.stored && key !== progress.previousKey) await deleteQuietly(store, key);
+    // The row still points at the previous logo (a busy app lock included): undo the put.
+    await undoPut();
     throw error;
   }
 

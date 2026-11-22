@@ -9,7 +9,16 @@ import {
   type TestDatabase,
 } from "@/lib/db/test-harness";
 import { logger } from "@/lib/logger";
-import { APP_STORAGE_CAP_BYTES, appStorageUsage } from "@/lib/storage/app-total";
+import {
+  APP_STORAGE_CAP_BYTES,
+  AppStorageBusyError,
+  appStorageUsage,
+} from "@/lib/storage/app-total";
+import {
+  APP_LOCK_EVENT,
+  lockTimeoutError,
+  recordLocks,
+} from "@/lib/storage/lock-recorder";
 import { createMemoryStore, type MemoryStore } from "@/lib/storage/memory";
 import { makePhoto } from "../test-support";
 import { photoStagingKey } from "./keys";
@@ -94,12 +103,52 @@ describe("startPhotoSession and the app-wide cap", () => {
   );
 
   it(
-    "gives exactly one reservation to two teachers who start together with room for one",
+    "gives exactly one reservation to two teachers who start together with room for one (check and insert are one step)",
     async () => {
       await leaveRoom(5000);
       const results = await Promise.all([start(5000, USER_A), start(5000, USER_B)]);
       expect(results.filter((result) => result.ok)).toHaveLength(1);
       expect(await sessions()).toHaveLength(1);
+    },
+    DB_TEST_TIMEOUT,
+  );
+
+  it(
+    "takes the app lock once, after the owner locks, under a short lock_timeout",
+    async () => {
+      const events: string[] = [];
+      const started = await startPhotoSession(recordLocks(db(), events), store, {
+        ownerId: USER_A,
+        kind: "photo",
+        mime: "image/png",
+        size: 5000,
+        now: NOW,
+      });
+      expect(started.ok).toBe(true);
+      expect(events[0]).toBe(`lock:solver:${USER_A}`);
+      expect(events.filter((event) => event === APP_LOCK_EVENT)).toHaveLength(1);
+      expect(events.slice(-3)).toEqual(["timeout:'3000ms'", APP_LOCK_EVENT, "timeout:0"]);
+    },
+    DB_TEST_TIMEOUT,
+  );
+
+  it(
+    "gives up with AppStorageBusyError when the app lock is not free in time, writing nothing",
+    async () => {
+      const busy = recordLocks(db(), [], (statement) => {
+        if (statement.includes("app_storage_cap")) throw lockTimeoutError();
+        return Promise.resolve();
+      });
+      await expect(
+        startPhotoSession(busy, store, {
+          ownerId: USER_A,
+          kind: "photo",
+          mime: "image/png",
+          size: 5000,
+          now: NOW,
+        }),
+      ).rejects.toBeInstanceOf(AppStorageBusyError);
+      expect(await sessions()).toHaveLength(0);
     },
     DB_TEST_TIMEOUT,
   );

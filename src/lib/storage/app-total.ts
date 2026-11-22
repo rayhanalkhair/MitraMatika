@@ -104,16 +104,50 @@ export async function appStorageUsage(db: AppTotalDb): Promise<AppStorageUsage> 
   return { usedBytes, capBytes: APP_STORAGE_CAP_BYTES, parts };
 }
 
+/** How long a reservation may wait for the app-wide lock before it gives up (a retry). */
+export const APP_LOCK_TIMEOUT_MS = 3_000;
+
+/** The app-wide lock was not free within APP_LOCK_TIMEOUT_MS: nothing was written, try again. */
+export class AppStorageBusyError extends Error {
+  constructor() {
+    super("The app-wide storage lock is busy; try again in a moment.");
+    this.name = "AppStorageBusyError";
+  }
+}
+
+function pgCode(error: unknown): string {
+  let current: unknown = error;
+  for (let depth = 0; depth < 5 && current instanceof Object; depth += 1) {
+    const code = (current as { code?: unknown }).code;
+    if (typeof code === "string") return code;
+    current = (current as { cause?: unknown }).cause;
+  }
+  return "";
+}
+
 /**
  * Serialises every reservation against the app-wide cap (a transaction advisory lock, freed at
  * commit). ONE FIXED ORDER, so there is no deadlock: a writer takes its own locks first (the
  * per-owner lock, a row lock) and this one LAST, and nothing ever waits for another lock while
- * holding it. Job writers (exports, OCR page images) do not take it (see assertAppStorageRoom).
+ * holding it. Hold it only for the check and the row write, never across a network call (the logo
+ * upload puts its object before taking it). Waits at most APP_LOCK_TIMEOUT_MS, then throws
+ * AppStorageBusyError (the transaction is aborted, nothing is written); the timeout is reset
+ * after the lock is held, so later statements of the transaction are not bounded by it. Job
+ * writers (exports, OCR page images) do not take it (see assertAppStorageRoom).
  */
 export async function lockAppStorage(tx: AppTotalDb): Promise<void> {
   await tx.execute(
-    sql`select pg_advisory_xact_lock(hashtextextended('app_storage_cap', 0))`,
+    sql.raw(`set local lock_timeout = '${String(APP_LOCK_TIMEOUT_MS)}ms'`),
   );
+  try {
+    await tx.execute(
+      sql`select pg_advisory_xact_lock(hashtextextended('app_storage_cap', 0))`,
+    );
+  } catch (error) {
+    if (pgCode(error) === "55P03") throw new AppStorageBusyError();
+    throw error;
+  }
+  await tx.execute(sql.raw("set local lock_timeout = 0"));
 }
 
 /**

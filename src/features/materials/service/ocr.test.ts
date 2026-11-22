@@ -30,7 +30,7 @@ import { createRegistry } from "@/lib/jobs/registry";
 import type { ClaimedJob } from "@/lib/jobs/types";
 import { contains, jpegWithExif } from "@/lib/images/metadata-fixtures";
 import { logger } from "@/lib/logger";
-import { APP_STORAGE_CAP_BYTES } from "@/lib/storage/app-total";
+import { APP_STORAGE_CAP_BYTES, appStorageUsage } from "@/lib/storage/app-total";
 import { createMemoryStore, type MemoryStore } from "@/lib/storage/memory";
 import type { Gateway } from "@/features/generation";
 import { trashMaterial } from "@/features/trash";
@@ -347,6 +347,38 @@ describe("prepareOcrUploads", () => {
     expect(url.searchParams.get("length")).toBe("1234");
     expect(pageStagingKey(USER_A, id, 2)).toBe(`uploads/${USER_A}/${id}/pages/2.png`);
     expect(await usage()).toBe(0);
+  });
+
+  it("refuses with appFull and signs nothing when the app has no room for the page images", async () => {
+    const id = await seedScanned();
+    const filler = crypto.randomUUID();
+    const { usedBytes } = await appStorageUsage(db());
+    await database.db.insert(materials).values({
+      id: filler,
+      ownerId: USER_B,
+      title: "Buku",
+      kind: "pdf",
+      mime: "application/pdf",
+      sizeBytes: APP_STORAGE_CAP_BYTES - usedBytes - 1000,
+      sha256: "0".repeat(64),
+      objectKey: `materials/${USER_B}/${filler}/source.pdf`,
+    });
+    vi.spyOn(logger, "warn").mockImplementation(() => undefined);
+    const sign = vi.spyOn(store, "signedPutUrl");
+    try {
+      const ask = (size: number) =>
+        prepareOcrUploads(db(), store, {
+          ownerId: USER_A,
+          materialId: id,
+          pages: [{ pageNo: 1, size }],
+          left: 20,
+        });
+      expect(await ask(1001)).toEqual({ ok: false, error: "appFull" });
+      expect(sign).not.toHaveBeenCalled();
+      expect((await ask(1000)).ok).toBe(true);
+    } finally {
+      await database.db.delete(materials).where(eq(materials.id, filler));
+    }
   });
 
   it("refuses more pages than are left, too large images, foreign or small-image materials", async () => {

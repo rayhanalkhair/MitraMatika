@@ -1482,6 +1482,7 @@
           "notFound": "Materi ini tidak ditemukan. Muat ulang halaman.",
           "pages": "Sebagian halaman tidak bisa di-OCR lagi. Muat ulang halaman, lalu pilih lagi.",
           "limit": "Sisa batas OCR hari ini tidak cukup untuk halaman yang dipilih.",
+          "appFull": "Penyimpanan MitraMatika sedang penuh, jadi unggahan baru ditutup sementara. Admin sudah diberi tahu. Coba lagi nanti.",
           "render": "Gambar halaman tidak dapat disiapkan. Coba lagi.",
           "upload": "Gambar halaman gagal diunggah. Coba lagi.",
           "invalid": "Pilihan halaman tidak valid. Muat ulang halaman.",

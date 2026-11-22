@@ -12,6 +12,7 @@ import { jobs, materialPages, materials } from "@/lib/db/schema";
 import { createJobQueue } from "@/lib/jobs/queue";
 import { err, ok, type Result } from "@/lib/result";
 import { pngSize } from "@/lib/images/dimensions";
+import { assertAppStorageRoom } from "@/lib/storage/app-total";
 import { assertSafeKey, type ObjectStore } from "@/lib/storage/types";
 import {
   MAX_PAGE_IMAGE_BYTES,
@@ -252,6 +253,14 @@ export async function prepareOcrUploads(
   const eligible = await eligiblePages(db, { ownerId, materialId, pageNos });
   if (eligible.length !== pageNos.length) return err("pages");
   if (pageNos.length > input.left) return err("limit");
+  // The app-wide cap (ADR-0022), without the lock: the staged images are not counted until the
+  // job keeps them (which checks again), so this only tells the teacher early and signs nothing.
+  const room = await assertAppStorageRoom(
+    db,
+    input.pages.reduce((sum, page) => sum + page.size, 0),
+    "ocr",
+  );
+  if (!room.ok) return err("appFull");
   const uploads = await Promise.all(
     input.pages.map(async (page) => ({
       pageNo: page.pageNo,

@@ -1,4 +1,3 @@
-import { PgDialect } from "drizzle-orm/pg-core";
 import { sql } from "drizzle-orm";
 import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { materials, materialUploads } from "@/lib/db/schema";
@@ -10,7 +9,16 @@ import {
   type TestDatabase,
 } from "@/lib/db/test-harness";
 import { logger } from "@/lib/logger";
-import { APP_STORAGE_CAP_BYTES, appStorageUsage } from "@/lib/storage/app-total";
+import {
+  APP_STORAGE_CAP_BYTES,
+  AppStorageBusyError,
+  appStorageUsage,
+} from "@/lib/storage/app-total";
+import {
+  APP_LOCK_EVENT,
+  lockTimeoutError,
+  recordLocks,
+} from "@/lib/storage/lock-recorder";
 import { createMemoryStore, type MemoryStore } from "@/lib/storage/memory";
 import { STORAGE_CAP_BYTES } from "../schema/upload";
 import { startUpload, type MaterialDb } from "./upload";
@@ -148,7 +156,7 @@ describe("startUpload and the app-wide cap", () => {
   );
 
   it(
-    "gives exactly one reservation to two teachers who start together with room for one",
+    "gives exactly one reservation to two teachers who start together with room for one (check and insert are one step)",
     async () => {
       vi.spyOn(logger, "warn").mockImplementation(() => undefined);
       // Both are far under their own 300 MB; the app has room for one 1 MB start only.
@@ -164,7 +172,7 @@ describe("startUpload and the app-wide cap", () => {
   );
 
   it(
-    "gives exactly one reservation when several starts race for the last room",
+    "gives exactly one reservation when several starts race for the last room (check and insert are one step)",
     async () => {
       vi.spyOn(logger, "warn").mockImplementation(() => undefined);
       await seedStored(USER_C, APP_STORAGE_CAP_BYTES - 3 * MB);
@@ -178,35 +186,10 @@ describe("startUpload and the app-wide cap", () => {
   );
 
   it(
-    "takes the per-owner lock first and the app lock last (one fixed order)",
+    "takes the per-owner lock first and the app lock once, last, under a short lock_timeout",
     async () => {
-      const dialect = new PgDialect();
-      const locks: string[] = [];
-      const recording = new Proxy(database.db, {
-        get(target, prop, receiver) {
-          if (prop !== "transaction")
-            return Reflect.get(target, prop, receiver) as unknown;
-          return (callback: (tx: unknown) => Promise<unknown>) =>
-            target.transaction((tx) =>
-              callback(
-                new Proxy(tx, {
-                  get(inner, name, innerReceiver) {
-                    if (name !== "execute")
-                      return Reflect.get(inner, name, innerReceiver) as unknown;
-                    return (query: Parameters<typeof dialect.sqlToQuery>[0]) => {
-                      const { sql: text, params } = dialect.sqlToQuery(query);
-                      if (text.includes("pg_advisory_xact_lock")) {
-                        locks.push(params.length > 0 ? String(params[0]) : text);
-                      }
-                      return inner.execute(query);
-                    };
-                  },
-                }),
-              ),
-            );
-        },
-      }) as unknown as MaterialDb;
-      const result = await startUpload(recording, store, {
+      const events: string[] = [];
+      const result = await startUpload(recordLocks(db(), events), store, {
         ownerId: USER_A,
         fileName: "buku.pdf",
         declaredType: "",
@@ -214,9 +197,33 @@ describe("startUpload and the app-wide cap", () => {
         now: NOW,
       });
       expect(result.ok).toBe(true);
-      expect(locks).toHaveLength(2);
-      expect(locks[0]).toBe(`material_upload:${USER_A}`);
-      expect(locks[1]).toContain("hashtextextended('app_storage_cap'");
+      expect(events).toEqual([
+        `lock:material_upload:${USER_A}`,
+        "timeout:'3000ms'",
+        APP_LOCK_EVENT,
+        "timeout:0",
+      ]);
+    },
+    DB_TEST_TIMEOUT,
+  );
+
+  it(
+    "gives up with AppStorageBusyError when the app lock is not free in time, writing nothing",
+    async () => {
+      const busy = recordLocks(db(), [], (statement) => {
+        if (statement.includes("app_storage_cap")) throw lockTimeoutError();
+        return Promise.resolve();
+      });
+      await expect(
+        startUpload(busy, store, {
+          ownerId: USER_A,
+          fileName: "buku.pdf",
+          declaredType: "",
+          size: MB,
+          now: NOW,
+        }),
+      ).rejects.toBeInstanceOf(AppStorageBusyError);
+      expect(await reservations()).toBe(0);
     },
     DB_TEST_TIMEOUT,
   );

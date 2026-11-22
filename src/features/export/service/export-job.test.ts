@@ -305,12 +305,14 @@ describe("render_export", () => {
       });
       const { store: probe, handler: probeHandler } = setup();
       await probeHandler(context(job));
-      const sizes = (await exportRows(job.id)).map((row) => row.sizeBytes);
-      const total = sizes.reduce((sum, bytes) => sum + bytes, 0);
+      const probed = await exportRows(job.id);
+      const total = probed.reduce((sum, row) => sum + row.sizeBytes, 0);
+      const bundle = probed.find((row) => row.document === "zip")?.sizeBytes ?? 0;
+      expect(bundle).toBeGreaterThan(1000);
       await database.db.delete(exports).where(eq(exports.jobId, job.id));
       expect(probe.keys()).toHaveLength(7);
 
-      // Room for every file but a little of the ZIP (sizes vary slightly between two renders).
+      // Room for every file but half of the ZIP: robust to small size differences between renders.
       const second = await enqueueAndClaim({
         assessmentId: seeded.assessmentId,
         snapshotHash: seeded.hash,
@@ -322,7 +324,7 @@ describe("render_export", () => {
         title: "Buku",
         kind: "pdf",
         mime: "application/pdf",
-        sizeBytes: APP_STORAGE_CAP_BYTES - total + 200,
+        sizeBytes: APP_STORAGE_CAP_BYTES - total + Math.floor(bundle / 2),
         sha256: "0".repeat(64),
         objectKey: `materials/${USER_B}/${filler}/source.pdf`,
       });

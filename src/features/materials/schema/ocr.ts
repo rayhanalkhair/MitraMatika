@@ -73,7 +73,8 @@ export const ocrAnswerSchema = z.object({
 export type OcrAnswer = z.infer<typeof ocrAnswerSchema>;
 
 export type QueueOcrError = "notFound" | "pages" | "limit";
-export type PageUploadError = "notFound" | "pages" | "limit";
+/** `appFull`: the app-wide storage cap is reached (ADR-0022), so no page image is signed. */
+export type PageUploadError = "notFound" | "pages" | "limit" | "appFull";
 export type SavePageTextError = "notFound" | "notReady" | "tooLong" | "busy";
 
 /** Why one page's OCR ended without text (job progress, never page content). */

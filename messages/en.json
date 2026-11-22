@@ -1482,6 +1482,7 @@
           "notFound": "This material was not found. Reload the page.",
           "pages": "Some pages can no longer be OCR'd. Reload the page and choose again.",
           "limit": "Today's remaining OCR pages are not enough for the chosen pages.",
+          "appFull": "MitraMatika storage is full, so new uploads are paused for now. The admin has been told. Try again later.",
           "render": "The page images could not be prepared. Try again.",
           "upload": "The page images failed to upload. Try again.",
           "invalid": "The page choice is not valid. Reload the page.",
