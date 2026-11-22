@@ -114,6 +114,32 @@ export function createStorageAlerter(deps: StorageAlertDeps): StorageAlerter {
     });
   }
 
+  async function extendMarker(markerId: string, at: Date): Promise<boolean> {
+    const expiresAt = new Date(at.getTime() + MARKER_DAYS * 24 * 60 * 60 * 1000);
+    for (const attempt of [1, 2]) {
+      try {
+        await db
+          .update(verification)
+          .set({ expiresAt })
+          .where(eq(verification.id, markerId));
+        return true;
+      } catch (error) {
+        logger.error(
+          {
+            module: "auth",
+            purpose: "storageAlert",
+            attempt,
+            errorName: errorName(error),
+          },
+          attempt === 1
+            ? "auth: the storage alert marker could not be extended; retrying once"
+            : "auth: the storage alert marker could not be extended; the next run may send the alert again",
+        );
+      }
+    }
+    return false;
+  }
+
   async function check(): Promise<StepReport> {
     const report: StepReport = {};
     let usage: AppStorageUsage;
@@ -181,11 +207,9 @@ export function createStorageAlerter(deps: StorageAlertDeps): StorageAlerter {
         { module: "auth", purpose: "storageAlert", level },
         "auth: sent the storage alert to the admin",
       );
-      // Sent: the marker now silences this level for 30 days.
-      await db
-        .update(verification)
-        .set({ expiresAt: new Date(at.getTime() + MARKER_DAYS * 24 * 60 * 60 * 1000) })
-        .where(eq(verification.id, markerId));
+      // Sent: the marker now silences this level for 30 days. A failure here would let the next
+      // tick mail the same level again, so it is retried once and a second failure is reported.
+      if (!(await extendMarker(markerId, at))) report.failed = true;
     } catch (error) {
       logger.error(
         { module: "auth", purpose: "storageAlert", errorName: errorName(error) },

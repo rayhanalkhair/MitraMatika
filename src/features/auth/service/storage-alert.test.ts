@@ -32,11 +32,7 @@ import {
   createGlobalSendBudget,
   RESET_EMAIL_RESERVE,
 } from "./global-send-budget";
-import {
-  checkStorageAlerts,
-  createStorageAlerter,
-  STORAGE_ALERT_LEVELS,
-} from "./storage-alert";
+import { createStorageAlerter, STORAGE_ALERT_LEVELS } from "./storage-alert";
 
 // PGlite with the real migrations, a fake sender, a fake clock and an injected total (the real
 // total is covered by app-total.test.ts; one test below runs the default wiring on real rows).
@@ -105,6 +101,62 @@ const markers = () =>
     .select()
     .from(verification)
     .where(like(verification.identifier, "storage-alert:%"));
+
+// Wraps the transaction of a (recordLocks) database so its select, delete and insert calls push
+// their kind into `events`, in the order they run.
+function recordWrites(db: AppTotalDb, events: string[]): AppTotalDb {
+  return new Proxy(db, {
+    get(target, prop, receiver) {
+      if (prop !== "transaction") return Reflect.get(target, prop, receiver) as unknown;
+      return (callback: (tx: object) => Promise<unknown>, ...rest: unknown[]) =>
+        (
+          target as unknown as {
+            transaction: (
+              cb: (tx: object) => Promise<unknown>,
+              ...r: unknown[]
+            ) => unknown;
+          }
+        ).transaction(
+          (tx) =>
+            callback(
+              new Proxy(tx, {
+                get(inner, name, innerReceiver) {
+                  const value = Reflect.get(inner, name, innerReceiver) as unknown;
+                  if (
+                    (name === "select" || name === "delete" || name === "insert") &&
+                    typeof value === "function"
+                  ) {
+                    return (...args: unknown[]) => {
+                      events.push(name);
+                      return (value as (...a: unknown[]) => unknown).apply(inner, args);
+                    };
+                  }
+                  return value;
+                },
+              }),
+            ),
+          ...rest,
+        );
+    },
+  });
+}
+
+// A database whose first `failures` calls of update() reject (the marker extension is the first
+// update the alert makes; the budget's confirm comes after it).
+function failingUpdates(db: AppTotalDb, failures: number): AppTotalDb {
+  let left = failures;
+  return new Proxy(db, {
+    get(target, prop, receiver) {
+      if (prop === "update" && left > 0) {
+        return () => {
+          left -= 1;
+          throw new Error("update refused");
+        };
+      }
+      return Reflect.get(target, prop, receiver) as unknown;
+    },
+  });
+}
 
 describe("STORAGE_ALERT_LEVELS", () => {
   it("is 80 percent and 100 percent", () => {
@@ -219,10 +271,12 @@ describe("checkStorageAlerts levels", () => {
 
   it("takes the claim under the advisory lock before it writes the marker", async () => {
     const events: string[] = [];
-    const db = recordLocks(t.db, events);
+    const db = recordWrites(recordLocks(t.db, events), events);
     const a = alerter({ used: atPercent(80), db });
     await a.check();
-    expect(events).toEqual(["lock:storage_alert"]);
+    // The whole transaction, in order: the lock, then the delete of an expired marker and the
+    // insert of the new one (PGlite cannot show a missing lock by a race; the order can).
+    expect(events).toEqual(["lock:storage_alert", "select", "delete", "insert"]);
     expect(a.fake.messages).toHaveLength(1);
   });
 });
@@ -275,6 +329,28 @@ describe("checkStorageAlerts failures and refusals", () => {
     expect(during).toBeDefined();
     expect(during!.getTime() - NOW.getTime()).toBeLessThanOrEqual(60 * 60 * 1000);
     expect((await markers())[0].expiresAt.getTime()).toBe(NOW.getTime() + 30 * DAY);
+  });
+
+  it("retries a failed 30-day extension once: no duplicate on the next tick", async () => {
+    const used = atPercent(80);
+    const a = alerter({ used, db: failingUpdates(t.db, 1) });
+    expect(await a.check()).toEqual({});
+    expect(logs.filter((l) => l.includes("retrying once"))).toHaveLength(1);
+    expect((await markers())[0].expiresAt.getTime()).toBe(NOW.getTime() + 30 * DAY);
+    await alerter({
+      used,
+      fake: a.fake,
+      at: new Date(NOW.getTime() + DAY),
+    }).check();
+    expect(a.fake.messages).toHaveLength(1);
+  });
+
+  it("logs and reports the step failed when the extension fails twice", async () => {
+    const a = alerter({ used: atPercent(80), db: failingUpdates(t.db, 2) });
+    expect(await a.check()).toEqual({ failed: true });
+    expect(a.fake.messages).toHaveLength(1);
+    expect(logs.filter((l) => l.includes("may send the alert again"))).toHaveLength(1);
+    expect(logs.join(" ")).not.toContain(ADMIN);
   });
 
   it("sends nothing and claims nothing when ADMIN_EMAIL is unset, and logs once without an address", async () => {
@@ -386,9 +462,5 @@ describe("storage alert privacy and wiring", () => {
     await t.db
       .delete(verification)
       .where(eq(verification.identifier, "storage-alert:0.8"));
-  });
-
-  it("checkStorageAlerts is exported for the tick", () => {
-    expect(typeof checkStorageAlerts).toBe("function");
   });
 });
