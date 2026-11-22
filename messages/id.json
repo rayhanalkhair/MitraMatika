@@ -682,7 +682,7 @@
   },
   "approval": {
     "title": "Menunggu persetujuan admin",
-    "account": "Akun",
+    "account": "Akun: {email}",
     "body": "Akun kamu sudah dibuat, email sudah terverifikasi, dan menunggu persetujuan admin.",
     "adminNotified": "Admin sudah diberi tahu saat emailmu terverifikasi. Kamu bisa menutup halaman ini; setelah disetujui, masuk lagi atau muat ulang halaman ini.",
     "recheck": "Cek lagi",

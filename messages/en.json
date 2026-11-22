@@ -682,7 +682,7 @@
   },
   "approval": {
     "title": "Waiting for admin approval",
-    "account": "Account",
+    "account": "Account: {email}",
     "body": "Your account has been created and your email is verified. It is waiting for the admin to approve it.",
     "adminNotified": "The admin was told when your email was verified. You can close this page; once you are approved, sign in again or reload this page.",
     "recheck": "Check again",

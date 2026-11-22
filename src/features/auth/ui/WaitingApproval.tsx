@@ -32,12 +32,15 @@ export function WaitingApproval({
         </Link>
       }
     >
-      <p className="text-sm font-medium break-all">{`${t("account")}: ${email}`}</p>
+      <p className="text-sm font-medium break-all">{t("account", { email })}</p>
       <p className="text-sm text-muted-foreground">{t("adminNotified")}</p>
       <div className="flex flex-col gap-3">
-        <Link href="/home" className={submitClass}>
+        {/* A plain anchor on purpose: a client-side Link can keep the router cache on this page
+            after the approval, and the check must ask the server again. */}
+        {}
+        <a href="/home" className={submitClass}>
           {t("recheck")}
-        </Link>
+        </a>
         <form action={signOutAction}>
           <button type="submit" className={secondaryClass}>
             {t("signOut")}
