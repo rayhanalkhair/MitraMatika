@@ -1,0 +1,167 @@
+# CI for the default stack.
+#   Every push to main and every PR: verify (install, typecheck, lint, test, build, format, audit).
+#   PR only: e2e (Playwright on Chromium against a throwaway Postgres 16 service).
+#   Push to main only: migrate (see the job). Vercel deploys separately from the Git integration.
+#
+# Supply chain: there is no Dependabot by design. Every third-party action is pinned to a full
+# commit SHA with its tag in a trailing comment, and the SHAs are bumped manually and deliberately
+# (resolve the tag with `gh api repos/<owner>/<repo>/git/ref/tags/<tag>`, dereference annotated tags).
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+# One run per ref. A newer push to a PR cancels the older run; runs on main are never cancelled.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      # next.config.ts validates the typed env whenever the build phase loads it; CI has no .env.local
+      # and no secrets, so the whole job skips it (the typed env is validated at deploy and runtime).
+      SKIP_ENV_VALIDATION: "1"
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - name: Node version
+        run: node --version
+      - run: pnpm install --frozen-lockfile
+      - name: Typecheck
+        run: pnpm typecheck
+      - name: Lint
+        run: pnpm lint
+      - name: Unit tests
+        run: pnpm test
+      - name: Build
+        run: pnpm build
+      - name: Format check
+        run: pnpm format:check
+      - name: Audit production dependencies
+        run: pnpm audit --prod --audit-level=high
+
+  e2e:
+    # Pull requests only: it needs no secrets, so it is safe on any PR, and a push to main has
+    # already passed it as a PR.
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    # An estimate, to re-measure after the first green run: a healthy run should take about 15
+    # minutes (the failing first run took 42.6 minutes only because tests waited out their timeouts
+    # on a broken page; Playwright now also stops after 5 failures). The materials and solver specs
+    # (plan 5) add uploads, ingestion, OCR and two generations per device project: 35 minutes.
+    timeout-minutes: 35
+    services:
+      postgres:
+        # Major 16 on purpose (CI migrates a stock PG16), pinned by digest.
+        image: postgres:16@sha256:dd2bf3ce2dc83a81674cf7f217fcfd8a5009a4b325dda5b843bfee82a06cff6f # postgres:16
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: mitramatika
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      CI: "true"
+      SKIP_ENV_VALIDATION: "1"
+      E2E_CI: "1"
+      E2E_FAKE_AI: "1"
+      E2E_FAKE_AUTH: "1"
+      DATABASE_URL: postgres://postgres:postgres@localhost:5432/mitramatika
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      # Fail closed: every step below writes to DATABASE_URL, which must be the local service.
+      - name: Guard check
+        run: pnpm exec tsx --conditions=react-server scripts/e2e-guard-check.ts
+      # A stock Postgres with nothing pre-created: the migrations create everything themselves.
+      - name: Migrate
+        run: pnpm db:migrate
+      - name: Seed curriculum
+        run: pnpm exec tsx --conditions=react-server scripts/seed-curriculum.ts --activate
+      - name: Seed e2e user
+        run: pnpm exec tsx --conditions=react-server scripts/e2e-seed-user.ts
+      - run: pnpm exec playwright install --with-deps chromium
+      - run: pnpm exec playwright test
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        if: failure()
+        with:
+          name: playwright-report
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 7
+
+  # Migrations run here, on merge to main, and never in the Vercel build. They are forward-fix
+  # only: a bad migration is repaired by a new migration, not by a rollback. It never runs on a PR
+  # or a fork (push to main only), and DATABASE_URL is the production-environment secret, so it is
+  # not readable by any other job on a plan with environment secrets. On the GitHub Free plan with
+  # a private repository (the owner's decision of 2026-11-16) environments cannot be restricted, so
+  # DATABASE_URL is a repository secret and the `if` below (push to main only) is the only
+  # protection; keep the `environment:` line so the protections switch on if the repository ever
+  # becomes public or moves to Pro (restricting `production` to `main` is then optional
+  # hardening). Nothing happens until the repository variable RUN_MIGRATIONS is
+  # "true".
+  migrate:
+    needs: [verify]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && vars.RUN_MIGRATIONS == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment: production
+    permissions:
+      contents: read
+    concurrency:
+      group: migrate-production
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Apply migrations
+        run: pnpm db:migrate
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+
+  # Read-only on purpose: gitleaks-action only needs GITHUB_TOKEN to list a PR's commits. Its PR
+  # comments are switched off (GITLEAKS_ENABLE_COMMENTS) so no write scope is needed; a finding
+  # still fails the job and shows in the job log and summary.
+  secrets:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      # Read only: a job-level block resets every other scope to none, and gitleaks lists the PR's
+      # commits through the API, which can answer 403 on a private repo without this.
+      pull-requests: read
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0
+      - uses: gitleaks/gitleaks-action@ff98106e4c7b2bc287b24eaf42907196329070c7 # v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITLEAKS_ENABLE_COMMENTS: "false"

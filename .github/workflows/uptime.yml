@@ -1,0 +1,37 @@
+# Daily uptime ping of the deployed app's health endpoint. /api/health runs a database round trip,
+# so a broken deployment or database shows up as a failed run. This is an uptime check, not a
+# keep-alive: Neon wakes on demand, so the database does not need to be kept warm. It does nothing
+# until the repository variable UPTIME_URL is set to the production origin (for example
+# https://mitramatika.vercel.app, without a trailing slash). The URL is validated (https only, bare
+# host) and curl never follows redirects off https.
+name: Uptime
+
+on:
+  schedule:
+    - cron: "17 3 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      UPTIME_URL: ${{ vars.UPTIME_URL }}
+    steps:
+      - name: Ping the health endpoint
+        run: |
+          set -euo pipefail
+          if [ -z "$UPTIME_URL" ]; then
+            echo "::notice::UPTIME_URL is not set; nothing to ping."
+            exit 0
+          fi
+          if ! [[ "$UPTIME_URL" =~ ^https://[A-Za-z0-9.-]+(:[0-9]{1,5})?$ ]]; then
+            echo "::error::UPTIME_URL must look like https://host"
+            exit 1
+          fi
+          body="$(curl -fsS --proto '=https' --proto-redir '=https' --retry 3 --retry-delay 10 --max-time 30 "$UPTIME_URL/api/health")"
+          echo "$body"
+          echo "$body" | grep -q '"status":"ok"'

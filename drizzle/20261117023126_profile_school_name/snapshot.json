@@ -1,0 +1,37 @@
+{
+  "type": "diff",
+  "version": "9",
+  "dialect": "postgres",
+  "id": "7a418693-d7fa-487c-839b-223583852c6a",
+  "prevIds": ["6443324c-7c31-47c2-b970-76602723baf4"],
+  "footprints": [
+    {
+      "statementType": "add_column",
+      "statementTarget": ["column", "public", "profiles", "school_name"],
+      "writes": [
+        "s|col|public.profiles.school_name",
+        "n|col|public.profiles.school_name",
+        "e|col|public.profiles.school_name"
+      ],
+      "reads": ["n|tbl|public.profiles", "n|sch|public"]
+    }
+  ],
+  "deltas": [
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "profiles",
+        "name": "school_name",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    }
+  ]
+}

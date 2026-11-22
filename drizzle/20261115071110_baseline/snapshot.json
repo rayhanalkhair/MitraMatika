@@ -1,0 +1,6242 @@
+{
+  "type": "diff",
+  "version": "9",
+  "dialect": "postgres",
+  "id": "27ea4f74-e1fe-454a-8742-214154c24c98",
+  "prevIds": ["7951991d-4bf2-4920-856a-aec31e247269"],
+  "footprints": [
+    {
+      "statementType": "create_table",
+      "statementTarget": ["table", "public", "account"],
+      "writes": [
+        "s|tbl|public.account",
+        "n|tbl|public.account",
+        "e|tbl|public.account",
+        "n|rel|public.account",
+        "n|type|public.account",
+        "n|rel|public.account_pkey"
+      ],
+      "reads": ["n|sch|public"]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": ["table", "public", "session"],
+      "writes": [
+        "s|tbl|public.session",
+        "n|tbl|public.session",
+        "e|tbl|public.session",
+        "n|rel|public.session",
+        "n|type|public.session",
+        "n|rel|public.session_pkey",
+        "n|rel|public.session_token_key"
+      ],
+      "reads": ["n|sch|public"]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": ["table", "public", "user"],
+      "writes": [
+        "s|tbl|public.user",
+        "n|tbl|public.user",
+        "e|tbl|public.user",
+        "n|rel|public.user",
+        "n|type|public.user",
+        "n|rel|public.user_pkey",
+        "n|rel|public.user_email_key"
+      ],
+      "reads": ["n|sch|public"]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": ["table", "public", "verification"],
+      "writes": [
+        "s|tbl|public.verification",
+        "n|tbl|public.verification",
+        "e|tbl|public.verification",
+        "n|rel|public.verification",
+        "n|type|public.verification",
+        "n|rel|public.verification_pkey"
+      ],
+      "reads": ["n|sch|public"]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": ["table", "public", "profiles"],
+      "writes": [
+        "s|tbl|public.profiles",
+        "n|tbl|public.profiles",
+        "e|tbl|public.profiles",
+        "n|rel|public.profiles",
+        "n|type|public.profiles",
+        "n|rel|public.profiles_pkey"
+      ],
+      "reads": ["n|sch|public"]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": ["table", "public", "cp_elements"],
+      "writes": [
+        "s|tbl|public.cp_elements",
+        "n|tbl|public.cp_elements",
+        "e|tbl|public.cp_elements",
+        "n|rel|public.cp_elements",
+        "n|type|public.cp_elements",
+        "n|rel|public.cp_elements_pkey",
+        "n|rel|public.cp_elements_version_code_unique"
+      ],
+      "reads": ["n|sch|public"]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": ["table", "public", "curriculum_versions"],
+      "writes": [
+        "s|tbl|public.curriculum_versions",
+        "n|tbl|public.curriculum_versions",
+        "e|tbl|public.curriculum_versions",
+        "n|rel|public.curriculum_versions",
+        "n|type|public.curriculum_versions",
+        "n|rel|public.curriculum_versions_pkey",
+        "n|rel|public.curriculum_versions_code_key"
+      ],
+      "reads": ["n|sch|public"]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": ["table", "public", "learning_objectives"],
+      "writes": [
+        "s|tbl|public.learning_objectives",
+        "n|tbl|public.learning_objectives",
+        "e|tbl|public.learning_objectives",
+        "n|rel|public.learning_objectives",
+        "n|type|public.learning_objectives",
+        "n|rel|public.learning_objectives_pkey",
+        "n|rel|public.learning_objectives_topic_code_unique"
+      ],
+      "reads": ["n|sch|public"]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": ["table", "public", "topics"],
+      "writes": [
+        "s|tbl|public.topics",
+        "n|tbl|public.topics",
+        "e|tbl|public.topics",
+        "n|rel|public.topics",
+        "n|type|public.topics",
+        "n|rel|public.topics_pkey",
+        "n|rel|public.topics_version_grade_key_unique"
+      ],
+      "reads": ["n|sch|public"]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": ["table", "public", "ai_calls"],
+      "writes": [
+        "s|tbl|public.ai_calls",
+        "n|tbl|public.ai_calls",
+        "e|tbl|public.ai_calls",
+        "n|rel|public.ai_calls",
+        "n|type|public.ai_calls",
+        "n|rel|public.ai_calls_pkey"
+      ],
+      "reads": ["n|sch|public"]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": ["table", "public", "app_errors"],
+      "writes": [
+        "s|tbl|public.app_errors",
+        "n|tbl|public.app_errors",
+        "e|tbl|public.app_errors",
+        "n|rel|public.app_errors",
+        "n|type|public.app_errors",
+        "n|rel|public.app_errors_pkey"
+      ],
+      "reads": ["n|sch|public"]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": ["table", "public", "audit_log"],
+      "writes": [
+        "s|tbl|public.audit_log",
+        "n|tbl|public.audit_log",
+        "e|tbl|public.audit_log",
+        "n|rel|public.audit_log",
+        "n|type|public.audit_log",
+        "n|rel|public.audit_log_pkey"
+      ],
+      "reads": ["n|sch|public"]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": ["table", "public", "job_runs"],
+      "writes": [
+        "s|tbl|public.job_runs",
+        "n|tbl|public.job_runs",
+        "e|tbl|public.job_runs",
+        "n|rel|public.job_runs",
+        "n|type|public.job_runs",
+        "n|rel|public.job_runs_pkey"
+      ],
+      "reads": ["n|sch|public"]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": ["table", "public", "jobs"],
+      "writes": [
+        "s|tbl|public.jobs",
+        "n|tbl|public.jobs",
+        "e|tbl|public.jobs",
+        "n|rel|public.jobs",
+        "n|type|public.jobs",
+        "n|rel|public.jobs_pkey",
+        "n|rel|public.jobs_id_owner_unique"
+      ],
+      "reads": ["n|sch|public"]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": ["table", "public", "usage_events"],
+      "writes": [
+        "s|tbl|public.usage_events",
+        "n|tbl|public.usage_events",
+        "e|tbl|public.usage_events",
+        "n|rel|public.usage_events",
+        "n|type|public.usage_events",
+        "n|rel|public.usage_events_pkey"
+      ],
+      "reads": ["n|sch|public"]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": ["table", "public", "generation_requests"],
+      "writes": [
+        "s|tbl|public.generation_requests",
+        "n|tbl|public.generation_requests",
+        "e|tbl|public.generation_requests",
+        "n|rel|public.generation_requests",
+        "n|type|public.generation_requests",
+        "n|rel|public.generation_requests_pkey",
+        "n|rel|public.generation_requests_id_owner_unique"
+      ],
+      "reads": ["n|sch|public"]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": ["table", "public", "generation_runs"],
+      "writes": [
+        "s|tbl|public.generation_runs",
+        "n|tbl|public.generation_runs",
+        "e|tbl|public.generation_runs",
+        "n|rel|public.generation_runs",
+        "n|type|public.generation_runs",
+        "n|rel|public.generation_runs_pkey",
+        "n|rel|public.generation_runs_id_owner_unique"
+      ],
+      "reads": ["n|sch|public"]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": ["table", "public", "question_sources"],
+      "writes": [
+        "s|tbl|public.question_sources",
+        "n|tbl|public.question_sources",
+        "e|tbl|public.question_sources",
+        "n|rel|public.question_sources",
+        "n|type|public.question_sources",
+        "n|rel|public.question_sources_pkey"
+      ],
+      "reads": ["n|sch|public"]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": ["table", "public", "question_versions"],
+      "writes": [
+        "s|tbl|public.question_versions",
+        "n|tbl|public.question_versions",
+        "e|tbl|public.question_versions",
+        "n|rel|public.question_versions",
+        "n|type|public.question_versions",
+        "n|rel|public.question_versions_pkey",
+        "n|rel|public.question_versions_id_owner_unique",
+        "n|rel|public.question_versions_question_version_unique"
+      ],
+      "reads": ["n|sch|public"]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": ["table", "public", "questions"],
+      "writes": [
+        "s|tbl|public.questions",
+        "n|tbl|public.questions",
+        "e|tbl|public.questions",
+        "n|rel|public.questions",
+        "n|type|public.questions",
+        "n|rel|public.questions_pkey",
+        "n|rel|public.questions_id_owner_unique"
+      ],
+      "reads": ["n|sch|public"]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": ["table", "public", "verification_runs"],
+      "writes": [
+        "s|tbl|public.verification_runs",
+        "n|tbl|public.verification_runs",
+        "e|tbl|public.verification_runs",
+        "n|rel|public.verification_runs",
+        "n|type|public.verification_runs",
+        "n|rel|public.verification_runs_pkey"
+      ],
+      "reads": ["n|sch|public"]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": ["index", "public", "account", "account_userId_idx"],
+      "writes": [
+        "s|idx|public.account_userId_idx",
+        "n|idx|public.account_userId_idx",
+        "e|idx|public.account_userId_idx",
+        "n|rel|public.account_userId_idx"
+      ],
+      "reads": ["n|tbl|public.account", "n|sch|public", "n|col|public.account.user_id"]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": ["index", "public", "session", "session_userId_idx"],
+      "writes": [
+        "s|idx|public.session_userId_idx",
+        "n|idx|public.session_userId_idx",
+        "e|idx|public.session_userId_idx",
+        "n|rel|public.session_userId_idx"
+      ],
+      "reads": ["n|tbl|public.session", "n|sch|public", "n|col|public.session.user_id"]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": [
+        "index",
+        "public",
+        "verification",
+        "verification_identifier_idx"
+      ],
+      "writes": [
+        "s|idx|public.verification_identifier_idx",
+        "n|idx|public.verification_identifier_idx",
+        "e|idx|public.verification_identifier_idx",
+        "n|rel|public.verification_identifier_idx"
+      ],
+      "reads": [
+        "n|tbl|public.verification",
+        "n|sch|public",
+        "n|col|public.verification.identifier"
+      ]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": ["index", "public", "ai_calls", "ai_calls_created_at_idx"],
+      "writes": [
+        "s|idx|public.ai_calls_created_at_idx",
+        "n|idx|public.ai_calls_created_at_idx",
+        "e|idx|public.ai_calls_created_at_idx",
+        "n|rel|public.ai_calls_created_at_idx"
+      ],
+      "reads": [
+        "n|tbl|public.ai_calls",
+        "n|sch|public",
+        "n|col|public.ai_calls.created_at"
+      ]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": ["index", "public", "job_runs", "job_runs_job_id_idx"],
+      "writes": [
+        "s|idx|public.job_runs_job_id_idx",
+        "n|idx|public.job_runs_job_id_idx",
+        "e|idx|public.job_runs_job_id_idx",
+        "n|rel|public.job_runs_job_id_idx"
+      ],
+      "reads": ["n|tbl|public.job_runs", "n|sch|public", "n|col|public.job_runs.job_id"]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": ["index", "public", "jobs", "jobs_status_run_after_idx"],
+      "writes": [
+        "s|idx|public.jobs_status_run_after_idx",
+        "n|idx|public.jobs_status_run_after_idx",
+        "e|idx|public.jobs_status_run_after_idx",
+        "n|rel|public.jobs_status_run_after_idx"
+      ],
+      "reads": [
+        "n|tbl|public.jobs",
+        "n|sch|public",
+        "n|col|public.jobs.status",
+        "n|col|public.jobs.run_after"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": ["table", "public", "account"],
+      "writes": [
+        "s|fk|public.account.account_user_id_user_id_fkey",
+        "n|fk|public.account.account_user_id_user_id_fkey",
+        "e|fk|public.account.account_user_id_user_id_fkey",
+        "n|con|public.account.account_user_id_user_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.account",
+        "n|sch|public",
+        "n|tbl|public.user",
+        "n|sch|public",
+        "n|col|public.account.user_id",
+        "n|col|public.user.id",
+        "e|uniqueness|public.user.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": ["table", "public", "session"],
+      "writes": [
+        "s|fk|public.session.session_user_id_user_id_fkey",
+        "n|fk|public.session.session_user_id_user_id_fkey",
+        "e|fk|public.session.session_user_id_user_id_fkey",
+        "n|con|public.session.session_user_id_user_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.session",
+        "n|sch|public",
+        "n|tbl|public.user",
+        "n|sch|public",
+        "n|col|public.session.user_id",
+        "n|col|public.user.id",
+        "e|uniqueness|public.user.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": ["table", "public", "profiles"],
+      "writes": [
+        "s|fk|public.profiles.profiles_id_user_id_fkey",
+        "n|fk|public.profiles.profiles_id_user_id_fkey",
+        "e|fk|public.profiles.profiles_id_user_id_fkey",
+        "n|con|public.profiles.profiles_id_user_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.profiles",
+        "n|sch|public",
+        "n|tbl|public.user",
+        "n|sch|public",
+        "n|col|public.profiles.id",
+        "n|col|public.user.id",
+        "e|uniqueness|public.user.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": ["table", "public", "cp_elements"],
+      "writes": [
+        "s|fk|public.cp_elements.cp_elements_curriculum_version_id_curriculum_versions_id_fkey",
+        "n|fk|public.cp_elements.cp_elements_curriculum_version_id_curriculum_versions_id_fkey",
+        "e|fk|public.cp_elements.cp_elements_curriculum_version_id_curriculum_versions_id_fkey",
+        "n|con|public.cp_elements.cp_elements_curriculum_version_id_curriculum_versions_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.cp_elements",
+        "n|sch|public",
+        "n|tbl|public.curriculum_versions",
+        "n|sch|public",
+        "n|col|public.cp_elements.curriculum_version_id",
+        "n|col|public.curriculum_versions.id",
+        "e|uniqueness|public.curriculum_versions.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": ["table", "public", "learning_objectives"],
+      "writes": [
+        "s|fk|public.learning_objectives.learning_objectives_topic_id_topics_id_fkey",
+        "n|fk|public.learning_objectives.learning_objectives_topic_id_topics_id_fkey",
+        "e|fk|public.learning_objectives.learning_objectives_topic_id_topics_id_fkey",
+        "n|con|public.learning_objectives.learning_objectives_topic_id_topics_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.learning_objectives",
+        "n|sch|public",
+        "n|tbl|public.topics",
+        "n|sch|public",
+        "n|col|public.learning_objectives.topic_id",
+        "n|col|public.topics.id",
+        "e|uniqueness|public.topics.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": ["table", "public", "topics"],
+      "writes": [
+        "s|fk|public.topics.topics_curriculum_version_id_curriculum_versions_id_fkey",
+        "n|fk|public.topics.topics_curriculum_version_id_curriculum_versions_id_fkey",
+        "e|fk|public.topics.topics_curriculum_version_id_curriculum_versions_id_fkey",
+        "n|con|public.topics.topics_curriculum_version_id_curriculum_versions_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.topics",
+        "n|sch|public",
+        "n|tbl|public.curriculum_versions",
+        "n|sch|public",
+        "n|col|public.topics.curriculum_version_id",
+        "n|col|public.curriculum_versions.id",
+        "e|uniqueness|public.curriculum_versions.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": ["table", "public", "topics"],
+      "writes": [
+        "s|fk|public.topics.topics_cp_element_id_cp_elements_id_fkey",
+        "n|fk|public.topics.topics_cp_element_id_cp_elements_id_fkey",
+        "e|fk|public.topics.topics_cp_element_id_cp_elements_id_fkey",
+        "n|con|public.topics.topics_cp_element_id_cp_elements_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.topics",
+        "n|sch|public",
+        "n|tbl|public.cp_elements",
+        "n|sch|public",
+        "n|col|public.topics.cp_element_id",
+        "n|col|public.cp_elements.id",
+        "e|uniqueness|public.cp_elements.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": ["table", "public", "ai_calls"],
+      "writes": [
+        "s|fk|public.ai_calls.ai_calls_owner_id_profiles_id_fkey",
+        "n|fk|public.ai_calls.ai_calls_owner_id_profiles_id_fkey",
+        "e|fk|public.ai_calls.ai_calls_owner_id_profiles_id_fkey",
+        "n|con|public.ai_calls.ai_calls_owner_id_profiles_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.ai_calls",
+        "n|sch|public",
+        "n|tbl|public.profiles",
+        "n|sch|public",
+        "n|col|public.ai_calls.owner_id",
+        "n|col|public.profiles.id",
+        "e|uniqueness|public.profiles.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": ["table", "public", "ai_calls"],
+      "writes": [
+        "s|fk|public.ai_calls.ai_calls_job_owner_fk",
+        "n|fk|public.ai_calls.ai_calls_job_owner_fk",
+        "e|fk|public.ai_calls.ai_calls_job_owner_fk",
+        "n|con|public.ai_calls.ai_calls_job_owner_fk"
+      ],
+      "reads": [
+        "n|tbl|public.ai_calls",
+        "n|sch|public",
+        "n|tbl|public.jobs",
+        "n|sch|public",
+        "n|col|public.ai_calls.job_id",
+        "n|col|public.ai_calls.owner_id",
+        "n|col|public.jobs.id",
+        "n|col|public.jobs.owner_id",
+        "e|uniqueness|public.jobs.id.owner_id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": ["table", "public", "app_errors"],
+      "writes": [
+        "s|fk|public.app_errors.app_errors_owner_id_profiles_id_fkey",
+        "n|fk|public.app_errors.app_errors_owner_id_profiles_id_fkey",
+        "e|fk|public.app_errors.app_errors_owner_id_profiles_id_fkey",
+        "n|con|public.app_errors.app_errors_owner_id_profiles_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.app_errors",
+        "n|sch|public",
+        "n|tbl|public.profiles",
+        "n|sch|public",
+        "n|col|public.app_errors.owner_id",
+        "n|col|public.profiles.id",
+        "e|uniqueness|public.profiles.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": ["table", "public", "audit_log"],
+      "writes": [
+        "s|fk|public.audit_log.audit_log_owner_id_profiles_id_fkey",
+        "n|fk|public.audit_log.audit_log_owner_id_profiles_id_fkey",
+        "e|fk|public.audit_log.audit_log_owner_id_profiles_id_fkey",
+        "n|con|public.audit_log.audit_log_owner_id_profiles_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.audit_log",
+        "n|sch|public",
+        "n|tbl|public.profiles",
+        "n|sch|public",
+        "n|col|public.audit_log.owner_id",
+        "n|col|public.profiles.id",
+        "e|uniqueness|public.profiles.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": ["table", "public", "job_runs"],
+      "writes": [
+        "s|fk|public.job_runs.job_runs_job_id_jobs_id_fkey",
+        "n|fk|public.job_runs.job_runs_job_id_jobs_id_fkey",
+        "e|fk|public.job_runs.job_runs_job_id_jobs_id_fkey",
+        "n|con|public.job_runs.job_runs_job_id_jobs_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.job_runs",
+        "n|sch|public",
+        "n|tbl|public.jobs",
+        "n|sch|public",
+        "n|col|public.job_runs.job_id",
+        "n|col|public.jobs.id",
+        "e|uniqueness|public.jobs.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": ["table", "public", "jobs"],
+      "writes": [
+        "s|fk|public.jobs.jobs_owner_id_profiles_id_fkey",
+        "n|fk|public.jobs.jobs_owner_id_profiles_id_fkey",
+        "e|fk|public.jobs.jobs_owner_id_profiles_id_fkey",
+        "n|con|public.jobs.jobs_owner_id_profiles_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.jobs",
+        "n|sch|public",
+        "n|tbl|public.profiles",
+        "n|sch|public",
+        "n|col|public.jobs.owner_id",
+        "n|col|public.profiles.id",
+        "e|uniqueness|public.profiles.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": ["table", "public", "usage_events"],
+      "writes": [
+        "s|fk|public.usage_events.usage_events_owner_id_profiles_id_fkey",
+        "n|fk|public.usage_events.usage_events_owner_id_profiles_id_fkey",
+        "e|fk|public.usage_events.usage_events_owner_id_profiles_id_fkey",
+        "n|con|public.usage_events.usage_events_owner_id_profiles_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.usage_events",
+        "n|sch|public",
+        "n|tbl|public.profiles",
+        "n|sch|public",
+        "n|col|public.usage_events.owner_id",
+        "n|col|public.profiles.id",
+        "e|uniqueness|public.profiles.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": ["table", "public", "generation_requests"],
+      "writes": [
+        "s|fk|public.generation_requests.generation_requests_owner_id_profiles_id_fkey",
+        "n|fk|public.generation_requests.generation_requests_owner_id_profiles_id_fkey",
+        "e|fk|public.generation_requests.generation_requests_owner_id_profiles_id_fkey",
+        "n|con|public.generation_requests.generation_requests_owner_id_profiles_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.generation_requests",
+        "n|sch|public",
+        "n|tbl|public.profiles",
+        "n|sch|public",
+        "n|col|public.generation_requests.owner_id",
+        "n|col|public.profiles.id",
+        "e|uniqueness|public.profiles.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": ["table", "public", "generation_requests"],
+      "writes": [
+        "s|fk|public.generation_requests.generation_requests_job_owner_fk",
+        "n|fk|public.generation_requests.generation_requests_job_owner_fk",
+        "e|fk|public.generation_requests.generation_requests_job_owner_fk",
+        "n|con|public.generation_requests.generation_requests_job_owner_fk"
+      ],
+      "reads": [
+        "n|tbl|public.generation_requests",
+        "n|sch|public",
+        "n|tbl|public.jobs",
+        "n|sch|public",
+        "n|col|public.generation_requests.job_id",
+        "n|col|public.generation_requests.owner_id",
+        "n|col|public.jobs.id",
+        "n|col|public.jobs.owner_id",
+        "e|uniqueness|public.jobs.id.owner_id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": ["table", "public", "generation_runs"],
+      "writes": [
+        "s|fk|public.generation_runs.generation_runs_owner_id_profiles_id_fkey",
+        "n|fk|public.generation_runs.generation_runs_owner_id_profiles_id_fkey",
+        "e|fk|public.generation_runs.generation_runs_owner_id_profiles_id_fkey",
+        "n|con|public.generation_runs.generation_runs_owner_id_profiles_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.generation_runs",
+        "n|sch|public",
+        "n|tbl|public.profiles",
+        "n|sch|public",
+        "n|col|public.generation_runs.owner_id",
+        "n|col|public.profiles.id",
+        "e|uniqueness|public.profiles.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": ["table", "public", "generation_runs"],
+      "writes": [
+        "s|fk|public.generation_runs.generation_runs_65ZrcGIXkM2a_fkey",
+        "n|fk|public.generation_runs.generation_runs_65ZrcGIXkM2a_fkey",
+        "e|fk|public.generation_runs.generation_runs_65ZrcGIXkM2a_fkey",
+        "n|con|public.generation_runs.generation_runs_65ZrcGIXkM2a_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.generation_runs",
+        "n|sch|public",
+        "n|tbl|public.curriculum_versions",
+        "n|sch|public",
+        "n|col|public.generation_runs.curriculum_version_id",
+        "n|col|public.curriculum_versions.id",
+        "e|uniqueness|public.curriculum_versions.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": ["table", "public", "generation_runs"],
+      "writes": [
+        "s|fk|public.generation_runs.generation_runs_request_owner_fk",
+        "n|fk|public.generation_runs.generation_runs_request_owner_fk",
+        "e|fk|public.generation_runs.generation_runs_request_owner_fk",
+        "n|con|public.generation_runs.generation_runs_request_owner_fk"
+      ],
+      "reads": [
+        "n|tbl|public.generation_runs",
+        "n|sch|public",
+        "n|tbl|public.generation_requests",
+        "n|sch|public",
+        "n|col|public.generation_runs.request_id",
+        "n|col|public.generation_runs.owner_id",
+        "n|col|public.generation_requests.id",
+        "n|col|public.generation_requests.owner_id",
+        "e|uniqueness|public.generation_requests.id.owner_id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": ["table", "public", "question_sources"],
+      "writes": [
+        "s|fk|public.question_sources.question_sources_owner_id_profiles_id_fkey",
+        "n|fk|public.question_sources.question_sources_owner_id_profiles_id_fkey",
+        "e|fk|public.question_sources.question_sources_owner_id_profiles_id_fkey",
+        "n|con|public.question_sources.question_sources_owner_id_profiles_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.question_sources",
+        "n|sch|public",
+        "n|tbl|public.profiles",
+        "n|sch|public",
+        "n|col|public.question_sources.owner_id",
+        "n|col|public.profiles.id",
+        "e|uniqueness|public.profiles.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": ["table", "public", "question_sources"],
+      "writes": [
+        "s|fk|public.question_sources.question_sources_topic_id_topics_id_fkey",
+        "n|fk|public.question_sources.question_sources_topic_id_topics_id_fkey",
+        "e|fk|public.question_sources.question_sources_topic_id_topics_id_fkey",
+        "n|con|public.question_sources.question_sources_topic_id_topics_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.question_sources",
+        "n|sch|public",
+        "n|tbl|public.topics",
+        "n|sch|public",
+        "n|col|public.question_sources.topic_id",
+        "n|col|public.topics.id",
+        "e|uniqueness|public.topics.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": ["table", "public", "question_sources"],
+      "writes": [
+        "s|fk|public.question_sources.question_sources_version_owner_fk",
+        "n|fk|public.question_sources.question_sources_version_owner_fk",
+        "e|fk|public.question_sources.question_sources_version_owner_fk",
+        "n|con|public.question_sources.question_sources_version_owner_fk"
+      ],
+      "reads": [
+        "n|tbl|public.question_sources",
+        "n|sch|public",
+        "n|tbl|public.question_versions",
+        "n|sch|public",
+        "n|col|public.question_sources.question_version_id",
+        "n|col|public.question_sources.owner_id",
+        "n|col|public.question_versions.id",
+        "n|col|public.question_versions.owner_id",
+        "e|uniqueness|public.question_versions.id.owner_id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": ["table", "public", "question_versions"],
+      "writes": [
+        "s|fk|public.question_versions.question_versions_owner_id_profiles_id_fkey",
+        "n|fk|public.question_versions.question_versions_owner_id_profiles_id_fkey",
+        "e|fk|public.question_versions.question_versions_owner_id_profiles_id_fkey",
+        "n|con|public.question_versions.question_versions_owner_id_profiles_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.question_versions",
+        "n|sch|public",
+        "n|tbl|public.profiles",
+        "n|sch|public",
+        "n|col|public.question_versions.owner_id",
+        "n|col|public.profiles.id",
+        "e|uniqueness|public.profiles.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": ["table", "public", "question_versions"],
+      "writes": [
+        "s|fk|public.question_versions.question_versions_question_owner_fk",
+        "n|fk|public.question_versions.question_versions_question_owner_fk",
+        "e|fk|public.question_versions.question_versions_question_owner_fk",
+        "n|con|public.question_versions.question_versions_question_owner_fk"
+      ],
+      "reads": [
+        "n|tbl|public.question_versions",
+        "n|sch|public",
+        "n|tbl|public.questions",
+        "n|sch|public",
+        "n|col|public.question_versions.question_id",
+        "n|col|public.question_versions.owner_id",
+        "n|col|public.questions.id",
+        "n|col|public.questions.owner_id",
+        "e|uniqueness|public.questions.id.owner_id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": ["table", "public", "question_versions"],
+      "writes": [
+        "s|fk|public.question_versions.question_versions_run_owner_fk",
+        "n|fk|public.question_versions.question_versions_run_owner_fk",
+        "e|fk|public.question_versions.question_versions_run_owner_fk",
+        "n|con|public.question_versions.question_versions_run_owner_fk"
+      ],
+      "reads": [
+        "n|tbl|public.question_versions",
+        "n|sch|public",
+        "n|tbl|public.generation_runs",
+        "n|sch|public",
+        "n|col|public.question_versions.generation_run_id",
+        "n|col|public.question_versions.owner_id",
+        "n|col|public.generation_runs.id",
+        "n|col|public.generation_runs.owner_id",
+        "e|uniqueness|public.generation_runs.id.owner_id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": ["table", "public", "questions"],
+      "writes": [
+        "s|fk|public.questions.questions_owner_id_profiles_id_fkey",
+        "n|fk|public.questions.questions_owner_id_profiles_id_fkey",
+        "e|fk|public.questions.questions_owner_id_profiles_id_fkey",
+        "n|con|public.questions.questions_owner_id_profiles_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.questions",
+        "n|sch|public",
+        "n|tbl|public.profiles",
+        "n|sch|public",
+        "n|col|public.questions.owner_id",
+        "n|col|public.profiles.id",
+        "e|uniqueness|public.profiles.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": ["table", "public", "questions"],
+      "writes": [
+        "s|fk|public.questions.questions_topic_id_topics_id_fkey",
+        "n|fk|public.questions.questions_topic_id_topics_id_fkey",
+        "e|fk|public.questions.questions_topic_id_topics_id_fkey",
+        "n|con|public.questions.questions_topic_id_topics_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.questions",
+        "n|sch|public",
+        "n|tbl|public.topics",
+        "n|sch|public",
+        "n|col|public.questions.topic_id",
+        "n|col|public.topics.id",
+        "e|uniqueness|public.topics.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": ["table", "public", "questions"],
+      "writes": [
+        "s|fk|public.questions.questions_learning_objective_id_learning_objectives_id_fkey",
+        "n|fk|public.questions.questions_learning_objective_id_learning_objectives_id_fkey",
+        "e|fk|public.questions.questions_learning_objective_id_learning_objectives_id_fkey",
+        "n|con|public.questions.questions_learning_objective_id_learning_objectives_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.questions",
+        "n|sch|public",
+        "n|tbl|public.learning_objectives",
+        "n|sch|public",
+        "n|col|public.questions.learning_objective_id",
+        "n|col|public.learning_objectives.id",
+        "e|uniqueness|public.learning_objectives.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": ["table", "public", "questions"],
+      "writes": [
+        "s|fk|public.questions.questions_generation_request_owner_fk",
+        "n|fk|public.questions.questions_generation_request_owner_fk",
+        "e|fk|public.questions.questions_generation_request_owner_fk",
+        "n|con|public.questions.questions_generation_request_owner_fk"
+      ],
+      "reads": [
+        "n|tbl|public.questions",
+        "n|sch|public",
+        "n|tbl|public.generation_requests",
+        "n|sch|public",
+        "n|col|public.questions.generation_request_id",
+        "n|col|public.questions.owner_id",
+        "n|col|public.generation_requests.id",
+        "n|col|public.generation_requests.owner_id",
+        "e|uniqueness|public.generation_requests.id.owner_id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": ["table", "public", "verification_runs"],
+      "writes": [
+        "s|fk|public.verification_runs.verification_runs_owner_id_profiles_id_fkey",
+        "n|fk|public.verification_runs.verification_runs_owner_id_profiles_id_fkey",
+        "e|fk|public.verification_runs.verification_runs_owner_id_profiles_id_fkey",
+        "n|con|public.verification_runs.verification_runs_owner_id_profiles_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.verification_runs",
+        "n|sch|public",
+        "n|tbl|public.profiles",
+        "n|sch|public",
+        "n|col|public.verification_runs.owner_id",
+        "n|col|public.profiles.id",
+        "e|uniqueness|public.profiles.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": ["table", "public", "verification_runs"],
+      "writes": [
+        "s|fk|public.verification_runs.verification_runs_version_owner_fk",
+        "n|fk|public.verification_runs.verification_runs_version_owner_fk",
+        "e|fk|public.verification_runs.verification_runs_version_owner_fk",
+        "n|con|public.verification_runs.verification_runs_version_owner_fk"
+      ],
+      "reads": [
+        "n|tbl|public.verification_runs",
+        "n|sch|public",
+        "n|tbl|public.question_versions",
+        "n|sch|public",
+        "n|col|public.verification_runs.question_version_id",
+        "n|col|public.verification_runs.owner_id",
+        "n|col|public.question_versions.id",
+        "n|col|public.question_versions.owner_id",
+        "e|uniqueness|public.question_versions.id.owner_id"
+      ]
+    },
+    {
+      "statementType": "create_policy",
+      "statementTarget": ["table", "public", "profiles"],
+      "writes": [
+        "s|pol|public.profiles.profiles_self_access",
+        "n|pol|public.profiles.profiles_self_access",
+        "e|pol|public.profiles.profiles_self_access"
+      ],
+      "reads": [
+        "n|tbl|public.profiles",
+        "n|sch|public",
+        "n|role|authenticated",
+        "e|rls|public.profiles"
+      ]
+    },
+    {
+      "statementType": "create_policy",
+      "statementTarget": ["table", "public", "cp_elements"],
+      "writes": [
+        "s|pol|public.cp_elements.cp_elements_read",
+        "n|pol|public.cp_elements.cp_elements_read",
+        "e|pol|public.cp_elements.cp_elements_read"
+      ],
+      "reads": [
+        "n|tbl|public.cp_elements",
+        "n|sch|public",
+        "n|role|authenticated",
+        "e|rls|public.cp_elements"
+      ]
+    },
+    {
+      "statementType": "create_policy",
+      "statementTarget": ["table", "public", "curriculum_versions"],
+      "writes": [
+        "s|pol|public.curriculum_versions.curriculum_versions_read",
+        "n|pol|public.curriculum_versions.curriculum_versions_read",
+        "e|pol|public.curriculum_versions.curriculum_versions_read"
+      ],
+      "reads": [
+        "n|tbl|public.curriculum_versions",
+        "n|sch|public",
+        "n|role|authenticated",
+        "e|rls|public.curriculum_versions"
+      ]
+    },
+    {
+      "statementType": "create_policy",
+      "statementTarget": ["table", "public", "learning_objectives"],
+      "writes": [
+        "s|pol|public.learning_objectives.learning_objectives_read",
+        "n|pol|public.learning_objectives.learning_objectives_read",
+        "e|pol|public.learning_objectives.learning_objectives_read"
+      ],
+      "reads": [
+        "n|tbl|public.learning_objectives",
+        "n|sch|public",
+        "n|role|authenticated",
+        "e|rls|public.learning_objectives"
+      ]
+    },
+    {
+      "statementType": "create_policy",
+      "statementTarget": ["table", "public", "topics"],
+      "writes": [
+        "s|pol|public.topics.topics_read",
+        "n|pol|public.topics.topics_read",
+        "e|pol|public.topics.topics_read"
+      ],
+      "reads": [
+        "n|tbl|public.topics",
+        "n|sch|public",
+        "n|role|authenticated",
+        "e|rls|public.topics"
+      ]
+    },
+    {
+      "statementType": "create_policy",
+      "statementTarget": ["table", "public", "ai_calls"],
+      "writes": [
+        "s|pol|public.ai_calls.ai_calls_owner_select",
+        "n|pol|public.ai_calls.ai_calls_owner_select",
+        "e|pol|public.ai_calls.ai_calls_owner_select"
+      ],
+      "reads": [
+        "n|tbl|public.ai_calls",
+        "n|sch|public",
+        "n|role|authenticated",
+        "e|rls|public.ai_calls"
+      ]
+    },
+    {
+      "statementType": "create_policy",
+      "statementTarget": ["table", "public", "job_runs"],
+      "writes": [
+        "s|pol|public.job_runs.job_runs_owner_select",
+        "n|pol|public.job_runs.job_runs_owner_select",
+        "e|pol|public.job_runs.job_runs_owner_select"
+      ],
+      "reads": [
+        "n|tbl|public.job_runs",
+        "n|sch|public",
+        "n|role|authenticated",
+        "e|rls|public.job_runs"
+      ]
+    },
+    {
+      "statementType": "create_policy",
+      "statementTarget": ["table", "public", "jobs"],
+      "writes": [
+        "s|pol|public.jobs.jobs_owner_select",
+        "n|pol|public.jobs.jobs_owner_select",
+        "e|pol|public.jobs.jobs_owner_select"
+      ],
+      "reads": [
+        "n|tbl|public.jobs",
+        "n|sch|public",
+        "n|role|authenticated",
+        "e|rls|public.jobs"
+      ]
+    },
+    {
+      "statementType": "create_policy",
+      "statementTarget": ["table", "public", "generation_requests"],
+      "writes": [
+        "s|pol|public.generation_requests.generation_requests_owner_select",
+        "n|pol|public.generation_requests.generation_requests_owner_select",
+        "e|pol|public.generation_requests.generation_requests_owner_select"
+      ],
+      "reads": [
+        "n|tbl|public.generation_requests",
+        "n|sch|public",
+        "n|role|authenticated",
+        "e|rls|public.generation_requests"
+      ]
+    },
+    {
+      "statementType": "create_policy",
+      "statementTarget": ["table", "public", "generation_requests"],
+      "writes": [
+        "s|pol|public.generation_requests.generation_requests_owner_insert",
+        "n|pol|public.generation_requests.generation_requests_owner_insert",
+        "e|pol|public.generation_requests.generation_requests_owner_insert"
+      ],
+      "reads": [
+        "n|tbl|public.generation_requests",
+        "n|sch|public",
+        "n|role|authenticated",
+        "e|rls|public.generation_requests"
+      ]
+    },
+    {
+      "statementType": "create_policy",
+      "statementTarget": ["table", "public", "generation_runs"],
+      "writes": [
+        "s|pol|public.generation_runs.generation_runs_owner_select",
+        "n|pol|public.generation_runs.generation_runs_owner_select",
+        "e|pol|public.generation_runs.generation_runs_owner_select"
+      ],
+      "reads": [
+        "n|tbl|public.generation_runs",
+        "n|sch|public",
+        "n|role|authenticated",
+        "e|rls|public.generation_runs"
+      ]
+    },
+    {
+      "statementType": "create_policy",
+      "statementTarget": ["table", "public", "question_sources"],
+      "writes": [
+        "s|pol|public.question_sources.question_sources_owner_select",
+        "n|pol|public.question_sources.question_sources_owner_select",
+        "e|pol|public.question_sources.question_sources_owner_select"
+      ],
+      "reads": [
+        "n|tbl|public.question_sources",
+        "n|sch|public",
+        "n|role|authenticated",
+        "e|rls|public.question_sources"
+      ]
+    },
+    {
+      "statementType": "create_policy",
+      "statementTarget": ["table", "public", "question_versions"],
+      "writes": [
+        "s|pol|public.question_versions.question_versions_owner_select",
+        "n|pol|public.question_versions.question_versions_owner_select",
+        "e|pol|public.question_versions.question_versions_owner_select"
+      ],
+      "reads": [
+        "n|tbl|public.question_versions",
+        "n|sch|public",
+        "n|role|authenticated",
+        "e|rls|public.question_versions"
+      ]
+    },
+    {
+      "statementType": "create_policy",
+      "statementTarget": ["table", "public", "questions"],
+      "writes": [
+        "s|pol|public.questions.questions_owner_select",
+        "n|pol|public.questions.questions_owner_select",
+        "e|pol|public.questions.questions_owner_select"
+      ],
+      "reads": [
+        "n|tbl|public.questions",
+        "n|sch|public",
+        "n|role|authenticated",
+        "e|rls|public.questions"
+      ]
+    },
+    {
+      "statementType": "create_policy",
+      "statementTarget": ["table", "public", "questions"],
+      "writes": [
+        "s|pol|public.questions.questions_owner_update",
+        "n|pol|public.questions.questions_owner_update",
+        "e|pol|public.questions.questions_owner_update"
+      ],
+      "reads": [
+        "n|tbl|public.questions",
+        "n|sch|public",
+        "n|role|authenticated",
+        "e|rls|public.questions"
+      ]
+    },
+    {
+      "statementType": "create_policy",
+      "statementTarget": ["table", "public", "verification_runs"],
+      "writes": [
+        "s|pol|public.verification_runs.verification_runs_owner_select",
+        "n|pol|public.verification_runs.verification_runs_owner_select",
+        "e|pol|public.verification_runs.verification_runs_owner_select"
+      ],
+      "reads": [
+        "n|tbl|public.verification_runs",
+        "n|sch|public",
+        "n|role|authenticated",
+        "e|rls|public.verification_runs"
+      ]
+    }
+  ],
+  "deltas": [
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "name": "account",
+        "isRlsEnabled": true,
+        "entityType": "tables"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "name": "session",
+        "isRlsEnabled": true,
+        "entityType": "tables"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "name": "user",
+        "isRlsEnabled": true,
+        "entityType": "tables"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "name": "verification",
+        "isRlsEnabled": true,
+        "entityType": "tables"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "name": "profiles",
+        "isRlsEnabled": true,
+        "entityType": "tables"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "name": "cp_elements",
+        "isRlsEnabled": true,
+        "entityType": "tables"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "name": "curriculum_versions",
+        "isRlsEnabled": true,
+        "entityType": "tables"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "name": "learning_objectives",
+        "isRlsEnabled": true,
+        "entityType": "tables"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "name": "topics",
+        "isRlsEnabled": true,
+        "entityType": "tables"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "name": "ai_calls",
+        "isRlsEnabled": true,
+        "entityType": "tables"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "name": "app_errors",
+        "isRlsEnabled": true,
+        "entityType": "tables"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "name": "audit_log",
+        "isRlsEnabled": true,
+        "entityType": "tables"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "name": "job_runs",
+        "isRlsEnabled": true,
+        "entityType": "tables"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "name": "jobs",
+        "isRlsEnabled": true,
+        "entityType": "tables"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "name": "usage_events",
+        "isRlsEnabled": true,
+        "entityType": "tables"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "name": "generation_requests",
+        "isRlsEnabled": true,
+        "entityType": "tables"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "name": "generation_runs",
+        "isRlsEnabled": true,
+        "entityType": "tables"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "name": "question_sources",
+        "isRlsEnabled": true,
+        "entityType": "tables"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "name": "question_versions",
+        "isRlsEnabled": true,
+        "entityType": "tables"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "name": "questions",
+        "isRlsEnabled": true,
+        "entityType": "tables"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "name": "verification_runs",
+        "isRlsEnabled": true,
+        "entityType": "tables"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "account",
+        "name": "id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "gen_random_uuid()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "account",
+        "name": "account_id",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "account",
+        "name": "provider_id",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "account",
+        "name": "user_id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "account",
+        "name": "access_token",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "account",
+        "name": "refresh_token",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "account",
+        "name": "id_token",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "account",
+        "name": "access_token_expires_at",
+        "type": "timestamp",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "account",
+        "name": "refresh_token_expires_at",
+        "type": "timestamp",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "account",
+        "name": "scope",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "account",
+        "name": "password",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "account",
+        "name": "created_at",
+        "type": "timestamp",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "now()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "account",
+        "name": "updated_at",
+        "type": "timestamp",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "session",
+        "name": "id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "gen_random_uuid()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "session",
+        "name": "expires_at",
+        "type": "timestamp",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "session",
+        "name": "token",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "session",
+        "name": "created_at",
+        "type": "timestamp",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "now()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "session",
+        "name": "updated_at",
+        "type": "timestamp",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "session",
+        "name": "ip_address",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "session",
+        "name": "user_agent",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "session",
+        "name": "user_id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "user",
+        "name": "id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "gen_random_uuid()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "user",
+        "name": "name",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "user",
+        "name": "email",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "user",
+        "name": "email_verified",
+        "type": "boolean",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "false",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "user",
+        "name": "image",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "user",
+        "name": "created_at",
+        "type": "timestamp",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "now()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "user",
+        "name": "updated_at",
+        "type": "timestamp",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "now()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "verification",
+        "name": "id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "gen_random_uuid()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "verification",
+        "name": "identifier",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "verification",
+        "name": "value",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "verification",
+        "name": "expires_at",
+        "type": "timestamp",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "verification",
+        "name": "created_at",
+        "type": "timestamp",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "now()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "verification",
+        "name": "updated_at",
+        "type": "timestamp",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "now()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "profiles",
+        "name": "id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "profiles",
+        "name": "display_name",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "profiles",
+        "name": "locale",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "'id-ID'",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "profiles",
+        "name": "timezone",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "'Asia/Jakarta'",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "profiles",
+        "name": "created_at",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "now()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "profiles",
+        "name": "updated_at",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "now()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "cp_elements",
+        "name": "id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "gen_random_uuid()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "cp_elements",
+        "name": "curriculum_version_id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "cp_elements",
+        "name": "code",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "cp_elements",
+        "name": "name",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "cp_elements",
+        "name": "outcome_text",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "cp_elements",
+        "name": "created_at",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "now()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "curriculum_versions",
+        "name": "id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "gen_random_uuid()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "curriculum_versions",
+        "name": "code",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "curriculum_versions",
+        "name": "title",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "curriculum_versions",
+        "name": "source_title",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "curriculum_versions",
+        "name": "source_url",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "curriculum_versions",
+        "name": "decree_ref",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "curriculum_versions",
+        "name": "published_on",
+        "type": "date",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "curriculum_versions",
+        "name": "retrieved_on",
+        "type": "date",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "curriculum_versions",
+        "name": "status",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "'draft'",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "curriculum_versions",
+        "name": "created_at",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "now()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "learning_objectives",
+        "name": "id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "gen_random_uuid()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "learning_objectives",
+        "name": "topic_id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "learning_objectives",
+        "name": "code",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "learning_objectives",
+        "name": "text",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "learning_objectives",
+        "name": "source_ref",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "learning_objectives",
+        "name": "created_at",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "now()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "topics",
+        "name": "id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "gen_random_uuid()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "topics",
+        "name": "curriculum_version_id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "topics",
+        "name": "cp_element_id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "topics",
+        "name": "grade",
+        "type": "smallint",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "topics",
+        "name": "stable_key",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "topics",
+        "name": "title",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "topics",
+        "name": "scope_notes",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "topics",
+        "name": "source_ref",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "topics",
+        "name": "sort_order",
+        "type": "integer",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "0",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "topics",
+        "name": "created_at",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "now()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "ai_calls",
+        "name": "id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "gen_random_uuid()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "ai_calls",
+        "name": "owner_id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "ai_calls",
+        "name": "job_id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "ai_calls",
+        "name": "task",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "ai_calls",
+        "name": "provider",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "ai_calls",
+        "name": "model",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "ai_calls",
+        "name": "prompt_version",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "ai_calls",
+        "name": "input_tokens",
+        "type": "integer",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "ai_calls",
+        "name": "output_tokens",
+        "type": "integer",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "ai_calls",
+        "name": "cached_tokens",
+        "type": "integer",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "ai_calls",
+        "name": "latency_ms",
+        "type": "integer",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "ai_calls",
+        "name": "outcome",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "ai_calls",
+        "name": "error_code",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "ai_calls",
+        "name": "failure_payload",
+        "type": "jsonb",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "ai_calls",
+        "name": "created_at",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "now()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "app_errors",
+        "name": "id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "gen_random_uuid()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "app_errors",
+        "name": "owner_id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "app_errors",
+        "name": "correlation_id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "app_errors",
+        "name": "source",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "app_errors",
+        "name": "code",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "app_errors",
+        "name": "message",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "app_errors",
+        "name": "context",
+        "type": "jsonb",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "'{}'",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "app_errors",
+        "name": "created_at",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "now()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "audit_log",
+        "name": "id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "gen_random_uuid()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "audit_log",
+        "name": "owner_id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "audit_log",
+        "name": "action",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "audit_log",
+        "name": "entity_type",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "audit_log",
+        "name": "entity_id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "audit_log",
+        "name": "metadata",
+        "type": "jsonb",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "'{}'",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "audit_log",
+        "name": "created_at",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "now()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "job_runs",
+        "name": "id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "gen_random_uuid()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "job_runs",
+        "name": "job_id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "job_runs",
+        "name": "owner_id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "job_runs",
+        "name": "started_at",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "now()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "job_runs",
+        "name": "finished_at",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "job_runs",
+        "name": "outcome",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "job_runs",
+        "name": "error_code",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "job_runs",
+        "name": "duration_ms",
+        "type": "integer",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "jobs",
+        "name": "id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "gen_random_uuid()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "jobs",
+        "name": "owner_id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "jobs",
+        "name": "type",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "jobs",
+        "name": "payload",
+        "type": "jsonb",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "'{}'",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "jobs",
+        "name": "status",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "'queued'",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "jobs",
+        "name": "priority",
+        "type": "integer",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "0",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "jobs",
+        "name": "attempts",
+        "type": "integer",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "0",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "jobs",
+        "name": "max_attempts",
+        "type": "integer",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "3",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "jobs",
+        "name": "run_after",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "now()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "jobs",
+        "name": "locked_at",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "jobs",
+        "name": "lock_token",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "jobs",
+        "name": "progress",
+        "type": "jsonb",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "jobs",
+        "name": "error",
+        "type": "jsonb",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "jobs",
+        "name": "correlation_id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "gen_random_uuid()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "jobs",
+        "name": "created_at",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "now()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "jobs",
+        "name": "updated_at",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "now()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "usage_events",
+        "name": "id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "gen_random_uuid()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "usage_events",
+        "name": "owner_id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "usage_events",
+        "name": "event",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "usage_events",
+        "name": "entity_type",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "usage_events",
+        "name": "entity_id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "usage_events",
+        "name": "duration_ms",
+        "type": "integer",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "usage_events",
+        "name": "metadata",
+        "type": "jsonb",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "'{}'",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "usage_events",
+        "name": "created_at",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "now()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "generation_requests",
+        "name": "id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "gen_random_uuid()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "generation_requests",
+        "name": "owner_id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "generation_requests",
+        "name": "mode",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "'topic'",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "generation_requests",
+        "name": "input_kind",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "'form'",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "generation_requests",
+        "name": "chat_text",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "generation_requests",
+        "name": "params",
+        "type": "jsonb",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "'{}'",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "generation_requests",
+        "name": "source_selection",
+        "type": "jsonb",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "generation_requests",
+        "name": "status",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "'queued'",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "generation_requests",
+        "name": "job_id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "generation_requests",
+        "name": "created_at",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "now()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "generation_requests",
+        "name": "updated_at",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "now()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "generation_runs",
+        "name": "id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "gen_random_uuid()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "generation_runs",
+        "name": "owner_id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "generation_runs",
+        "name": "request_id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "generation_runs",
+        "name": "task",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "generation_runs",
+        "name": "provider",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "generation_runs",
+        "name": "model",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "generation_runs",
+        "name": "prompt_version",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "generation_runs",
+        "name": "curriculum_version_id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "generation_runs",
+        "name": "input_tokens",
+        "type": "integer",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "generation_runs",
+        "name": "output_tokens",
+        "type": "integer",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "generation_runs",
+        "name": "cached_tokens",
+        "type": "integer",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "generation_runs",
+        "name": "latency_ms",
+        "type": "integer",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "generation_runs",
+        "name": "outcome",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "generation_runs",
+        "name": "error_code",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "generation_runs",
+        "name": "created_at",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "now()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "question_sources",
+        "name": "id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "gen_random_uuid()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "question_sources",
+        "name": "owner_id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "question_sources",
+        "name": "question_version_id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "question_sources",
+        "name": "kind",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "'curriculum'",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "question_sources",
+        "name": "topic_id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "question_sources",
+        "name": "anchor_label",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "question_sources",
+        "name": "excerpt",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "question_sources",
+        "name": "created_at",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "now()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "question_versions",
+        "name": "id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "gen_random_uuid()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "question_versions",
+        "name": "owner_id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "question_versions",
+        "name": "question_id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "question_versions",
+        "name": "version_no",
+        "type": "integer",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "question_versions",
+        "name": "author",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "question_versions",
+        "name": "change_kind",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "question_versions",
+        "name": "stem_md",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "question_versions",
+        "name": "options",
+        "type": "jsonb",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "question_versions",
+        "name": "answer",
+        "type": "jsonb",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "question_versions",
+        "name": "explanation_md",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "question_versions",
+        "name": "steps",
+        "type": "jsonb",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "question_versions",
+        "name": "answer_rules",
+        "type": "jsonb",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "question_versions",
+        "name": "verification_claims",
+        "type": "jsonb",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "question_versions",
+        "name": "verification_status",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "question_versions",
+        "name": "teacher_override",
+        "type": "jsonb",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "question_versions",
+        "name": "generation_run_id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "question_versions",
+        "name": "created_at",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "now()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "questions",
+        "name": "id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "gen_random_uuid()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "questions",
+        "name": "owner_id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "questions",
+        "name": "status",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "'draft'",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "questions",
+        "name": "origin",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "'generated'",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "questions",
+        "name": "grade",
+        "type": "smallint",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "questions",
+        "name": "type",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "'multiple_choice'",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "questions",
+        "name": "difficulty",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "questions",
+        "name": "cognitive_level",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "questions",
+        "name": "topic_id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "questions",
+        "name": "learning_objective_id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "questions",
+        "name": "current_version_id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "questions",
+        "name": "approved_version_id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "questions",
+        "name": "generation_request_id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "questions",
+        "name": "approved_at",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "questions",
+        "name": "approval_override",
+        "type": "jsonb",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "questions",
+        "name": "banked_at",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "questions",
+        "name": "row_version",
+        "type": "integer",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "1",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "questions",
+        "name": "created_at",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "now()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "questions",
+        "name": "updated_at",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "now()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "verification_runs",
+        "name": "id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "gen_random_uuid()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "verification_runs",
+        "name": "owner_id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "verification_runs",
+        "name": "question_version_id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "verification_runs",
+        "name": "verifier_version",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "verification_runs",
+        "name": "status",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "verification_runs",
+        "name": "checks",
+        "type": "jsonb",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "'[]'",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "verification_runs",
+        "name": "cross_check",
+        "type": "jsonb",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "verification_runs",
+        "name": "created_at",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "now()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "account",
+        "name": "account_userId_idx",
+        "nameExplicit": true,
+        "columns": [
+          {
+            "value": "user_id",
+            "isExpression": false,
+            "asc": true,
+            "nullsFirst": false,
+            "opclass": null
+          }
+        ],
+        "isUnique": false,
+        "where": null,
+        "with": "",
+        "method": "btree",
+        "concurrently": false,
+        "entityType": "indexes"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "session",
+        "name": "session_userId_idx",
+        "nameExplicit": true,
+        "columns": [
+          {
+            "value": "user_id",
+            "isExpression": false,
+            "asc": true,
+            "nullsFirst": false,
+            "opclass": null
+          }
+        ],
+        "isUnique": false,
+        "where": null,
+        "with": "",
+        "method": "btree",
+        "concurrently": false,
+        "entityType": "indexes"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "verification",
+        "name": "verification_identifier_idx",
+        "nameExplicit": true,
+        "columns": [
+          {
+            "value": "identifier",
+            "isExpression": false,
+            "asc": true,
+            "nullsFirst": false,
+            "opclass": null
+          }
+        ],
+        "isUnique": false,
+        "where": null,
+        "with": "",
+        "method": "btree",
+        "concurrently": false,
+        "entityType": "indexes"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "ai_calls",
+        "name": "ai_calls_created_at_idx",
+        "nameExplicit": true,
+        "columns": [
+          {
+            "value": "created_at",
+            "isExpression": false,
+            "asc": true,
+            "nullsFirst": false,
+            "opclass": null
+          }
+        ],
+        "isUnique": false,
+        "where": null,
+        "with": "",
+        "method": "btree",
+        "concurrently": false,
+        "entityType": "indexes"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "job_runs",
+        "name": "job_runs_job_id_idx",
+        "nameExplicit": true,
+        "columns": [
+          {
+            "value": "job_id",
+            "isExpression": false,
+            "asc": true,
+            "nullsFirst": false,
+            "opclass": null
+          }
+        ],
+        "isUnique": false,
+        "where": null,
+        "with": "",
+        "method": "btree",
+        "concurrently": false,
+        "entityType": "indexes"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "jobs",
+        "name": "jobs_status_run_after_idx",
+        "nameExplicit": true,
+        "columns": [
+          {
+            "value": "status",
+            "isExpression": false,
+            "asc": true,
+            "nullsFirst": false,
+            "opclass": null
+          },
+          {
+            "value": "run_after",
+            "isExpression": false,
+            "asc": true,
+            "nullsFirst": false,
+            "opclass": null
+          }
+        ],
+        "isUnique": false,
+        "where": null,
+        "with": "",
+        "method": "btree",
+        "concurrently": false,
+        "entityType": "indexes"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "account",
+        "name": "account_user_id_user_id_fkey",
+        "nameExplicit": false,
+        "columns": ["user_id"],
+        "schemaTo": "public",
+        "tableTo": "user",
+        "columnsTo": ["id"],
+        "onUpdate": "NO ACTION",
+        "onDelete": "CASCADE",
+        "entityType": "fks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "session",
+        "name": "session_user_id_user_id_fkey",
+        "nameExplicit": false,
+        "columns": ["user_id"],
+        "schemaTo": "public",
+        "tableTo": "user",
+        "columnsTo": ["id"],
+        "onUpdate": "NO ACTION",
+        "onDelete": "CASCADE",
+        "entityType": "fks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "profiles",
+        "name": "profiles_id_user_id_fkey",
+        "nameExplicit": false,
+        "columns": ["id"],
+        "schemaTo": "public",
+        "tableTo": "user",
+        "columnsTo": ["id"],
+        "onUpdate": "NO ACTION",
+        "onDelete": "CASCADE",
+        "entityType": "fks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "cp_elements",
+        "name": "cp_elements_curriculum_version_id_curriculum_versions_id_fkey",
+        "nameExplicit": false,
+        "columns": ["curriculum_version_id"],
+        "schemaTo": "public",
+        "tableTo": "curriculum_versions",
+        "columnsTo": ["id"],
+        "onUpdate": "NO ACTION",
+        "onDelete": "CASCADE",
+        "entityType": "fks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "learning_objectives",
+        "name": "learning_objectives_topic_id_topics_id_fkey",
+        "nameExplicit": false,
+        "columns": ["topic_id"],
+        "schemaTo": "public",
+        "tableTo": "topics",
+        "columnsTo": ["id"],
+        "onUpdate": "NO ACTION",
+        "onDelete": "CASCADE",
+        "entityType": "fks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "topics",
+        "name": "topics_curriculum_version_id_curriculum_versions_id_fkey",
+        "nameExplicit": false,
+        "columns": ["curriculum_version_id"],
+        "schemaTo": "public",
+        "tableTo": "curriculum_versions",
+        "columnsTo": ["id"],
+        "onUpdate": "NO ACTION",
+        "onDelete": "CASCADE",
+        "entityType": "fks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "topics",
+        "name": "topics_cp_element_id_cp_elements_id_fkey",
+        "nameExplicit": false,
+        "columns": ["cp_element_id"],
+        "schemaTo": "public",
+        "tableTo": "cp_elements",
+        "columnsTo": ["id"],
+        "onUpdate": "NO ACTION",
+        "onDelete": "CASCADE",
+        "entityType": "fks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "ai_calls",
+        "name": "ai_calls_owner_id_profiles_id_fkey",
+        "nameExplicit": false,
+        "columns": ["owner_id"],
+        "schemaTo": "public",
+        "tableTo": "profiles",
+        "columnsTo": ["id"],
+        "onUpdate": "NO ACTION",
+        "onDelete": "CASCADE",
+        "entityType": "fks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "ai_calls",
+        "name": "ai_calls_job_owner_fk",
+        "nameExplicit": true,
+        "columns": ["job_id", "owner_id"],
+        "schemaTo": "public",
+        "tableTo": "jobs",
+        "columnsTo": ["id", "owner_id"],
+        "onUpdate": "NO ACTION",
+        "onDelete": "NO ACTION",
+        "entityType": "fks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "app_errors",
+        "name": "app_errors_owner_id_profiles_id_fkey",
+        "nameExplicit": false,
+        "columns": ["owner_id"],
+        "schemaTo": "public",
+        "tableTo": "profiles",
+        "columnsTo": ["id"],
+        "onUpdate": "NO ACTION",
+        "onDelete": "SET NULL",
+        "entityType": "fks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "audit_log",
+        "name": "audit_log_owner_id_profiles_id_fkey",
+        "nameExplicit": false,
+        "columns": ["owner_id"],
+        "schemaTo": "public",
+        "tableTo": "profiles",
+        "columnsTo": ["id"],
+        "onUpdate": "NO ACTION",
+        "onDelete": "CASCADE",
+        "entityType": "fks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "job_runs",
+        "name": "job_runs_job_id_jobs_id_fkey",
+        "nameExplicit": false,
+        "columns": ["job_id"],
+        "schemaTo": "public",
+        "tableTo": "jobs",
+        "columnsTo": ["id"],
+        "onUpdate": "NO ACTION",
+        "onDelete": "CASCADE",
+        "entityType": "fks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "jobs",
+        "name": "jobs_owner_id_profiles_id_fkey",
+        "nameExplicit": false,
+        "columns": ["owner_id"],
+        "schemaTo": "public",
+        "tableTo": "profiles",
+        "columnsTo": ["id"],
+        "onUpdate": "NO ACTION",
+        "onDelete": "CASCADE",
+        "entityType": "fks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "usage_events",
+        "name": "usage_events_owner_id_profiles_id_fkey",
+        "nameExplicit": false,
+        "columns": ["owner_id"],
+        "schemaTo": "public",
+        "tableTo": "profiles",
+        "columnsTo": ["id"],
+        "onUpdate": "NO ACTION",
+        "onDelete": "CASCADE",
+        "entityType": "fks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "generation_requests",
+        "name": "generation_requests_owner_id_profiles_id_fkey",
+        "nameExplicit": false,
+        "columns": ["owner_id"],
+        "schemaTo": "public",
+        "tableTo": "profiles",
+        "columnsTo": ["id"],
+        "onUpdate": "NO ACTION",
+        "onDelete": "CASCADE",
+        "entityType": "fks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "generation_requests",
+        "name": "generation_requests_job_owner_fk",
+        "nameExplicit": true,
+        "columns": ["job_id", "owner_id"],
+        "schemaTo": "public",
+        "tableTo": "jobs",
+        "columnsTo": ["id", "owner_id"],
+        "onUpdate": "NO ACTION",
+        "onDelete": "NO ACTION",
+        "entityType": "fks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "generation_runs",
+        "name": "generation_runs_owner_id_profiles_id_fkey",
+        "nameExplicit": false,
+        "columns": ["owner_id"],
+        "schemaTo": "public",
+        "tableTo": "profiles",
+        "columnsTo": ["id"],
+        "onUpdate": "NO ACTION",
+        "onDelete": "CASCADE",
+        "entityType": "fks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "generation_runs",
+        "name": "generation_runs_65ZrcGIXkM2a_fkey",
+        "nameExplicit": false,
+        "columns": ["curriculum_version_id"],
+        "schemaTo": "public",
+        "tableTo": "curriculum_versions",
+        "columnsTo": ["id"],
+        "onUpdate": "NO ACTION",
+        "onDelete": "NO ACTION",
+        "entityType": "fks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "generation_runs",
+        "name": "generation_runs_request_owner_fk",
+        "nameExplicit": true,
+        "columns": ["request_id", "owner_id"],
+        "schemaTo": "public",
+        "tableTo": "generation_requests",
+        "columnsTo": ["id", "owner_id"],
+        "onUpdate": "NO ACTION",
+        "onDelete": "CASCADE",
+        "entityType": "fks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "question_sources",
+        "name": "question_sources_owner_id_profiles_id_fkey",
+        "nameExplicit": false,
+        "columns": ["owner_id"],
+        "schemaTo": "public",
+        "tableTo": "profiles",
+        "columnsTo": ["id"],
+        "onUpdate": "NO ACTION",
+        "onDelete": "CASCADE",
+        "entityType": "fks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "question_sources",
+        "name": "question_sources_topic_id_topics_id_fkey",
+        "nameExplicit": false,
+        "columns": ["topic_id"],
+        "schemaTo": "public",
+        "tableTo": "topics",
+        "columnsTo": ["id"],
+        "onUpdate": "NO ACTION",
+        "onDelete": "NO ACTION",
+        "entityType": "fks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "question_sources",
+        "name": "question_sources_version_owner_fk",
+        "nameExplicit": true,
+        "columns": ["question_version_id", "owner_id"],
+        "schemaTo": "public",
+        "tableTo": "question_versions",
+        "columnsTo": ["id", "owner_id"],
+        "onUpdate": "NO ACTION",
+        "onDelete": "CASCADE",
+        "entityType": "fks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "question_versions",
+        "name": "question_versions_owner_id_profiles_id_fkey",
+        "nameExplicit": false,
+        "columns": ["owner_id"],
+        "schemaTo": "public",
+        "tableTo": "profiles",
+        "columnsTo": ["id"],
+        "onUpdate": "NO ACTION",
+        "onDelete": "CASCADE",
+        "entityType": "fks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "question_versions",
+        "name": "question_versions_question_owner_fk",
+        "nameExplicit": true,
+        "columns": ["question_id", "owner_id"],
+        "schemaTo": "public",
+        "tableTo": "questions",
+        "columnsTo": ["id", "owner_id"],
+        "onUpdate": "NO ACTION",
+        "onDelete": "CASCADE",
+        "entityType": "fks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "question_versions",
+        "name": "question_versions_run_owner_fk",
+        "nameExplicit": true,
+        "columns": ["generation_run_id", "owner_id"],
+        "schemaTo": "public",
+        "tableTo": "generation_runs",
+        "columnsTo": ["id", "owner_id"],
+        "onUpdate": "NO ACTION",
+        "onDelete": "NO ACTION",
+        "entityType": "fks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "questions",
+        "name": "questions_owner_id_profiles_id_fkey",
+        "nameExplicit": false,
+        "columns": ["owner_id"],
+        "schemaTo": "public",
+        "tableTo": "profiles",
+        "columnsTo": ["id"],
+        "onUpdate": "NO ACTION",
+        "onDelete": "CASCADE",
+        "entityType": "fks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "questions",
+        "name": "questions_topic_id_topics_id_fkey",
+        "nameExplicit": false,
+        "columns": ["topic_id"],
+        "schemaTo": "public",
+        "tableTo": "topics",
+        "columnsTo": ["id"],
+        "onUpdate": "NO ACTION",
+        "onDelete": "NO ACTION",
+        "entityType": "fks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "questions",
+        "name": "questions_learning_objective_id_learning_objectives_id_fkey",
+        "nameExplicit": false,
+        "columns": ["learning_objective_id"],
+        "schemaTo": "public",
+        "tableTo": "learning_objectives",
+        "columnsTo": ["id"],
+        "onUpdate": "NO ACTION",
+        "onDelete": "NO ACTION",
+        "entityType": "fks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "questions",
+        "name": "questions_generation_request_owner_fk",
+        "nameExplicit": true,
+        "columns": ["generation_request_id", "owner_id"],
+        "schemaTo": "public",
+        "tableTo": "generation_requests",
+        "columnsTo": ["id", "owner_id"],
+        "onUpdate": "NO ACTION",
+        "onDelete": "NO ACTION",
+        "entityType": "fks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "verification_runs",
+        "name": "verification_runs_owner_id_profiles_id_fkey",
+        "nameExplicit": false,
+        "columns": ["owner_id"],
+        "schemaTo": "public",
+        "tableTo": "profiles",
+        "columnsTo": ["id"],
+        "onUpdate": "NO ACTION",
+        "onDelete": "CASCADE",
+        "entityType": "fks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "verification_runs",
+        "name": "verification_runs_version_owner_fk",
+        "nameExplicit": true,
+        "columns": ["question_version_id", "owner_id"],
+        "schemaTo": "public",
+        "tableTo": "question_versions",
+        "columnsTo": ["id", "owner_id"],
+        "onUpdate": "NO ACTION",
+        "onDelete": "CASCADE",
+        "entityType": "fks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "account",
+        "name": "account_pkey",
+        "columns": ["id"],
+        "nameExplicit": false,
+        "entityType": "pks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "session",
+        "name": "session_pkey",
+        "columns": ["id"],
+        "nameExplicit": false,
+        "entityType": "pks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "user",
+        "name": "user_pkey",
+        "columns": ["id"],
+        "nameExplicit": false,
+        "entityType": "pks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "verification",
+        "name": "verification_pkey",
+        "columns": ["id"],
+        "nameExplicit": false,
+        "entityType": "pks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "profiles",
+        "name": "profiles_pkey",
+        "columns": ["id"],
+        "nameExplicit": false,
+        "entityType": "pks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "cp_elements",
+        "name": "cp_elements_pkey",
+        "columns": ["id"],
+        "nameExplicit": false,
+        "entityType": "pks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "curriculum_versions",
+        "name": "curriculum_versions_pkey",
+        "columns": ["id"],
+        "nameExplicit": false,
+        "entityType": "pks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "learning_objectives",
+        "name": "learning_objectives_pkey",
+        "columns": ["id"],
+        "nameExplicit": false,
+        "entityType": "pks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "topics",
+        "name": "topics_pkey",
+        "columns": ["id"],
+        "nameExplicit": false,
+        "entityType": "pks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "ai_calls",
+        "name": "ai_calls_pkey",
+        "columns": ["id"],
+        "nameExplicit": false,
+        "entityType": "pks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "app_errors",
+        "name": "app_errors_pkey",
+        "columns": ["id"],
+        "nameExplicit": false,
+        "entityType": "pks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "audit_log",
+        "name": "audit_log_pkey",
+        "columns": ["id"],
+        "nameExplicit": false,
+        "entityType": "pks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "job_runs",
+        "name": "job_runs_pkey",
+        "columns": ["id"],
+        "nameExplicit": false,
+        "entityType": "pks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "jobs",
+        "name": "jobs_pkey",
+        "columns": ["id"],
+        "nameExplicit": false,
+        "entityType": "pks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "usage_events",
+        "name": "usage_events_pkey",
+        "columns": ["id"],
+        "nameExplicit": false,
+        "entityType": "pks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "generation_requests",
+        "name": "generation_requests_pkey",
+        "columns": ["id"],
+        "nameExplicit": false,
+        "entityType": "pks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "generation_runs",
+        "name": "generation_runs_pkey",
+        "columns": ["id"],
+        "nameExplicit": false,
+        "entityType": "pks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "question_sources",
+        "name": "question_sources_pkey",
+        "columns": ["id"],
+        "nameExplicit": false,
+        "entityType": "pks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "question_versions",
+        "name": "question_versions_pkey",
+        "columns": ["id"],
+        "nameExplicit": false,
+        "entityType": "pks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "questions",
+        "name": "questions_pkey",
+        "columns": ["id"],
+        "nameExplicit": false,
+        "entityType": "pks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "verification_runs",
+        "name": "verification_runs_pkey",
+        "columns": ["id"],
+        "nameExplicit": false,
+        "entityType": "pks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "cp_elements",
+        "name": "cp_elements_version_code_unique",
+        "nameExplicit": true,
+        "columns": ["curriculum_version_id", "code"],
+        "nullsNotDistinct": false,
+        "entityType": "uniques"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "learning_objectives",
+        "name": "learning_objectives_topic_code_unique",
+        "nameExplicit": true,
+        "columns": ["topic_id", "code"],
+        "nullsNotDistinct": false,
+        "entityType": "uniques"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "topics",
+        "name": "topics_version_grade_key_unique",
+        "nameExplicit": true,
+        "columns": ["curriculum_version_id", "grade", "stable_key"],
+        "nullsNotDistinct": false,
+        "entityType": "uniques"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "jobs",
+        "name": "jobs_id_owner_unique",
+        "nameExplicit": true,
+        "columns": ["id", "owner_id"],
+        "nullsNotDistinct": false,
+        "entityType": "uniques"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "generation_requests",
+        "name": "generation_requests_id_owner_unique",
+        "nameExplicit": true,
+        "columns": ["id", "owner_id"],
+        "nullsNotDistinct": false,
+        "entityType": "uniques"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "generation_runs",
+        "name": "generation_runs_id_owner_unique",
+        "nameExplicit": true,
+        "columns": ["id", "owner_id"],
+        "nullsNotDistinct": false,
+        "entityType": "uniques"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "question_versions",
+        "name": "question_versions_id_owner_unique",
+        "nameExplicit": true,
+        "columns": ["id", "owner_id"],
+        "nullsNotDistinct": false,
+        "entityType": "uniques"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "question_versions",
+        "name": "question_versions_question_version_unique",
+        "nameExplicit": true,
+        "columns": ["question_id", "version_no"],
+        "nullsNotDistinct": false,
+        "entityType": "uniques"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "questions",
+        "name": "questions_id_owner_unique",
+        "nameExplicit": true,
+        "columns": ["id", "owner_id"],
+        "nullsNotDistinct": false,
+        "entityType": "uniques"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "session",
+        "name": "session_token_key",
+        "nameExplicit": false,
+        "columns": ["token"],
+        "nullsNotDistinct": false,
+        "entityType": "uniques"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "user",
+        "name": "user_email_key",
+        "nameExplicit": false,
+        "columns": ["email"],
+        "nullsNotDistinct": false,
+        "entityType": "uniques"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "curriculum_versions",
+        "name": "curriculum_versions_code_key",
+        "nameExplicit": false,
+        "columns": ["code"],
+        "nullsNotDistinct": false,
+        "entityType": "uniques"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "curriculum_versions",
+        "name": "curriculum_versions_status_check",
+        "value": "\"status\" in ('draft', 'active', 'archived')",
+        "entityType": "checks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "topics",
+        "name": "topics_grade_check",
+        "value": "\"grade\" in (7, 8, 9)",
+        "entityType": "checks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "ai_calls",
+        "name": "ai_calls_outcome_check",
+        "value": "\"outcome\" in ('ok', 'error')",
+        "entityType": "checks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "job_runs",
+        "name": "job_runs_outcome_check",
+        "value": "\"outcome\" in ('running', 'succeeded', 'failed', 'deferred')",
+        "entityType": "checks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "jobs",
+        "name": "jobs_status_check",
+        "value": "\"status\" in ('queued', 'running', 'succeeded', 'failed', 'deferred', 'cancelled')",
+        "entityType": "checks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "generation_requests",
+        "name": "generation_requests_mode_check",
+        "value": "\"mode\" in ('topic', 'material')",
+        "entityType": "checks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "generation_requests",
+        "name": "generation_requests_input_kind_check",
+        "value": "\"input_kind\" in ('form', 'chat')",
+        "entityType": "checks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "generation_requests",
+        "name": "generation_requests_status_check",
+        "value": "\"status\" in ('queued', 'running', 'succeeded', 'partial', 'failed', 'deferred', 'cancelled')",
+        "entityType": "checks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "generation_runs",
+        "name": "generation_runs_outcome_check",
+        "value": "\"outcome\" in ('ok', 'error')",
+        "entityType": "checks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "question_sources",
+        "name": "question_sources_kind_check",
+        "value": "\"kind\" in ('curriculum')",
+        "entityType": "checks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "question_versions",
+        "name": "question_versions_author_check",
+        "value": "\"author\" in ('ai', 'teacher')",
+        "entityType": "checks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "question_versions",
+        "name": "question_versions_change_kind_check",
+        "value": "\"change_kind\" in ('generated', 'edited', 'regenerated', 'restored')",
+        "entityType": "checks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "question_versions",
+        "name": "question_versions_verification_status_check",
+        "value": "\"verification_status\" in ('terverifikasi', 'dicek_silang_ai', 'belum_dapat_diverifikasi', 'ketidaksesuaian')",
+        "entityType": "checks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "questions",
+        "name": "questions_status_check",
+        "value": "\"status\" in ('draft', 'approved', 'archived')",
+        "entityType": "checks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "questions",
+        "name": "questions_origin_check",
+        "value": "\"origin\" in ('generated', 'manual', 'imported')",
+        "entityType": "checks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "questions",
+        "name": "questions_grade_check",
+        "value": "\"grade\" in (7, 8, 9)",
+        "entityType": "checks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "questions",
+        "name": "questions_type_check",
+        "value": "\"type\" in ('multiple_choice')",
+        "entityType": "checks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "questions",
+        "name": "questions_difficulty_check",
+        "value": "\"difficulty\" in ('mudah', 'sedang', 'sulit')",
+        "entityType": "checks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "verification_runs",
+        "name": "verification_runs_status_check",
+        "value": "\"status\" in ('terverifikasi', 'dicek_silang_ai', 'belum_dapat_diverifikasi', 'ketidaksesuaian')",
+        "entityType": "checks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "profiles",
+        "name": "profiles_self_access",
+        "as": "PERMISSIVE",
+        "for": "ALL",
+        "roles": ["authenticated"],
+        "using": "\"profiles\".\"id\" = auth.uid()",
+        "withCheck": "\"profiles\".\"id\" = auth.uid()",
+        "entityType": "policies"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "cp_elements",
+        "name": "cp_elements_read",
+        "as": "PERMISSIVE",
+        "for": "SELECT",
+        "roles": ["authenticated"],
+        "using": "true",
+        "withCheck": null,
+        "entityType": "policies"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "curriculum_versions",
+        "name": "curriculum_versions_read",
+        "as": "PERMISSIVE",
+        "for": "SELECT",
+        "roles": ["authenticated"],
+        "using": "true",
+        "withCheck": null,
+        "entityType": "policies"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "learning_objectives",
+        "name": "learning_objectives_read",
+        "as": "PERMISSIVE",
+        "for": "SELECT",
+        "roles": ["authenticated"],
+        "using": "true",
+        "withCheck": null,
+        "entityType": "policies"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "topics",
+        "name": "topics_read",
+        "as": "PERMISSIVE",
+        "for": "SELECT",
+        "roles": ["authenticated"],
+        "using": "true",
+        "withCheck": null,
+        "entityType": "policies"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "ai_calls",
+        "name": "ai_calls_owner_select",
+        "as": "PERMISSIVE",
+        "for": "SELECT",
+        "roles": ["authenticated"],
+        "using": "\"ai_calls\".\"owner_id\" = auth.uid()",
+        "withCheck": null,
+        "entityType": "policies"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "job_runs",
+        "name": "job_runs_owner_select",
+        "as": "PERMISSIVE",
+        "for": "SELECT",
+        "roles": ["authenticated"],
+        "using": "\"job_runs\".\"owner_id\" = auth.uid()",
+        "withCheck": null,
+        "entityType": "policies"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "jobs",
+        "name": "jobs_owner_select",
+        "as": "PERMISSIVE",
+        "for": "SELECT",
+        "roles": ["authenticated"],
+        "using": "\"jobs\".\"owner_id\" = auth.uid()",
+        "withCheck": null,
+        "entityType": "policies"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "generation_requests",
+        "name": "generation_requests_owner_select",
+        "as": "PERMISSIVE",
+        "for": "SELECT",
+        "roles": ["authenticated"],
+        "using": "\"generation_requests\".\"owner_id\" = auth.uid()",
+        "withCheck": null,
+        "entityType": "policies"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "generation_requests",
+        "name": "generation_requests_owner_insert",
+        "as": "PERMISSIVE",
+        "for": "INSERT",
+        "roles": ["authenticated"],
+        "using": null,
+        "withCheck": "\"generation_requests\".\"owner_id\" = auth.uid()",
+        "entityType": "policies"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "generation_runs",
+        "name": "generation_runs_owner_select",
+        "as": "PERMISSIVE",
+        "for": "SELECT",
+        "roles": ["authenticated"],
+        "using": "\"generation_runs\".\"owner_id\" = auth.uid()",
+        "withCheck": null,
+        "entityType": "policies"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "question_sources",
+        "name": "question_sources_owner_select",
+        "as": "PERMISSIVE",
+        "for": "SELECT",
+        "roles": ["authenticated"],
+        "using": "\"question_sources\".\"owner_id\" = auth.uid()",
+        "withCheck": null,
+        "entityType": "policies"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "question_versions",
+        "name": "question_versions_owner_select",
+        "as": "PERMISSIVE",
+        "for": "SELECT",
+        "roles": ["authenticated"],
+        "using": "\"question_versions\".\"owner_id\" = auth.uid()",
+        "withCheck": null,
+        "entityType": "policies"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "questions",
+        "name": "questions_owner_select",
+        "as": "PERMISSIVE",
+        "for": "SELECT",
+        "roles": ["authenticated"],
+        "using": "\"questions\".\"owner_id\" = auth.uid()",
+        "withCheck": null,
+        "entityType": "policies"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "questions",
+        "name": "questions_owner_update",
+        "as": "PERMISSIVE",
+        "for": "UPDATE",
+        "roles": ["authenticated"],
+        "using": "\"questions\".\"owner_id\" = auth.uid()",
+        "withCheck": "\"questions\".\"owner_id\" = auth.uid()",
+        "entityType": "policies"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "verification_runs",
+        "name": "verification_runs_owner_select",
+        "as": "PERMISSIVE",
+        "for": "SELECT",
+        "roles": ["authenticated"],
+        "using": "\"verification_runs\".\"owner_id\" = auth.uid()",
+        "withCheck": null,
+        "entityType": "policies"
+      }
+    }
+  ]
+}

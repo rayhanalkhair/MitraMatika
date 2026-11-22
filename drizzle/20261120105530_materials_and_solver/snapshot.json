@@ -1,0 +1,3598 @@
+{
+  "type": "diff",
+  "version": "9",
+  "dialect": "postgres",
+  "id": "7d435cae-5a5d-4501-9d7b-72fc22f4211e",
+  "prevIds": ["73c6b9c1-a9bf-4158-9fe2-fb78ef5f64f8"],
+  "footprints": [
+    {
+      "statementType": "create_table",
+      "statementTarget": ["table", "public", "folders"],
+      "writes": [
+        "s|tbl|public.folders",
+        "n|tbl|public.folders",
+        "e|tbl|public.folders",
+        "n|rel|public.folders",
+        "n|type|public.folders",
+        "n|rel|public.folders_pkey",
+        "n|rel|public.folders_id_owner_unique"
+      ],
+      "reads": ["n|sch|public"]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": ["table", "public", "material_pages"],
+      "writes": [
+        "s|tbl|public.material_pages",
+        "n|tbl|public.material_pages",
+        "e|tbl|public.material_pages",
+        "n|rel|public.material_pages",
+        "n|type|public.material_pages",
+        "n|rel|public.material_pages_pkey",
+        "n|rel|public.material_pages_material_page_unique",
+        "n|rel|public.material_pages_id_owner_unique"
+      ],
+      "reads": ["n|sch|public"]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": ["table", "public", "material_sections"],
+      "writes": [
+        "s|tbl|public.material_sections",
+        "n|tbl|public.material_sections",
+        "e|tbl|public.material_sections",
+        "n|rel|public.material_sections",
+        "n|type|public.material_sections",
+        "n|rel|public.material_sections_pkey",
+        "n|rel|public.material_sections_id_owner_unique",
+        "n|rel|public.material_sections_id_material_owner_unique"
+      ],
+      "reads": ["n|sch|public"]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": ["table", "public", "materials"],
+      "writes": [
+        "s|tbl|public.materials",
+        "n|tbl|public.materials",
+        "e|tbl|public.materials",
+        "n|rel|public.materials",
+        "n|type|public.materials",
+        "n|rel|public.materials_pkey",
+        "n|rel|public.materials_id_owner_unique",
+        "n|rel|public.materials_object_key_unique"
+      ],
+      "reads": ["n|sch|public"]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": ["table", "public", "ocr_usage"],
+      "writes": [
+        "s|tbl|public.ocr_usage",
+        "n|tbl|public.ocr_usage",
+        "e|tbl|public.ocr_usage",
+        "n|rel|public.ocr_usage",
+        "n|type|public.ocr_usage",
+        "n|rel|public.ocr_usage_pkey",
+        "n|rel|public.ocr_usage_owner_day_unique"
+      ],
+      "reads": ["n|sch|public"]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": ["table", "public", "solver_sessions"],
+      "writes": [
+        "s|tbl|public.solver_sessions",
+        "n|tbl|public.solver_sessions",
+        "e|tbl|public.solver_sessions",
+        "n|rel|public.solver_sessions",
+        "n|type|public.solver_sessions",
+        "n|rel|public.solver_sessions_pkey",
+        "n|rel|public.solver_sessions_id_owner_unique"
+      ],
+      "reads": ["n|sch|public"]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": ["table", "public", "solver_solutions"],
+      "writes": [
+        "s|tbl|public.solver_solutions",
+        "n|tbl|public.solver_solutions",
+        "e|tbl|public.solver_solutions",
+        "n|rel|public.solver_solutions",
+        "n|type|public.solver_solutions",
+        "n|rel|public.solver_solutions_pkey"
+      ],
+      "reads": ["n|sch|public"]
+    },
+    {
+      "statementType": "add_column",
+      "statementTarget": ["column", "public", "question_sources", "material_id"],
+      "writes": [
+        "s|col|public.question_sources.material_id",
+        "n|col|public.question_sources.material_id",
+        "e|col|public.question_sources.material_id"
+      ],
+      "reads": ["n|tbl|public.question_sources", "n|sch|public"]
+    },
+    {
+      "statementType": "add_column",
+      "statementTarget": ["column", "public", "question_sources", "material_page_id"],
+      "writes": [
+        "s|col|public.question_sources.material_page_id",
+        "n|col|public.question_sources.material_page_id",
+        "e|col|public.question_sources.material_page_id"
+      ],
+      "reads": ["n|tbl|public.question_sources", "n|sch|public"]
+    },
+    {
+      "statementType": "add_column",
+      "statementTarget": ["column", "public", "question_sources", "section_id"],
+      "writes": [
+        "s|col|public.question_sources.section_id",
+        "n|col|public.question_sources.section_id",
+        "e|col|public.question_sources.section_id"
+      ],
+      "reads": ["n|tbl|public.question_sources", "n|sch|public"]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": [
+        "index",
+        "public",
+        "question_sources",
+        "question_sources_material_idx"
+      ],
+      "writes": [
+        "s|idx|public.question_sources_material_idx",
+        "n|idx|public.question_sources_material_idx",
+        "e|idx|public.question_sources_material_idx",
+        "n|rel|public.question_sources_material_idx"
+      ],
+      "reads": [
+        "n|tbl|public.question_sources",
+        "n|sch|public",
+        "n|col|public.question_sources.material_id"
+      ]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": [
+        "index",
+        "public",
+        "question_sources",
+        "question_sources_page_idx"
+      ],
+      "writes": [
+        "s|idx|public.question_sources_page_idx",
+        "n|idx|public.question_sources_page_idx",
+        "e|idx|public.question_sources_page_idx",
+        "n|rel|public.question_sources_page_idx"
+      ],
+      "reads": [
+        "n|tbl|public.question_sources",
+        "n|sch|public",
+        "n|col|public.question_sources.material_page_id"
+      ]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": [
+        "index",
+        "public",
+        "question_sources",
+        "question_sources_section_idx"
+      ],
+      "writes": [
+        "s|idx|public.question_sources_section_idx",
+        "n|idx|public.question_sources_section_idx",
+        "e|idx|public.question_sources_section_idx",
+        "n|rel|public.question_sources_section_idx"
+      ],
+      "reads": [
+        "n|tbl|public.question_sources",
+        "n|sch|public",
+        "n|col|public.question_sources.section_id"
+      ]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": ["index", "public", "folders", "folders_owner_parent_idx"],
+      "writes": [
+        "s|idx|public.folders_owner_parent_idx",
+        "n|idx|public.folders_owner_parent_idx",
+        "e|idx|public.folders_owner_parent_idx",
+        "n|rel|public.folders_owner_parent_idx"
+      ],
+      "reads": [
+        "n|tbl|public.folders",
+        "n|sch|public",
+        "n|col|public.folders.owner_id",
+        "n|col|public.folders.parent_id"
+      ]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": ["index", "public", "folders", "folders_owner_deleted_idx"],
+      "writes": [
+        "s|idx|public.folders_owner_deleted_idx",
+        "n|idx|public.folders_owner_deleted_idx",
+        "e|idx|public.folders_owner_deleted_idx",
+        "n|rel|public.folders_owner_deleted_idx"
+      ],
+      "reads": [
+        "n|tbl|public.folders",
+        "n|sch|public",
+        "n|col|public.folders.owner_id",
+        "n|col|public.folders.deleted_at"
+      ]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": ["index", "public", "material_pages", "material_pages_tsv_idx"],
+      "writes": [
+        "s|idx|public.material_pages_tsv_idx",
+        "n|idx|public.material_pages_tsv_idx",
+        "e|idx|public.material_pages_tsv_idx",
+        "n|rel|public.material_pages_tsv_idx"
+      ],
+      "reads": [
+        "n|tbl|public.material_pages",
+        "n|sch|public",
+        "n|col|public.material_pages.tsv"
+      ]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": [
+        "index",
+        "public",
+        "material_pages",
+        "material_pages_text_trgm"
+      ],
+      "writes": [
+        "s|idx|public.material_pages_text_trgm",
+        "n|idx|public.material_pages_text_trgm",
+        "e|idx|public.material_pages_text_trgm",
+        "n|rel|public.material_pages_text_trgm"
+      ],
+      "reads": [
+        "n|tbl|public.material_pages",
+        "n|sch|public",
+        "n|col|public.material_pages.text_md"
+      ]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": [
+        "index",
+        "public",
+        "material_sections",
+        "material_sections_material_idx"
+      ],
+      "writes": [
+        "s|idx|public.material_sections_material_idx",
+        "n|idx|public.material_sections_material_idx",
+        "e|idx|public.material_sections_material_idx",
+        "n|rel|public.material_sections_material_idx"
+      ],
+      "reads": [
+        "n|tbl|public.material_sections",
+        "n|sch|public",
+        "n|col|public.material_sections.material_id"
+      ]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": [
+        "index",
+        "public",
+        "material_sections",
+        "material_sections_parent_idx"
+      ],
+      "writes": [
+        "s|idx|public.material_sections_parent_idx",
+        "n|idx|public.material_sections_parent_idx",
+        "e|idx|public.material_sections_parent_idx",
+        "n|rel|public.material_sections_parent_idx"
+      ],
+      "reads": [
+        "n|tbl|public.material_sections",
+        "n|sch|public",
+        "n|col|public.material_sections.parent_id"
+      ]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": ["index", "public", "materials", "materials_owner_deleted_idx"],
+      "writes": [
+        "s|idx|public.materials_owner_deleted_idx",
+        "n|idx|public.materials_owner_deleted_idx",
+        "e|idx|public.materials_owner_deleted_idx",
+        "n|rel|public.materials_owner_deleted_idx"
+      ],
+      "reads": [
+        "n|tbl|public.materials",
+        "n|sch|public",
+        "n|col|public.materials.owner_id",
+        "n|col|public.materials.deleted_at"
+      ]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": ["index", "public", "materials", "materials_owner_folder_idx"],
+      "writes": [
+        "s|idx|public.materials_owner_folder_idx",
+        "n|idx|public.materials_owner_folder_idx",
+        "e|idx|public.materials_owner_folder_idx",
+        "n|rel|public.materials_owner_folder_idx"
+      ],
+      "reads": [
+        "n|tbl|public.materials",
+        "n|sch|public",
+        "n|col|public.materials.owner_id",
+        "n|col|public.materials.folder_id"
+      ]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": [
+        "index",
+        "public",
+        "solver_sessions",
+        "solver_sessions_owner_recent_idx"
+      ],
+      "writes": [
+        "s|idx|public.solver_sessions_owner_recent_idx",
+        "n|idx|public.solver_sessions_owner_recent_idx",
+        "e|idx|public.solver_sessions_owner_recent_idx",
+        "n|rel|public.solver_sessions_owner_recent_idx"
+      ],
+      "reads": [
+        "n|tbl|public.solver_sessions",
+        "n|sch|public",
+        "n|col|public.solver_sessions.owner_id",
+        "n|col|public.solver_sessions.deleted_at",
+        "n|col|public.solver_sessions.created_at"
+      ]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": [
+        "index",
+        "public",
+        "solver_sessions",
+        "solver_sessions_photo_purge_idx"
+      ],
+      "writes": [
+        "s|idx|public.solver_sessions_photo_purge_idx",
+        "n|idx|public.solver_sessions_photo_purge_idx",
+        "e|idx|public.solver_sessions_photo_purge_idx",
+        "n|rel|public.solver_sessions_photo_purge_idx"
+      ],
+      "reads": [
+        "n|tbl|public.solver_sessions",
+        "n|sch|public",
+        "n|col|public.solver_sessions.created_at"
+      ]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": [
+        "index",
+        "public",
+        "solver_solutions",
+        "solver_solutions_session_idx"
+      ],
+      "writes": [
+        "s|idx|public.solver_solutions_session_idx",
+        "n|idx|public.solver_solutions_session_idx",
+        "e|idx|public.solver_solutions_session_idx",
+        "n|rel|public.solver_solutions_session_idx"
+      ],
+      "reads": [
+        "n|tbl|public.solver_solutions",
+        "n|sch|public",
+        "n|col|public.solver_solutions.session_id"
+      ]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": [
+        "index",
+        "public",
+        "solver_solutions",
+        "solver_solutions_run_idx"
+      ],
+      "writes": [
+        "s|idx|public.solver_solutions_run_idx",
+        "n|idx|public.solver_solutions_run_idx",
+        "e|idx|public.solver_solutions_run_idx",
+        "n|rel|public.solver_solutions_run_idx"
+      ],
+      "reads": [
+        "n|tbl|public.solver_solutions",
+        "n|sch|public",
+        "n|col|public.solver_solutions.generation_run_id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": ["table", "public", "folders"],
+      "writes": [
+        "s|fk|public.folders.folders_owner_id_profiles_id_fkey",
+        "n|fk|public.folders.folders_owner_id_profiles_id_fkey",
+        "e|fk|public.folders.folders_owner_id_profiles_id_fkey",
+        "n|con|public.folders.folders_owner_id_profiles_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.folders",
+        "n|sch|public",
+        "n|tbl|public.profiles",
+        "n|sch|public",
+        "n|col|public.folders.owner_id",
+        "n|col|public.profiles.id",
+        "e|uniqueness|public.profiles.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": ["table", "public", "folders"],
+      "writes": [
+        "s|fk|public.folders.folders_parent_owner_fk",
+        "n|fk|public.folders.folders_parent_owner_fk",
+        "e|fk|public.folders.folders_parent_owner_fk",
+        "n|con|public.folders.folders_parent_owner_fk"
+      ],
+      "reads": [
+        "n|tbl|public.folders",
+        "n|sch|public",
+        "n|tbl|public.folders",
+        "n|sch|public",
+        "n|col|public.folders.parent_id",
+        "n|col|public.folders.owner_id",
+        "n|col|public.folders.id",
+        "n|col|public.folders.owner_id",
+        "e|uniqueness|public.folders.id.owner_id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": ["table", "public", "material_pages"],
+      "writes": [
+        "s|fk|public.material_pages.material_pages_owner_id_profiles_id_fkey",
+        "n|fk|public.material_pages.material_pages_owner_id_profiles_id_fkey",
+        "e|fk|public.material_pages.material_pages_owner_id_profiles_id_fkey",
+        "n|con|public.material_pages.material_pages_owner_id_profiles_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.material_pages",
+        "n|sch|public",
+        "n|tbl|public.profiles",
+        "n|sch|public",
+        "n|col|public.material_pages.owner_id",
+        "n|col|public.profiles.id",
+        "e|uniqueness|public.profiles.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": ["table", "public", "material_pages"],
+      "writes": [
+        "s|fk|public.material_pages.material_pages_material_owner_fk",
+        "n|fk|public.material_pages.material_pages_material_owner_fk",
+        "e|fk|public.material_pages.material_pages_material_owner_fk",
+        "n|con|public.material_pages.material_pages_material_owner_fk"
+      ],
+      "reads": [
+        "n|tbl|public.material_pages",
+        "n|sch|public",
+        "n|tbl|public.materials",
+        "n|sch|public",
+        "n|col|public.material_pages.material_id",
+        "n|col|public.material_pages.owner_id",
+        "n|col|public.materials.id",
+        "n|col|public.materials.owner_id",
+        "e|uniqueness|public.materials.id.owner_id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": ["table", "public", "material_sections"],
+      "writes": [
+        "s|fk|public.material_sections.material_sections_owner_id_profiles_id_fkey",
+        "n|fk|public.material_sections.material_sections_owner_id_profiles_id_fkey",
+        "e|fk|public.material_sections.material_sections_owner_id_profiles_id_fkey",
+        "n|con|public.material_sections.material_sections_owner_id_profiles_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.material_sections",
+        "n|sch|public",
+        "n|tbl|public.profiles",
+        "n|sch|public",
+        "n|col|public.material_sections.owner_id",
+        "n|col|public.profiles.id",
+        "e|uniqueness|public.profiles.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": ["table", "public", "material_sections"],
+      "writes": [
+        "s|fk|public.material_sections.material_sections_topic_id_topics_id_fkey",
+        "n|fk|public.material_sections.material_sections_topic_id_topics_id_fkey",
+        "e|fk|public.material_sections.material_sections_topic_id_topics_id_fkey",
+        "n|con|public.material_sections.material_sections_topic_id_topics_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.material_sections",
+        "n|sch|public",
+        "n|tbl|public.topics",
+        "n|sch|public",
+        "n|col|public.material_sections.topic_id",
+        "n|col|public.topics.id",
+        "e|uniqueness|public.topics.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": ["table", "public", "material_sections"],
+      "writes": [
+        "s|fk|public.material_sections.material_sections_material_owner_fk",
+        "n|fk|public.material_sections.material_sections_material_owner_fk",
+        "e|fk|public.material_sections.material_sections_material_owner_fk",
+        "n|con|public.material_sections.material_sections_material_owner_fk"
+      ],
+      "reads": [
+        "n|tbl|public.material_sections",
+        "n|sch|public",
+        "n|tbl|public.materials",
+        "n|sch|public",
+        "n|col|public.material_sections.material_id",
+        "n|col|public.material_sections.owner_id",
+        "n|col|public.materials.id",
+        "n|col|public.materials.owner_id",
+        "e|uniqueness|public.materials.id.owner_id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": ["table", "public", "material_sections"],
+      "writes": [
+        "s|fk|public.material_sections.material_sections_parent_owner_fk",
+        "n|fk|public.material_sections.material_sections_parent_owner_fk",
+        "e|fk|public.material_sections.material_sections_parent_owner_fk",
+        "n|con|public.material_sections.material_sections_parent_owner_fk"
+      ],
+      "reads": [
+        "n|tbl|public.material_sections",
+        "n|sch|public",
+        "n|tbl|public.material_sections",
+        "n|sch|public",
+        "n|col|public.material_sections.parent_id",
+        "n|col|public.material_sections.material_id",
+        "n|col|public.material_sections.owner_id",
+        "n|col|public.material_sections.id",
+        "n|col|public.material_sections.material_id",
+        "n|col|public.material_sections.owner_id",
+        "e|uniqueness|public.material_sections.id.material_id.owner_id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": ["table", "public", "materials"],
+      "writes": [
+        "s|fk|public.materials.materials_owner_id_profiles_id_fkey",
+        "n|fk|public.materials.materials_owner_id_profiles_id_fkey",
+        "e|fk|public.materials.materials_owner_id_profiles_id_fkey",
+        "n|con|public.materials.materials_owner_id_profiles_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.materials",
+        "n|sch|public",
+        "n|tbl|public.profiles",
+        "n|sch|public",
+        "n|col|public.materials.owner_id",
+        "n|col|public.profiles.id",
+        "e|uniqueness|public.profiles.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": ["table", "public", "ocr_usage"],
+      "writes": [
+        "s|fk|public.ocr_usage.ocr_usage_owner_id_profiles_id_fkey",
+        "n|fk|public.ocr_usage.ocr_usage_owner_id_profiles_id_fkey",
+        "e|fk|public.ocr_usage.ocr_usage_owner_id_profiles_id_fkey",
+        "n|con|public.ocr_usage.ocr_usage_owner_id_profiles_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.ocr_usage",
+        "n|sch|public",
+        "n|tbl|public.profiles",
+        "n|sch|public",
+        "n|col|public.ocr_usage.owner_id",
+        "n|col|public.profiles.id",
+        "e|uniqueness|public.profiles.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": ["table", "public", "solver_sessions"],
+      "writes": [
+        "s|fk|public.solver_sessions.solver_sessions_owner_id_profiles_id_fkey",
+        "n|fk|public.solver_sessions.solver_sessions_owner_id_profiles_id_fkey",
+        "e|fk|public.solver_sessions.solver_sessions_owner_id_profiles_id_fkey",
+        "n|con|public.solver_sessions.solver_sessions_owner_id_profiles_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.solver_sessions",
+        "n|sch|public",
+        "n|tbl|public.profiles",
+        "n|sch|public",
+        "n|col|public.solver_sessions.owner_id",
+        "n|col|public.profiles.id",
+        "e|uniqueness|public.profiles.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": ["table", "public", "solver_solutions"],
+      "writes": [
+        "s|fk|public.solver_solutions.solver_solutions_owner_id_profiles_id_fkey",
+        "n|fk|public.solver_solutions.solver_solutions_owner_id_profiles_id_fkey",
+        "e|fk|public.solver_solutions.solver_solutions_owner_id_profiles_id_fkey",
+        "n|con|public.solver_solutions.solver_solutions_owner_id_profiles_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.solver_solutions",
+        "n|sch|public",
+        "n|tbl|public.profiles",
+        "n|sch|public",
+        "n|col|public.solver_solutions.owner_id",
+        "n|col|public.profiles.id",
+        "e|uniqueness|public.profiles.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": ["table", "public", "solver_solutions"],
+      "writes": [
+        "s|fk|public.solver_solutions.solver_solutions_session_owner_fk",
+        "n|fk|public.solver_solutions.solver_solutions_session_owner_fk",
+        "e|fk|public.solver_solutions.solver_solutions_session_owner_fk",
+        "n|con|public.solver_solutions.solver_solutions_session_owner_fk"
+      ],
+      "reads": [
+        "n|tbl|public.solver_solutions",
+        "n|sch|public",
+        "n|tbl|public.solver_sessions",
+        "n|sch|public",
+        "n|col|public.solver_solutions.session_id",
+        "n|col|public.solver_solutions.owner_id",
+        "n|col|public.solver_sessions.id",
+        "n|col|public.solver_sessions.owner_id",
+        "e|uniqueness|public.solver_sessions.id.owner_id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": ["table", "public", "solver_solutions"],
+      "writes": [
+        "s|fk|public.solver_solutions.solver_solutions_run_owner_fk",
+        "n|fk|public.solver_solutions.solver_solutions_run_owner_fk",
+        "e|fk|public.solver_solutions.solver_solutions_run_owner_fk",
+        "n|con|public.solver_solutions.solver_solutions_run_owner_fk"
+      ],
+      "reads": [
+        "n|tbl|public.solver_solutions",
+        "n|sch|public",
+        "n|tbl|public.generation_runs",
+        "n|sch|public",
+        "n|col|public.solver_solutions.generation_run_id",
+        "n|col|public.solver_solutions.owner_id",
+        "n|col|public.generation_runs.id",
+        "n|col|public.generation_runs.owner_id",
+        "e|uniqueness|public.generation_runs.id.owner_id"
+      ]
+    },
+    {
+      "statementType": "add_check",
+      "statementTarget": ["table", "public", "question_sources"],
+      "writes": [
+        "s|ck|public.question_sources.question_sources_material_anchor_check",
+        "n|ck|public.question_sources.question_sources_material_anchor_check",
+        "e|ck|public.question_sources.question_sources_material_anchor_check",
+        "n|con|public.question_sources.question_sources_material_anchor_check"
+      ],
+      "reads": [
+        "n|tbl|public.question_sources",
+        "n|sch|public",
+        "n|col|public.question_sources.kind",
+        "n|col|public.question_sources.anchor_label",
+        "n|col|public.question_sources.material_id",
+        "n|col|public.question_sources.excerpt"
+      ]
+    },
+    {
+      "statementType": "add_check",
+      "statementTarget": ["table", "public", "question_sources"],
+      "writes": [
+        "s|ck|public.question_sources.question_sources_curriculum_no_material_check",
+        "n|ck|public.question_sources.question_sources_curriculum_no_material_check",
+        "e|ck|public.question_sources.question_sources_curriculum_no_material_check",
+        "n|con|public.question_sources.question_sources_curriculum_no_material_check"
+      ],
+      "reads": [
+        "n|tbl|public.question_sources",
+        "n|sch|public",
+        "n|col|public.question_sources.kind",
+        "n|col|public.question_sources.material_id",
+        "n|col|public.question_sources.material_page_id",
+        "n|col|public.question_sources.section_id"
+      ]
+    },
+    {
+      "statementType": "alter_check",
+      "statementTarget": ["table", "public", "question_sources"],
+      "writes": ["s|ck|public.question_sources.question_sources_kind_check"],
+      "reads": [
+        "n|tbl|public.question_sources",
+        "n|sch|public",
+        "n|col|public.question_sources.kind",
+        "e|col|public.question_sources.kind"
+      ],
+      "sqlHash": "f36b740564e7d3f0"
+    },
+    {
+      "statementType": "create_policy",
+      "statementTarget": ["table", "public", "folders"],
+      "writes": [
+        "s|pol|public.folders.folders_owner_select",
+        "n|pol|public.folders.folders_owner_select",
+        "e|pol|public.folders.folders_owner_select"
+      ],
+      "reads": [
+        "n|tbl|public.folders",
+        "n|sch|public",
+        "n|role|authenticated",
+        "e|rls|public.folders"
+      ]
+    },
+    {
+      "statementType": "create_policy",
+      "statementTarget": ["table", "public", "folders"],
+      "writes": [
+        "s|pol|public.folders.folders_owner_insert",
+        "n|pol|public.folders.folders_owner_insert",
+        "e|pol|public.folders.folders_owner_insert"
+      ],
+      "reads": [
+        "n|tbl|public.folders",
+        "n|sch|public",
+        "n|role|authenticated",
+        "e|rls|public.folders"
+      ]
+    },
+    {
+      "statementType": "create_policy",
+      "statementTarget": ["table", "public", "folders"],
+      "writes": [
+        "s|pol|public.folders.folders_owner_update",
+        "n|pol|public.folders.folders_owner_update",
+        "e|pol|public.folders.folders_owner_update"
+      ],
+      "reads": [
+        "n|tbl|public.folders",
+        "n|sch|public",
+        "n|role|authenticated",
+        "e|rls|public.folders"
+      ]
+    },
+    {
+      "statementType": "create_policy",
+      "statementTarget": ["table", "public", "material_pages"],
+      "writes": [
+        "s|pol|public.material_pages.material_pages_owner_select",
+        "n|pol|public.material_pages.material_pages_owner_select",
+        "e|pol|public.material_pages.material_pages_owner_select"
+      ],
+      "reads": [
+        "n|tbl|public.material_pages",
+        "n|sch|public",
+        "n|role|authenticated",
+        "e|rls|public.material_pages"
+      ]
+    },
+    {
+      "statementType": "create_policy",
+      "statementTarget": ["table", "public", "material_sections"],
+      "writes": [
+        "s|pol|public.material_sections.material_sections_owner_select",
+        "n|pol|public.material_sections.material_sections_owner_select",
+        "e|pol|public.material_sections.material_sections_owner_select"
+      ],
+      "reads": [
+        "n|tbl|public.material_sections",
+        "n|sch|public",
+        "n|role|authenticated",
+        "e|rls|public.material_sections"
+      ]
+    },
+    {
+      "statementType": "create_policy",
+      "statementTarget": ["table", "public", "material_sections"],
+      "writes": [
+        "s|pol|public.material_sections.material_sections_owner_insert",
+        "n|pol|public.material_sections.material_sections_owner_insert",
+        "e|pol|public.material_sections.material_sections_owner_insert"
+      ],
+      "reads": [
+        "n|tbl|public.material_sections",
+        "n|sch|public",
+        "n|role|authenticated",
+        "e|rls|public.material_sections"
+      ]
+    },
+    {
+      "statementType": "create_policy",
+      "statementTarget": ["table", "public", "material_sections"],
+      "writes": [
+        "s|pol|public.material_sections.material_sections_owner_update",
+        "n|pol|public.material_sections.material_sections_owner_update",
+        "e|pol|public.material_sections.material_sections_owner_update"
+      ],
+      "reads": [
+        "n|tbl|public.material_sections",
+        "n|sch|public",
+        "n|role|authenticated",
+        "e|rls|public.material_sections"
+      ]
+    },
+    {
+      "statementType": "create_policy",
+      "statementTarget": ["table", "public", "material_sections"],
+      "writes": [
+        "s|pol|public.material_sections.material_sections_owner_delete",
+        "n|pol|public.material_sections.material_sections_owner_delete",
+        "e|pol|public.material_sections.material_sections_owner_delete"
+      ],
+      "reads": [
+        "n|tbl|public.material_sections",
+        "n|sch|public",
+        "n|role|authenticated",
+        "e|rls|public.material_sections"
+      ]
+    },
+    {
+      "statementType": "create_policy",
+      "statementTarget": ["table", "public", "materials"],
+      "writes": [
+        "s|pol|public.materials.materials_owner_select",
+        "n|pol|public.materials.materials_owner_select",
+        "e|pol|public.materials.materials_owner_select"
+      ],
+      "reads": [
+        "n|tbl|public.materials",
+        "n|sch|public",
+        "n|role|authenticated",
+        "e|rls|public.materials"
+      ]
+    },
+    {
+      "statementType": "create_policy",
+      "statementTarget": ["table", "public", "materials"],
+      "writes": [
+        "s|pol|public.materials.materials_owner_update",
+        "n|pol|public.materials.materials_owner_update",
+        "e|pol|public.materials.materials_owner_update"
+      ],
+      "reads": [
+        "n|tbl|public.materials",
+        "n|sch|public",
+        "n|role|authenticated",
+        "e|rls|public.materials"
+      ]
+    },
+    {
+      "statementType": "create_policy",
+      "statementTarget": ["table", "public", "ocr_usage"],
+      "writes": [
+        "s|pol|public.ocr_usage.ocr_usage_owner_select",
+        "n|pol|public.ocr_usage.ocr_usage_owner_select",
+        "e|pol|public.ocr_usage.ocr_usage_owner_select"
+      ],
+      "reads": [
+        "n|tbl|public.ocr_usage",
+        "n|sch|public",
+        "n|role|authenticated",
+        "e|rls|public.ocr_usage"
+      ]
+    },
+    {
+      "statementType": "create_policy",
+      "statementTarget": ["table", "public", "solver_sessions"],
+      "writes": [
+        "s|pol|public.solver_sessions.solver_sessions_owner_select",
+        "n|pol|public.solver_sessions.solver_sessions_owner_select",
+        "e|pol|public.solver_sessions.solver_sessions_owner_select"
+      ],
+      "reads": [
+        "n|tbl|public.solver_sessions",
+        "n|sch|public",
+        "n|role|authenticated",
+        "e|rls|public.solver_sessions"
+      ]
+    },
+    {
+      "statementType": "create_policy",
+      "statementTarget": ["table", "public", "solver_solutions"],
+      "writes": [
+        "s|pol|public.solver_solutions.solver_solutions_owner_select",
+        "n|pol|public.solver_solutions.solver_solutions_owner_select",
+        "e|pol|public.solver_solutions.solver_solutions_owner_select"
+      ],
+      "reads": [
+        "n|tbl|public.solver_solutions",
+        "n|sch|public",
+        "n|role|authenticated",
+        "e|rls|public.solver_solutions"
+      ]
+    }
+  ],
+  "deltas": [
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "name": "folders",
+        "isRlsEnabled": true,
+        "entityType": "tables"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "name": "material_pages",
+        "isRlsEnabled": true,
+        "entityType": "tables"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "name": "material_sections",
+        "isRlsEnabled": true,
+        "entityType": "tables"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "name": "materials",
+        "isRlsEnabled": true,
+        "entityType": "tables"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "name": "ocr_usage",
+        "isRlsEnabled": true,
+        "entityType": "tables"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "name": "solver_sessions",
+        "isRlsEnabled": true,
+        "entityType": "tables"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "name": "solver_solutions",
+        "isRlsEnabled": true,
+        "entityType": "tables"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "question_sources",
+        "name": "material_id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "question_sources",
+        "name": "material_page_id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "question_sources",
+        "name": "section_id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "folders",
+        "name": "id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "gen_random_uuid()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "folders",
+        "name": "owner_id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "folders",
+        "name": "parent_id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "folders",
+        "name": "name",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "folders",
+        "name": "deleted_at",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "folders",
+        "name": "purge_after",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "folders",
+        "name": "created_at",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "now()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "folders",
+        "name": "updated_at",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "now()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "material_pages",
+        "name": "id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "gen_random_uuid()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "material_pages",
+        "name": "owner_id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "material_pages",
+        "name": "material_id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "material_pages",
+        "name": "page_no",
+        "type": "integer",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "material_pages",
+        "name": "text_md",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "''",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "material_pages",
+        "name": "text_source",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "material_pages",
+        "name": "confidence",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "'low'",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "material_pages",
+        "name": "flags",
+        "type": "jsonb",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "'[]'",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "material_pages",
+        "name": "ocr_status",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "'none'",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "material_pages",
+        "name": "reviewed_at",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "material_pages",
+        "name": "tsv",
+        "type": "tsvector",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": {
+          "as": "to_tsvector('indonesian'::regconfig, \"text_md\")",
+          "type": "stored"
+        },
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "material_pages",
+        "name": "created_at",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "now()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "material_pages",
+        "name": "updated_at",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "now()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "material_sections",
+        "name": "id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "gen_random_uuid()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "material_sections",
+        "name": "owner_id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "material_sections",
+        "name": "material_id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "material_sections",
+        "name": "parent_id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "material_sections",
+        "name": "title",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "material_sections",
+        "name": "kind",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "'chapter'",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "material_sections",
+        "name": "page_start",
+        "type": "integer",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "material_sections",
+        "name": "page_end",
+        "type": "integer",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "material_sections",
+        "name": "topic_id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "material_sections",
+        "name": "created_at",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "now()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "material_sections",
+        "name": "updated_at",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "now()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "materials",
+        "name": "id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "gen_random_uuid()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "materials",
+        "name": "owner_id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "materials",
+        "name": "folder_id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "materials",
+        "name": "title",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "materials",
+        "name": "kind",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "materials",
+        "name": "mime",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "materials",
+        "name": "size_bytes",
+        "type": "bigint",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "materials",
+        "name": "sha256",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "materials",
+        "name": "object_key",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "materials",
+        "name": "page_count",
+        "type": "integer",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "materials",
+        "name": "grade",
+        "type": "smallint",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "materials",
+        "name": "academic_year",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "materials",
+        "name": "status",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "'uploaded'",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "materials",
+        "name": "proposed_metadata",
+        "type": "jsonb",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "materials",
+        "name": "metadata_confirmed_at",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "materials",
+        "name": "deleted_at",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "materials",
+        "name": "purge_after",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "materials",
+        "name": "created_at",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "now()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "materials",
+        "name": "updated_at",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "now()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "ocr_usage",
+        "name": "id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "gen_random_uuid()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "ocr_usage",
+        "name": "owner_id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "ocr_usage",
+        "name": "day",
+        "type": "date",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "ocr_usage",
+        "name": "pages",
+        "type": "integer",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "0",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "ocr_usage",
+        "name": "created_at",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "now()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "ocr_usage",
+        "name": "updated_at",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "now()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "solver_sessions",
+        "name": "id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "gen_random_uuid()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "solver_sessions",
+        "name": "owner_id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "solver_sessions",
+        "name": "input_kind",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "solver_sessions",
+        "name": "input_text",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "solver_sessions",
+        "name": "input_key",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "solver_sessions",
+        "name": "extracted_md",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "solver_sessions",
+        "name": "extraction_flags",
+        "type": "jsonb",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "'[]'",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "solver_sessions",
+        "name": "confirmed_md",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "solver_sessions",
+        "name": "status",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "'pending'",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "solver_sessions",
+        "name": "deleted_at",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "solver_sessions",
+        "name": "purge_after",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "solver_sessions",
+        "name": "created_at",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "now()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "solver_sessions",
+        "name": "updated_at",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "now()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "solver_solutions",
+        "name": "id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "gen_random_uuid()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "solver_solutions",
+        "name": "owner_id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "solver_solutions",
+        "name": "session_id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "solver_solutions",
+        "name": "method_label",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "solver_solutions",
+        "name": "is_alternative",
+        "type": "boolean",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "false",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "solver_solutions",
+        "name": "steps",
+        "type": "jsonb",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "solver_solutions",
+        "name": "final_answer",
+        "type": "jsonb",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "solver_solutions",
+        "name": "verification_status",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "solver_solutions",
+        "name": "verification_report",
+        "type": "jsonb",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "solver_solutions",
+        "name": "generation_run_id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "solver_solutions",
+        "name": "created_at",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "now()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "question_sources",
+        "name": "question_sources_material_idx",
+        "nameExplicit": true,
+        "columns": [
+          {
+            "value": "material_id",
+            "isExpression": false,
+            "asc": true,
+            "nullsFirst": false,
+            "opclass": null
+          }
+        ],
+        "isUnique": false,
+        "where": null,
+        "with": "",
+        "method": "btree",
+        "concurrently": false,
+        "entityType": "indexes"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "question_sources",
+        "name": "question_sources_page_idx",
+        "nameExplicit": true,
+        "columns": [
+          {
+            "value": "material_page_id",
+            "isExpression": false,
+            "asc": true,
+            "nullsFirst": false,
+            "opclass": null
+          }
+        ],
+        "isUnique": false,
+        "where": null,
+        "with": "",
+        "method": "btree",
+        "concurrently": false,
+        "entityType": "indexes"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "question_sources",
+        "name": "question_sources_section_idx",
+        "nameExplicit": true,
+        "columns": [
+          {
+            "value": "section_id",
+            "isExpression": false,
+            "asc": true,
+            "nullsFirst": false,
+            "opclass": null
+          }
+        ],
+        "isUnique": false,
+        "where": null,
+        "with": "",
+        "method": "btree",
+        "concurrently": false,
+        "entityType": "indexes"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "folders",
+        "name": "folders_owner_parent_idx",
+        "nameExplicit": true,
+        "columns": [
+          {
+            "value": "owner_id",
+            "isExpression": false,
+            "asc": true,
+            "nullsFirst": false,
+            "opclass": null
+          },
+          {
+            "value": "parent_id",
+            "isExpression": false,
+            "asc": true,
+            "nullsFirst": false,
+            "opclass": null
+          }
+        ],
+        "isUnique": false,
+        "where": null,
+        "with": "",
+        "method": "btree",
+        "concurrently": false,
+        "entityType": "indexes"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "folders",
+        "name": "folders_owner_deleted_idx",
+        "nameExplicit": true,
+        "columns": [
+          {
+            "value": "owner_id",
+            "isExpression": false,
+            "asc": true,
+            "nullsFirst": false,
+            "opclass": null
+          },
+          {
+            "value": "deleted_at",
+            "isExpression": false,
+            "asc": true,
+            "nullsFirst": false,
+            "opclass": null
+          }
+        ],
+        "isUnique": false,
+        "where": null,
+        "with": "",
+        "method": "btree",
+        "concurrently": false,
+        "entityType": "indexes"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "material_pages",
+        "name": "material_pages_tsv_idx",
+        "nameExplicit": true,
+        "columns": [
+          {
+            "value": "tsv",
+            "isExpression": false,
+            "asc": true,
+            "nullsFirst": false,
+            "opclass": null
+          }
+        ],
+        "isUnique": false,
+        "where": null,
+        "with": "",
+        "method": "gin",
+        "concurrently": false,
+        "entityType": "indexes"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "material_pages",
+        "name": "material_pages_text_trgm",
+        "nameExplicit": true,
+        "columns": [
+          {
+            "value": "text_md",
+            "isExpression": false,
+            "asc": true,
+            "nullsFirst": false,
+            "opclass": {
+              "name": "gin_trgm_ops",
+              "default": false
+            }
+          }
+        ],
+        "isUnique": false,
+        "where": null,
+        "with": "",
+        "method": "gin",
+        "concurrently": false,
+        "entityType": "indexes"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "material_sections",
+        "name": "material_sections_material_idx",
+        "nameExplicit": true,
+        "columns": [
+          {
+            "value": "material_id",
+            "isExpression": false,
+            "asc": true,
+            "nullsFirst": false,
+            "opclass": null
+          }
+        ],
+        "isUnique": false,
+        "where": null,
+        "with": "",
+        "method": "btree",
+        "concurrently": false,
+        "entityType": "indexes"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "material_sections",
+        "name": "material_sections_parent_idx",
+        "nameExplicit": true,
+        "columns": [
+          {
+            "value": "parent_id",
+            "isExpression": false,
+            "asc": true,
+            "nullsFirst": false,
+            "opclass": null
+          }
+        ],
+        "isUnique": false,
+        "where": null,
+        "with": "",
+        "method": "btree",
+        "concurrently": false,
+        "entityType": "indexes"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "materials",
+        "name": "materials_owner_deleted_idx",
+        "nameExplicit": true,
+        "columns": [
+          {
+            "value": "owner_id",
+            "isExpression": false,
+            "asc": true,
+            "nullsFirst": false,
+            "opclass": null
+          },
+          {
+            "value": "deleted_at",
+            "isExpression": false,
+            "asc": true,
+            "nullsFirst": false,
+            "opclass": null
+          }
+        ],
+        "isUnique": false,
+        "where": null,
+        "with": "",
+        "method": "btree",
+        "concurrently": false,
+        "entityType": "indexes"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "materials",
+        "name": "materials_owner_folder_idx",
+        "nameExplicit": true,
+        "columns": [
+          {
+            "value": "owner_id",
+            "isExpression": false,
+            "asc": true,
+            "nullsFirst": false,
+            "opclass": null
+          },
+          {
+            "value": "folder_id",
+            "isExpression": false,
+            "asc": true,
+            "nullsFirst": false,
+            "opclass": null
+          }
+        ],
+        "isUnique": false,
+        "where": null,
+        "with": "",
+        "method": "btree",
+        "concurrently": false,
+        "entityType": "indexes"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "solver_sessions",
+        "name": "solver_sessions_owner_recent_idx",
+        "nameExplicit": true,
+        "columns": [
+          {
+            "value": "owner_id",
+            "isExpression": false,
+            "asc": true,
+            "nullsFirst": false,
+            "opclass": null
+          },
+          {
+            "value": "deleted_at",
+            "isExpression": false,
+            "asc": true,
+            "nullsFirst": false,
+            "opclass": null
+          },
+          {
+            "value": "created_at",
+            "isExpression": false,
+            "asc": false,
+            "nullsFirst": false,
+            "opclass": null
+          }
+        ],
+        "isUnique": false,
+        "where": null,
+        "with": "",
+        "method": "btree",
+        "concurrently": false,
+        "entityType": "indexes"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "solver_sessions",
+        "name": "solver_sessions_photo_purge_idx",
+        "nameExplicit": true,
+        "columns": [
+          {
+            "value": "created_at",
+            "isExpression": false,
+            "asc": true,
+            "nullsFirst": false,
+            "opclass": null
+          }
+        ],
+        "isUnique": false,
+        "where": "\"input_key\" is not null",
+        "with": "",
+        "method": "btree",
+        "concurrently": false,
+        "entityType": "indexes"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "solver_solutions",
+        "name": "solver_solutions_session_idx",
+        "nameExplicit": true,
+        "columns": [
+          {
+            "value": "session_id",
+            "isExpression": false,
+            "asc": true,
+            "nullsFirst": false,
+            "opclass": null
+          }
+        ],
+        "isUnique": false,
+        "where": null,
+        "with": "",
+        "method": "btree",
+        "concurrently": false,
+        "entityType": "indexes"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "solver_solutions",
+        "name": "solver_solutions_run_idx",
+        "nameExplicit": true,
+        "columns": [
+          {
+            "value": "generation_run_id",
+            "isExpression": false,
+            "asc": true,
+            "nullsFirst": false,
+            "opclass": null
+          }
+        ],
+        "isUnique": false,
+        "where": null,
+        "with": "",
+        "method": "btree",
+        "concurrently": false,
+        "entityType": "indexes"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "folders",
+        "name": "folders_owner_id_profiles_id_fkey",
+        "nameExplicit": false,
+        "columns": ["owner_id"],
+        "schemaTo": "public",
+        "tableTo": "profiles",
+        "columnsTo": ["id"],
+        "onUpdate": "NO ACTION",
+        "onDelete": "CASCADE",
+        "entityType": "fks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "folders",
+        "name": "folders_parent_owner_fk",
+        "nameExplicit": true,
+        "columns": ["parent_id", "owner_id"],
+        "schemaTo": "public",
+        "tableTo": "folders",
+        "columnsTo": ["id", "owner_id"],
+        "onUpdate": "NO ACTION",
+        "onDelete": "CASCADE",
+        "entityType": "fks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "material_pages",
+        "name": "material_pages_owner_id_profiles_id_fkey",
+        "nameExplicit": false,
+        "columns": ["owner_id"],
+        "schemaTo": "public",
+        "tableTo": "profiles",
+        "columnsTo": ["id"],
+        "onUpdate": "NO ACTION",
+        "onDelete": "CASCADE",
+        "entityType": "fks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "material_pages",
+        "name": "material_pages_material_owner_fk",
+        "nameExplicit": true,
+        "columns": ["material_id", "owner_id"],
+        "schemaTo": "public",
+        "tableTo": "materials",
+        "columnsTo": ["id", "owner_id"],
+        "onUpdate": "NO ACTION",
+        "onDelete": "CASCADE",
+        "entityType": "fks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "material_sections",
+        "name": "material_sections_owner_id_profiles_id_fkey",
+        "nameExplicit": false,
+        "columns": ["owner_id"],
+        "schemaTo": "public",
+        "tableTo": "profiles",
+        "columnsTo": ["id"],
+        "onUpdate": "NO ACTION",
+        "onDelete": "CASCADE",
+        "entityType": "fks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "material_sections",
+        "name": "material_sections_topic_id_topics_id_fkey",
+        "nameExplicit": false,
+        "columns": ["topic_id"],
+        "schemaTo": "public",
+        "tableTo": "topics",
+        "columnsTo": ["id"],
+        "onUpdate": "NO ACTION",
+        "onDelete": "NO ACTION",
+        "entityType": "fks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "material_sections",
+        "name": "material_sections_material_owner_fk",
+        "nameExplicit": true,
+        "columns": ["material_id", "owner_id"],
+        "schemaTo": "public",
+        "tableTo": "materials",
+        "columnsTo": ["id", "owner_id"],
+        "onUpdate": "NO ACTION",
+        "onDelete": "CASCADE",
+        "entityType": "fks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "material_sections",
+        "name": "material_sections_parent_owner_fk",
+        "nameExplicit": true,
+        "columns": ["parent_id", "material_id", "owner_id"],
+        "schemaTo": "public",
+        "tableTo": "material_sections",
+        "columnsTo": ["id", "material_id", "owner_id"],
+        "onUpdate": "NO ACTION",
+        "onDelete": "CASCADE",
+        "entityType": "fks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "materials",
+        "name": "materials_owner_id_profiles_id_fkey",
+        "nameExplicit": false,
+        "columns": ["owner_id"],
+        "schemaTo": "public",
+        "tableTo": "profiles",
+        "columnsTo": ["id"],
+        "onUpdate": "NO ACTION",
+        "onDelete": "CASCADE",
+        "entityType": "fks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "ocr_usage",
+        "name": "ocr_usage_owner_id_profiles_id_fkey",
+        "nameExplicit": false,
+        "columns": ["owner_id"],
+        "schemaTo": "public",
+        "tableTo": "profiles",
+        "columnsTo": ["id"],
+        "onUpdate": "NO ACTION",
+        "onDelete": "CASCADE",
+        "entityType": "fks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "solver_sessions",
+        "name": "solver_sessions_owner_id_profiles_id_fkey",
+        "nameExplicit": false,
+        "columns": ["owner_id"],
+        "schemaTo": "public",
+        "tableTo": "profiles",
+        "columnsTo": ["id"],
+        "onUpdate": "NO ACTION",
+        "onDelete": "CASCADE",
+        "entityType": "fks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "solver_solutions",
+        "name": "solver_solutions_owner_id_profiles_id_fkey",
+        "nameExplicit": false,
+        "columns": ["owner_id"],
+        "schemaTo": "public",
+        "tableTo": "profiles",
+        "columnsTo": ["id"],
+        "onUpdate": "NO ACTION",
+        "onDelete": "CASCADE",
+        "entityType": "fks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "solver_solutions",
+        "name": "solver_solutions_session_owner_fk",
+        "nameExplicit": true,
+        "columns": ["session_id", "owner_id"],
+        "schemaTo": "public",
+        "tableTo": "solver_sessions",
+        "columnsTo": ["id", "owner_id"],
+        "onUpdate": "NO ACTION",
+        "onDelete": "CASCADE",
+        "entityType": "fks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "solver_solutions",
+        "name": "solver_solutions_run_owner_fk",
+        "nameExplicit": true,
+        "columns": ["generation_run_id", "owner_id"],
+        "schemaTo": "public",
+        "tableTo": "generation_runs",
+        "columnsTo": ["id", "owner_id"],
+        "onUpdate": "NO ACTION",
+        "onDelete": "NO ACTION",
+        "entityType": "fks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "folders",
+        "name": "folders_pkey",
+        "columns": ["id"],
+        "nameExplicit": false,
+        "entityType": "pks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "material_pages",
+        "name": "material_pages_pkey",
+        "columns": ["id"],
+        "nameExplicit": false,
+        "entityType": "pks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "material_sections",
+        "name": "material_sections_pkey",
+        "columns": ["id"],
+        "nameExplicit": false,
+        "entityType": "pks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "materials",
+        "name": "materials_pkey",
+        "columns": ["id"],
+        "nameExplicit": false,
+        "entityType": "pks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "ocr_usage",
+        "name": "ocr_usage_pkey",
+        "columns": ["id"],
+        "nameExplicit": false,
+        "entityType": "pks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "solver_sessions",
+        "name": "solver_sessions_pkey",
+        "columns": ["id"],
+        "nameExplicit": false,
+        "entityType": "pks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "solver_solutions",
+        "name": "solver_solutions_pkey",
+        "columns": ["id"],
+        "nameExplicit": false,
+        "entityType": "pks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "folders",
+        "name": "folders_id_owner_unique",
+        "nameExplicit": true,
+        "columns": ["id", "owner_id"],
+        "nullsNotDistinct": false,
+        "entityType": "uniques"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "material_pages",
+        "name": "material_pages_material_page_unique",
+        "nameExplicit": true,
+        "columns": ["material_id", "page_no"],
+        "nullsNotDistinct": false,
+        "entityType": "uniques"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "material_pages",
+        "name": "material_pages_id_owner_unique",
+        "nameExplicit": true,
+        "columns": ["id", "owner_id"],
+        "nullsNotDistinct": false,
+        "entityType": "uniques"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "material_sections",
+        "name": "material_sections_id_owner_unique",
+        "nameExplicit": true,
+        "columns": ["id", "owner_id"],
+        "nullsNotDistinct": false,
+        "entityType": "uniques"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "material_sections",
+        "name": "material_sections_id_material_owner_unique",
+        "nameExplicit": true,
+        "columns": ["id", "material_id", "owner_id"],
+        "nullsNotDistinct": false,
+        "entityType": "uniques"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "materials",
+        "name": "materials_id_owner_unique",
+        "nameExplicit": true,
+        "columns": ["id", "owner_id"],
+        "nullsNotDistinct": false,
+        "entityType": "uniques"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "materials",
+        "name": "materials_object_key_unique",
+        "nameExplicit": true,
+        "columns": ["object_key"],
+        "nullsNotDistinct": false,
+        "entityType": "uniques"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "ocr_usage",
+        "name": "ocr_usage_owner_day_unique",
+        "nameExplicit": true,
+        "columns": ["owner_id", "day"],
+        "nullsNotDistinct": false,
+        "entityType": "uniques"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "solver_sessions",
+        "name": "solver_sessions_id_owner_unique",
+        "nameExplicit": true,
+        "columns": ["id", "owner_id"],
+        "nullsNotDistinct": false,
+        "entityType": "uniques"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "question_sources",
+        "name": "question_sources_material_anchor_check",
+        "value": "\"kind\" <> 'material' or (\"anchor_label\" is not null and (\"material_id\" is null or \"excerpt\" is not null))",
+        "entityType": "checks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "question_sources",
+        "name": "question_sources_curriculum_no_material_check",
+        "value": "\"kind\" = 'material' or (\"material_id\" is null and \"material_page_id\" is null and \"section_id\" is null)",
+        "entityType": "checks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "folders",
+        "name": "folders_not_own_parent_check",
+        "value": "\"parent_id\" <> \"id\"",
+        "entityType": "checks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "material_pages",
+        "name": "material_pages_text_source_check",
+        "value": "\"text_source\" in ('pdf_text', 'docx', 'ocr', 'manual')",
+        "entityType": "checks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "material_pages",
+        "name": "material_pages_confidence_check",
+        "value": "\"confidence\" in ('high', 'medium', 'low')",
+        "entityType": "checks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "material_pages",
+        "name": "material_pages_ocr_status_check",
+        "value": "\"ocr_status\" in ('none', 'available', 'queued', 'done', 'failed')",
+        "entityType": "checks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "material_pages",
+        "name": "material_pages_flags_check",
+        "value": "jsonb_typeof(\"flags\") = 'array'",
+        "entityType": "checks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "material_pages",
+        "name": "material_pages_page_no_check",
+        "value": "\"page_no\" >= 1",
+        "entityType": "checks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "material_sections",
+        "name": "material_sections_kind_check",
+        "value": "\"kind\" in ('chapter', 'section')",
+        "entityType": "checks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "material_sections",
+        "name": "material_sections_pages_check",
+        "value": "\"page_start\" >= 1 and (\"page_end\" is null or \"page_end\" >= \"page_start\")",
+        "entityType": "checks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "material_sections",
+        "name": "material_sections_not_own_parent_check",
+        "value": "\"parent_id\" <> \"id\"",
+        "entityType": "checks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "materials",
+        "name": "materials_kind_check",
+        "value": "\"kind\" in ('pdf', 'docx', 'image')",
+        "entityType": "checks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "materials",
+        "name": "materials_status_check",
+        "value": "\"status\" in ('uploaded', 'processing', 'needs_review', 'ready', 'failed')",
+        "entityType": "checks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "materials",
+        "name": "materials_grade_check",
+        "value": "\"grade\" in (7, 8, 9)",
+        "entityType": "checks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "materials",
+        "name": "materials_academic_year_check",
+        "value": "\"academic_year\" ~ '^[0-9]{4}/[0-9]{4}$'",
+        "entityType": "checks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "materials",
+        "name": "materials_sha256_check",
+        "value": "\"sha256\" ~ '^[0-9a-f]{64}$'",
+        "entityType": "checks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "materials",
+        "name": "materials_size_check",
+        "value": "\"size_bytes\" > 0",
+        "entityType": "checks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "materials",
+        "name": "materials_page_count_check",
+        "value": "\"page_count\" > 0",
+        "entityType": "checks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "ocr_usage",
+        "name": "ocr_usage_pages_check",
+        "value": "\"pages\" >= 0",
+        "entityType": "checks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "solver_sessions",
+        "name": "solver_sessions_input_kind_check",
+        "value": "\"input_kind\" in ('text', 'photo', 'file')",
+        "entityType": "checks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "solver_sessions",
+        "name": "solver_sessions_text_input_check",
+        "value": "\"input_kind\" <> 'text' or \"input_text\" is not null",
+        "entityType": "checks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "solver_sessions",
+        "name": "solver_sessions_status_check",
+        "value": "\"status\" in ('pending', 'extracting', 'needs_confirmation', 'ready', 'solved', 'failed')",
+        "entityType": "checks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "solver_sessions",
+        "name": "solver_sessions_extraction_flags_check",
+        "value": "jsonb_typeof(\"extraction_flags\") = 'array'",
+        "entityType": "checks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "solver_solutions",
+        "name": "solver_solutions_verification_status_check",
+        "value": "\"verification_status\" in ('terverifikasi', 'dicek_silang_ai', 'belum_dapat_diverifikasi', 'ketidaksesuaian')",
+        "entityType": "checks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "folders",
+        "name": "folders_owner_select",
+        "as": "PERMISSIVE",
+        "for": "SELECT",
+        "roles": ["authenticated"],
+        "using": "\"folders\".\"owner_id\" = auth.uid()",
+        "withCheck": null,
+        "entityType": "policies"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "folders",
+        "name": "folders_owner_insert",
+        "as": "PERMISSIVE",
+        "for": "INSERT",
+        "roles": ["authenticated"],
+        "using": null,
+        "withCheck": "\"folders\".\"owner_id\" = auth.uid() and \"folders\".\"deleted_at\" is null and \"folders\".\"purge_after\" is null",
+        "entityType": "policies"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "folders",
+        "name": "folders_owner_update",
+        "as": "PERMISSIVE",
+        "for": "UPDATE",
+        "roles": ["authenticated"],
+        "using": "\"folders\".\"owner_id\" = auth.uid()",
+        "withCheck": "\"folders\".\"owner_id\" = auth.uid()",
+        "entityType": "policies"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "material_pages",
+        "name": "material_pages_owner_select",
+        "as": "PERMISSIVE",
+        "for": "SELECT",
+        "roles": ["authenticated"],
+        "using": "\"material_pages\".\"owner_id\" = auth.uid()",
+        "withCheck": null,
+        "entityType": "policies"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "material_sections",
+        "name": "material_sections_owner_select",
+        "as": "PERMISSIVE",
+        "for": "SELECT",
+        "roles": ["authenticated"],
+        "using": "\"material_sections\".\"owner_id\" = auth.uid()",
+        "withCheck": null,
+        "entityType": "policies"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "material_sections",
+        "name": "material_sections_owner_insert",
+        "as": "PERMISSIVE",
+        "for": "INSERT",
+        "roles": ["authenticated"],
+        "using": null,
+        "withCheck": "\"material_sections\".\"owner_id\" = auth.uid()",
+        "entityType": "policies"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "material_sections",
+        "name": "material_sections_owner_update",
+        "as": "PERMISSIVE",
+        "for": "UPDATE",
+        "roles": ["authenticated"],
+        "using": "\"material_sections\".\"owner_id\" = auth.uid()",
+        "withCheck": "\"material_sections\".\"owner_id\" = auth.uid()",
+        "entityType": "policies"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "material_sections",
+        "name": "material_sections_owner_delete",
+        "as": "PERMISSIVE",
+        "for": "DELETE",
+        "roles": ["authenticated"],
+        "using": "\"material_sections\".\"owner_id\" = auth.uid()",
+        "withCheck": null,
+        "entityType": "policies"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "materials",
+        "name": "materials_owner_select",
+        "as": "PERMISSIVE",
+        "for": "SELECT",
+        "roles": ["authenticated"],
+        "using": "\"materials\".\"owner_id\" = auth.uid()",
+        "withCheck": null,
+        "entityType": "policies"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "materials",
+        "name": "materials_owner_update",
+        "as": "PERMISSIVE",
+        "for": "UPDATE",
+        "roles": ["authenticated"],
+        "using": "\"materials\".\"owner_id\" = auth.uid()",
+        "withCheck": "\"materials\".\"owner_id\" = auth.uid()",
+        "entityType": "policies"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "ocr_usage",
+        "name": "ocr_usage_owner_select",
+        "as": "PERMISSIVE",
+        "for": "SELECT",
+        "roles": ["authenticated"],
+        "using": "\"ocr_usage\".\"owner_id\" = auth.uid()",
+        "withCheck": null,
+        "entityType": "policies"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "solver_sessions",
+        "name": "solver_sessions_owner_select",
+        "as": "PERMISSIVE",
+        "for": "SELECT",
+        "roles": ["authenticated"],
+        "using": "\"solver_sessions\".\"owner_id\" = auth.uid()",
+        "withCheck": null,
+        "entityType": "policies"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "solver_solutions",
+        "name": "solver_solutions_owner_select",
+        "as": "PERMISSIVE",
+        "for": "SELECT",
+        "roles": ["authenticated"],
+        "using": "\"solver_solutions\".\"owner_id\" = auth.uid()",
+        "withCheck": null,
+        "entityType": "policies"
+      }
+    },
+    {
+      "op": "alter",
+      "key": "checks\u0000[\"public\",\"question_sources\",\"question_sources_kind_check\"]",
+      "set": {
+        "value": "\"kind\" in ('curriculum', 'material')"
+      }
+    }
+  ]
+}

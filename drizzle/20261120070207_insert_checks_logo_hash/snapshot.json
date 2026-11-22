@@ -1,0 +1,65 @@
+{
+  "type": "diff",
+  "version": "9",
+  "dialect": "postgres",
+  "id": "73c6b9c1-a9bf-4158-9fe2-fb78ef5f64f8",
+  "prevIds": ["77d0f8cc-0dc2-4bce-bae5-d846adf594ed"],
+  "footprints": [
+    {
+      "statementType": "add_column",
+      "statementTarget": ["column", "public", "school_templates", "logo_sha256"],
+      "writes": [
+        "s|col|public.school_templates.logo_sha256",
+        "n|col|public.school_templates.logo_sha256",
+        "e|col|public.school_templates.logo_sha256"
+      ],
+      "reads": ["n|tbl|public.school_templates", "n|sch|public"]
+    },
+    {
+      "statementType": "alter_policy",
+      "statementTarget": ["table", "public", "assessments"],
+      "writes": ["s|pol|public.assessments.assessments_owner_insert"],
+      "reads": ["n|tbl|public.assessments", "n|sch|public", "n|role|authenticated"],
+      "sqlHash": "e38c2685330283d8"
+    },
+    {
+      "statementType": "alter_policy",
+      "statementTarget": ["table", "public", "school_templates"],
+      "writes": ["s|pol|public.school_templates.school_templates_owner_insert"],
+      "reads": ["n|tbl|public.school_templates", "n|sch|public", "n|role|authenticated"],
+      "sqlHash": "4c64acef1be94e08"
+    }
+  ],
+  "deltas": [
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "school_templates",
+        "name": "logo_sha256",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "alter",
+      "key": "policies\u0000[\"public\",\"assessments\",\"assessments_owner_insert\"]",
+      "set": {
+        "withCheck": "\"assessments\".\"owner_id\" = auth.uid() and \"assessments\".\"deleted_at\" is null and \"assessments\".\"purge_after\" is null"
+      }
+    },
+    {
+      "op": "alter",
+      "key": "policies\u0000[\"public\",\"school_templates\",\"school_templates_owner_insert\"]",
+      "set": {
+        "withCheck": "\"school_templates\".\"owner_id\" = auth.uid() and \"school_templates\".\"logo_key\" is null and \"school_templates\".\"logo_sha256\" is null and \"school_templates\".\"deleted_at\" is null and \"school_templates\".\"purge_after\" is null"
+      }
+    }
+  ]
+}

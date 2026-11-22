@@ -1,0 +1,25 @@
+{
+  "type": "diff",
+  "version": "9",
+  "dialect": "postgres",
+  "id": "fe732f80-2625-4445-b1a9-89d0d5637efe",
+  "prevIds": ["fdb23aa4-2af5-41ad-b3d8-57bc824720d4"],
+  "footprints": [
+    {
+      "statementType": "alter_policy",
+      "statementTarget": ["table", "public", "school_templates"],
+      "writes": ["s|pol|public.school_templates.school_templates_owner_insert"],
+      "reads": ["n|tbl|public.school_templates", "n|sch|public", "n|role|authenticated"],
+      "sqlHash": "e173711dba46aa1a"
+    }
+  ],
+  "deltas": [
+    {
+      "op": "alter",
+      "key": "policies\u0000[\"public\",\"school_templates\",\"school_templates_owner_insert\"]",
+      "set": {
+        "withCheck": "\"school_templates\".\"owner_id\" = auth.uid() and \"school_templates\".\"logo_key\" is null"
+      }
+    }
+  ]
+}

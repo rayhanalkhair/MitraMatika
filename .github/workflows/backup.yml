@@ -1,0 +1,90 @@
+# Weekly logical backup of the production database, stored OUTSIDE Neon in Cloudflare R2 (S3 API).
+# Needs the R2 setup (an owner step: create the bucket and an API token scoped to it) before
+# BACKUP_ENABLED is set; until then every run is a notice and exits 0.
+#
+# Secrets: DATABASE_URL, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY (repository secrets on this plan;
+# environment secrets of `production` if protections ever become available).
+# Repository or environment variables:
+#   BACKUP_ENABLED ("true" to turn it on), R2_BUCKET, R2_ENDPOINT
+#   (https://<32-hex account id>.r2.cloudflarestorage.com, optionally with .eu or .fedramp)
+#
+# PROTECTION: a workflow file can be edited on any branch. On the GitHub Free plan with a private
+# repository (the owner's decision of 2026-11-16) environments cannot be restricted to a branch, so
+# the `if: github.ref == 'refs/heads/main'` guard on the job below is the only protection, and the
+# owner is the only writer. Keep the `environment:` line: if the repository ever becomes public or
+# moves to Pro, restricting `production` and `staging` to `main` (Settings, Environments,
+# Deployment branches) becomes optional hardening. If required reviewers are added to `production`,
+# the weekly run (even the no-op notice run) waits for approval; leave reviewers off or accept the
+# wait.
+#
+# DATABASE_URL should be an UNPOOLED (direct) Neon connection string: pg_dump does not work well
+# through the pooler.
+#
+# pg_dump comes from the official postgres image, pinned by digest (the multi-arch index digest of
+# the tag in the trailing comment). Its major version must be >= the Neon project's Postgres major,
+# because a pg_dump older than the server aborts. Bump tag and digest together, deliberately. The
+# AWS CLI is preinstalled on ubuntu-latest. No third-party actions are used.
+#
+# What the dump holds: sessions and pending email links and limits are secrets, so the data of
+# public.session and public.verification is left out (users simply sign in again after a restore);
+# public.rate_limit holds raw client IP addresses and has no restore value, so its data is left out
+# too. Retention: the bucket's lifecycle rule deletes each dump after 8 weeks (runbook step 7; the
+# privacy notice states this period).
+# public.account is kept on purpose: its rows hold the Google link and tokens, and dropping them
+# would break Google re-linking. The dump is NOT encrypted, so restrict who can read the R2 bucket.
+name: Backup
+
+on:
+  schedule:
+    - cron: "23 2 * * 0"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: backup
+  cancel-in-progress: false
+
+jobs:
+  backup:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment: production
+    env:
+      BACKUP_ENABLED: ${{ vars.BACKUP_ENABLED }}
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+      AWS_DEFAULT_REGION: auto
+      # Recent AWS CLI v2 defaults add checksums that some R2 setups reject.
+      AWS_REQUEST_CHECKSUM_CALCULATION: when_required
+      AWS_RESPONSE_CHECKSUM_VALIDATION: when_required
+      R2_BUCKET: ${{ vars.R2_BUCKET }}
+      R2_ENDPOINT: ${{ vars.R2_ENDPOINT }}
+    steps:
+      - name: Dump and upload
+        run: |
+          set -euo pipefail
+          if [ "$BACKUP_ENABLED" != "true" ]; then
+            echo "::notice::BACKUP_ENABLED is not true; nothing to back up."
+            exit 0
+          fi
+          if [ -z "$DATABASE_URL" ] || [ -z "$AWS_ACCESS_KEY_ID" ] || [ -z "$AWS_SECRET_ACCESS_KEY" ]; then
+            echo "::error::DATABASE_URL, R2_ACCESS_KEY_ID and R2_SECRET_ACCESS_KEY must be set."
+            exit 1
+          fi
+          if ! [[ "$R2_BUCKET" =~ ^[a-z0-9][a-z0-9-]{1,61}[a-z0-9]$ ]]; then
+            echo "::error::R2_BUCKET must be a valid bucket name"
+            exit 1
+          fi
+          if ! [[ "$R2_ENDPOINT" =~ ^https://[a-f0-9]{32}(\.(eu|fedramp))?\.r2\.cloudflarestorage\.com$ ]]; then
+            echo "::error::R2_ENDPOINT must look like https://<account id>.r2.cloudflarestorage.com"
+            exit 1
+          fi
+          trap 'shred -u backup.dump 2>/dev/null || rm -f backup.dump' EXIT
+          # postgres:18, multi-arch index digest
+          docker run --rm -e DATABASE_URL postgres:18@sha256:2ea8630df176ad090ec92136dee850397c5af8781e4bcf2e4162593691c61bbc sh -c 'pg_dump --format=custom --no-owner --exclude-table-data=public.session --exclude-table-data=public.verification --exclude-table-data=public.rate_limit "$DATABASE_URL"' > backup.dump
+          test -s backup.dump
+          aws s3 cp backup.dump "s3://$R2_BUCKET/mitramatika/$(date -u +%Y-%m-%d).dump" --endpoint-url "$R2_ENDPOINT"

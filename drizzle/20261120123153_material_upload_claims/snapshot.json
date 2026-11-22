@@ -1,0 +1,89 @@
+{
+  "type": "diff",
+  "version": "9",
+  "dialect": "postgres",
+  "id": "2a38b08e-3082-433f-9288-34ca5ef53e4f",
+  "prevIds": ["b44b8ca0-875e-4b67-bced-f8e36669dcae"],
+  "footprints": [
+    {
+      "statementType": "add_column",
+      "statementTarget": ["column", "public", "material_uploads", "claim_token"],
+      "writes": [
+        "s|col|public.material_uploads.claim_token",
+        "n|col|public.material_uploads.claim_token",
+        "e|col|public.material_uploads.claim_token"
+      ],
+      "reads": ["n|tbl|public.material_uploads", "n|sch|public"]
+    },
+    {
+      "statementType": "add_column",
+      "statementTarget": ["column", "public", "material_uploads", "claimed_at"],
+      "writes": [
+        "s|col|public.material_uploads.claimed_at",
+        "n|col|public.material_uploads.claimed_at",
+        "e|col|public.material_uploads.claimed_at"
+      ],
+      "reads": ["n|tbl|public.material_uploads", "n|sch|public"]
+    },
+    {
+      "statementType": "add_check",
+      "statementTarget": ["table", "public", "material_uploads"],
+      "writes": [
+        "s|ck|public.material_uploads.material_uploads_claim_check",
+        "n|ck|public.material_uploads.material_uploads_claim_check",
+        "e|ck|public.material_uploads.material_uploads_claim_check",
+        "n|con|public.material_uploads.material_uploads_claim_check"
+      ],
+      "reads": [
+        "n|tbl|public.material_uploads",
+        "n|sch|public",
+        "n|col|public.material_uploads.claim_token",
+        "n|col|public.material_uploads.claimed_at"
+      ]
+    }
+  ],
+  "deltas": [
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "material_uploads",
+        "name": "claim_token",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "material_uploads",
+        "name": "claimed_at",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "material_uploads",
+        "name": "material_uploads_claim_check",
+        "value": "(\"claim_token\" is null) = (\"claimed_at\" is null)",
+        "entityType": "checks"
+      }
+    }
+  ]
+}

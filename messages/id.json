@@ -1,0 +1,1595 @@
+{
+  "nav": {
+    "beranda": "Beranda",
+    "buatSoal": "Buat Soal",
+    "bankSoal": "Bank Soal",
+    "selesaikan": "Selesaikan",
+    "lainnya": "Lainnya",
+    "materi": "Materi Pembelajaran",
+    "penyusunAsesmen": "Penyusun Asesmen",
+    "sampah": "Sampah",
+    "pengaturan": "Pengaturan"
+  },
+  "shell": {
+    "skipToContent": "Lewati ke konten utama",
+    "sidebarNavLabel": "Menu utama",
+    "bottomNavLabel": "Menu bawah",
+    "groupMain": "Menu utama",
+    "groupSoon": "Segera hadir",
+    "curriculumContext": "Kurikulum Merdeka",
+    "accountAvatar": "Akun {name}"
+  },
+  "common": {
+    "comingSoon": "Segera hadir",
+    "soonBadge": "Segera"
+  },
+  "buatSoal": {
+    "gradeLegend": "Kelas",
+    "soon": "Segera",
+    "grades": {
+      "7": "Kelas 7",
+      "8": "Kelas 8",
+      "9": "Kelas 9"
+    },
+    "gradeComingSoon": "Kelas ini segera hadir. Menampilkan topik Kelas 8.",
+    "searchLabel": "Cari topik",
+    "searchPlaceholder": "Ketik kata kunci, misalnya SPLDV",
+    "topicsLegend": "Pilih topik",
+    "resultCount": "{count, number, ::group-off} topik ditemukan",
+    "noMatch": "Tidak ada topik yang cocok dengan \"{query}\".",
+    "clearSearch": "Hapus pencarian",
+    "objectivesSummary": "Tujuan pembelajaran ({count})",
+    "noObjectives": "Belum ada tujuan pembelajaran untuk topik ini.",
+    "selectedHeading": "Topik dipilih",
+    "selectedElement": "Elemen",
+    "clearSelection": "Hapus pilihan",
+    "nothingSelected": "Belum ada topik dipilih.",
+    "sourcePrefix": "Sumber:",
+    "versionWord": "versi",
+    "openSource": "Buka sumber",
+    "opensInNewTab": "(tab baru)",
+    "unavailableEmpty": "Daftar topik belum tersedia. Kurikulum belum diaktifkan; hubungi pengembang.",
+    "unavailableError": "Daftar topik belum dapat dimuat. Coba muat ulang halaman."
+  },
+  "generate": {
+    "pageDescription": "Pilih kelas dan topik, lalu atur jumlah dan tingkat kesulitan soal.",
+    "steps": {
+      "grade": "Pilih kelas",
+      "topic": "Pilih topik",
+      "count": "Jumlah soal",
+      "difficulty": "Tingkat kesulitan",
+      "source": "Sumber soal"
+    },
+    "quantityLegend": "Jumlah soal",
+    "difficultyLegend": "Tingkat kesulitan",
+    "difficulties": {
+      "mudah": "Mudah",
+      "sedang": "Sedang",
+      "sulit": "Sulit"
+    },
+    "typeNote": "Jenis soal: pilihan ganda",
+    "submit": "Buat soal",
+    "submitting": "Membuat…",
+    "errors": {
+      "kelas": "Kelas tidak valid.",
+      "topik": "Pilih satu topik terlebih dahulu.",
+      "topicUnknown": "Topik tidak ditemukan atau belum aktif. Muat ulang halaman.",
+      "jumlah": "Pilih jumlah soal 1 sampai 5.",
+      "kesulitan": "Pilih tingkat kesulitan.",
+      "materialMissing": "Pilih materi terlebih dahulu.",
+      "sectionsMissing": "Pilih minimal satu bab.",
+      "pagesInvalid": "Tulis halaman seperti 1-3, 5 (paling banyak sampai halaman 300).",
+      "materialUnknown": "Materi tidak ditemukan atau sudah dihapus.",
+      "materialNotReady": "Materi masih diproses. Coba lagi setelah selesai.",
+      "sectionsUnknown": "Bab yang dipilih tidak ditemukan di materi ini.",
+      "pagesUnavailable": "Ada halaman yang tidak ada atau belum punya teks (misalnya masih menunggu OCR).",
+      "materialEmpty": "Bagian yang dipilih belum punya teks yang bisa dipakai.",
+      "materialUnrelated": "Halaman materi yang dipilih tidak membahas topik ini. Pilih halaman atau topik lain."
+    },
+    "formErrors": {
+      "generic": "Terjadi kesalahan. Coba lagi.",
+      "unauthenticated": "Silakan masuk terlebih dahulu."
+    },
+    "activeRequest": "Kamu masih punya permintaan yang sedang berjalan.",
+    "openActiveRequest": "Buka permintaan itu",
+    "dailyLimit": "Kamu sudah meminta {used} dari {limit} soal hari ini. Sisa {remaining} soal. Batas harian dihitung ulang pada {time}.",
+    "status": {
+      "pageHeading": "Permintaan soal",
+      "summaryTopic": "Topik",
+      "summaryQuantity": "Jumlah soal",
+      "summaryDifficulty": "Tingkat kesulitan",
+      "loading": "Memuat status…",
+      "queuedTitle": "Menunggu giliran",
+      "runningTitle": "Soal sedang dibuat",
+      "progress": "Langkah {done} dari {total}",
+      "deferredTitle": "Kuota AI harian habis. Pekerjaan dilanjutkan otomatis setelah layanan AI tersedia lagi, paling cepat pukul {time}",
+      "deferredMinuteTitle": "Menunggu giliran layanan AI. Dilanjutkan otomatis setelah layanan AI tersedia lagi, paling cepat pukul {time}",
+      "deferredProviderTitle": "Layanan AI sedang membatasi permintaan. Dilanjutkan otomatis setelah layanan AI tersedia lagi, paling cepat pukul {time}",
+      "deferredSoonTitle": "Segera dilanjutkan",
+      "succeededTitle": "Selesai",
+      "succeededDetail": "Soal ada di bawah. Periksa setiap soal sebelum menyimpannya.",
+      "succeededLoadingDetail": "Soal sedang dimuat…",
+      "failedTitle": "Soal belum dapat dibuat",
+      "failedUnknownType": "Pembuatan soal belum tersedia.",
+      "failedProviderUnavailable": "Layanan AI sedang tidak dapat dijangkau. Coba lagi beberapa saat lagi.",
+      "failedProviderMisconfigured": "Layanan AI belum diatur dengan benar. Hubungi pengelola aplikasi.",
+      "failedProviderBusy": "Layanan AI masih membatasi permintaan. Coba lagi nanti.",
+      "failedInvalidOutput": "Jawaban AI belum bisa dipakai. Coba buat lagi.",
+      "failedStructural": "Soal yang dibuat belum memenuhi pemeriksaan otomatis. Coba buat lagi.",
+      "failedPersist": "Soal belum dapat disimpan. Coba lagi nanti.",
+      "failedGeneric": "Terjadi kesalahan saat membuat soal. Coba lagi nanti.",
+      "cancelledTitle": "Dibatalkan",
+      "signedOut": "Sesi berakhir. Silakan masuk kembali.",
+      "notFound": "Permintaan tidak ditemukan.",
+      "reconnecting": "Menyambung kembali…",
+      "back": "Kembali ke Buat Soal",
+      "backToAssessment": "Kembali ke asesmen",
+      "backToAssessmentHint": "Setelah soal tersimpan di Bank Soal, kembali ke asesmen untuk menambahkannya.",
+      "failedMaterialUnavailable": "Materi sumber tidak dapat dipakai lagi (dihapus atau diubah). Buat permintaan baru.",
+      "failedMaterialUnrelated": "Halaman materi yang dipilih tidak membahas topik ini. Pilih halaman atau topik lain."
+    },
+    "source": {
+      "legend": "Sumber soal",
+      "topic": "Topik kurikulum",
+      "material": "Dari materi",
+      "materialHint": "Soal dibuat dari halaman materi yang kamu pilih dan mencantumkan halaman sumbernya.",
+      "pick": "Materi",
+      "pickPlaceholder": "Pilih materi",
+      "scopeLegend": "Bagian yang dipakai",
+      "scopes": {
+        "all": "Seluruh dokumen",
+        "sections": "Bab",
+        "pages": "Halaman"
+      },
+      "sectionPages": "hal. {start}–{end}",
+      "pagesLabel": "Halaman",
+      "pagesHint": "Contoh: 1-3, 5. Dokumen ini punya {count} halaman.",
+      "noSections": "Materi ini belum punya bab. Konfirmasi struktur di halaman materi, atau pilih halaman.",
+      "none": "Belum ada materi yang siap dipakai.",
+      "noneLink": "Buka Materi",
+      "topicNote": "Topik tetap dipilih: dipakai untuk memilih halaman yang paling relevan.",
+      "truncated": "Hanya 100 materi terbaru yang ditampilkan."
+    }
+  },
+  "bank": {
+    "heading": "Bank Soal",
+    "detailTitle": "Soal di Bank Soal",
+    "empty": "Belum ada soal di Bank Soal",
+    "emptyHint": "Setujui soal di halaman tinjau lalu pilih Simpan ke Bank Soal.",
+    "savedOn": "Disimpan {date}",
+    "type": "Pilihan ganda",
+    "detailHeading": "Detail soal",
+    "questionHeading": "Soal tersimpan",
+    "back": "Kembali ke Bank Soal",
+    "summaryLabel": "Ringkasan Bank Soal",
+    "total": "Total soal",
+    "verified": "Terverifikasi",
+    "subtitle": "Soal yang sudah Anda setujui dan simpan.",
+    "create": "Buat soal",
+    "emptyAction": "Buat soal",
+    "search": {
+      "label": "Cari soal",
+      "placeholder": "Cari kata soal atau kode TP",
+      "submit": "Cari"
+    },
+    "pagination": {
+      "label": "Halaman Bank Soal",
+      "previous": "Sebelumnya",
+      "next": "Berikutnya",
+      "page": "Halaman {page, number, ::group-off}",
+      "showing": "Menampilkan {first, number, ::group-off}–{last, number, ::group-off} dari {total, number, ::group-off} soal"
+    },
+    "filters": {
+      "heading": "Filter",
+      "open": "Filter",
+      "close": "Tutup filter",
+      "apply": "Terapkan",
+      "reset": "Atur ulang",
+      "all": "Semua",
+      "grade": "Kelas",
+      "gradeOption": "Kelas {grade, number, ::group-off}",
+      "element": "Elemen",
+      "topic": "Topik",
+      "difficulty": "Tingkat kesulitan",
+      "status": "Status verifikasi",
+      "from": "Dari tanggal",
+      "to": "Sampai tanggal",
+      "sort": "Urutkan",
+      "sorts": {
+        "newest": "Terbaru",
+        "oldest": "Terlama",
+        "difficulty": "Tingkat kesulitan"
+      },
+      "active": "Filter aktif",
+      "remove": "Hapus filter: {label}",
+      "unknown": "Tidak diketahui",
+      "origins": {
+        "generated": "Dibuat AI",
+        "manual": "Dibuat manual",
+        "imported": "Diimpor"
+      },
+      "pill": {
+        "q": "Pencarian: {q}",
+        "from": "Dari {date}",
+        "to": "Sampai {date}",
+        "type": "Pilihan ganda"
+      }
+    },
+    "noMatch": "Tidak ada soal yang cocok",
+    "noMatchHint": "Coba ubah kata kunci atau kurangi filter.",
+    "noMatchAction": "Atur ulang filter",
+    "history": {
+      "title": "Riwayat versi",
+      "heading": "Riwayat versi",
+      "description": "Semua versi soal ini, dari yang terbaru. Memulihkan versi lama membuat versi baru; riwayat tidak pernah ditimpa.",
+      "back": "Kembali ke soal",
+      "listLabel": "Daftar versi",
+      "versionNumber": "Versi {number}",
+      "current": "Versi saat ini",
+      "authors": {
+        "ai": "Dibuat AI",
+        "teacher": "Anda"
+      },
+      "kinds": {
+        "generated": "Dibuat",
+        "regenerated": "Dibuat ulang",
+        "edited": "Diedit",
+        "restored": "Dipulihkan"
+      },
+      "openHint": "Pilih versi untuk melihat isinya.",
+      "viewCurrent": "Lihat versi saat ini",
+      "viewLabel": "Isi versi yang dipilih",
+      "readOnly": "Hanya dibaca. Versi ini tidak bisa diubah.",
+      "isCurrent": "Ini versi yang sedang dipakai.",
+      "restore": "Pulihkan versi ini",
+      "restoring": "Memulihkan…",
+      "restored": "Versi dipulihkan sebagai versi baru.",
+      "errors": {
+        "stale": "Soal sudah berubah di tempat lain. Muat ulang halaman, lalu coba lagi.",
+        "notReady": "Soal ini sedang dibuat ulang. Tunggu sampai selesai, lalu coba lagi.",
+        "current": "Versi ini sudah menjadi versi saat ini.",
+        "trashed": "Soal ini ada di sampah dan tidak bisa dipulihkan.",
+        "notFound": "Versi tidak ditemukan.",
+        "signedOut": "Sesi berakhir. Silakan masuk kembali.",
+        "generic": "Versi belum dipulihkan. Coba lagi."
+      }
+    },
+    "historyLink": "Riwayat versi"
+  },
+  "trash": {
+    "title": "Sampah",
+    "heading": "Sampah",
+    "description": "Soal, asesmen, templat dokumen, materi dan folder yang Anda hapus disimpan di sini selama 30 hari, lalu dihapus untuk selamanya.",
+    "empty": "Sampah kosong",
+    "emptyHint": "Soal, asesmen, templat, materi dan folder yang Anda pindahkan ke Sampah tampil di sini selama 30 hari.",
+    "listLabel": "Soal di Sampah",
+    "sections": {
+      "questions": "Soal",
+      "assessments": "Asesmen",
+      "templates": "Templat dokumen",
+      "materials": "Materi pembelajaran",
+      "folders": "Folder materi",
+      "solverSessions": "Soal yang diselesaikan"
+    },
+    "assessmentListLabel": "Asesmen di Sampah",
+    "templateListLabel": "Templat di Sampah",
+    "deletedOn": "Dihapus {date}",
+    "daysLeft": "{days, plural, =0 {Dihapus pada pembersihan berikutnya} other {# hari lagi sebelum dihapus untuk selamanya}}",
+    "keptWhilePinned": "Disimpan selama masih dipakai di asesmen {assessments}",
+    "restore": "Pulihkan",
+    "restoreLabel": "Pulihkan soal: {topic}",
+    "restoring": "Memulihkan…",
+    "deleteForever": "Hapus selamanya",
+    "deleteForeverLabel": "Hapus selamanya soal: {topic}",
+    "restored": "Soal dipulihkan ke tempat asalnya.",
+    "deleted": "Soal dihapus untuk selamanya.",
+    "confirm": {
+      "title": "Hapus soal ini untuk selamanya?",
+      "description": "Ini tidak bisa dibatalkan. Yang akan dihapus:",
+      "itemQuestion": "Soal ini",
+      "itemVersions": "{count, plural, =1 {Satu-satunya versi soal} other {Semua # versi soal}}",
+      "itemRuns": "Semua hasil verifikasi setiap versi",
+      "cancel": "Batal",
+      "confirm": "Hapus selamanya",
+      "working": "Menghapus…"
+    },
+    "assessment": {
+      "approved": "Sudah disetujui",
+      "summary": "{items, plural, =0 {Belum ada soal} other {# soal}} · {sections, plural, other {# bagian}}",
+      "restoreLabel": "Pulihkan asesmen: {title}",
+      "deleteForeverLabel": "Hapus selamanya asesmen: {title}",
+      "restored": "Asesmen dipulihkan ke tempat asalnya, dengan persetujuannya.",
+      "deleted": "Asesmen dihapus untuk selamanya.",
+      "confirm": {
+        "title": "Hapus asesmen ini untuk selamanya?",
+        "itemAssessment": "Asesmen ini",
+        "itemContent": "{sections, plural, other {# bagian}} dan {items, plural, =0 {tanpa soal} other {# butir soal}} di dalamnya",
+        "itemExports": "{count, plural, =0 {Semua berkas ekspornya (belum ada)} other {# berkas ekspor yang tersimpan}}",
+        "itemUsages": "{count, plural, =0 {Catatan pemakaian soalnya (belum ada)} other {# catatan pemakaian soal}}",
+        "keep": "Soal-soalnya tetap ada di Bank Soal."
+      }
+    },
+    "template": {
+      "usedBy": "Masih dipakai oleh asesmen {assessments}",
+      "restoreLabel": "Pulihkan templat: {name}",
+      "deleteForeverLabel": "Hapus selamanya templat: {name}",
+      "restored": "Templat dipulihkan ke tempat asalnya.",
+      "restoredNotDefault": "Templat dipulihkan sebagai templat biasa karena templat lain sudah menjadi templat default.",
+      "deleted": "Templat dihapus untuk selamanya.",
+      "confirm": {
+        "title": "Hapus templat ini untuk selamanya?",
+        "itemTemplate": "Templat ini",
+        "itemLogo": "Logo sekolahnya"
+      }
+    },
+    "move": {
+      "button": "Pindahkan ke Sampah",
+      "buttonLabel": "Pindahkan ke Sampah: {topic}",
+      "title": "Pindahkan soal ke Sampah?",
+      "description": "Soal hilang dari Bank Soal dan bisa dipulihkan dari Sampah selama 30 hari. Setelah itu soal dihapus untuk selamanya.",
+      "cancel": "Batal",
+      "confirm": "Pindahkan ke Sampah",
+      "working": "Memindahkan…",
+      "done": "Soal dipindahkan ke Sampah."
+    },
+    "moveAssessment": {
+      "button": "Pindahkan ke Sampah",
+      "buttonLabel": "Pindahkan ke Sampah: {name}",
+      "title": "Pindahkan asesmen ke Sampah?",
+      "description": "Asesmen hilang dari Penyusun Asesmen dan Beranda, dan tidak bisa diubah atau diekspor. Anda bisa memulihkannya dari Sampah selama 30 hari, lengkap dengan persetujuannya. Setelah itu asesmen, berkas ekspornya dan catatan pemakaian soalnya dihapus untuk selamanya.",
+      "cancel": "Batal",
+      "confirm": "Pindahkan ke Sampah",
+      "working": "Memindahkan…"
+    },
+    "moveTemplate": {
+      "button": "Pindahkan ke Sampah",
+      "buttonLabel": "Pindahkan ke Sampah: {name}",
+      "title": "Pindahkan templat ke Sampah?",
+      "description": "Templat hilang dari Pengaturan dan tidak bisa dipilih untuk asesmen. Asesmen yang memakainya tidak bisa disetujui sampai Anda memilih templat lain. Anda bisa memulihkannya dari Sampah selama 30 hari.",
+      "cancel": "Batal",
+      "confirm": "Pindahkan ke Sampah",
+      "working": "Memindahkan…"
+    },
+    "errors": {
+      "notFound": "Soal ini tidak ditemukan. Muat ulang halaman.",
+      "notInTrash": "Soal ini sudah tidak ada di Sampah. Muat ulang halaman.",
+      "signedOut": "Sesi Anda berakhir. Masuk lagi, lalu coba lagi.",
+      "generic": "Terjadi kesalahan. Coba lagi.",
+      "assessmentGone": "Asesmen ini sudah tidak ada di sini. Muat ulang halaman.",
+      "templateGone": "Templat ini sudah tidak ada di sini. Muat ulang halaman.",
+      "questionInUse": "Belum bisa dihapus untuk selamanya: soal ini masih dipakai di asesmen {assessments}. Keluarkan soal itu dari asesmennya, atau hapus asesmen itu untuk selamanya dulu.",
+      "templateInUse": "Belum bisa dihapus untuk selamanya: templat ini masih dipakai oleh asesmen {assessments}. Pilih templat lain di asesmen itu, atau hapus asesmen itu untuk selamanya dulu.",
+      "materialGone": "Materi ini sudah tidak ada di sini. Muat ulang halaman.",
+      "folderGone": "Folder ini sudah tidak ada di sini. Muat ulang halaman.",
+      "folderNotEmpty": "Folder ini masih berisi materi atau subfolder. Pindahkan atau buang isinya dulu.",
+      "solverSessionGone": "Soal ini sudah tidak ada di Sampah. Muat ulang halaman."
+    },
+    "materialListLabel": "Materi di Sampah",
+    "folderListLabel": "Folder di Sampah",
+    "solverSessionListLabel": "Soal yang diselesaikan di Sampah",
+    "material": {
+      "restoreLabel": "Pulihkan materi: {title}",
+      "deleteForeverLabel": "Hapus selamanya materi: {title}",
+      "restored": "Materi dipulihkan.",
+      "deleted": "Materi dihapus untuk selamanya.",
+      "confirm": {
+        "title": "Hapus materi ini untuk selamanya?",
+        "itemFile": "Berkas aslinya",
+        "itemPageImages": "Gambar halamannya",
+        "itemText": "Teks semua halamannya",
+        "itemSections": "{count, plural, other {# bab}}",
+        "keep": "Soal di Bank Soal yang memakai materi ini tetap ada, dengan sumber tertulis “Materi sumber telah dihapus”."
+      }
+    },
+    "folder": {
+      "restoreLabel": "Pulihkan folder: {name}",
+      "deleteForeverLabel": "Hapus selamanya folder: {name}",
+      "restored": "Folder dipulihkan.",
+      "deleted": "Folder dihapus untuk selamanya.",
+      "confirm": {
+        "title": "Hapus folder ini untuk selamanya?",
+        "itemFolder": "Folder ini",
+        "keep": "Materi dan subfolder di Sampah yang dulu ada di dalamnya tetap di Sampah."
+      }
+    },
+    "moveMaterial": {
+      "button": "Pindahkan ke Sampah",
+      "buttonLabel": "Pindahkan ke Sampah: {title}",
+      "title": "Pindahkan materi ke Sampah?",
+      "description": "Materi hilang dari daftar dan pencarian. Anda bisa memulihkannya dari Sampah selama 30 hari. Setelah itu berkas, teks dan babnya dihapus untuk selamanya.",
+      "cancel": "Batal",
+      "confirm": "Pindahkan ke Sampah",
+      "working": "Memindahkan…"
+    },
+    "moveFolder": {
+      "button": "Pindahkan ke Sampah",
+      "buttonLabel": "Pindahkan ke Sampah: {name}",
+      "title": "Pindahkan folder ke Sampah?",
+      "description": "Folder kosong ini hilang dari daftar. Anda bisa memulihkannya dari Sampah selama 30 hari.",
+      "cancel": "Batal",
+      "confirm": "Pindahkan ke Sampah",
+      "working": "Memindahkan…"
+    },
+    "solverSession": {
+      "untitled": "Soal tanpa teks",
+      "restoreLabel": "Pulihkan soal: {problem}",
+      "deleteForeverLabel": "Hapus selamanya soal: {problem}",
+      "restored": "Soal dipulihkan.",
+      "deleted": "Soal dihapus untuk selamanya.",
+      "confirm": {
+        "title": "Hapus soal ini untuk selamanya?",
+        "itemSession": "Teks soalnya",
+        "itemSolutions": "{count, plural, other {# penyelesaian}}",
+        "itemPhoto": "Foto soalnya"
+      }
+    },
+    "moveSolverSession": {
+      "button": "Pindahkan ke Sampah",
+      "buttonLabel": "Pindahkan soal ini ke Sampah",
+      "title": "Pindahkan soal ke Sampah?",
+      "description": "Soal hilang dari daftar soal terbaru. Anda bisa memulihkannya dari Sampah selama 30 hari. Setelah itu soal, penyelesaian dan fotonya dihapus untuk selamanya.",
+      "cancel": "Batal",
+      "confirm": "Pindahkan ke Sampah",
+      "working": "Memindahkan…"
+    }
+  },
+  "beranda": {
+    "quickAction": "Buat soal",
+    "quickActionFirst": "Buat soal pertama",
+    "quickActionHint": "Pilih topik, lalu AI menyiapkan soal untuk Anda tinjau.",
+    "ai": {
+      "working": "AI sedang bekerja",
+      "ready": "Layanan AI siap digunakan",
+      "waiting": "Menunggu kuota AI"
+    },
+    "running": {
+      "heading": "Sedang berjalan",
+      "empty": "Tidak ada pekerjaan yang berjalan.",
+      "quantity": "{count, number, ::group-off} soal",
+      "open": "Buka"
+    },
+    "pending": {
+      "heading": "Draf yang perlu ditinjau",
+      "empty": "Tidak ada draf yang menunggu.",
+      "undecided": "{count} belum diputuskan",
+      "ready": "{count} siap disimpan"
+    },
+    "bank": {
+      "open": "Buka Bank Soal"
+    },
+    "unknownTopic": "Topik tidak diketahui",
+    "greeting": "Halo, {name}",
+    "greetingNeutral": "Selamat datang",
+    "subtitle": "Ringkasan pekerjaan Anda.",
+    "tiles": {
+      "label": "Ringkasan",
+      "drafts": "Draf perlu ditinjau",
+      "bank": "Soal di Bank Soal",
+      "running": "Pekerjaan berjalan"
+    },
+    "recent": {
+      "heading": "Asesmen terbaru",
+      "empty": "Belum ada asesmen.",
+      "viewAll": "Lihat semua asesmen"
+    }
+  },
+  "review": {
+    "heading": "Soal untuk ditinjau",
+    "loading": "Memuat soal…",
+    "disclaimer": "Pemeriksaan otomatis tidak menjamin kebenaran.",
+    "ready": "{count, number, ::group-off} soal siap ditinjau",
+    "showing": "Menampilkan {shown, number, ::group-off} dari {requested, number, ::group-off} soal",
+    "questionHeading": "Soal {number}",
+    "difficulty": {
+      "mudah": "Mudah",
+      "sedang": "Sedang",
+      "sulit": "Sulit"
+    },
+    "optionsLabel": "Pilihan jawaban",
+    "keyLabel": "Kunci jawaban",
+    "answerLabel": "Jawaban akhir",
+    "explanationLabel": "Pembahasan",
+    "stepsSummary": "Langkah penyelesaian ({count})",
+    "detailsButton": "Lihat detail pemeriksaan",
+    "bank": {
+      "progress": "{approved, number} dari {total, number} disetujui",
+      "ready": "{count, number, ::group-off} soal disetujui siap disimpan",
+      "none": "Belum ada soal yang disetujui",
+      "save": "Simpan ke Bank Soal",
+      "saving": "Menyimpan…",
+      "saved": "{count, number, ::group-off} soal tersimpan",
+      "open": "Buka Bank Soal",
+      "savedLabel": "Tersimpan di Bank Soal",
+      "nothingNew": "Tidak ada soal baru untuk disimpan",
+      "errors": {
+        "generic": "Soal belum tersimpan. Coba lagi.",
+        "signedOut": "Sesi berakhir. Masuk lagi untuk melanjutkan."
+      }
+    },
+    "decision": {
+      "approve": "Setujui",
+      "reject": "Tolak",
+      "undo": "Batalkan keputusan",
+      "approved": "Disetujui",
+      "rejected": "Ditolak",
+      "approvedWithNote": "Disetujui dengan catatan",
+      "approveWithNote": "Setujui dengan catatan",
+      "waitingChecks": "Menunggu pemeriksaan selesai",
+      "overrideTitle": "Setujui soal yang ditemukan tidak sesuai",
+      "overrideIntro": "Pemeriksaan otomatis menemukan ketidaksesuaian pada soal ini. Setujui hanya jika Anda sudah memeriksanya sendiri.",
+      "overrideConfirm": "Saya sudah memeriksa; kunci jawaban benar",
+      "overrideNoteLabel": "Catatan pemeriksaan Anda",
+      "overrideNoteHint": "{min}–{max} karakter",
+      "overrideSubmit": "Setujui soal ini",
+      "overrideCancel": "Batal",
+      "errors": {
+        "alreadySaved": "Soal ini sudah tersimpan di Bank Soal.",
+        "conflict": "Soal ini sudah berubah. Daftar dimuat ulang, coba lagi.",
+        "notFound": "Soal tidak ditemukan.",
+        "overrideRequired": "Soal ini perlu catatan sebelum disetujui.",
+        "invalidNote": "Catatan harus 10 sampai 500 karakter.",
+        "notReady": "Pemeriksaan masih berjalan. Tunggu sampai selesai.",
+        "signedOut": "Sesi berakhir. Silakan masuk kembali.",
+        "invalid": "Permintaan tidak valid. Muat ulang halaman.",
+        "generic": "Keputusan belum tersimpan. Coba lagi."
+      }
+    },
+    "statuses": {
+      "terverifikasi": "Terverifikasi otomatis",
+      "dicek_silang": "Dicek silang AI",
+      "belum_dapat_diverifikasi": "Belum dapat diverifikasi",
+      "ketidaksesuaian": "Ditemukan ketidaksesuaian",
+      "checking": "Sedang diperiksa",
+      "waiting": "Menunggu pemeriksaan"
+    },
+    "statusExplanations": {
+      "terverifikasi": "Hitungan soal ini sudah dicek otomatis dan hasilnya sesuai.",
+      "dicek_silang": "Hitungan otomatis belum bisa dipakai, tetapi penyelesai AI independen memilih jawaban yang sama.",
+      "belum_dapat_diverifikasi": "Soal ini belum dapat diperiksa secara otomatis. Periksa sendiri sebelum dipakai.",
+      "ketidaksesuaian": "Pemeriksaan menemukan ketidaksesuaian pada soal ini. Periksa kunci dan pembahasannya.",
+      "checking": "Pemeriksaan otomatis masih berjalan. Status akan berubah sendiri.",
+      "waiting": "Pemeriksaan ditunda sampai layanan AI siap lagi. Waktu paling cepat dilanjutkan tertera di status permintaan di atas."
+    },
+    "sheetTitle": "Detail pemeriksaan soal {number}",
+    "checksHeading": "Hasil pemeriksaan",
+    "noChecks": "Belum ada hasil pemeriksaan.",
+    "checkTypes": {
+      "numeric": "Hitungan",
+      "equivalent": "Kesetaraan bentuk",
+      "equation": "Penyelesaian persamaan",
+      "choice": "Kunci sesuai jawaban",
+      "other": "Pemeriksaan lain"
+    },
+    "checkResults": {
+      "pass": "Lulus",
+      "fail": "Tidak lulus",
+      "unsupported": "Tidak dapat diperiksa otomatis"
+    },
+    "crossCheckHeading": "Penyelesai AI independen",
+    "crossCheck": {
+      "agree": "Sepakat dengan kunci",
+      "disagree": "Memilih jawaban berbeda",
+      "unknown": "Tidak tersedia"
+    },
+    "regenerated": "Soal ini dibuat ulang satu kali secara otomatis karena pemeriksaan pertama menemukan ketidaksesuaian.",
+    "regenerationFailed": "Pembuatan ulang otomatis tidak berhasil; soal pertama dipertahankan.",
+    "close": "Tutup",
+    "curriculum": {
+      "summary": "Sumber kurikulum",
+      "element": "Elemen",
+      "topic": "Topik",
+      "objectives": "Tujuan pembelajaran",
+      "source": "Sumber",
+      "version": "Versi kurikulum"
+    },
+    "edit": {
+      "heading": "Ubah soal",
+      "description": "Perubahan disimpan sebagai versi baru. Versi sebelumnya tidak dihapus.",
+      "back": "Kembali",
+      "action": "Ubah soal",
+      "stem": "Teks soal",
+      "options": "Pilihan jawaban",
+      "optionLabel": "Teks pilihan {label}",
+      "keyOption": "Jadikan pilihan {label} kunci jawaban",
+      "answer": "Jawaban akhir",
+      "explanation": "Pembahasan",
+      "steps": "Langkah penyelesaian",
+      "stepsHint": "Satu isian per langkah. Paling banyak {limit} langkah.",
+      "stepLabel": "Langkah {number}",
+      "addStep": "Tambah langkah",
+      "removeStep": "Hapus langkah {number}",
+      "moveStepUp": "Naikkan langkah {number}",
+      "moveStepDown": "Turunkan langkah {number}",
+      "preview": "Pratinjau",
+      "save": "Simpan versi baru",
+      "saving": "Menyimpan…",
+      "cancel": "Batal",
+      "draftRestored": "Draf yang belum tersimpan dipulihkan.",
+      "discardDraft": "Buang draf",
+      "reload": "Muat ulang soal",
+      "notices": {
+        "checks": "Soal diperiksa ulang setelah disimpan. Jika teks soal atau jawaban berubah, pemeriksaan otomatis sebelumnya tidak berlaku lagi.",
+        "banked": "Soal ini ada di Bank Soal. Versi baru menggantikan versi tersimpan jika lolos pemeriksaan; jika ditemukan ketidaksesuaian, soal kembali ke peninjauan.",
+        "approved": "Soal ini sudah disetujui. Setelah disimpan, soal kembali ke peninjauan dan perlu disetujui lagi."
+      },
+      "fieldMath": "Rumus di kolom ini tidak valid. Periksa tanda $ dan kurung kurawal.",
+      "fieldInvalid": "Kolom ini kosong atau terlalu panjang.",
+      "errors": {
+        "stale": "Soal ini sudah diubah di tempat lain. Muat ulang soal, lalu simpan lagi; draf Anda tetap tersimpan.",
+        "notFound": "Soal tidak ditemukan.",
+        "trashed": "Soal ini ada di sampah dan tidak bisa diubah.",
+        "signedOut": "Sesi berakhir. Silakan masuk kembali.",
+        "invalid": "Periksa kolom yang ditandai.",
+        "invalidMath": "Ada rumus yang tidak valid. Periksa kolom yang ditandai.",
+        "generic": "Perubahan belum tersimpan. Coba lagi.",
+        "notReady": "Pembuatan soal masih berjalan. Tunggu sampai selesai.",
+        "regenerating": "Soal ini sedang dibuat ulang. Tunggu sampai selesai."
+      },
+      "draftOlder": "Draf ini dibuat pada versi soal yang lebih lama. Soal yang tampil sudah diperbarui.",
+      "useDraft": "Pakai draf"
+    },
+    "regenerate": {
+      "action": "Buat ulang",
+      "heading": "Buat ulang soal ini",
+      "hintLegend": "Petunjuk untuk soal baru (opsional)",
+      "hints": {
+        "none": "Tanpa petunjuk",
+        "easier": "Lebih mudah",
+        "harder": "Lebih sulit",
+        "otherContext": "Konteks lain",
+        "text": "Tulis sendiri"
+      },
+      "textLabel": "Petunjuk Anda",
+      "textCount": "{count} dari {max} karakter",
+      "note": "Soal yang sekarang tetap tersimpan sebagai versi sebelumnya. Membuat ulang dihitung 1 soal dari batas harian.",
+      "submit": "Buat ulang soal",
+      "submitting": "Mengirim…",
+      "cancel": "Batal",
+      "status": {
+        "starting": "Memulai pembuatan ulang…",
+        "queued": "Menunggu giliran untuk membuat ulang soal",
+        "running": "Soal sedang dibuat ulang",
+        "failed": "Soal belum berhasil dibuat ulang. Soal lama tidak berubah.",
+        "skipped": "Soal ini sudah dihapus, jadi tidak dibuat ulang.",
+        "returned": "Versi baru tidak lolos pemeriksaan, jadi soal keluar dari Bank Soal dan kembali ke peninjauan.",
+        "saved": "Versi baru sudah dibuat dan diperiksa."
+      },
+      "errors": {
+        "dailyLimit": "Batas harian {limit} soal sudah tercapai. Coba lagi setelah {time}.",
+        "notReady": "Pembuatan soal masih berjalan. Tunggu sampai selesai.",
+        "notFound": "Soal tidak ditemukan.",
+        "trashed": "Soal ini ada di sampah dan tidak bisa dibuat ulang.",
+        "signedOut": "Sesi berakhir. Silakan masuk kembali.",
+        "generic": "Permintaan belum terkirim. Coba lagi."
+      },
+      "compare": {
+        "heading": "Bandingkan versi",
+        "previous": "Versi sebelumnya ({number})",
+        "new": "Versi baru ({number})",
+        "keep": "Pakai versi baru",
+        "restore": "Kembalikan versi sebelumnya",
+        "restoring": "Mengembalikan…",
+        "restored": "Versi sebelumnya dipulihkan sebagai versi baru.",
+        "stale": "Soal sudah berubah di tempat lain. Muat ulang halaman, lalu coba lagi.",
+        "error": "Versi sebelumnya belum dipulihkan. Coba lagi."
+      }
+    },
+    "materialSource": {
+      "label": "Sumber: {title}, hal. {page}",
+      "deleted": "Materi sumber telah dihapus",
+      "unknownPage": "Sumber: {title}"
+    }
+  },
+  "auth": {
+    "title": "Masuk",
+    "subtitle": "Masuk untuk melanjutkan ke MitraMatika.",
+    "google": "Masuk dengan Google",
+    "signOut": "Keluar",
+    "errors": {
+      "oauthDenied": "Masuk dengan Google dibatalkan atau ditolak.",
+      "generic": "Terjadi kesalahan. Coba lagi.",
+      "unauthenticated": "Silakan masuk terlebih dahulu."
+    },
+    "or": "atau",
+    "working": "Memproses…",
+    "fields": {
+      "name": "Nama lengkap",
+      "email": "Email",
+      "password": "Kata sandi",
+      "newPassword": "Kata sandi baru",
+      "confirmPassword": "Ulangi kata sandi",
+      "schoolName": "Nama sekolah (opsional)",
+      "showPassword": "Tampilkan kata sandi",
+      "passwordHint": "8 sampai 128 karakter, berisi huruf dan angka."
+    },
+    "fieldErrors": {
+      "fieldInvalid": "Isian ini tidak valid.",
+      "emailInvalid": "Masukkan alamat email yang valid.",
+      "nameLength": "Nama harus 2 sampai 80 karakter.",
+      "schoolNameTooLong": "Nama sekolah paling banyak 120 karakter.",
+      "passwordRequired": "Masukkan kata sandi.",
+      "passwordTooShort": "Kata sandi minimal 8 karakter.",
+      "passwordTooLong": "Kata sandi paling banyak 128 karakter.",
+      "passwordNeedsLetterAndDigit": "Kata sandi harus berisi huruf dan angka.",
+      "passwordMismatch": "Kedua kata sandi tidak sama.",
+      "privacyRequired": "Setujui pemberitahuan privasi untuk mendaftar."
+    },
+    "formErrors": {
+      "generic": "Terjadi kesalahan. Coba lagi.",
+      "rateLimited": "Terlalu banyak percobaan. Tunggu sebentar, lalu coba lagi.",
+      "invalidCredentials": "Email atau kata sandi salah.",
+      "emailNotVerified": "Email kamu belum dikonfirmasi. Buka tautan konfirmasi yang kami kirim ke email kamu."
+    },
+    "notices": {
+      "passwordReset": "Kata sandi baru sudah disimpan. Masuk dengan kata sandi itu.",
+      "linkUsed": "Tautan konfirmasi ini sudah dipakai atau tidak berlaku lagi. Masuk untuk melanjutkan, atau minta tautan baru jika belum bisa masuk.",
+      "accountDeleted": "Akun kamu sudah dihapus."
+    },
+    "signIn": {
+      "submit": "Masuk",
+      "forgotPassword": "Lupa kata sandi?",
+      "noAccount": "Belum punya akun?",
+      "signUpLink": "Daftar",
+      "resendLink": "Kirim ulang tautan konfirmasi"
+    },
+    "signUp": {
+      "title": "Daftar",
+      "subtitle": "Buat akun MitraMatika untuk mulai menyusun soal.",
+      "google": "Daftar dengan Google",
+      "submit": "Buat akun",
+      "privacy": "Saya sudah membaca dan menyetujui <link>pemberitahuan privasi</link>.",
+      "hasAccount": "Sudah punya akun?",
+      "signInLink": "Masuk"
+    },
+    "verify": {
+      "title": "Cek email kamu",
+      "description": "Kami sudah mengirim email ke alamat yang kamu daftarkan. Ikuti petunjuk di email itu untuk melanjutkan. Tautan konfirmasi berlaku 24 jam.",
+      "invalidTitle": "Tautan tidak berlaku",
+      "invalidDescription": "Tautan konfirmasi ini sudah kedaluwarsa atau tidak valid. Minta tautan baru di bawah.",
+      "resendHint": "Tidak menerima email? Periksa folder spam, atau kirim ulang tautannya.",
+      "resend": "Kirim ulang tautan",
+      "resendIn": "Kirim ulang dalam {seconds, number} detik",
+      "sent": "Jika alamat itu menunggu konfirmasi, tautan baru sudah dikirim.",
+      "backToSignIn": "Kembali ke halaman masuk"
+    },
+    "forgot": {
+      "title": "Lupa kata sandi",
+      "description": "Masukkan email akun kamu. Kami akan mengirim tautan untuk membuat kata sandi baru.",
+      "submit": "Kirim tautan",
+      "sent": "Jika ada akun dengan email itu, kami sudah mengirim tautan untuk membuat kata sandi baru. Tautan berlaku 1 jam. Periksa juga folder spam.",
+      "backToSignIn": "Kembali ke halaman masuk"
+    },
+    "reset": {
+      "title": "Buat kata sandi baru",
+      "description": "Setelah kata sandi baru disimpan, semua perangkat keluar dan kamu perlu masuk lagi.",
+      "submit": "Simpan kata sandi",
+      "expiredTitle": "Tautan tidak berlaku",
+      "expired": "Tautan ini sudah kedaluwarsa atau pernah dipakai. Minta tautan baru untuk membuat kata sandi baru.",
+      "requestNew": "Minta tautan baru"
+    },
+    "email": {
+      "verifySubject": "Konfirmasi email akun MitraMatika",
+      "verifyBody": "Halo,\n\nBuka tautan berikut untuk mengonfirmasi alamat email akun MitraMatika kamu:\n\n{url}\n\nTautan ini berlaku {hours, number, ::group-off} jam. Seseorang memakai alamat email ini untuk membuat akun MitraMatika dengan kata sandi. Jika bukan kamu, jangan buka tautan ini dan abaikan email ini: membukanya akan mengaktifkan akun dengan kata sandi yang tidak kamu buat.",
+      "resetSubject": "Atur ulang kata sandi MitraMatika",
+      "resetBody": "Halo,\n\nBuka tautan berikut untuk membuat kata sandi baru akun MitraMatika kamu:\n\n{url}\n\nTautan ini berlaku {minutes, number, ::group-off} menit dan hanya bisa dipakai sekali. Jika kamu tidak memintanya, abaikan email ini; kata sandimu tidak berubah.",
+      "accountExistsSubject": "Akun MitraMatika kamu sudah ada",
+      "accountExistsBody": "Halo,\n\nAda yang mencoba mendaftar di MitraMatika dengan alamat email ini, padahal akunnya sudah ada. Tidak ada akun baru yang dibuat.\n\nMasuk dengan Google atau kata sandi kamu di {signInUrl}\n\nJika lupa kata sandi, buat yang baru di {resetUrl}\n\nJika bukan kamu yang mencoba mendaftar, abaikan email ini. Akunmu tetap aman."
+    }
+  },
+  "settings": {
+    "heading": "Pengaturan",
+    "account": {
+      "heading": "Akun",
+      "description": "Nama dan sekolah kamu tampil di aplikasi. Email akun tidak bisa diubah.",
+      "emailLabel": "Email akun",
+      "loadFailed": "Data akun tidak bisa dimuat. Muat ulang halaman ini untuk mencoba lagi.",
+      "formErrors": {
+        "generic": "Terjadi kesalahan. Coba lagi.",
+        "rateLimited": "Terlalu banyak percobaan. Tunggu sebentar, lalu coba lagi.",
+        "unauthenticated": "Sesi kamu sudah berakhir. Masuk lagi untuk melanjutkan.",
+        "signInAgain": "Untuk menghapus akun, masuk lagi dulu. Keluar, masuk lagi dengan Google, lalu hapus akun dalam 10 menit."
+      },
+      "profile": {
+        "heading": "Profil",
+        "submit": "Simpan profil",
+        "saved": "Profil sudah disimpan."
+      },
+      "password": {
+        "heading": "Ganti kata sandi",
+        "description": "Setelah diganti, semua perangkat lain keluar dari akun ini. Perangkat ini tetap masuk.",
+        "current": "Kata sandi saat ini",
+        "submit": "Ganti kata sandi",
+        "saved": "Kata sandi sudah diganti. Perangkat lain sudah dikeluarkan.",
+        "wrongPassword": "Kata sandi saat ini salah."
+      },
+      "delete": {
+        "heading": "Hapus akun",
+        "description": "Akun, profil, dan semua soal serta permintaan soal kamu dihapus untuk selamanya. Tindakan ini tidak bisa dibatalkan.",
+        "open": "Hapus akun",
+        "dialogTitle": "Hapus akun untuk selamanya?",
+        "dialogDescription": "Semua data akun ini dihapus dan tidak bisa dikembalikan. Ketik email akun kamu untuk melanjutkan.",
+        "confirmLabel": "Ketik {email}",
+        "confirm": "Hapus akun saya",
+        "cancel": "Batal",
+        "emailMismatch": "Email yang diketik tidak sama dengan email akun.",
+        "passwordHint": "Masukkan kata sandi kamu untuk memastikan ini memang kamu.",
+        "freshSignIn": "Untuk keamanan, akun tanpa kata sandi hanya bisa dihapus dalam 10 menit setelah masuk.",
+        "signOut": "Keluar sekarang"
+      }
+    },
+    "templates": {
+      "heading": "Templat dokumen",
+      "description": "Kop sekolah, logo, dan format cetak untuk naskah soal, kunci jawaban, dan pembahasan. Templat default dipakai untuk asesmen baru.",
+      "empty": "Belum ada templat. Buat yang pertama di bawah ini.",
+      "loadFailed": "Templat dokumen tidak bisa dimuat. Muat ulang halaman ini untuk mencoba lagi.",
+      "listLabel": "Daftar templat",
+      "defaultBadge": "Default",
+      "makeDefault": "Jadikan default: {name}",
+      "makeDefaultShort": "Jadikan default",
+      "edit": "Ubah: {name}",
+      "editShort": "Ubah",
+      "newTemplate": "Templat baru",
+      "editHeading": "Ubah templat",
+      "newHeading": "Templat baru",
+      "submit": "Simpan templat",
+      "saved": "Templat sudah disimpan.",
+      "defaultSaved": "Templat default sudah diganti.",
+      "setDefaultFailed": "Templat default belum bisa diganti. Coba lagi.",
+      "fields": {
+        "name": "Nama templat",
+        "nameHint": "Hanya untuk kamu, misalnya \"Kop ujian semester\".",
+        "schoolName": "Nama sekolah",
+        "headerLines": "Baris kop",
+        "headerLinesHint": "Tampil di atas nama sekolah, misalnya pemerintah daerah, dinas pendidikan, atau alamat. Paling banyak 4 baris; yang kosong dilewati.",
+        "headerLine": "Baris kop {number}",
+        "subject": "Mata pelajaran",
+        "studentFields": "Isian identitas siswa",
+        "defaultInstructions": "Petunjuk umum (opsional)",
+        "paperSize": "Ukuran kertas",
+        "font": "Huruf",
+        "isDefault": "Jadikan templat default"
+      },
+      "studentField": {
+        "name": "Nama",
+        "class": "Kelas",
+        "number": "Nomor absen",
+        "date": "Tanggal"
+      },
+      "paper": {
+        "A4": "A4 (210 × 297 mm)",
+        "F4": "F4 (215 × 330 mm)"
+      },
+      "fonts": {
+        "times": "Times New Roman 12 pt",
+        "arial": "Arial 12 pt"
+      },
+      "fieldErrors": {
+        "required": "Wajib diisi.",
+        "tooLong": "Teks ini terlalu panjang.",
+        "invalidCharacters": "Ada karakter yang tidak diizinkan.",
+        "invalid": "Pilihan ini tidak tersedia."
+      },
+      "formErrors": {
+        "generic": "Terjadi kesalahan. Coba lagi.",
+        "unauthenticated": "Sesi kamu sudah berakhir. Masuk lagi untuk melanjutkan.",
+        "notFound": "Templat ini tidak ditemukan. Mungkin sudah dihapus.",
+        "conflict": "Templat ini baru saja diubah di tempat lain. Muat ulang halaman, lalu coba lagi."
+      },
+      "logo": {
+        "label": "Logo sekolah",
+        "hint": "PNG, JPG, atau SVG, paling besar 1 MB. Logo baru menggantikan yang lama.",
+        "submit": "Unggah logo",
+        "saved": "Logo sudah diunggah.",
+        "saveFirst": "Simpan templat dulu, lalu unggah logonya.",
+        "errors": {
+          "empty": "Pilih berkas logo dulu.",
+          "tooLarge": "Ukuran logo paling besar 1 MB.",
+          "unsupportedType": "Logo harus berupa PNG, JPG, atau SVG.",
+          "invalidImage": "Berkas logo rusak atau tidak bisa dibaca.",
+          "dimensionsTooLarge": "Gambar terlalu besar. Paling besar 6000 piksel per sisi.",
+          "notFound": "Templat ini tidak ditemukan. Mungkin sudah dihapus.",
+          "unauthenticated": "Sesi kamu sudah berakhir. Masuk lagi untuk melanjutkan.",
+          "generic": "Logo belum bisa diunggah. Coba lagi."
+        }
+      },
+      "preview": {
+        "label": "Pratinjau kop",
+        "heading": "Pratinjau",
+        "schoolPlaceholder": "Nama sekolah",
+        "logoAlt": "Logo sekolah",
+        "subject": "Mata pelajaran: {subject}"
+      }
+    },
+    "language": {
+      "heading": "Bahasa",
+      "description": "Pilih bahasa tampilan aplikasi. Soal yang dibuat tetap berbahasa Indonesia.",
+      "groupLabel": "Bahasa tampilan"
+    }
+  },
+  "privacy": {
+    "title": "Pemberitahuan privasi",
+    "intro": "Halaman ini menjelaskan data apa yang disimpan MitraMatika, ke mana data itu dikirim, dan cara menghapus akun kamu.",
+    "storedTitle": "Data yang kami simpan",
+    "storedAccount": "Akun: nama, alamat email, nama sekolah jika kamu mengisinya, dan kata sandi dalam bentuk hash (kata sandi aslinya tidak pernah disimpan). Jika kamu masuk dengan Google, kami menerima nama dan alamat email dari Google.",
+    "storedContent": "Pekerjaan kamu: permintaan soal, soal yang dibuat, keputusan tinjauanmu, dan Bank Soal.",
+    "storedTechnical": "Data teknis: sesi masuk beserta alamat IP dan browser yang memulainya, pilihan bahasa, penghitung per alamat IP dan per alamat email (dalam bentuk hash) yang membatasi seberapa sering permintaan masuk, daftar, dan email bisa dibuat (kedaluwarsa dalam sehari), dan catatan aktivitas yang hanya memuat ID akun, bukan email atau nama.",
+    "aiTitle": "Layanan AI dan data yang dikirim",
+    "aiGroq": "Groq membuat dan memeriksa soal. Groq menerima data kurikulum (kelas, topik, tujuan pembelajaran, tingkat kesulitan) dan isi soal yang sedang dibuat. Nama, email, dan nama sekolah kamu tidak pernah dikirim.",
+    "aiGemini": "Gemini dari Google hanya dipakai sebagai cadangan, dan hanya menerima data kurikulum yang memang publik.",
+    "emailService": "Resend mengirim email konfirmasi dan email untuk membuat kata sandi baru, jadi Resend menerima alamat email kamu.",
+    "studentsTitle": "Tanpa data siswa",
+    "students": "MitraMatika tidak mengumpulkan data siswa. Jangan menulis nama atau data pribadi siswa di dalam aplikasi; data seperti itu tidak boleh dikirim ke layanan AI mana pun.",
+    "deleteTitle": "Menghapus akun",
+    "delete": "Kamu bisa menghapus akun kapan saja di Pengaturan, bagian Akun. Akun, sesi, soal, dan semua pekerjaanmu ikut terhapus. Yang tersisa: catatan bahwa sebuah akun telah dihapus, tanpa nama atau email, hanya berisi bentuk acak satu arah dari ID akun; catatan aktivitas dan galat sebelumnya, dengan ID akunmu dihapus; dan cadangan basis data mingguan, yang menyimpan salinan datamu paling lama 8 minggu sampai cadangan itu dihapus. Resend menyimpan catatannya sendiri tentang email yang dikirim kepadamu.",
+    "back": "Kembali ke halaman masuk"
+  },
+  "assessments": {
+    "list": {
+      "description": "Susun soal dari Bank Soal menjadi naskah ujian.",
+      "newHeading": "Asesmen baru",
+      "listHeading": "Asesmen Anda",
+      "listLabel": "Daftar asesmen",
+      "empty": "Belum ada asesmen",
+      "emptyHint": "Buat asesmen pertama di atas, lalu tambahkan soal dari Bank Soal.",
+      "itemCount": "{count, plural, =0 {Belum ada soal} other {# soal}}",
+      "sectionCount": "{count, plural, other {# bagian}}",
+      "updated": "Diubah {date}",
+      "loadFailed": "Daftar asesmen tidak dapat dimuat. Muat ulang halaman ini sebentar lagi.",
+      "status": {
+        "draft": "Draf",
+        "approved": "Disetujui"
+      }
+    },
+    "kinds": {
+      "latihan": "Latihan",
+      "ulangan_harian": "Ulangan harian",
+      "sts": "STS",
+      "sas": "SAS",
+      "custom": "Lainnya"
+    },
+    "form": {
+      "title": "Judul",
+      "kind": "Jenis",
+      "grade": "Kelas",
+      "gradeOption": "Kelas {grade, number, ::group-off}",
+      "template": "Templat dokumen",
+      "templateNone": "Tanpa templat",
+      "templateDefault": "{name} (default)",
+      "templateHint": "Atur templat di Pengaturan.",
+      "examDate": "Tanggal",
+      "duration": "Durasi (menit)",
+      "instructions": "Petunjuk pengerjaan",
+      "create": "Buat asesmen",
+      "creating": "Membuat asesmen",
+      "save": "Simpan detail",
+      "saving": "Menyimpan",
+      "saved": "Detail disimpan.",
+      "fieldErrors": {
+        "required": "Wajib diisi.",
+        "tooLong": "Terlalu panjang.",
+        "invalidCharacters": "Mengandung karakter yang tidak diizinkan.",
+        "invalid": "Isi dengan nilai yang valid."
+      }
+    },
+    "errors": {
+      "unauthenticated": "Sesi Anda berakhir. Masuk lagi untuk melanjutkan.",
+      "generic": "Terjadi kesalahan. Coba lagi.",
+      "invalid": "Permintaan tidak valid.",
+      "notFound": "Asesmen atau soal ini sudah tidak ada.",
+      "conflict": "Asesmen ini sudah diubah di tempat lain. Muat ulang halaman, lalu coba lagi.",
+      "approved": "Asesmen ini sudah disetujui, sehingga tidak dapat diubah.",
+      "templateNotFound": "Templat yang dipilih sudah tidak ada.",
+      "sectionNotFound": "Bagian ini sudah tidak ada.",
+      "notBanked": "Satu soal tidak lagi ada di Bank Soal, jadi tidak ada yang ditambahkan.",
+      "tooMany": "Jumlah bagian sudah mencapai batas.",
+      "lastSection": "Bagian terakhir tidak dapat dihapus.",
+      "pendingCheck": "Versi baru satu soal masih menunggu pemeriksaan, jadi tidak ada yang ditambahkan.",
+      "tooManyItems": "Asesmen sudah berisi 200 soal, jumlah maksimum.",
+      "tooManyAtOnce": "Terlalu banyak soal sekaligus. Tambahkan paling banyak 50 soal.",
+      "invalidPoints": "Skor harus lebih dari 0, paling banyak 1000, dengan paling banyak dua angka desimal.",
+      "itemNotFound": "Satu soal sudah tidak ada di asesmen ini. Muat ulang halaman, lalu coba lagi.",
+      "notReady": "Asesmen belum siap disetujui. Muat ulang halaman untuk melihat yang perlu diselesaikan."
+    },
+    "preview": {
+      "description": "Naskah soal, kunci jawaban, dan pembahasan seperti yang akan dicetak. Dokumen selalu berbahasa Indonesia.",
+      "back": "Kembali ke penyusun",
+      "kindNav": "Jenis dokumen",
+      "frameTitle": "Pratinjau dokumen",
+      "kinds": {
+        "paper": "Naskah soal",
+        "key": "Kunci jawaban",
+        "solutions": "Pembahasan"
+      },
+      "draftNote": "Ini pratinjau dari draf. Dokumen untuk diunduh baru bisa dibuat setelah asesmen disetujui.",
+      "warningsHeading": "Ada rumus yang tidak dapat ditampilkan",
+      "warningsHint": "Rumus berikut ditampilkan sebagai teks biasa. Perbaiki soalnya di Bank Soal, lalu perbarui soal di asesmen.",
+      "tooWideHeading": "Ada rumus yang terlalu lebar untuk halaman",
+      "tooWideHint": "Rumus berikut sudah dicetak lebih kecil, tetapi masih bisa melewati tepi halaman PDF. Pecah rumusnya menjadi beberapa baris di Bank Soal, lalu perbarui soal di asesmen.",
+      "templateMissing": "Templat dokumen asesmen ini tidak dapat dibaca (mungkin ada di Sampah), jadi pratinjau memakai kop kosong, kertas A4, dan huruf Times New Roman. Pilih templat lain di detail asesmen.",
+      "missingVersion": "Satu atau lebih versi soal yang disematkan sudah tidak ada, sehingga pratinjau tidak dapat dibuat. Hapus soal itu dari susunan lalu tambahkan lagi.",
+      "where": {
+        "stem": "Soal {number}: teks soal",
+        "option": "Soal {number}: pilihan {label}",
+        "step": "Soal {number}: langkah {step}",
+        "sectionInstructions": "Petunjuk bagian {section}",
+        "instructions": "Petunjuk umum"
+      },
+      "paperInfo": "Ukuran kertas dan huruf mengikuti templat dokumen.",
+      "pdfNote": "Pratinjau ini menunjukkan isi dokumen; pemisahan baris dan halaman di PDF dapat sedikit berbeda."
+    },
+    "editor": {
+      "preview": "Pratinjau dokumen",
+      "back": "Semua asesmen",
+      "details": "Detail asesmen",
+      "outline": "Susunan soal",
+      "outlineHint": "Gunakan tombol di setiap soal untuk mengurutkan atau memindahkannya.",
+      "locked": "Asesmen ini sudah disetujui, sehingga tidak dapat diubah. Buka kembali persetujuannya untuk mengedit.",
+      "total": "{count, plural, =0 {Belum ada soal} other {# soal}} dalam {sections, plural, other {# bagian}}"
+    },
+    "section": {
+      "titleLabel": "Judul bagian",
+      "rename": "Simpan judul",
+      "renamed": "Judul bagian disimpan.",
+      "remove": "Hapus bagian",
+      "removeHint": "Soal di bagian ini pindah ke bagian lain.",
+      "removed": "Bagian dihapus.",
+      "add": "Tambah bagian",
+      "addLabel": "Judul bagian baru",
+      "addPlaceholder": "Contoh: B. Uraian",
+      "added": "Bagian ditambahkan.",
+      "empty": "Belum ada soal di bagian ini.",
+      "addQuestions": "Tambah soal dari Bank Soal",
+      "removeNamed": "Hapus bagian: {title}"
+    },
+    "item": {
+      "number": "Soal {n}",
+      "moveUp": "Naikkan soal {n}",
+      "moveDown": "Turunkan soal {n}",
+      "moveTo": "Pindahkan soal {n} ke bagian",
+      "remove": "Keluarkan soal {n}",
+      "version": "Versi {no}",
+      "newer": "Ada versi terbaru",
+      "updateLatest": "Pakai versi terbaru soal {n}",
+      "trashed": "Soal ini ada di Sampah. Pulihkan di Sampah atau keluarkan dari asesmen.",
+      "unbanked": "Soal ini tidak lagi ada di Bank Soal. Periksa ulang atau keluarkan dari asesmen.",
+      "correct": "Kunci: {label}",
+      "moved": "Soal {n} dipindahkan.",
+      "removedNote": "Soal dikeluarkan dari asesmen.",
+      "updatedNote": "Soal memakai versi terbaru.",
+      "alreadyLatest": "Soal sudah memakai versi terbaru.",
+      "pending": "Versi barunya sedang menunggu pemeriksaan. Soal tetap memakai versi yang disematkan."
+    },
+    "picker": {
+      "heading": "Tambah soal ke {section}",
+      "close": "Tutup",
+      "targetLabel": "Tambahkan ke bagian",
+      "select": "Pilih soal {n}",
+      "alreadyAdded": "Sudah ada di asesmen",
+      "add": "{count, plural, =0 {Tambahkan soal} other {Tambahkan # soal}}",
+      "adding": "Menambahkan",
+      "result": "{added} soal ditambahkan, {skipped} dilewati karena sudah ada.",
+      "none": "Tidak ada soal yang cocok dengan pencarian ini.",
+      "emptyBank": "Bank Soal masih kosong. Buat soal dan simpan ke Bank Soal terlebih dulu.",
+      "pageLabel": "Halaman soal",
+      "page": "Halaman {page} dari {pageCount}",
+      "previous": "Sebelumnya",
+      "next": "Berikutnya",
+      "pending": "Versi baru menunggu pemeriksaan",
+      "refusedNotBanked": "Soal {n} tidak lagi ada di Bank Soal, jadi tidak ada yang ditambahkan.",
+      "refusedPending": "Versi baru soal {n} masih menunggu pemeriksaan, jadi tidak ada yang ditambahkan."
+    },
+    "create": {
+      "link": "Buat soal baru",
+      "hint": "Buka Buat Soal, lalu kembali ke sini untuk menambahkan soal yang tersimpan."
+    },
+    "offer": {
+      "heading": "Soal baru di Bank Soal",
+      "description": "{count, plural, other {# soal}} baru tersimpan di Bank Soal dan belum ada di asesmen ini.",
+      "dismiss": "Abaikan"
+    },
+    "scoring": {
+      "heading": "Skor dan urutan",
+      "modeLegend": "Cara penilaian",
+      "mode": {
+        "equal": "Sama rata",
+        "manual": "Manual",
+        "normalised": "Manual, dijadikan 100"
+      },
+      "modeHint": {
+        "equal": "Setiap soal mendapat bagian yang sama dari 100.",
+        "manual": "Isi skor setiap soal. Totalnya boleh berapa saja.",
+        "normalised": "Isi bobot setiap soal. Skornya diskalakan agar totalnya tepat 100."
+      },
+      "modeSaved": "Cara penilaian disimpan.",
+      "pointsLegend": "Skor per soal",
+      "pointsLabel": "Skor soal {n}",
+      "pointsHint": "Angka lebih dari 0, paling banyak dua angka desimal.",
+      "scaled": "Menjadi {points, number} poin",
+      "save": "Simpan skor",
+      "saved": "Skor disimpan.",
+      "total": "Total skor: {total, number}",
+      "needs100": "Total harus tepat 100.",
+      "empty": "Tambahkan soal untuk mengatur skor.",
+      "shuffle": "Acak urutan soal di setiap bagian",
+      "shuffleHint": "Nomor soal di naskah, kunci jawaban, dan pembahasan mengikuti urutan acak. Editor tetap menampilkan susunan Anda.",
+      "reshuffle": "Acak ulang",
+      "shuffleOn": "Urutan soal diacak.",
+      "shuffleOff": "Urutan soal tidak diacak.",
+      "reshuffled": "Urutan soal diacak ulang."
+    },
+    "approval": {
+      "heading": "Persetujuan",
+      "ready": "Siap disetujui. Setelah disetujui, asesmen dikunci dan dapat diekspor.",
+      "notReady": "{count, plural, other {# hal}} perlu diselesaikan sebelum disetujui:",
+      "approve": "Setujui asesmen",
+      "approved": "Asesmen disetujui.",
+      "approvedOn": "Disetujui pada {date}.",
+      "stale": "Ada perubahan sejak asesmen disetujui, misalnya pada templat. Buka kembali, lalu setujui lagi sebelum mengekspor.",
+      "reopen": "Buka kembali",
+      "reopenTitle": "Buka kembali asesmen ini?",
+      "reopenBody": "Persetujuan dihapus dan asesmen dapat diedit lagi. Setujui lagi sebelum mengekspor.",
+      "reopenConfirm": "Ya, buka kembali",
+      "cancel": "Batal",
+      "reopened": "Asesmen dibuka kembali.",
+      "problem": {
+        "empty": "Belum ada soal di asesmen ini.",
+        "templateTrashed": "Templat dokumen ada di Sampah. Pulihkan di Sampah atau pilih templat lain.",
+        "trashed": "Soal {n} ada di Sampah.",
+        "notApproved": "Soal {n} belum disetujui atau tidak lagi ada di Bank Soal.",
+        "mismatch": "Soal {n} memiliki ketidaksesuaian yang belum diselesaikan. Setujui dengan catatan di Tinjau Soal, atau keluarkan.",
+        "badTotal": "Total skor {total, number} belum tepat 100.",
+        "badTotalManual": "Total skor harus lebih dari 0.",
+        "unscored": "Soal {n} belum punya skor."
+      },
+      "refusedNotReady": "Asesmen belum siap disetujui. Lihat daftar yang perlu diselesaikan.",
+      "refusedConflict": "Asesmen berubah sejak halaman dimuat. Periksa lagi, lalu setujui."
+    },
+    "export": {
+      "heading": "Ekspor dokumen",
+      "description": "Naskah soal, kunci jawaban, dan pembahasan dalam PDF dan Word, ditambah satu ZIP berisi semuanya. Berkas tersedia selama 7 hari.",
+      "start": "Ekspor dokumen",
+      "again": "Ekspor ulang",
+      "status": {
+        "starting": "Memulai ekspor…",
+        "queued": "Ekspor menunggu giliran…",
+        "running": "Membuat dokumen. Ini bisa memakan waktu hingga beberapa menit.",
+        "deferred": "Ekspor menunggu giliran dan berlanjut sebentar lagi.",
+        "done": "Dokumen siap diunduh."
+      },
+      "expiresOn": "Tersedia sampai {date}",
+      "expired": "Berkas ekspor sudah kedaluwarsa (berlaku 7 hari) dan telah dihapus. Ekspor ulang untuk membuat berkas baru.",
+      "filesLabel": "Berkas ekspor",
+      "documents": {
+        "paper": "Naskah soal",
+        "key": "Kunci jawaban",
+        "solutions": "Pembahasan",
+        "zip": "Semua berkas (ZIP)"
+      },
+      "formats": {
+        "pdf": "PDF",
+        "docx": "Word",
+        "zip": "ZIP"
+      },
+      "downloadLabel": "Unduh {document} ({format})",
+      "downloadZip": "Unduh semua berkas (ZIP)",
+      "warningsHeading": "Perlu diperiksa",
+      "warningsHint": "Rumus berikut tidak dapat dijadikan persamaan dan ditulis sebagai teks biasa:",
+      "tooWideHint": "Rumus berikut lebih lebar dari halaman dan dicetak lebih kecil; di PDF rumus itu bisa melewati tepi halaman. Periksa berkasnya, atau pecah rumusnya menjadi beberapa baris di Bank Soal:",
+      "warningItem": "{file}: {where}",
+      "logoOmitted": "Logo sekolah berformat SVG tidak dapat dimuat di berkas PDF dan Word. Unggah logo PNG atau JPG di templat.",
+      "logoMissing": "Berkas logo templat tidak ditemukan, jadi dokumen dibuat tanpa logo. Unggah logo lagi di templat, lalu ekspor ulang.",
+      "errors": {
+        "notApproved": "Asesmen belum disetujui. Setujui dahulu, lalu ekspor.",
+        "notFound": "Asesmen tidak ditemukan.",
+        "stale": "Asesmen atau templatnya berubah setelah disetujui. Buka kembali persetujuan, periksa, lalu setujui lagi.",
+        "tooLarge": "Dokumen terlalu besar untuk diekspor. Kurangi jumlah soal atau bagi menjadi beberapa asesmen.",
+        "rendererUnavailable": "Pencetak PDF sedang tidak tersedia. Coba ekspor lagi beberapa saat lagi.",
+        "renderFailed": "Salah satu dokumen tidak dapat dibuat. Coba ekspor lagi.",
+        "hourlyLimit": "Batas {limit} ekspor per jam sudah tercapai. Coba lagi setelah pukul {time}.",
+        "signedOut": "Sesi Anda berakhir. Masuk lagi untuk mengekspor.",
+        "generic": "Ekspor gagal. Coba lagi sebentar lagi."
+      }
+    }
+  },
+  "materials": {
+    "upload": {
+      "title": "Unggah materi",
+      "privacy": "Jangan unggah dokumen yang memuat data pribadi siswa (nama, nilai, foto, nomor induk).",
+      "dropLabel": "Seret berkas ke sini atau pilih berkas",
+      "chooseFile": "Pilih berkas",
+      "takePhoto": "Ambil foto",
+      "hint": "PDF, DOCX, JPG atau PNG, paling besar 50 MB dan 300 halaman.",
+      "storage": "{used} dari {cap} terpakai",
+      "uploading": "Mengunggah {name}: {percent}%",
+      "checking": "Memeriksa {name}…",
+      "done": "{name} tersimpan. Teks sedang dibaca.",
+      "failed": "{name} tidak dapat diunggah.",
+      "progressLabel": "Kemajuan unggahan {name}",
+      "retry": "Coba lagi",
+      "cancel": "Batal",
+      "cancelled": "Unggahan {name} dibatalkan.",
+      "dismiss": "Tutup",
+      "errors": {
+        "type": "Jenis berkas tidak didukung. Gunakan PDF, DOCX, JPG atau PNG.",
+        "doc": "Berkas .doc tidak didukung. Buka di Word lalu simpan sebagai .docx.",
+        "size": "Berkas lebih besar dari 50 MB atau ukurannya berubah saat diunggah.",
+        "quota": "Penyimpanan Anda (1 GB) penuh. Hapus materi lama dari tempat sampah dulu.",
+        "pending": "Terlalu banyak unggahan berjalan. Tunggu sampai selesai, lalu coba lagi.",
+        "encrypted": "PDF ini terkunci kata sandi. Simpan ulang tanpa kata sandi, lalu unggah lagi.",
+        "pages": "PDF lebih dari 300 halaman. Pisahkan menjadi beberapa berkas.",
+        "zipBomb": "Isi DOCX ini terlalu besar setelah dibuka. Simpan ulang dari Word, lalu unggah lagi.",
+        "image": "Gambar tidak terbaca atau lebih dari 10.000 piksel per sisi.",
+        "damaged": "Berkas rusak dan tidak dapat dibaca.",
+        "notFound": "Unggahan tidak ditemukan. Mulai unggah lagi.",
+        "missing": "Berkas belum sampai di penyimpanan. Coba lagi.",
+        "expired": "Unggahan terlalu lama. Mulai unggah lagi.",
+        "title": "Judul wajib diisi (paling banyak 200 karakter).",
+        "folder": "Folder tidak ditemukan.",
+        "network": "Koneksi terputus saat mengunggah. Periksa internet, lalu coba lagi.",
+        "unauthenticated": "Sesi Anda berakhir. Masuk lagi untuk mengunggah.",
+        "generic": "Unggahan gagal. Coba lagi sebentar lagi.",
+        "busy": "Server sedang membaca berkas lain. Coba lagi sebentar lagi."
+      }
+    },
+    "library": {
+      "description": "Simpan buku, modul ajar dan pindaian sebagai acuan untuk membuat soal.",
+      "openTrash": "Buka Sampah",
+      "listLabel": "Daftar materi",
+      "listHeading": "Materi Anda",
+      "empty": "Belum ada materi.",
+      "emptyHint": "Unggah buku atau modul ajar pertama Anda lewat kotak unggah.",
+      "noMatches": "Tidak ada materi yang cocok.",
+      "resetFilters": "Hapus filter",
+      "pages": "{count, plural, other {# halaman}}",
+      "grade": "Kelas {grade}",
+      "matchPage": "Ditemukan di hal. {page}",
+      "inFolder": "Folder: {name}",
+      "structureConfirmed": "Struktur dikonfirmasi",
+      "kind": {
+        "pdf": "PDF",
+        "docx": "DOCX",
+        "image": "Gambar"
+      },
+      "status": {
+        "uploaded": "Menunggu dibaca",
+        "processing": "Sedang dibaca",
+        "needs_review": "Perlu ditinjau",
+        "ready": "Siap dipakai",
+        "failed": "Gagal dibaca"
+      },
+      "showing": "{first}–{last} dari {total} materi",
+      "pagination": {
+        "label": "Halaman daftar materi",
+        "previous": "Sebelumnya",
+        "next": "Berikutnya",
+        "page": "Halaman {page}"
+      },
+      "search": {
+        "label": "Cari materi",
+        "placeholder": "Cari judul atau isi materi",
+        "submit": "Cari"
+      },
+      "filters": {
+        "label": "Saring materi",
+        "grade": "Kelas",
+        "year": "Tahun ajaran",
+        "status": "Status",
+        "any": "Semua",
+        "apply": "Terapkan"
+      }
+    },
+    "storage": {
+      "label": "Penyimpanan",
+      "nearlyFull": "Penyimpanan hampir penuh. Hapus untuk selamanya materi yang tidak dipakai dari Sampah."
+    },
+    "folders": {
+      "heading": "Folder",
+      "navLabel": "Folder materi",
+      "all": "Semua materi",
+      "empty": "Belum ada folder.",
+      "count": "{count, plural, other {# materi}}",
+      "create": {
+        "heading": "Folder baru",
+        "name": "Nama folder",
+        "parent": "Letak folder",
+        "topLevel": "Paling atas",
+        "inside": "Di dalam {name}",
+        "submit": "Buat folder",
+        "created": "Folder dibuat."
+      },
+      "current": {
+        "heading": "Atur folder ini",
+        "name": "Nama baru",
+        "rename": "Ganti nama",
+        "renamed": "Nama folder diganti.",
+        "move": "Pindahkan ke",
+        "moveSubmit": "Pindahkan folder",
+        "moved": "Folder dipindahkan."
+      },
+      "errors": {
+        "name": "Nama folder wajib diisi (paling banyak 80 karakter).",
+        "notFound": "Folder ini tidak ditemukan. Muat ulang halaman.",
+        "parent": "Folder tujuan tidak ditemukan.",
+        "nesting": "Folder hanya bisa bersarang satu tingkat: pilih folder paling atas, atau pindahkan subfoldernya dulu.",
+        "retry": "Ada perubahan lain yang sedang berjalan. Coba lagi.",
+        "unauthenticated": "Sesi Anda berakhir. Masuk lagi, lalu coba lagi.",
+        "generic": "Terjadi kesalahan. Coba lagi.",
+        "trashedSubfolders": "Folder ini masih punya subfolder di Sampah. Pulihkan subfolder itu atau hapus untuk selamanya dulu, lalu pindahkan foldernya."
+      }
+    },
+    "detail": {
+      "back": "Kembali ke daftar materi",
+      "facts": "Tentang berkas",
+      "kindLabel": "Jenis",
+      "sizeLabel": "Ukuran",
+      "pagesLabel": "Halaman",
+      "addedLabel": "Diunggah",
+      "statusLabel": "Status",
+      "folderLabel": "Folder",
+      "noFolder": "Tanpa folder",
+      "quality": {
+        "heading": "Kualitas teks",
+        "summary": "{high} halaman jelas, {medium} perlu diperiksa, {low} sulit dibaca",
+        "flagged": "Halaman yang perlu diperiksa: {pages}",
+        "none": "Belum ada halaman yang terbaca.",
+        "reading": "Teks sedang dibaca. Muat ulang halaman ini sebentar lagi.",
+        "failed": "Teks berkas ini tidak dapat dibaca. Pindahkan ke Sampah, lalu unggah lagi."
+      },
+      "move": {
+        "label": "Pindahkan ke folder",
+        "submit": "Pindahkan",
+        "moved": "Materi dipindahkan.",
+        "errors": {
+          "notFound": "Materi ini tidak ditemukan. Muat ulang halaman.",
+          "folder": "Folder tidak ditemukan. Muat ulang halaman.",
+          "unauthenticated": "Sesi Anda berakhir. Masuk lagi, lalu coba lagi.",
+          "generic": "Terjadi kesalahan. Coba lagi."
+        }
+      }
+    },
+    "structure": {
+      "heading": "Struktur materi",
+      "description": "Judul, kelas, tahun ajaran dan bab beserta halamannya. Semua bisa diubah sebelum disimpan.",
+      "propose": "Usulkan dengan AI",
+      "proposeAgain": "Usulkan ulang dengan AI",
+      "proposing": "AI sedang menyusun usulan struktur. Anda boleh meninggalkan halaman ini.",
+      "waiting": "Menunggu layanan AI. Usulan disusun otomatis saat layanan siap.",
+      "proposalNote": "Diusulkan AI: periksa setiap bab sebelum menyimpan.",
+      "notReady": "Usulan AI bisa diminta setelah teks selesai dibaca.",
+      "confirmedOn": "Dikonfirmasi {date}",
+      "title": "Judul",
+      "grade": "Kelas",
+      "gradeNone": "Belum dipilih",
+      "year": "Tahun ajaran",
+      "yearHint": "Contoh: 2026/2027",
+      "titleInvalid": "Isi judul, paling banyak 200 huruf.",
+      "gradeInvalid": "Pilih kelas 7, 8, atau 9.",
+      "yearInvalid": "Tulis tahun ajaran seperti 2026/2027.",
+      "chapterInvalid": "Periksa bab {number}: judul wajib diisi, halaman berupa angka, dan halaman akhir di atau setelah halaman awal.",
+      "chapterPages": "Bab {number} melewati halaman terakhir materi ({pages}).",
+      "chapters": "Bab",
+      "noChapters": "Belum ada bab. Tambahkan bab, atau minta usulan AI.",
+      "chapterTitle": "Judul bab {number}",
+      "pageStart": "Halaman awal bab {number}",
+      "pageEnd": "Halaman akhir bab {number}",
+      "topic": "Topik kurikulum bab {number}",
+      "topicNone": "Tanpa topik",
+      "removeChapter": "Hapus bab {number}",
+      "addChapter": "Tambah bab",
+      "chaptersLimit": "Paling banyak {limit} bab.",
+      "save": "Simpan struktur",
+      "saving": "Menyimpan…",
+      "saved": "Struktur disimpan.",
+      "errors": {
+        "notFound": "Materi ini tidak ditemukan. Muat ulang halaman.",
+        "notReady": "Teks materi belum selesai dibaca. Coba lagi nanti.",
+        "pages": "Ada bab yang melewati halaman terakhir materi.",
+        "topic": "Topik kurikulum tidak dikenal. Pilih ulang topiknya.",
+        "invalid": "Periksa isian: judul wajib diisi, tahun ajaran seperti 2026/2027, dan setiap bab berakhir di atau setelah halaman awalnya.",
+        "failed": "AI tidak dapat menyusun usulan. Coba lagi, atau isi strukturnya sendiri.",
+        "unauthenticated": "Sesi Anda berakhir. Masuk lagi, lalu coba lagi.",
+        "generic": "Terjadi kesalahan. Coba lagi.",
+        "limit": "Usulan AI untuk hari ini sudah habis ({limit} per hari). Coba lagi besok, atau isi strukturnya sendiri."
+      }
+    },
+    "ocr": {
+      "heading": "Halaman dan teks",
+      "intro": "Periksa teks tiap halaman di samping gambarnya. Perbaiki bagian yang perlu diperiksa, lalu simpan.",
+      "pageOf": "Halaman {page} dari {total}",
+      "previous": "Halaman sebelumnya",
+      "next": "Halaman berikutnya",
+      "nextFlagged": "Halaman berikutnya yang perlu diperiksa",
+      "choosePage": "Buka halaman",
+      "open": "Buka",
+      "needsCheck": "Perlu diperiksa",
+      "clear": "Teks jelas",
+      "source": {
+        "pdf_text": "Teks dari PDF",
+        "docx": "Teks dari Word",
+        "ocr": "Hasil OCR",
+        "manual": "Diperbaiki guru",
+        "none": "Belum ada teks"
+      },
+      "status": {
+        "none": "Tidak perlu OCR",
+        "available": "Bisa di-OCR",
+        "queued": "Menunggu OCR",
+        "done": "Sudah di-OCR",
+        "failed": "OCR gagal, bisa dicoba lagi"
+      },
+      "flags": {
+        "uncertain_math": "Ada bagian yang tidak pasti",
+        "low_text": "Teksnya sedikit",
+        "garbled": "Teksnya tampak acak",
+        "truncated": "Teks terpotong, periksa akhir halaman"
+      },
+      "viewer": {
+        "label": "Gambar halaman {page}",
+        "loading": "Memuat gambar halaman…",
+        "failed": "Gambar halaman tidak dapat dimuat. Muat ulang halaman ini.",
+        "noImage": "Dokumen Word tidak punya gambar halaman."
+      },
+      "editor": {
+        "label": "Teks halaman {page}",
+        "hint": "Bagian yang tidak pasti diapit tanda [[?]]. Perbaiki bagian itu lalu hapus tandanya. Rumus ditulis sebagai LaTeX di antara tanda $.",
+        "marks": "{count, plural, =0 {Tidak ada bagian bertanda [[?]].} other {# bagian bertanda [[?]].}}",
+        "jump": "Ke bagian bertanda berikutnya",
+        "save": "Simpan teks",
+        "saving": "Menyimpan…",
+        "saved": "Teks halaman disimpan.",
+        "queued": "Halaman ini sedang menunggu OCR. Teksnya bisa diperbaiki setelah OCR selesai.",
+        "errors": {
+          "notFound": "Halaman ini tidak ditemukan. Muat ulang halaman.",
+          "notReady": "Teks materi ini masih dibaca. Coba lagi sebentar lagi.",
+          "tooLong": "Teks terlalu panjang. Paling banyak {max} karakter per halaman.",
+          "busy": "Halaman ini sedang menunggu OCR. Coba lagi setelah selesai.",
+          "invalid": "Teks tidak dapat disimpan. Muat ulang halaman, lalu coba lagi.",
+          "unauthenticated": "Sesi Anda berakhir. Masuk lagi, lalu coba lagi.",
+          "generic": "Terjadi kesalahan. Coba lagi."
+        },
+        "partLabel": "Ke bagian bertanda:"
+      },
+      "selector": {
+        "heading": "OCR halaman",
+        "intro": "Pilih halaman yang teksnya sulit dibaca. AI membaca gambar halaman, kira-kira satu halaman per menit. Hasilnya tetap perlu Anda periksa.",
+        "left": "{left} dari {cap} halaman tersisa hari ini",
+        "none": "Tidak ada halaman yang bisa di-OCR.",
+        "legend": "Halaman yang bisa di-OCR",
+        "page": "Halaman {page}",
+        "submit": "OCR halaman terpilih",
+        "preparing": "Menyiapkan gambar halaman ({done} dari {total})…",
+        "queued": "{count, plural, other {# halaman masuk antrean OCR.}}",
+        "choose": "Pilih setidaknya satu halaman.",
+        "tooMany": "Hari ini Anda hanya bisa memilih {left, plural, other {# halaman}} lagi.",
+        "errors": {
+          "notFound": "Materi ini tidak ditemukan. Muat ulang halaman.",
+          "pages": "Sebagian halaman tidak bisa di-OCR lagi. Muat ulang halaman, lalu pilih lagi.",
+          "limit": "Sisa batas OCR hari ini tidak cukup untuk halaman yang dipilih.",
+          "render": "Gambar halaman tidak dapat disiapkan. Coba lagi.",
+          "upload": "Gambar halaman gagal diunggah. Coba lagi.",
+          "invalid": "Pilihan halaman tidak valid. Muat ulang halaman.",
+          "unauthenticated": "Sesi Anda berakhir. Masuk lagi, lalu coba lagi.",
+          "generic": "Terjadi kesalahan. Coba lagi.",
+          "blank": "{count, plural, other {Halaman {pages}}} tampak kosong, jadi tidak dikirim ke OCR. Ketik teksnya sendiri bila perlu."
+        },
+        "overwrite": "Teks {count, plural, other {halaman {pages}}} sudah Anda perbaiki. OCR akan menggantinya. Tekan tombol OCR sekali lagi untuk melanjutkan.",
+        "visionLeft": "{left} dari {cap} pembacaan gambar tersisa hari ini (OCR dan foto soal)"
+      }
+    }
+  },
+  "solve": {
+    "title": "Selesaikan soal",
+    "description": "Ketik soal atau fotokan soalnya. Langkah penyelesaian dan jawaban akhirnya diperiksa otomatis bila bisa.",
+    "sessionTitle": "Penyelesaian soal",
+    "newProblem": "Soal baru",
+    "left": "{left} dari {limit} penyelesaian tersisa hari ini",
+    "how": {
+      "heading": "Cara kerjanya",
+      "input": "Ketik soal dengan pratinjau rumus, atau ambil foto soal.",
+      "confirm": "Bila ada bagian foto yang belum pasti terbaca, Anda memeriksa dan memperbaikinya dulu.",
+      "verify": "Langkah, jawaban akhir, satuan dan pembulatan ditampilkan; perhitungannya diperiksa mesin bila bisa.",
+      "another": "Minta metode lain bila perlu. Setiap penyelesaian dihitung dalam jatah harian."
+    },
+    "input": {
+      "heading": "Soal",
+      "tabsLabel": "Cara memasukkan soal",
+      "typeTab": "Ketik soal",
+      "photoTab": "Foto atau gambar",
+      "textLabel": "Teks soal",
+      "textHint": "Tulis rumus di antara tanda $, misalnya $x^2 + 3x = 10$.",
+      "count": "{count} dari {max} karakter",
+      "preview": "Pratinjau rumus",
+      "previewEmpty": "Pratinjau soal muncul di sini.",
+      "submit": "Selesaikan dan periksa",
+      "sending": "Mengirim soal…",
+      "photoHint": "Satu soal saja per foto, tegak dan terang. PNG atau JPG.",
+      "privacy": "Jangan memotret data pribadi siswa.",
+      "camera": "Ambil foto",
+      "gallery": "Pilih gambar",
+      "chosen": "Dipilih: {name}",
+      "sendPhoto": "Baca soal dari foto",
+      "preparing": "Menyiapkan foto…",
+      "uploading": "Mengunggah foto… {percent}%",
+      "checking": "Memeriksa foto…",
+      "visionLeft": "{left} dari {cap} pembacaan gambar tersisa hari ini (OCR dan foto soal)"
+    },
+    "errors": {
+      "empty": "Tulis soalnya dulu.",
+      "tooLong": "Soal terlalu panjang. Batasnya {max} karakter.",
+      "limit": "Jatah {limit} penyelesaian hari ini sudah habis. Coba lagi besok.",
+      "noMore": "Soal ini sudah punya {max} metode.",
+      "pending": "Terlalu banyak foto yang belum selesai diunggah. Tunggu sebentar, lalu coba lagi.",
+      "type": "Berkas ini bukan gambar PNG atau JPG.",
+      "size": "Gambar terlalu besar dan tidak dapat diperkecil. Pilih foto lain.",
+      "image": "Ukuran gambar tidak dapat dibaca atau melebihi batas.",
+      "missing": "Foto belum sampai. Coba lagi.",
+      "expired": "Unggahan foto sudah kedaluwarsa. Pilih fotonya lagi.",
+      "upload": "Foto gagal diunggah. Coba lagi.",
+      "notFound": "Soal ini tidak ditemukan.",
+      "state": "Soal ini tidak bisa diubah sekarang. Muat ulang halaman.",
+      "markers": "Masih ada bagian bertanda [[?]]. Perbaiki bagian itu, lalu hapus tandanya.",
+      "busy": "Soal ini masih sedang diselesaikan.",
+      "unauthenticated": "Sesi Anda berakhir. Masuk lagi.",
+      "generic": "Terjadi kesalahan. Coba lagi.",
+      "visionLimit": "Jatah {limit} pembacaan gambar hari ini sudah habis (OCR dan foto soal bersama). Coba lagi besok."
+    },
+    "confirm": {
+      "heading": "Periksa hasil bacaan foto",
+      "description": "Bagian yang ditandai belum pasti terbaca. Perbaiki teksnya, lalu selesaikan.",
+      "failedDescription": "Foto tidak dapat dibaca. Ketik soalnya di bawah ini.",
+      "photoAlt": "Foto soal",
+      "photoGone": "Foto sudah dihapus. Foto soal disimpan 7 hari.",
+      "issuesHeading": "Perlu diperiksa",
+      "issueUncertain": "Belum pasti terbaca: {text}",
+      "issueKatex": "Rumus tidak dapat ditampilkan: {text}",
+      "issueTruncated": "Bacaan terpotong. Periksa apakah soalnya lengkap.",
+      "issueEmpty": "Tidak ada teks yang terbaca.",
+      "textLabel": "Teks soal",
+      "hint": "Hapus tanda [[?]] setelah bagiannya diperbaiki.",
+      "preview": "Pratinjau rumus",
+      "submit": "Konfirmasi dan selesaikan",
+      "working": "Mengirim…",
+      "confirmed": "Teks soal dikonfirmasi."
+    },
+    "status": {
+      "pending": "Foto belum selesai diunggah. Kembali ke Selesaikan dan pilih fotonya lagi.",
+      "reading": "Membaca soal dari foto…",
+      "solving": "Menyelesaikan soal…",
+      "alternative": "Mencari metode lain…",
+      "deferred": "Layanan AI sedang sibuk. Pekerjaan dilanjutkan otomatis.",
+      "failed": "Soal ini belum dapat diselesaikan.",
+      "solveAgain": "Selesaikan lagi",
+      "alternativeFailed": "Metode lain belum dapat ditemukan. Coba lagi nanti."
+    },
+    "solution": {
+      "problemHeading": "Soal",
+      "method": "Metode {number}: {method}",
+      "alternative": "Metode lain",
+      "finalAnswer": "Jawaban akhir",
+      "rounding": "Pembulatan: {rounding}",
+      "noRounding": "Tanpa pembulatan",
+      "answerUnchecked": "Jawaban akhir ini belum dihitung ulang oleh mesin.",
+      "steps": "Langkah penyelesaian ({count})",
+      "stepLabel": "Langkah {number}",
+      "showAnother": "Tampilkan metode lain",
+      "noMore": "Semua metode untuk soal ini sudah ditampilkan.",
+      "disclaimer": "Periksa kembali sebelum dipakai di kelas.",
+      "crossDisagree": "Penyelesaian AI kedua yang dikerjakan terpisah mendapat jawaban {answer}. Periksa langkahnya sebelum memakai jawaban ini.",
+      "crossUnavailable": "Pemeriksaan silang oleh AI kedua tidak dapat dijalankan."
+    },
+    "recent": {
+      "heading": "Soal terbaru",
+      "empty": "Belum ada soal yang diselesaikan.",
+      "typed": "Diketik",
+      "photo": "Dari foto",
+      "untitled": "Soal tanpa teks",
+      "statuses": {
+        "reading": "Membaca foto",
+        "confirm": "Perlu dikonfirmasi",
+        "solving": "Sedang diselesaikan",
+        "solved": "Selesai",
+        "failed": "Belum selesai"
+      }
+    }
+  }
+}

@@ -1,0 +1,1595 @@
+{
+  "nav": {
+    "beranda": "Home",
+    "buatSoal": "Generate",
+    "bankSoal": "Question bank",
+    "selesaikan": "Solve",
+    "lainnya": "More",
+    "materi": "Learning materials",
+    "penyusunAsesmen": "Assessment builder",
+    "sampah": "Trash",
+    "pengaturan": "Settings"
+  },
+  "shell": {
+    "skipToContent": "Skip to main content",
+    "sidebarNavLabel": "Main menu",
+    "bottomNavLabel": "Bottom menu",
+    "groupMain": "Main menu",
+    "groupSoon": "Coming soon",
+    "curriculumContext": "Merdeka curriculum",
+    "accountAvatar": "Account {name}"
+  },
+  "common": {
+    "comingSoon": "Coming soon",
+    "soonBadge": "Soon"
+  },
+  "buatSoal": {
+    "gradeLegend": "Grade",
+    "soon": "Soon",
+    "grades": {
+      "7": "Grade 7",
+      "8": "Grade 8",
+      "9": "Grade 9"
+    },
+    "gradeComingSoon": "This grade is coming soon. Showing grade 8 topics.",
+    "searchLabel": "Search topics",
+    "searchPlaceholder": "Type a keyword, for example SPLDV",
+    "topicsLegend": "Choose a topic",
+    "resultCount": "{count, plural, one {# topic} other {# topics}} found",
+    "noMatch": "No topics match \"{query}\".",
+    "clearSearch": "Clear search",
+    "objectivesSummary": "Learning objectives ({count})",
+    "noObjectives": "There are no learning objectives for this topic yet.",
+    "selectedHeading": "Selected topic",
+    "selectedElement": "Element",
+    "clearSelection": "Clear selection",
+    "nothingSelected": "No topic selected yet.",
+    "sourcePrefix": "Source:",
+    "versionWord": "version",
+    "openSource": "Open source",
+    "opensInNewTab": "(new tab)",
+    "unavailableEmpty": "The topic list is not available yet. The curriculum has not been activated; contact the developer.",
+    "unavailableError": "The topic list could not be loaded. Try reloading the page."
+  },
+  "generate": {
+    "pageDescription": "Choose a grade and a topic, then set the number and difficulty of the questions.",
+    "steps": {
+      "grade": "Choose a grade",
+      "topic": "Choose a topic",
+      "count": "Number of questions",
+      "difficulty": "Difficulty level",
+      "source": "Question source"
+    },
+    "quantityLegend": "Number of questions",
+    "difficultyLegend": "Difficulty level",
+    "difficulties": {
+      "mudah": "Easy",
+      "sedang": "Medium",
+      "sulit": "Hard"
+    },
+    "typeNote": "Question type: multiple choice",
+    "submit": "Create questions",
+    "submitting": "Creating…",
+    "errors": {
+      "kelas": "Invalid grade.",
+      "topik": "Choose a topic first.",
+      "topicUnknown": "The topic was not found or is not active. Reload the page.",
+      "jumlah": "Choose between 1 and 5 questions.",
+      "kesulitan": "Choose a difficulty level.",
+      "materialMissing": "Choose a material first.",
+      "sectionsMissing": "Choose at least one chapter.",
+      "pagesInvalid": "Write pages like 1-3, 5 (up to page 300).",
+      "materialUnknown": "The material was not found or has been deleted.",
+      "materialNotReady": "The material is still being processed. Try again when it is done.",
+      "sectionsUnknown": "The chosen chapters were not found in this material.",
+      "pagesUnavailable": "Some pages do not exist or have no text yet (for example, they are waiting for OCR).",
+      "materialEmpty": "The chosen part has no usable text yet.",
+      "materialUnrelated": "The chosen material pages do not cover this topic. Choose other pages or another topic."
+    },
+    "formErrors": {
+      "generic": "Something went wrong. Try again.",
+      "unauthenticated": "Sign in first."
+    },
+    "activeRequest": "You still have a request in progress.",
+    "openActiveRequest": "Open that request",
+    "dailyLimit": "You have already requested {used} of {limit} questions today. {remaining} left. The daily limit resets on {time}.",
+    "status": {
+      "pageHeading": "Question request",
+      "summaryTopic": "Topic",
+      "summaryQuantity": "Number of questions",
+      "summaryDifficulty": "Difficulty level",
+      "loading": "Loading status…",
+      "queuedTitle": "Waiting for its turn",
+      "runningTitle": "Questions are being created",
+      "progress": "Step {done} of {total}",
+      "deferredTitle": "The daily AI quota is used up. Work resumes automatically once the AI service is available again, at {time} at the earliest",
+      "deferredMinuteTitle": "Waiting for the AI service. Resumes automatically once the AI service is available again, at {time} at the earliest",
+      "deferredProviderTitle": "The AI service is limiting requests. Resumes automatically once the AI service is available again, at {time} at the earliest",
+      "deferredSoonTitle": "Resuming shortly",
+      "succeededTitle": "Done",
+      "succeededDetail": "The questions are below. Check each question before saving it.",
+      "succeededLoadingDetail": "Loading the questions…",
+      "failedTitle": "The questions could not be created",
+      "failedUnknownType": "Creating this type of question is not available yet.",
+      "failedProviderUnavailable": "The AI service cannot be reached right now. Try again in a moment.",
+      "failedProviderMisconfigured": "The AI service is not set up correctly. Contact the app administrator.",
+      "failedProviderBusy": "The AI service is still limiting requests. Try again later.",
+      "failedInvalidOutput": "The AI response could not be used. Try creating the questions again.",
+      "failedStructural": "The questions did not pass the automatic checks. Try creating them again.",
+      "failedPersist": "The questions could not be saved. Try again later.",
+      "failedGeneric": "Something went wrong while creating the questions. Try again later.",
+      "cancelledTitle": "Cancelled",
+      "signedOut": "Your session has ended. Sign in again.",
+      "notFound": "Request not found.",
+      "reconnecting": "Reconnecting…",
+      "back": "Back to Generate",
+      "backToAssessment": "Back to the assessment",
+      "backToAssessmentHint": "Once the questions are saved to the question bank, go back to the assessment to add them.",
+      "failedMaterialUnavailable": "The source material can no longer be used (deleted or changed). Create a new request.",
+      "failedMaterialUnrelated": "The chosen material pages do not cover this topic. Choose other pages or another topic."
+    },
+    "source": {
+      "legend": "Question source",
+      "topic": "Curriculum topic",
+      "material": "From material",
+      "materialHint": "Questions are written from the material pages you choose and name their source page.",
+      "pick": "Material",
+      "pickPlaceholder": "Choose a material",
+      "scopeLegend": "Part to use",
+      "scopes": {
+        "all": "Whole document",
+        "sections": "Chapters",
+        "pages": "Pages"
+      },
+      "sectionPages": "p. {start}–{end}",
+      "pagesLabel": "Pages",
+      "pagesHint": "For example: 1-3, 5. This document has {count} pages.",
+      "noSections": "This material has no chapters yet. Confirm its structure on the material page, or choose pages.",
+      "none": "No material is ready to use yet.",
+      "noneLink": "Open materials",
+      "topicNote": "Still choose a topic: it is used to pick the most relevant pages.",
+      "truncated": "Only the newest 100 materials are listed."
+    }
+  },
+  "bank": {
+    "heading": "Question bank",
+    "detailTitle": "Questions in the question bank",
+    "empty": "There are no questions in the question bank yet",
+    "emptyHint": "Approve questions on the review page, then choose Save to question bank.",
+    "savedOn": "Saved {date}",
+    "type": "Multiple choice",
+    "detailHeading": "Question details",
+    "questionHeading": "Saved question",
+    "back": "Back to question bank",
+    "summaryLabel": "Question bank summary",
+    "total": "Total questions",
+    "verified": "Verified",
+    "subtitle": "Questions you approved and saved.",
+    "create": "Create questions",
+    "emptyAction": "Create questions",
+    "search": {
+      "label": "Search questions",
+      "placeholder": "Search question words or TP code",
+      "submit": "Search"
+    },
+    "pagination": {
+      "label": "Question bank pages",
+      "previous": "Previous",
+      "next": "Next",
+      "page": "Page {page, number, ::group-off}",
+      "showing": "Showing {first, number, ::group-off}–{last, number, ::group-off} of {total, number, ::group-off} questions"
+    },
+    "filters": {
+      "heading": "Filter",
+      "open": "Filter",
+      "close": "Close filters",
+      "apply": "Apply",
+      "reset": "Reset",
+      "all": "All",
+      "grade": "Grade",
+      "gradeOption": "Grade {grade, number, ::group-off}",
+      "element": "Element",
+      "topic": "Topic",
+      "difficulty": "Difficulty",
+      "status": "Verification status",
+      "from": "From date",
+      "to": "To date",
+      "sort": "Sort by",
+      "sorts": {
+        "newest": "Newest",
+        "oldest": "Oldest",
+        "difficulty": "Difficulty"
+      },
+      "active": "Active filters",
+      "remove": "Remove filter: {label}",
+      "unknown": "Unknown",
+      "origins": {
+        "generated": "AI generated",
+        "manual": "Created manually",
+        "imported": "Imported"
+      },
+      "pill": {
+        "q": "Search: {q}",
+        "from": "From {date}",
+        "to": "To {date}",
+        "type": "Multiple choice"
+      }
+    },
+    "noMatch": "No questions match",
+    "noMatchHint": "Try other keywords or remove some filters.",
+    "noMatchAction": "Reset filters",
+    "history": {
+      "title": "Version history",
+      "heading": "Version history",
+      "description": "Every version of this question, newest first. Restoring an old version creates a new one; history is never overwritten.",
+      "back": "Back to the question",
+      "listLabel": "Versions",
+      "versionNumber": "Version {number}",
+      "current": "Current version",
+      "authors": {
+        "ai": "Made by AI",
+        "teacher": "You"
+      },
+      "kinds": {
+        "generated": "Created",
+        "regenerated": "Regenerated",
+        "edited": "Edited",
+        "restored": "Restored"
+      },
+      "openHint": "Choose a version to read it.",
+      "viewCurrent": "View the current version",
+      "viewLabel": "Content of the chosen version",
+      "readOnly": "Read only. This version cannot be changed.",
+      "isCurrent": "This is the version in use.",
+      "restore": "Restore this version",
+      "restoring": "Restoring…",
+      "restored": "The version was restored as a new version.",
+      "errors": {
+        "stale": "The question changed elsewhere. Reload the page and try again.",
+        "notReady": "This question is being regenerated. Wait for it to finish, then try again.",
+        "current": "This version is already the current one.",
+        "trashed": "This question is in the trash and cannot be restored.",
+        "notFound": "Version not found.",
+        "signedOut": "Your session ended. Sign in again.",
+        "generic": "The version was not restored. Try again."
+      }
+    },
+    "historyLink": "Version history"
+  },
+  "trash": {
+    "title": "Trash",
+    "heading": "Trash",
+    "description": "Questions, assessments, document templates, materials and folders you delete stay here for 30 days, then are deleted for good.",
+    "empty": "The trash is empty",
+    "emptyHint": "Questions, assessments, templates, materials and folders you move to the trash show here for 30 days.",
+    "listLabel": "Questions in the trash",
+    "sections": {
+      "questions": "Questions",
+      "assessments": "Assessments",
+      "templates": "Document templates",
+      "materials": "Learning materials",
+      "folders": "Material folders",
+      "solverSessions": "Solved problems"
+    },
+    "assessmentListLabel": "Assessments in the trash",
+    "templateListLabel": "Templates in the trash",
+    "deletedOn": "Deleted {date}",
+    "daysLeft": "{days, plural, =0 {Deleted at the next cleanup} one {# day left before it is deleted for good} other {# days left before it is deleted for good}}",
+    "keptWhilePinned": "Kept while the assessments {assessments} use it",
+    "restore": "Restore",
+    "restoreLabel": "Restore question: {topic}",
+    "restoring": "Restoring…",
+    "deleteForever": "Delete for good",
+    "deleteForeverLabel": "Delete for good, question: {topic}",
+    "restored": "The question is back where it was.",
+    "deleted": "The question was deleted for good.",
+    "confirm": {
+      "title": "Delete this question for good?",
+      "description": "This cannot be undone. What will be deleted:",
+      "itemQuestion": "This question",
+      "itemVersions": "{count, plural, one {Its only version} other {All # versions of the question}}",
+      "itemRuns": "Every verification result of every version",
+      "cancel": "Cancel",
+      "confirm": "Delete for good",
+      "working": "Deleting…"
+    },
+    "assessment": {
+      "approved": "Approved",
+      "summary": "{items, plural, =0 {No questions yet} one {# question} other {# questions}} · {sections, plural, one {# section} other {# sections}}",
+      "restoreLabel": "Restore assessment: {title}",
+      "deleteForeverLabel": "Delete for good, assessment: {title}",
+      "restored": "The assessment is back where it was, with its approval.",
+      "deleted": "The assessment was deleted for good.",
+      "confirm": {
+        "title": "Delete this assessment for good?",
+        "itemAssessment": "This assessment",
+        "itemContent": "{sections, plural, one {# section} other {# sections}} and {items, plural, =0 {no questions} one {# question} other {# questions}} in it",
+        "itemExports": "{count, plural, =0 {Its export files (none yet)} one {# stored export file} other {# stored export files}}",
+        "itemUsages": "{count, plural, =0 {Its question usage records (none yet)} one {# question usage record} other {# question usage records}}",
+        "keep": "Its questions stay in the question bank."
+      }
+    },
+    "template": {
+      "usedBy": "Still used by the assessments {assessments}",
+      "restoreLabel": "Restore template: {name}",
+      "deleteForeverLabel": "Delete for good, template: {name}",
+      "restored": "The template is back where it was.",
+      "restoredNotDefault": "The template is back as a plain template, since another one is the default now.",
+      "deleted": "The template was deleted for good.",
+      "confirm": {
+        "title": "Delete this template for good?",
+        "itemTemplate": "This template",
+        "itemLogo": "Its school logo"
+      }
+    },
+    "move": {
+      "button": "Move to trash",
+      "buttonLabel": "Move to trash: {topic}",
+      "title": "Move the question to the trash?",
+      "description": "The question leaves the question bank and can be restored from the trash for 30 days. After that it is deleted for good.",
+      "cancel": "Cancel",
+      "confirm": "Move to trash",
+      "working": "Moving…",
+      "done": "The question was moved to the trash."
+    },
+    "moveAssessment": {
+      "button": "Move to trash",
+      "buttonLabel": "Move to trash: {name}",
+      "title": "Move the assessment to the trash?",
+      "description": "The assessment leaves the assessment builder and Home, and cannot be edited or exported. You can restore it from the trash for 30 days, approval included. After that the assessment, its export files and its question usage records are deleted for good.",
+      "cancel": "Cancel",
+      "confirm": "Move to trash",
+      "working": "Moving…"
+    },
+    "moveTemplate": {
+      "button": "Move to trash",
+      "buttonLabel": "Move to trash: {name}",
+      "title": "Move the template to the trash?",
+      "description": "The template leaves the settings and cannot be chosen for an assessment. An assessment that uses it cannot be approved until you choose another template. You can restore it from the trash for 30 days.",
+      "cancel": "Cancel",
+      "confirm": "Move to trash",
+      "working": "Moving…"
+    },
+    "errors": {
+      "notFound": "This question was not found. Reload the page.",
+      "notInTrash": "This question is no longer in the trash. Reload the page.",
+      "signedOut": "Your session has ended. Sign in again, then try again.",
+      "generic": "Something went wrong. Try again.",
+      "assessmentGone": "This assessment is no longer here. Reload the page.",
+      "templateGone": "This template is no longer here. Reload the page.",
+      "questionInUse": "It cannot be deleted for good yet: the assessments {assessments} still use this question. Take it out of those assessments, or delete them for good first.",
+      "templateInUse": "It cannot be deleted for good yet: the assessments {assessments} still use this template. Choose another template in them, or delete them for good first.",
+      "materialGone": "This material is no longer here. Reload the page.",
+      "folderGone": "This folder is no longer here. Reload the page.",
+      "folderNotEmpty": "This folder still holds materials or subfolders. Move them or trash them first.",
+      "solverSessionGone": "This problem is no longer in the trash. Reload the page."
+    },
+    "materialListLabel": "Materials in the trash",
+    "folderListLabel": "Folders in the trash",
+    "solverSessionListLabel": "Solved problems in the trash",
+    "material": {
+      "restoreLabel": "Restore material: {title}",
+      "deleteForeverLabel": "Delete for good, material: {title}",
+      "restored": "The material is back.",
+      "deleted": "The material was deleted for good.",
+      "confirm": {
+        "title": "Delete this material for good?",
+        "itemFile": "Its original file",
+        "itemPageImages": "Its page images",
+        "itemText": "The text of all its pages",
+        "itemSections": "{count, plural, one {# chapter} other {# chapters}}",
+        "keep": "Questions in the bank that use this material stay, with their source shown as “Source material deleted”."
+      }
+    },
+    "folder": {
+      "restoreLabel": "Restore folder: {name}",
+      "deleteForeverLabel": "Delete for good, folder: {name}",
+      "restored": "The folder is back.",
+      "deleted": "The folder was deleted for good.",
+      "confirm": {
+        "title": "Delete this folder for good?",
+        "itemFolder": "This folder",
+        "keep": "Materials and subfolders in the trash that were inside it stay in the trash."
+      }
+    },
+    "moveMaterial": {
+      "button": "Move to trash",
+      "buttonLabel": "Move to trash: {title}",
+      "title": "Move the material to the trash?",
+      "description": "The material leaves the list and search. You can restore it from the trash for 30 days. After that its file, text and chapters are deleted for good.",
+      "cancel": "Cancel",
+      "confirm": "Move to trash",
+      "working": "Moving…"
+    },
+    "moveFolder": {
+      "button": "Move to trash",
+      "buttonLabel": "Move to trash: {name}",
+      "title": "Move the folder to the trash?",
+      "description": "This empty folder leaves the list. You can restore it from the trash for 30 days.",
+      "cancel": "Cancel",
+      "confirm": "Move to trash",
+      "working": "Moving…"
+    },
+    "solverSession": {
+      "untitled": "Problem without text",
+      "restoreLabel": "Restore problem: {problem}",
+      "deleteForeverLabel": "Delete problem forever: {problem}",
+      "restored": "Problem restored.",
+      "deleted": "Problem deleted forever.",
+      "confirm": {
+        "title": "Delete this problem forever?",
+        "itemSession": "Its problem text",
+        "itemSolutions": "{count, plural, one {# solution} other {# solutions}}",
+        "itemPhoto": "Its photo"
+      }
+    },
+    "moveSolverSession": {
+      "button": "Move to trash",
+      "buttonLabel": "Move this problem to the trash",
+      "title": "Move the problem to the trash?",
+      "description": "The problem leaves the recent list. You can restore it from the trash for 30 days. After that the problem, its solutions and its photo are deleted forever.",
+      "cancel": "Cancel",
+      "confirm": "Move to trash",
+      "working": "Moving…"
+    }
+  },
+  "beranda": {
+    "quickAction": "Create questions",
+    "quickActionFirst": "Create your first questions",
+    "quickActionHint": "Choose a topic, then the AI prepares questions for you to review.",
+    "ai": {
+      "working": "The AI is working",
+      "ready": "The AI service is ready",
+      "waiting": "Waiting for the AI quota"
+    },
+    "running": {
+      "heading": "In progress",
+      "empty": "No jobs are running.",
+      "quantity": "{count, plural, one {# question} other {# questions}}",
+      "open": "Open"
+    },
+    "pending": {
+      "heading": "Drafts to review",
+      "empty": "No drafts are waiting.",
+      "undecided": "{count} undecided",
+      "ready": "{count} ready to save"
+    },
+    "bank": {
+      "open": "Open question bank"
+    },
+    "unknownTopic": "Unknown topic",
+    "greeting": "Hello, {name}",
+    "greetingNeutral": "Welcome",
+    "subtitle": "An overview of your work.",
+    "tiles": {
+      "label": "Overview",
+      "drafts": "Drafts to review",
+      "bank": "Questions in the bank",
+      "running": "Jobs running"
+    },
+    "recent": {
+      "heading": "Recent assessments",
+      "empty": "No assessments yet.",
+      "viewAll": "See all assessments"
+    }
+  },
+  "review": {
+    "heading": "Questions to review",
+    "loading": "Loading questions…",
+    "disclaimer": "Automatic checks do not guarantee correctness.",
+    "ready": "{count, plural, one {# question} other {# questions}} ready for review",
+    "showing": "Showing {shown, number} of {requested, plural, one {# question} other {# questions}}",
+    "questionHeading": "Question {number}",
+    "difficulty": {
+      "mudah": "Easy",
+      "sedang": "Medium",
+      "sulit": "Hard"
+    },
+    "optionsLabel": "Answer choices",
+    "keyLabel": "Answer key",
+    "answerLabel": "Final answer",
+    "explanationLabel": "Explanation",
+    "stepsSummary": "Solution steps ({count})",
+    "detailsButton": "View check details",
+    "bank": {
+      "progress": "{approved, number} of {total, number} approved",
+      "ready": "{count, plural, one {# approved question} other {# approved questions}} ready to save",
+      "none": "No questions approved yet",
+      "save": "Save to question bank",
+      "saving": "Saving…",
+      "saved": "{count, plural, one {# question} other {# questions}} saved",
+      "open": "Open question bank",
+      "savedLabel": "Saved in the question bank",
+      "nothingNew": "No new questions to save",
+      "errors": {
+        "generic": "The questions were not saved. Try again.",
+        "signedOut": "Your session has ended. Sign in again to continue."
+      }
+    },
+    "decision": {
+      "approve": "Approve",
+      "reject": "Reject",
+      "undo": "Undo decision",
+      "approved": "Approved",
+      "rejected": "Rejected",
+      "approvedWithNote": "Approved with a note",
+      "approveWithNote": "Approve with a note",
+      "waitingChecks": "Waiting for the checks to finish",
+      "overrideTitle": "Approve a question with a mismatch",
+      "overrideIntro": "The automatic checks found a mismatch in this question. Approve it only if you have checked it yourself.",
+      "overrideConfirm": "I have checked it; the answer key is correct",
+      "overrideNoteLabel": "Your review note",
+      "overrideNoteHint": "{min}–{max} characters",
+      "overrideSubmit": "Approve this question",
+      "overrideCancel": "Cancel",
+      "errors": {
+        "alreadySaved": "This question is already saved in the question bank.",
+        "conflict": "This question has changed. The list was reloaded, try again.",
+        "notFound": "Question not found.",
+        "overrideRequired": "This question needs a note before it can be approved.",
+        "invalidNote": "The note must be 10 to 500 characters.",
+        "notReady": "The checks are still running. Wait until they finish.",
+        "signedOut": "Your session has ended. Sign in again.",
+        "invalid": "Invalid request. Reload the page.",
+        "generic": "The decision was not saved. Try again."
+      }
+    },
+    "statuses": {
+      "terverifikasi": "Automatically verified",
+      "dicek_silang": "Cross-checked by AI",
+      "belum_dapat_diverifikasi": "Cannot be verified yet",
+      "ketidaksesuaian": "Mismatch found",
+      "checking": "Being checked",
+      "waiting": "Waiting for checks"
+    },
+    "statusExplanations": {
+      "terverifikasi": "The calculation for this question was checked automatically and the result matches.",
+      "dicek_silang": "The automatic calculation could not be used, but an independent AI solver chose the same answer.",
+      "belum_dapat_diverifikasi": "This question cannot be checked automatically yet. Check it yourself before using it.",
+      "ketidaksesuaian": "The check found a mismatch in this question. Review the key and the explanation.",
+      "checking": "The automatic check is still running. The status will update by itself.",
+      "waiting": "The check is paused until the AI service is ready again. The earliest resume time is shown in the request status above."
+    },
+    "sheetTitle": "Check details for question {number}",
+    "checksHeading": "Check results",
+    "noChecks": "No check results yet.",
+    "checkTypes": {
+      "numeric": "Calculation",
+      "equivalent": "Form equivalence",
+      "equation": "Equation solution",
+      "choice": "Key matches answer",
+      "other": "Other check"
+    },
+    "checkResults": {
+      "pass": "Passed",
+      "fail": "Failed",
+      "unsupported": "Cannot be checked automatically"
+    },
+    "crossCheckHeading": "Independent AI solver",
+    "crossCheck": {
+      "agree": "Agrees with the key",
+      "disagree": "Chose a different answer",
+      "unknown": "Not available"
+    },
+    "regenerated": "This question was automatically regenerated once because the first check found a mismatch.",
+    "regenerationFailed": "Automatic regeneration did not succeed; the first question was kept.",
+    "close": "Close",
+    "curriculum": {
+      "summary": "Curriculum source",
+      "element": "Element",
+      "topic": "Topic",
+      "objectives": "Learning objectives",
+      "source": "Source",
+      "version": "Curriculum version"
+    },
+    "edit": {
+      "heading": "Edit question",
+      "description": "Your changes are saved as a new version. The previous version is kept.",
+      "back": "Back",
+      "action": "Edit question",
+      "stem": "Question text",
+      "options": "Answer choices",
+      "optionLabel": "Text of choice {label}",
+      "keyOption": "Make choice {label} the answer key",
+      "answer": "Final answer",
+      "explanation": "Explanation",
+      "steps": "Solution steps",
+      "stepsHint": "One field per step. At most {limit} steps.",
+      "stepLabel": "Step {number}",
+      "addStep": "Add step",
+      "removeStep": "Remove step {number}",
+      "moveStepUp": "Move step {number} up",
+      "moveStepDown": "Move step {number} down",
+      "preview": "Preview",
+      "save": "Save new version",
+      "saving": "Saving…",
+      "cancel": "Cancel",
+      "draftRestored": "Your unsaved draft was restored.",
+      "discardDraft": "Discard draft",
+      "reload": "Reload question",
+      "notices": {
+        "checks": "The question is checked again after it is saved. If the question text or the answer changes, the earlier automatic checks no longer apply.",
+        "banked": "This question is in the question bank. The new version replaces the saved one if it passes the checks; if a mismatch is found, the question goes back to review.",
+        "approved": "This question is approved. After saving, it goes back to review and needs approval again."
+      },
+      "fieldMath": "The math in this field is not valid. Check the $ signs and the curly braces.",
+      "fieldInvalid": "This field is empty or too long.",
+      "errors": {
+        "stale": "This question was changed elsewhere. Reload it, then save again; your draft is kept.",
+        "notFound": "Question not found.",
+        "trashed": "This question is in the trash and cannot be edited.",
+        "signedOut": "Your session has ended. Sign in again.",
+        "invalid": "Check the marked fields.",
+        "invalidMath": "Some math is not valid. Check the marked fields.",
+        "generic": "Your changes were not saved. Try again.",
+        "notReady": "Question generation is still running. Wait until it finishes.",
+        "regenerating": "This question is being regenerated. Wait until it finishes."
+      },
+      "draftOlder": "This draft was made on an older version of the question. The question shown is the latest.",
+      "useDraft": "Use draft"
+    },
+    "regenerate": {
+      "action": "Regenerate",
+      "heading": "Regenerate this question",
+      "hintLegend": "Hint for the new question (optional)",
+      "hints": {
+        "none": "No hint",
+        "easier": "Easier",
+        "harder": "Harder",
+        "otherContext": "Another context",
+        "text": "Write my own"
+      },
+      "textLabel": "Your hint",
+      "textCount": "{count} of {max} characters",
+      "note": "The current question stays as the previous version. Regenerating counts as 1 question toward your daily limit.",
+      "submit": "Regenerate question",
+      "submitting": "Sending…",
+      "cancel": "Cancel",
+      "status": {
+        "starting": "Starting the regeneration…",
+        "queued": "Waiting for a turn to regenerate the question",
+        "running": "Regenerating the question",
+        "failed": "The question could not be regenerated. The old question is unchanged.",
+        "skipped": "This question was deleted, so it was not regenerated.",
+        "returned": "The new version did not pass the checks, so the question left the question bank and went back to review.",
+        "saved": "The new version has been made and checked."
+      },
+      "errors": {
+        "dailyLimit": "You have reached the daily limit of {limit} questions. Try again after {time}.",
+        "notReady": "Questions are still being generated. Wait until it finishes.",
+        "notFound": "Question not found.",
+        "trashed": "This question is in the trash and cannot be regenerated.",
+        "signedOut": "Your session has ended. Sign in again.",
+        "generic": "The request was not sent. Try again."
+      },
+      "compare": {
+        "heading": "Compare versions",
+        "previous": "Previous version ({number})",
+        "new": "New version ({number})",
+        "keep": "Keep the new version",
+        "restore": "Restore the previous version",
+        "restoring": "Restoring…",
+        "restored": "The previous version was restored as a new version.",
+        "stale": "The question changed somewhere else. Reload the page, then try again.",
+        "error": "The previous version was not restored. Try again."
+      }
+    },
+    "materialSource": {
+      "label": "Source: {title}, p. {page}",
+      "deleted": "The source material has been deleted",
+      "unknownPage": "Source: {title}"
+    }
+  },
+  "auth": {
+    "title": "Sign in",
+    "subtitle": "Sign in to continue to MitraMatika.",
+    "google": "Sign in with Google",
+    "signOut": "Sign out",
+    "errors": {
+      "oauthDenied": "Sign in with Google was cancelled or denied.",
+      "generic": "Something went wrong. Try again.",
+      "unauthenticated": "Sign in first."
+    },
+    "or": "or",
+    "working": "Working…",
+    "fields": {
+      "name": "Full name",
+      "email": "Email",
+      "password": "Password",
+      "newPassword": "New password",
+      "confirmPassword": "Repeat password",
+      "schoolName": "School name (optional)",
+      "showPassword": "Show password",
+      "passwordHint": "8 to 128 characters, with letters and digits."
+    },
+    "fieldErrors": {
+      "fieldInvalid": "This field is not valid.",
+      "emailInvalid": "Enter a valid email address.",
+      "nameLength": "The name must be 2 to 80 characters.",
+      "schoolNameTooLong": "The school name can be at most 120 characters.",
+      "passwordRequired": "Enter your password.",
+      "passwordTooShort": "The password needs at least 8 characters.",
+      "passwordTooLong": "The password can be at most 128 characters.",
+      "passwordNeedsLetterAndDigit": "The password needs letters and digits.",
+      "passwordMismatch": "The two passwords do not match.",
+      "privacyRequired": "Accept the privacy notice to sign up."
+    },
+    "formErrors": {
+      "generic": "Something went wrong. Try again.",
+      "rateLimited": "Too many attempts. Wait a moment, then try again.",
+      "invalidCredentials": "Wrong email or password.",
+      "emailNotVerified": "Your email is not confirmed yet. Open the confirmation link we sent to your email."
+    },
+    "notices": {
+      "passwordReset": "Your new password is saved. Sign in with it.",
+      "linkUsed": "This confirmation link was already used or no longer works. Sign in to continue, or ask for a new link if you cannot sign in yet.",
+      "accountDeleted": "Your account has been deleted."
+    },
+    "signIn": {
+      "submit": "Sign in",
+      "forgotPassword": "Forgot password?",
+      "noAccount": "No account yet?",
+      "signUpLink": "Sign up",
+      "resendLink": "Resend the confirmation link"
+    },
+    "signUp": {
+      "title": "Sign up",
+      "subtitle": "Create a MitraMatika account to start writing questions.",
+      "google": "Sign up with Google",
+      "submit": "Create account",
+      "privacy": "I have read and accept the <link>privacy notice</link>.",
+      "hasAccount": "Already have an account?",
+      "signInLink": "Sign in"
+    },
+    "verify": {
+      "title": "Check your email",
+      "description": "We sent an email to the address you signed up with. Follow the steps in that email to continue. The confirmation link is valid for 24 hours.",
+      "invalidTitle": "This link does not work",
+      "invalidDescription": "This confirmation link has expired or is not valid. Ask for a new one below.",
+      "resendHint": "No email? Check your spam folder, or send the link again.",
+      "resend": "Send the link again",
+      "resendIn": "Send again in {seconds, number} s",
+      "sent": "If that address is waiting for confirmation, a new link is on its way.",
+      "backToSignIn": "Back to sign in"
+    },
+    "forgot": {
+      "title": "Forgot password",
+      "description": "Enter the email of your account. We will send a link to create a new password.",
+      "submit": "Send link",
+      "sent": "If there is an account with that email, we sent a link to create a new password. The link is valid for 1 hour. Check your spam folder too.",
+      "backToSignIn": "Back to sign in"
+    },
+    "reset": {
+      "title": "Create a new password",
+      "description": "Once the new password is saved, every device is signed out and you sign in again.",
+      "submit": "Save password",
+      "expiredTitle": "This link does not work",
+      "expired": "This link has expired or was already used. Ask for a new link to create a new password.",
+      "requestNew": "Ask for a new link"
+    },
+    "email": {
+      "verifySubject": "Confirm the email of your MitraMatika account",
+      "verifyBody": "Hello,\n\nOpen this link to confirm the email address of your MitraMatika account:\n\n{url}\n\nThe link is valid for {hours, number, ::group-off} hours. Someone used this email address to create a MitraMatika account with a password. If it was not you, do not open the link and ignore this email: opening it would activate an account with a password you did not choose.",
+      "resetSubject": "Reset your MitraMatika password",
+      "resetBody": "Hello,\n\nOpen this link to choose a new password for your MitraMatika account:\n\n{url}\n\nThe link is valid for {minutes, number, ::group-off} minutes and works only once. If you did not ask for it, ignore this email; your password stays the same.",
+      "accountExistsSubject": "You already have a MitraMatika account",
+      "accountExistsBody": "Hello,\n\nSomeone tried to sign up for MitraMatika with this email address, but an account already exists. No new account was created.\n\nSign in with Google or your password at {signInUrl}\n\nIf you forgot your password, choose a new one at {resetUrl}\n\nIf this was not you, ignore this email. Your account is safe."
+    }
+  },
+  "settings": {
+    "heading": "Settings",
+    "account": {
+      "heading": "Account",
+      "description": "Your name and school are shown in the app. The account email cannot be changed.",
+      "emailLabel": "Account email",
+      "loadFailed": "Your account details could not be loaded. Reload this page to try again.",
+      "formErrors": {
+        "generic": "Something went wrong. Try again.",
+        "rateLimited": "Too many attempts. Wait a moment, then try again.",
+        "unauthenticated": "Your session has ended. Sign in again to continue.",
+        "signInAgain": "To delete your account, sign in again first. Sign out, sign in again with Google, then delete the account within 10 minutes."
+      },
+      "profile": {
+        "heading": "Profile",
+        "submit": "Save profile",
+        "saved": "Your profile is saved."
+      },
+      "password": {
+        "heading": "Change password",
+        "description": "After the change, every other device is signed out of this account. This device stays signed in.",
+        "current": "Current password",
+        "submit": "Change password",
+        "saved": "Your password is changed. Other devices are signed out.",
+        "wrongPassword": "The current password is wrong."
+      },
+      "delete": {
+        "heading": "Delete account",
+        "description": "Your account, profile and all your questions and question requests are deleted for good. This cannot be undone.",
+        "open": "Delete account",
+        "dialogTitle": "Delete your account for good?",
+        "dialogDescription": "All data of this account is deleted and cannot be restored. Type your account email to continue.",
+        "confirmLabel": "Type {email}",
+        "confirm": "Delete my account",
+        "cancel": "Cancel",
+        "emailMismatch": "The typed email does not match the account email.",
+        "passwordHint": "Enter your password to confirm it is you.",
+        "freshSignIn": "For security, an account without a password can only be deleted within 10 minutes of signing in.",
+        "signOut": "Sign out now"
+      }
+    },
+    "templates": {
+      "heading": "Document templates",
+      "description": "School letterhead, logo and print format for question papers, answer keys and solutions. The default template is used for new assessments.",
+      "empty": "No templates yet. Create the first one below.",
+      "loadFailed": "The document templates could not be loaded. Reload this page to try again.",
+      "listLabel": "Templates",
+      "defaultBadge": "Default",
+      "makeDefault": "Make default: {name}",
+      "makeDefaultShort": "Make default",
+      "edit": "Edit: {name}",
+      "editShort": "Edit",
+      "newTemplate": "New template",
+      "editHeading": "Edit template",
+      "newHeading": "New template",
+      "submit": "Save template",
+      "saved": "Template saved.",
+      "defaultSaved": "Default template changed.",
+      "setDefaultFailed": "The default template could not be changed. Try again.",
+      "fields": {
+        "name": "Template name",
+        "nameHint": "Only for you, for example \"Semester exam letterhead\".",
+        "schoolName": "School name",
+        "headerLines": "Letterhead lines",
+        "headerLinesHint": "Shown above the school name, for example the local government, the education office or the address. Up to 4 lines; empty ones are skipped.",
+        "headerLine": "Letterhead line {number}",
+        "subject": "Subject",
+        "studentFields": "Student details to fill in",
+        "defaultInstructions": "General instructions (optional)",
+        "paperSize": "Paper size",
+        "font": "Font",
+        "isDefault": "Make this the default template"
+      },
+      "studentField": {
+        "name": "Name",
+        "class": "Class",
+        "number": "Roll number",
+        "date": "Date"
+      },
+      "paper": {
+        "A4": "A4 (210 × 297 mm)",
+        "F4": "F4 (215 × 330 mm)"
+      },
+      "fonts": {
+        "times": "Times New Roman 12 pt",
+        "arial": "Arial 12 pt"
+      },
+      "fieldErrors": {
+        "required": "Required.",
+        "tooLong": "This text is too long.",
+        "invalidCharacters": "Contains characters that are not allowed.",
+        "invalid": "This option is not available."
+      },
+      "formErrors": {
+        "generic": "Something went wrong. Try again.",
+        "unauthenticated": "Your session has ended. Sign in again to continue.",
+        "notFound": "This template was not found. It may have been deleted.",
+        "conflict": "This template was just changed elsewhere. Reload the page, then try again."
+      },
+      "logo": {
+        "label": "School logo",
+        "hint": "PNG, JPG or SVG, up to 1 MB. A new logo replaces the old one.",
+        "submit": "Upload logo",
+        "saved": "Logo uploaded.",
+        "saveFirst": "Save the template first, then upload its logo.",
+        "errors": {
+          "empty": "Choose a logo file first.",
+          "tooLarge": "The logo can be at most 1 MB.",
+          "unsupportedType": "The logo must be a PNG, JPG or SVG.",
+          "invalidImage": "The logo file is damaged or cannot be read.",
+          "dimensionsTooLarge": "The image is too large. At most 6000 pixels per side.",
+          "notFound": "This template was not found. It may have been deleted.",
+          "unauthenticated": "Your session has ended. Sign in again to continue.",
+          "generic": "The logo could not be uploaded. Try again."
+        }
+      },
+      "preview": {
+        "label": "Letterhead preview",
+        "heading": "Preview",
+        "schoolPlaceholder": "School name",
+        "logoAlt": "School logo",
+        "subject": "Subject: {subject}"
+      }
+    },
+    "language": {
+      "heading": "Language",
+      "description": "Choose the display language of the app. Generated questions stay in Indonesian.",
+      "groupLabel": "Display language"
+    }
+  },
+  "privacy": {
+    "title": "Privacy notice",
+    "intro": "This page explains what data MitraMatika stores, where that data is sent and how to delete your account.",
+    "storedTitle": "Data we store",
+    "storedAccount": "Account: your name, email address, school name if you give one, and your password as a hash (the password itself is never stored). If you sign in with Google, we receive your name and email address from Google.",
+    "storedContent": "Your work: question requests, the generated questions, your review decisions and your question bank.",
+    "storedTechnical": "Technical data: sign-in sessions together with the IP address and browser they were started from, your language choice, counters by IP address and by hashed email address that limit how often sign-in, sign-up and email requests can be made (they expire within a day), and an activity log that holds only your account ID, not your email or name.",
+    "aiTitle": "AI services and the data they get",
+    "aiGroq": "Groq writes and checks the questions. Groq receives curriculum data (grade, topic, learning objectives, difficulty) and the text of the questions being written. Your name, email and school name are never sent.",
+    "aiGemini": "Gemini by Google is only a fallback and only receives curriculum data that is public anyway.",
+    "emailService": "Resend sends the confirmation and new password emails, so Resend receives your email address.",
+    "studentsTitle": "No student data",
+    "students": "MitraMatika does not collect student data. Do not write student names or other personal student data in the app; such data must never be sent to any AI service.",
+    "deleteTitle": "Deleting your account",
+    "delete": "You can delete your account at any time in Settings, under Account. Your account, your sessions, your questions and the rest of your work are deleted with it. What remains: a record that an account was deleted, which holds no name or email, only a one-way scrambled form of the account ID; earlier activity and error records, with your account ID removed; and the weekly database backups, which keep a copy of your data for up to 8 weeks until they are deleted. Resend keeps its own log of the emails it sent you.",
+    "back": "Back to sign in"
+  },
+  "assessments": {
+    "list": {
+      "description": "Assemble questions from the question bank into an exam paper.",
+      "newHeading": "New assessment",
+      "listHeading": "Your assessments",
+      "listLabel": "Assessment list",
+      "empty": "No assessments yet",
+      "emptyHint": "Create your first assessment above, then add questions from the question bank.",
+      "itemCount": "{count, plural, =0 {No questions yet} one {# question} other {# questions}}",
+      "sectionCount": "{count, plural, one {# section} other {# sections}}",
+      "updated": "Changed {date}",
+      "loadFailed": "The assessment list could not be loaded. Reload this page in a moment.",
+      "status": {
+        "draft": "Draft",
+        "approved": "Approved"
+      }
+    },
+    "kinds": {
+      "latihan": "Practice",
+      "ulangan_harian": "Daily test",
+      "sts": "Midterm exam",
+      "sas": "Final exam",
+      "custom": "Other"
+    },
+    "form": {
+      "title": "Title",
+      "kind": "Type",
+      "grade": "Grade",
+      "gradeOption": "Grade {grade, number, ::group-off}",
+      "template": "Document template",
+      "templateNone": "No template",
+      "templateDefault": "{name} (default)",
+      "templateHint": "Manage templates in Settings.",
+      "examDate": "Date",
+      "duration": "Duration (minutes)",
+      "instructions": "Instructions for students",
+      "create": "Create assessment",
+      "creating": "Creating assessment",
+      "save": "Save details",
+      "saving": "Saving",
+      "saved": "Details saved.",
+      "fieldErrors": {
+        "required": "This field is required.",
+        "tooLong": "This is too long.",
+        "invalidCharacters": "This contains characters that are not allowed.",
+        "invalid": "Enter a valid value."
+      }
+    },
+    "errors": {
+      "unauthenticated": "Your session has ended. Sign in again to continue.",
+      "generic": "Something went wrong. Try again.",
+      "invalid": "The request is not valid.",
+      "notFound": "This assessment or question no longer exists.",
+      "conflict": "This assessment was changed elsewhere. Reload the page, then try again.",
+      "approved": "This assessment is approved, so it cannot be changed.",
+      "templateNotFound": "The chosen template no longer exists.",
+      "sectionNotFound": "This section no longer exists.",
+      "notBanked": "One question is no longer in the question bank, so nothing was added.",
+      "tooMany": "The number of sections has reached the limit.",
+      "lastSection": "The last section cannot be removed.",
+      "pendingCheck": "A question's new version is still waiting for its check, so nothing was added.",
+      "tooManyItems": "The assessment already holds 200 questions, the maximum.",
+      "tooManyAtOnce": "Too many questions at once. Add at most 50 questions.",
+      "invalidPoints": "Points must be more than 0, at most 1000, with at most two decimals.",
+      "itemNotFound": "A question is no longer in this assessment. Reload the page and try again.",
+      "notReady": "The assessment is not ready to approve. Reload the page to see what needs fixing."
+    },
+    "preview": {
+      "description": "The question paper, answer key and solutions as they will print. Documents are always in Indonesian.",
+      "back": "Back to the builder",
+      "kindNav": "Document type",
+      "frameTitle": "Document preview",
+      "kinds": {
+        "paper": "Question paper",
+        "key": "Answer key",
+        "solutions": "Solutions"
+      },
+      "draftNote": "This previews the draft. Downloadable documents can only be made once the assessment is approved.",
+      "warningsHeading": "Some formulas could not be shown",
+      "warningsHint": "These formulas are shown as plain text. Fix the question in the question bank, then update it in the assessment.",
+      "tooWideHeading": "Some formulas are too wide for the page",
+      "tooWideHint": "These formulas are already printed smaller but may still run past the edge of the PDF page. Split the formula over several lines in the question bank, then update it in the assessment.",
+      "templateMissing": "This assessment's document template cannot be read (it may be in the trash), so the preview uses an empty letterhead, A4 paper and Times New Roman. Choose another template in the assessment details.",
+      "missingVersion": "One or more pinned question versions no longer exist, so the preview cannot be built. Remove that question from the outline and add it again.",
+      "where": {
+        "stem": "Question {number}: question text",
+        "option": "Question {number}: option {label}",
+        "step": "Question {number}: step {step}",
+        "sectionInstructions": "Section instructions: {section}",
+        "instructions": "General instructions"
+      },
+      "paperInfo": "Paper size and font follow the document template.",
+      "pdfNote": "This preview shows the content of the document; line and page breaks in the PDF may differ slightly."
+    },
+    "editor": {
+      "preview": "Document preview",
+      "back": "All assessments",
+      "details": "Assessment details",
+      "outline": "Question order",
+      "outlineHint": "Use the buttons on each question to reorder or move it.",
+      "locked": "This assessment is approved, so it cannot be changed. Reopen its approval to edit.",
+      "total": "{count, plural, =0 {No questions yet} one {# question} other {# questions}} in {sections, plural, one {# section} other {# sections}}"
+    },
+    "section": {
+      "titleLabel": "Section title",
+      "rename": "Save title",
+      "renamed": "Section title saved.",
+      "remove": "Remove section",
+      "removeHint": "Questions in this section move to another section.",
+      "removed": "Section removed.",
+      "add": "Add section",
+      "addLabel": "New section title",
+      "addPlaceholder": "Example: B. Essay",
+      "added": "Section added.",
+      "empty": "No questions in this section yet.",
+      "addQuestions": "Add questions from the question bank",
+      "removeNamed": "Remove section: {title}"
+    },
+    "item": {
+      "number": "Question {n}",
+      "moveUp": "Move question {n} up",
+      "moveDown": "Move question {n} down",
+      "moveTo": "Move question {n} to section",
+      "remove": "Remove question {n}",
+      "version": "Version {no}",
+      "newer": "A newer version is available",
+      "updateLatest": "Use the latest version of question {n}",
+      "trashed": "This question is in the trash. Restore it from the trash or remove it from the assessment.",
+      "unbanked": "This question is no longer in the question bank. Check it again or remove it from the assessment.",
+      "correct": "Key: {label}",
+      "moved": "Question {n} moved.",
+      "removedNote": "Question removed from the assessment.",
+      "updatedNote": "The question now uses its latest version.",
+      "alreadyLatest": "The question already uses its latest version.",
+      "pending": "Its new version is waiting for its check. The question keeps the version it is pinned to."
+    },
+    "picker": {
+      "heading": "Add questions to {section}",
+      "close": "Close",
+      "targetLabel": "Add to section",
+      "select": "Select question {n}",
+      "alreadyAdded": "Already in the assessment",
+      "add": "{count, plural, =0 {Add questions} one {Add # question} other {Add # questions}}",
+      "adding": "Adding",
+      "result": "{added} added, {skipped} skipped because they were already there.",
+      "none": "No questions match this search.",
+      "emptyBank": "The question bank is empty. Create questions and save them to the bank first.",
+      "pageLabel": "Question pages",
+      "page": "Page {page} of {pageCount}",
+      "previous": "Previous",
+      "next": "Next",
+      "pending": "New version waiting for its check",
+      "refusedNotBanked": "Question {n} is no longer in the question bank, so nothing was added.",
+      "refusedPending": "The new version of question {n} is still waiting for its check, so nothing was added."
+    },
+    "create": {
+      "link": "Create new questions",
+      "hint": "Open the question generator, then come back here to add the ones you saved."
+    },
+    "offer": {
+      "heading": "New questions in the question bank",
+      "description": "{count, plural, one {# new question was} other {# new questions were}} saved to the question bank and {count, plural, one {is} other {are}} not in this assessment yet.",
+      "dismiss": "Dismiss"
+    },
+    "scoring": {
+      "heading": "Points and order",
+      "modeLegend": "Scoring",
+      "mode": {
+        "equal": "Equal",
+        "manual": "Manual",
+        "normalised": "Manual, scaled to 100"
+      },
+      "modeHint": {
+        "equal": "Each question gets an equal share of 100.",
+        "manual": "Enter the points of each question. Any total is allowed.",
+        "normalised": "Enter a weight for each question. Points are scaled to total exactly 100."
+      },
+      "modeSaved": "Scoring saved.",
+      "pointsLegend": "Points per question",
+      "pointsLabel": "Points for question {n}",
+      "pointsHint": "A number above 0, with at most two decimals.",
+      "scaled": "Becomes {points, number} points",
+      "save": "Save points",
+      "saved": "Points saved.",
+      "total": "Total points: {total, number}",
+      "needs100": "The total must be exactly 100.",
+      "empty": "Add questions to set their points.",
+      "shuffle": "Shuffle the questions within each section",
+      "shuffleHint": "Question numbers in the paper, the answer key and the solutions follow the shuffled order. The editor keeps your arrangement.",
+      "reshuffle": "Shuffle again",
+      "shuffleOn": "Questions are shuffled.",
+      "shuffleOff": "Questions are not shuffled.",
+      "reshuffled": "Questions shuffled again."
+    },
+    "approval": {
+      "heading": "Approval",
+      "ready": "Ready to approve. Once approved, the assessment is locked and can be exported.",
+      "notReady": "{count, plural, one {# thing needs} other {# things need}} fixing before approval:",
+      "approve": "Approve assessment",
+      "approved": "Assessment approved.",
+      "approvedOn": "Approved on {date}.",
+      "stale": "Something changed since the assessment was approved, for example the template. Reopen it and approve it again before exporting.",
+      "reopen": "Reopen",
+      "reopenTitle": "Reopen this assessment?",
+      "reopenBody": "The approval is removed and the assessment can be edited again. Approve it again before exporting.",
+      "reopenConfirm": "Yes, reopen",
+      "cancel": "Cancel",
+      "reopened": "Assessment reopened.",
+      "problem": {
+        "empty": "This assessment has no questions yet.",
+        "templateTrashed": "The document template is in the trash. Restore it in the trash or choose another template.",
+        "trashed": "Question {n} is in the trash.",
+        "notApproved": "Question {n} is not approved or is no longer in the question bank.",
+        "mismatch": "Question {n} has an unresolved mismatch. Approve it with a note in Review, or remove it.",
+        "badTotal": "The total of {total, number} points is not exactly 100.",
+        "badTotalManual": "The total must be more than 0.",
+        "unscored": "Question {n} has no points yet."
+      },
+      "refusedNotReady": "The assessment is not ready to approve. See the list of what needs fixing.",
+      "refusedConflict": "The assessment changed since the page loaded. Check it again, then approve."
+    },
+    "export": {
+      "heading": "Export documents",
+      "description": "The question paper, answer key and worked solutions as PDF and Word, plus one ZIP with all of them. The files are available for 7 days.",
+      "start": "Export documents",
+      "again": "Export again",
+      "status": {
+        "starting": "Starting the export…",
+        "queued": "The export is waiting its turn…",
+        "running": "Creating the documents. This can take up to a few minutes.",
+        "deferred": "The export is waiting for its turn and continues shortly.",
+        "done": "The documents are ready to download."
+      },
+      "expiresOn": "Available until {date}",
+      "expired": "The exported files have expired (they are kept for 7 days) and were deleted. Export again to create new files.",
+      "filesLabel": "Exported files",
+      "documents": {
+        "paper": "Question paper",
+        "key": "Answer key",
+        "solutions": "Worked solutions",
+        "zip": "All files (ZIP)"
+      },
+      "formats": {
+        "pdf": "PDF",
+        "docx": "Word",
+        "zip": "ZIP"
+      },
+      "downloadLabel": "Download {document} ({format})",
+      "downloadZip": "Download all files (ZIP)",
+      "warningsHeading": "Check these",
+      "warningsHint": "These formulas could not be turned into equations and were written as plain text:",
+      "tooWideHint": "These formulas are wider than the page and are printed smaller; in the PDF they may run past the edge of the page. Check the file, or split the formula over several lines in the question bank:",
+      "warningItem": "{file}: {where}",
+      "logoOmitted": "An SVG school logo cannot be placed in the PDF and Word files. Upload a PNG or JPG logo in the template.",
+      "logoMissing": "The template's logo file was not found, so the documents have no logo. Upload the logo again in the template, then export again.",
+      "errors": {
+        "notApproved": "The assessment is not approved. Approve it first, then export.",
+        "notFound": "The assessment was not found.",
+        "stale": "The assessment or its template changed after approval. Reopen the approval, check it and approve again.",
+        "tooLarge": "The documents are too large to export. Remove some questions or split the assessment.",
+        "rendererUnavailable": "The PDF printer is not available right now. Try the export again shortly.",
+        "renderFailed": "One of the documents could not be created. Try the export again.",
+        "hourlyLimit": "You reached the limit of {limit} exports per hour. Try again after {time}.",
+        "signedOut": "Your session ended. Sign in again to export.",
+        "generic": "The export failed. Try again shortly."
+      }
+    }
+  },
+  "materials": {
+    "upload": {
+      "title": "Upload material",
+      "privacy": "Do not upload documents containing students' personal data (names, grades, photos, student numbers).",
+      "dropLabel": "Drag a file here or choose a file",
+      "chooseFile": "Choose file",
+      "takePhoto": "Take a photo",
+      "hint": "PDF, DOCX, JPG or PNG, at most 50 MB and 300 pages.",
+      "storage": "{used} of {cap} used",
+      "uploading": "Uploading {name}: {percent}%",
+      "checking": "Checking {name}…",
+      "done": "{name} saved. Reading its text.",
+      "failed": "{name} could not be uploaded.",
+      "progressLabel": "Upload progress of {name}",
+      "retry": "Try again",
+      "cancel": "Cancel",
+      "cancelled": "Upload of {name} cancelled.",
+      "dismiss": "Close",
+      "errors": {
+        "type": "File type not supported. Use PDF, DOCX, JPG or PNG.",
+        "doc": ".doc files are not supported. Open it in Word and save it as .docx.",
+        "size": "The file is larger than 50 MB or changed size while uploading.",
+        "quota": "Your storage (1 GB) is full. Delete old materials from the trash first.",
+        "pending": "Too many uploads in progress. Wait for them to finish, then try again.",
+        "encrypted": "This PDF is password-protected. Save it again without a password, then upload it.",
+        "pages": "The PDF has more than 300 pages. Split it into several files.",
+        "zipBomb": "This DOCX is too large once unpacked. Save it again from Word, then upload it.",
+        "image": "The image cannot be read or is over 10,000 pixels on a side.",
+        "damaged": "The file is damaged and cannot be read.",
+        "notFound": "Upload not found. Start the upload again.",
+        "missing": "The file has not reached storage yet. Try again.",
+        "expired": "The upload took too long. Start the upload again.",
+        "title": "A title is required (at most 200 characters).",
+        "folder": "Folder not found.",
+        "network": "The connection dropped while uploading. Check your internet, then try again.",
+        "unauthenticated": "Your session has ended. Sign in again to upload.",
+        "generic": "The upload failed. Try again in a moment.",
+        "busy": "The server is reading another file. Try again in a moment."
+      }
+    },
+    "library": {
+      "description": "Keep textbooks, teaching modules and scans as references for creating questions.",
+      "openTrash": "Open the trash",
+      "listLabel": "Materials",
+      "listHeading": "Your materials",
+      "empty": "No materials yet.",
+      "emptyHint": "Upload your first textbook or teaching module with the upload box.",
+      "noMatches": "No materials match.",
+      "resetFilters": "Clear filters",
+      "pages": "{count, plural, one {# page} other {# pages}}",
+      "grade": "Grade {grade}",
+      "matchPage": "Found on page {page}",
+      "inFolder": "Folder: {name}",
+      "structureConfirmed": "Structure confirmed",
+      "kind": {
+        "pdf": "PDF",
+        "docx": "DOCX",
+        "image": "Image"
+      },
+      "status": {
+        "uploaded": "Waiting to be read",
+        "processing": "Being read",
+        "needs_review": "Needs review",
+        "ready": "Ready to use",
+        "failed": "Could not be read"
+      },
+      "showing": "{first}–{last} of {total} materials",
+      "pagination": {
+        "label": "Pages of the materials list",
+        "previous": "Previous",
+        "next": "Next",
+        "page": "Page {page}"
+      },
+      "search": {
+        "label": "Search materials",
+        "placeholder": "Search titles or text",
+        "submit": "Search"
+      },
+      "filters": {
+        "label": "Filter materials",
+        "grade": "Grade",
+        "year": "Academic year",
+        "status": "Status",
+        "any": "All",
+        "apply": "Apply"
+      }
+    },
+    "storage": {
+      "label": "Storage",
+      "nearlyFull": "Storage is nearly full. Delete materials you no longer use from the trash for good."
+    },
+    "folders": {
+      "heading": "Folders",
+      "navLabel": "Material folders",
+      "all": "All materials",
+      "empty": "No folders yet.",
+      "count": "{count, plural, one {# material} other {# materials}}",
+      "create": {
+        "heading": "New folder",
+        "name": "Folder name",
+        "parent": "Where it goes",
+        "topLevel": "Top level",
+        "inside": "Inside {name}",
+        "submit": "Create folder",
+        "created": "Folder created."
+      },
+      "current": {
+        "heading": "Manage this folder",
+        "name": "New name",
+        "rename": "Rename",
+        "renamed": "Folder renamed.",
+        "move": "Move to",
+        "moveSubmit": "Move folder",
+        "moved": "Folder moved."
+      },
+      "errors": {
+        "name": "A folder name is required (at most 80 characters).",
+        "notFound": "This folder was not found. Reload the page.",
+        "parent": "The target folder was not found.",
+        "nesting": "Folders nest one level only: choose a top-level folder, or move its subfolders out first.",
+        "retry": "Another change was in progress. Try again.",
+        "unauthenticated": "Your session has ended. Sign in again, then try again.",
+        "generic": "Something went wrong. Try again.",
+        "trashedSubfolders": "This folder still has a subfolder in the trash. Restore it or delete it for good first, then move the folder."
+      }
+    },
+    "detail": {
+      "back": "Back to the materials",
+      "facts": "About the file",
+      "kindLabel": "Type",
+      "sizeLabel": "Size",
+      "pagesLabel": "Pages",
+      "addedLabel": "Uploaded",
+      "statusLabel": "Status",
+      "folderLabel": "Folder",
+      "noFolder": "No folder",
+      "quality": {
+        "heading": "Text quality",
+        "summary": "{high} pages clear, {medium} to check, {low} hard to read",
+        "flagged": "Pages to check: {pages}",
+        "none": "No pages have been read yet.",
+        "reading": "The text is being read. Reload this page in a moment.",
+        "failed": "The text of this file could not be read. Move it to the trash, then upload it again."
+      },
+      "move": {
+        "label": "Move to folder",
+        "submit": "Move",
+        "moved": "Material moved.",
+        "errors": {
+          "notFound": "This material was not found. Reload the page.",
+          "folder": "Folder not found. Reload the page.",
+          "unauthenticated": "Your session has ended. Sign in again, then try again.",
+          "generic": "Something went wrong. Try again."
+        }
+      }
+    },
+    "structure": {
+      "heading": "Structure",
+      "description": "Title, grade, academic year and chapters with their pages. Everything can be changed before you save.",
+      "propose": "Suggest with AI",
+      "proposeAgain": "Suggest again with AI",
+      "proposing": "The AI is drafting a structure. You can leave this page.",
+      "waiting": "Waiting for the AI service. The suggestion is drafted automatically when it is ready.",
+      "proposalNote": "Suggested by AI: check each chapter before saving.",
+      "notReady": "An AI suggestion can be asked for once the text has been read.",
+      "confirmedOn": "Confirmed {date}",
+      "title": "Title",
+      "grade": "Grade",
+      "gradeNone": "Not chosen",
+      "year": "Academic year",
+      "yearHint": "For example: 2026/2027",
+      "titleInvalid": "Enter a title of at most 200 characters.",
+      "gradeInvalid": "Choose grade 7, 8 or 9.",
+      "yearInvalid": "Write the academic year like 2026/2027.",
+      "chapterInvalid": "Check chapter {number}: it needs a title, page numbers, and a last page on or after its first page.",
+      "chapterPages": "Chapter {number} goes past the last page of the material ({pages}).",
+      "chapters": "Chapters",
+      "noChapters": "No chapters yet. Add one, or ask the AI for a suggestion.",
+      "chapterTitle": "Chapter {number} title",
+      "pageStart": "Chapter {number} first page",
+      "pageEnd": "Chapter {number} last page",
+      "topic": "Chapter {number} curriculum topic",
+      "topicNone": "No topic",
+      "removeChapter": "Remove chapter {number}",
+      "addChapter": "Add chapter",
+      "chaptersLimit": "At most {limit} chapters.",
+      "save": "Save structure",
+      "saving": "Saving…",
+      "saved": "Structure saved.",
+      "errors": {
+        "notFound": "This material was not found. Reload the page.",
+        "notReady": "The material's text has not been read yet. Try again later.",
+        "pages": "A chapter goes past the material's last page.",
+        "topic": "Unknown curriculum topic. Choose it again.",
+        "invalid": "Check the form: a title is required, the academic year looks like 2026/2027, and every chapter ends on or after its first page.",
+        "failed": "The AI could not draft a structure. Try again, or fill it in yourself.",
+        "unauthenticated": "Your session has ended. Sign in again, then try again.",
+        "generic": "Something went wrong. Try again.",
+        "limit": "The AI suggestions for today are used up ({limit} a day). Try again tomorrow, or fill it in yourself."
+      }
+    },
+    "ocr": {
+      "heading": "Pages and text",
+      "intro": "Check each page's text beside its image. Fix the parts that need checking, then save.",
+      "pageOf": "Page {page} of {total}",
+      "previous": "Previous page",
+      "next": "Next page",
+      "nextFlagged": "Next page that needs checking",
+      "choosePage": "Open page",
+      "open": "Open",
+      "needsCheck": "Needs checking",
+      "clear": "Text looks clear",
+      "source": {
+        "pdf_text": "Text from the PDF",
+        "docx": "Text from Word",
+        "ocr": "OCR result",
+        "manual": "Corrected by the teacher",
+        "none": "No text yet"
+      },
+      "status": {
+        "none": "No OCR needed",
+        "available": "Can be OCR'd",
+        "queued": "Waiting for OCR",
+        "done": "OCR done",
+        "failed": "OCR failed, can be tried again"
+      },
+      "flags": {
+        "uncertain_math": "Has uncertain parts",
+        "low_text": "Little text",
+        "garbled": "Text looks scrambled",
+        "truncated": "Text cut off, check the end of the page"
+      },
+      "viewer": {
+        "label": "Image of page {page}",
+        "loading": "Loading the page image…",
+        "failed": "The page image could not be loaded. Reload this page.",
+        "noImage": "Word documents have no page image."
+      },
+      "editor": {
+        "label": "Text of page {page}",
+        "hint": "Uncertain parts are wrapped in [[?]] marks. Fix those parts and remove the marks. Formulas are written as LaTeX between $ signs.",
+        "marks": "{count, plural, =0 {No parts marked [[?]].} one {# part marked [[?]].} other {# parts marked [[?]].}}",
+        "jump": "Go to the next marked part",
+        "save": "Save text",
+        "saving": "Saving…",
+        "saved": "Page text saved.",
+        "queued": "This page is waiting for OCR. Its text can be corrected once OCR is done.",
+        "errors": {
+          "notFound": "This page was not found. Reload the page.",
+          "notReady": "This material's text is still being read. Try again shortly.",
+          "tooLong": "The text is too long. At most {max} characters per page.",
+          "busy": "This page is waiting for OCR. Try again once it is done.",
+          "invalid": "The text could not be saved. Reload the page and try again.",
+          "unauthenticated": "Your session has ended. Sign in again, then try again.",
+          "generic": "Something went wrong. Try again."
+        },
+        "partLabel": "Go to marked part:"
+      },
+      "selector": {
+        "heading": "OCR pages",
+        "intro": "Choose pages whose text is hard to read. The AI reads the page image, about one page a minute. You still need to check the result.",
+        "left": "{left} of {cap} pages left today",
+        "none": "No pages can be OCR'd.",
+        "legend": "Pages that can be OCR'd",
+        "page": "Page {page}",
+        "submit": "OCR selected pages",
+        "preparing": "Preparing page images ({done} of {total})…",
+        "queued": "{count, plural, one {# page queued for OCR.} other {# pages queued for OCR.}}",
+        "choose": "Choose at least one page.",
+        "tooMany": "You can only choose {left, plural, one {# more page} other {# more pages}} today.",
+        "errors": {
+          "notFound": "This material was not found. Reload the page.",
+          "pages": "Some pages can no longer be OCR'd. Reload the page and choose again.",
+          "limit": "Today's remaining OCR pages are not enough for the chosen pages.",
+          "render": "The page images could not be prepared. Try again.",
+          "upload": "The page images failed to upload. Try again.",
+          "invalid": "The page choice is not valid. Reload the page.",
+          "unauthenticated": "Your session has ended. Sign in again, then try again.",
+          "generic": "Something went wrong. Try again.",
+          "blank": "{count, plural, one {Page {pages} looks} other {Pages {pages} look}} empty, so nothing was sent to OCR. Type the text yourself if needed."
+        },
+        "overwrite": "You corrected the text of {count, plural, one {page {pages}} other {pages {pages}}}. OCR will replace it. Press the OCR button again to continue.",
+        "visionLeft": "{left} of {cap} picture reads left today (OCR and problem photos)"
+      }
+    }
+  },
+  "solve": {
+    "title": "Solve a problem",
+    "description": "Type a problem or take a photo of it. The steps and the final answer are checked automatically where possible.",
+    "sessionTitle": "Problem solution",
+    "newProblem": "New problem",
+    "left": "{left} of {limit} solves left today",
+    "how": {
+      "heading": "How it works",
+      "input": "Type the problem with a formula preview, or take a photo of it.",
+      "confirm": "When part of a photo is not read clearly, you check and correct it first.",
+      "verify": "You get the steps, the final answer, its units and rounding; the arithmetic is checked by machine where possible.",
+      "another": "Ask for another method when you need one. Every solve counts toward the daily limit."
+    },
+    "input": {
+      "heading": "Problem",
+      "tabsLabel": "How to enter the problem",
+      "typeTab": "Type it",
+      "photoTab": "Photo or image",
+      "textLabel": "Problem text",
+      "textHint": "Write formulas between $ signs, for example $x^2 + 3x = 10$.",
+      "count": "{count} of {max} characters",
+      "preview": "Formula preview",
+      "previewEmpty": "The problem preview appears here.",
+      "submit": "Solve and check",
+      "sending": "Sending the problem…",
+      "photoHint": "One problem per photo, upright and well lit. PNG or JPG.",
+      "privacy": "Do not photograph students' personal data.",
+      "camera": "Take a photo",
+      "gallery": "Choose an image",
+      "chosen": "Chosen: {name}",
+      "sendPhoto": "Read the problem from the photo",
+      "preparing": "Preparing the photo…",
+      "uploading": "Uploading the photo… {percent}%",
+      "checking": "Checking the photo…",
+      "visionLeft": "{left} of {cap} picture reads left today (OCR and problem photos)"
+    },
+    "errors": {
+      "empty": "Write the problem first.",
+      "tooLong": "The problem is too long. The limit is {max} characters.",
+      "limit": "All {limit} solves for today are used up. Try again tomorrow.",
+      "noMore": "This problem already has {max} methods.",
+      "pending": "Too many photos are still unfinished. Wait a moment, then try again.",
+      "type": "This file is not a PNG or JPG image.",
+      "size": "The image is too large and cannot be made smaller. Choose another photo.",
+      "image": "The image size cannot be read or is over the limit.",
+      "missing": "The photo has not arrived yet. Try again.",
+      "expired": "The photo upload has expired. Choose the photo again.",
+      "upload": "The photo could not be uploaded. Try again.",
+      "notFound": "This problem was not found.",
+      "state": "This problem cannot be changed now. Reload the page.",
+      "markers": "Some parts are still marked [[?]]. Correct them, then remove the marks.",
+      "busy": "This problem is still being solved.",
+      "unauthenticated": "Your session has ended. Sign in again.",
+      "generic": "Something went wrong. Try again.",
+      "visionLimit": "All {limit} picture reads for today are used (OCR and problem photos together). Try again tomorrow."
+    },
+    "confirm": {
+      "heading": "Check what was read from the photo",
+      "description": "The marked parts were not read clearly. Correct the text, then solve it.",
+      "failedDescription": "The photo could not be read. Type the problem below.",
+      "photoAlt": "Photo of the problem",
+      "photoGone": "The photo has been deleted. Problem photos are kept for 7 days.",
+      "issuesHeading": "To check",
+      "issueUncertain": "Not read clearly: {text}",
+      "issueKatex": "Formula cannot be shown: {text}",
+      "issueTruncated": "The reading was cut off. Check that the problem is complete.",
+      "issueEmpty": "No text was read.",
+      "textLabel": "Problem text",
+      "hint": "Remove the [[?]] marks once those parts are corrected.",
+      "preview": "Formula preview",
+      "submit": "Confirm and solve",
+      "working": "Sending…",
+      "confirmed": "Problem text confirmed."
+    },
+    "status": {
+      "pending": "The photo upload did not finish. Go back to solving and choose the photo again.",
+      "reading": "Reading the problem from the photo…",
+      "solving": "Solving the problem…",
+      "alternative": "Looking for another method…",
+      "deferred": "The AI service is busy. The work continues automatically.",
+      "failed": "This problem could not be solved yet.",
+      "solveAgain": "Solve again",
+      "alternativeFailed": "No other method could be found yet. Try again later."
+    },
+    "solution": {
+      "problemHeading": "Problem",
+      "method": "Method {number}: {method}",
+      "alternative": "Another method",
+      "finalAnswer": "Final answer",
+      "rounding": "Rounding: {rounding}",
+      "noRounding": "Not rounded",
+      "answerUnchecked": "This final answer has not been recomputed by machine.",
+      "steps": "Solution steps ({count})",
+      "stepLabel": "Step {number}",
+      "showAnother": "Show another method",
+      "noMore": "Every method for this problem is shown.",
+      "disclaimer": "Check again before using it in class.",
+      "crossDisagree": "A second AI solution, worked out separately, got {answer}. Check the steps before using this answer.",
+      "crossUnavailable": "The cross-check by a second AI could not run."
+    },
+    "recent": {
+      "heading": "Recent problems",
+      "empty": "No problems solved yet.",
+      "typed": "Typed",
+      "photo": "From a photo",
+      "untitled": "Problem without text",
+      "statuses": {
+        "reading": "Reading the photo",
+        "confirm": "Needs confirmation",
+        "solving": "Being solved",
+        "solved": "Solved",
+        "failed": "Not solved"
+      }
+    }
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "type": "diff",
+  "version": "9",
+  "dialect": "postgres",
+  "id": "d72a7c41-8a22-47c5-b903-7fd30c09a3cb",
+  "prevIds": ["7a418693-d7fa-487c-839b-223583852c6a"],
+  "footprints": [
+    {
+      "statementType": "alter_column",
+      "statementTarget": ["column", "public", "audit_log", "owner_id"],
+      "writes": ["s|colprop|public.audit_log.owner_id.notNull"],
+      "reads": [
+        "n|tbl|public.audit_log",
+        "n|sch|public",
+        "n|col|public.audit_log.owner_id"
+      ],
+      "sqlHash": "563bb8a465546583"
+    },
+    {
+      "statementType": "recreate_fk",
+      "statementTarget": ["table", "public", "audit_log"],
+      "writes": [
+        "s|fk|public.audit_log.audit_log_owner_id_profiles_id_fkey",
+        "n|fk|public.audit_log.audit_log_owner_id_profiles_id_fkey",
+        "e|fk|public.audit_log.audit_log_owner_id_profiles_id_fkey",
+        "n|con|public.audit_log.audit_log_owner_id_profiles_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.audit_log",
+        "n|sch|public",
+        "n|tbl|public.profiles",
+        "n|sch|public",
+        "n|col|public.audit_log.owner_id",
+        "n|col|public.profiles.id",
+        "e|uniqueness|public.profiles.id"
+      ],
+      "sqlHash": "317bb4280f4d14d7"
+    }
+  ],
+  "deltas": [
+    {
+      "op": "alter",
+      "key": "columns\u0000[\"public\",\"audit_log\",\"owner_id\"]",
+      "set": {
+        "notNull": false
+      }
+    },
+    {
+      "op": "alter",
+      "key": "fks\u0000[\"public\",\"audit_log\",\"audit_log_owner_id_profiles_id_fkey\"]",
+      "set": {
+        "onDelete": "SET NULL"
+      }
+    }
+  ]
+}

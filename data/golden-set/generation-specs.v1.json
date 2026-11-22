@@ -1,0 +1,185 @@
+{
+  "version": "golden-generation-specs-v1",
+  "items": [
+    {
+      "id": "bilangan-berpangkat-mudah-1",
+      "grade": 8,
+      "topicStableKey": "bilangan-berpangkat-dan-bentuk-akar",
+      "topicTitle": "Bilangan Berpangkat, Bentuk Akar, dan Notasi Ilmiah",
+      "difficulty": "mudah",
+      "count": 1,
+      "sourceRef": "data/curriculum/grade-8-v1.json, topik bilangan-berpangkat-dan-bentuk-akar"
+    },
+    {
+      "id": "bilangan-berpangkat-sedang-1",
+      "grade": 8,
+      "topicStableKey": "bilangan-berpangkat-dan-bentuk-akar",
+      "topicTitle": "Bilangan Berpangkat, Bentuk Akar, dan Notasi Ilmiah",
+      "difficulty": "sedang",
+      "count": 1,
+      "sourceRef": "data/curriculum/grade-8-v1.json, topik bilangan-berpangkat-dan-bentuk-akar"
+    },
+    {
+      "id": "bilangan-berpangkat-sulit-1",
+      "grade": 8,
+      "topicStableKey": "bilangan-berpangkat-dan-bentuk-akar",
+      "topicTitle": "Bilangan Berpangkat, Bentuk Akar, dan Notasi Ilmiah",
+      "difficulty": "sulit",
+      "count": 1,
+      "sourceRef": "data/curriculum/grade-8-v1.json, topik bilangan-berpangkat-dan-bentuk-akar"
+    },
+    {
+      "id": "spldv-mudah-1",
+      "grade": 8,
+      "topicStableKey": "sistem-persamaan-linear-dua-variabel",
+      "topicTitle": "Sistem Persamaan Linear Dua Variabel (SPLDV)",
+      "difficulty": "mudah",
+      "count": 1,
+      "sourceRef": "data/curriculum/grade-8-v1.json, topik sistem-persamaan-linear-dua-variabel"
+    },
+    {
+      "id": "spldv-sedang-1",
+      "grade": 8,
+      "topicStableKey": "sistem-persamaan-linear-dua-variabel",
+      "topicTitle": "Sistem Persamaan Linear Dua Variabel (SPLDV)",
+      "difficulty": "sedang",
+      "count": 1,
+      "sourceRef": "data/curriculum/grade-8-v1.json, topik sistem-persamaan-linear-dua-variabel"
+    },
+    {
+      "id": "spldv-sulit-1",
+      "grade": 8,
+      "topicStableKey": "sistem-persamaan-linear-dua-variabel",
+      "topicTitle": "Sistem Persamaan Linear Dua Variabel (SPLDV)",
+      "difficulty": "sulit",
+      "count": 1,
+      "sourceRef": "data/curriculum/grade-8-v1.json, topik sistem-persamaan-linear-dua-variabel"
+    },
+    {
+      "id": "relasi-fungsi-garis-lurus-mudah-1",
+      "grade": 8,
+      "topicStableKey": "relasi-fungsi-dan-persamaan-garis-lurus",
+      "topicTitle": "Relasi, Fungsi, dan Persamaan Garis Lurus",
+      "difficulty": "mudah",
+      "count": 1,
+      "sourceRef": "data/curriculum/grade-8-v1.json, topik relasi-fungsi-dan-persamaan-garis-lurus"
+    },
+    {
+      "id": "relasi-fungsi-garis-lurus-sedang-1",
+      "grade": 8,
+      "topicStableKey": "relasi-fungsi-dan-persamaan-garis-lurus",
+      "topicTitle": "Relasi, Fungsi, dan Persamaan Garis Lurus",
+      "difficulty": "sedang",
+      "count": 1,
+      "sourceRef": "data/curriculum/grade-8-v1.json, topik relasi-fungsi-dan-persamaan-garis-lurus"
+    },
+    {
+      "id": "relasi-fungsi-garis-lurus-sulit-1",
+      "grade": 8,
+      "topicStableKey": "relasi-fungsi-dan-persamaan-garis-lurus",
+      "topicTitle": "Relasi, Fungsi, dan Persamaan Garis Lurus",
+      "difficulty": "sulit",
+      "count": 1,
+      "sourceRef": "data/curriculum/grade-8-v1.json, topik relasi-fungsi-dan-persamaan-garis-lurus"
+    },
+    {
+      "id": "pythagoras-mudah-1",
+      "grade": 8,
+      "topicStableKey": "teorema-pythagoras",
+      "topicTitle": "Teorema Pythagoras",
+      "difficulty": "mudah",
+      "count": 1,
+      "sourceRef": "data/curriculum/grade-8-v1.json, topik teorema-pythagoras; bab dan gaya soal dicocokkan dengan Matematika untuk SMP/MTs Kelas VIII (Kemdikbud, 2022), Bab 2"
+    },
+    {
+      "id": "pythagoras-sedang-1",
+      "grade": 8,
+      "topicStableKey": "teorema-pythagoras",
+      "topicTitle": "Teorema Pythagoras",
+      "difficulty": "sedang",
+      "count": 1,
+      "sourceRef": "data/curriculum/grade-8-v1.json, topik teorema-pythagoras; bab dan gaya soal dicocokkan dengan Matematika untuk SMP/MTs Kelas VIII (Kemdikbud, 2022), Bab 2"
+    },
+    {
+      "id": "pythagoras-sulit-1",
+      "grade": 8,
+      "topicStableKey": "teorema-pythagoras",
+      "topicTitle": "Teorema Pythagoras",
+      "difficulty": "sulit",
+      "count": 1,
+      "sourceRef": "data/curriculum/grade-8-v1.json, topik teorema-pythagoras; bab dan gaya soal dicocokkan dengan Matematika untuk SMP/MTs Kelas VIII (Kemdikbud, 2022), Bab 2"
+    },
+    {
+      "id": "garis-sudut-mudah-1",
+      "grade": 8,
+      "topicStableKey": "garis-dan-sudut",
+      "topicTitle": "Garis dan Sudut",
+      "difficulty": "mudah",
+      "count": 1,
+      "sourceRef": "data/curriculum/grade-8-v1.json, topik garis-dan-sudut"
+    },
+    {
+      "id": "garis-sudut-sedang-1",
+      "grade": 8,
+      "topicStableKey": "garis-dan-sudut",
+      "topicTitle": "Garis dan Sudut",
+      "difficulty": "sedang",
+      "count": 1,
+      "sourceRef": "data/curriculum/grade-8-v1.json, topik garis-dan-sudut"
+    },
+    {
+      "id": "lingkaran-mudah-1",
+      "grade": 8,
+      "topicStableKey": "lingkaran",
+      "topicTitle": "Lingkaran",
+      "difficulty": "mudah",
+      "count": 1,
+      "sourceRef": "data/curriculum/grade-8-v1.json, topik lingkaran"
+    },
+    {
+      "id": "lingkaran-sedang-1",
+      "grade": 8,
+      "topicStableKey": "lingkaran",
+      "topicTitle": "Lingkaran",
+      "difficulty": "sedang",
+      "count": 1,
+      "sourceRef": "data/curriculum/grade-8-v1.json, topik lingkaran"
+    },
+    {
+      "id": "statistika-mudah-1",
+      "grade": 8,
+      "topicStableKey": "statistika",
+      "topicTitle": "Statistika: Penyajian dan Ukuran Pemusatan Data",
+      "difficulty": "mudah",
+      "count": 1,
+      "sourceRef": "data/curriculum/grade-8-v1.json, topik statistika; bab dan gaya soal dicocokkan dengan Matematika untuk SMP/MTs Kelas VIII (Kemdikbud, 2022), Bab 6"
+    },
+    {
+      "id": "statistika-sedang-1",
+      "grade": 8,
+      "topicStableKey": "statistika",
+      "topicTitle": "Statistika: Penyajian dan Ukuran Pemusatan Data",
+      "difficulty": "sedang",
+      "count": 1,
+      "sourceRef": "data/curriculum/grade-8-v1.json, topik statistika; bab dan gaya soal dicocokkan dengan Matematika untuk SMP/MTs Kelas VIII (Kemdikbud, 2022), Bab 6"
+    },
+    {
+      "id": "peluang-mudah-1",
+      "grade": 8,
+      "topicStableKey": "peluang",
+      "topicTitle": "Peluang",
+      "difficulty": "mudah",
+      "count": 1,
+      "sourceRef": "data/curriculum/grade-8-v1.json, topik peluang"
+    },
+    {
+      "id": "peluang-sedang-1",
+      "grade": 8,
+      "topicStableKey": "peluang",
+      "topicTitle": "Peluang",
+      "difficulty": "sedang",
+      "count": 1,
+      "sourceRef": "data/curriculum/grade-8-v1.json, topik peluang"
+    }
+  ]
+}

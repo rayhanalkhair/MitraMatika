@@ -1,0 +1,168 @@
+{
+  "version": "golden-solver-problems-v1",
+  "items": [
+    {
+      "id": "bilangan-berpangkat-persamaan-1",
+      "grade": 8,
+      "topicStableKey": "bilangan-berpangkat-dan-bentuk-akar",
+      "difficulty": "mudah",
+      "stem_md": "Tentukan nilai $x$ yang memenuhi persamaan $2^x = 128$.",
+      "options": [
+        { "label": "A", "text_md": "$x = 6$" },
+        { "label": "B", "text_md": "$x = 7$" },
+        { "label": "C", "text_md": "$x = 8$" },
+        { "label": "D", "text_md": "$x = 64$" }
+      ],
+      "correctLabel": "B",
+      "answer": { "display_md": "$x = 7$", "machine": "7" },
+      "sourceRef": "Ditulis mengikuti gaya soal 'Ayo Berlatih' Bab 1 Bilangan Berpangkat (mis. 3^x=81, 6^x=1.296), Matematika untuk SMP/MTs Kelas VIII (Kemdikbud, 2022), hlm. 10 — bukan kutipan langsung."
+    },
+    {
+      "id": "bentuk-akar-sederhanakan-1",
+      "grade": 8,
+      "topicStableKey": "bilangan-berpangkat-dan-bentuk-akar",
+      "difficulty": "sedang",
+      "stem_md": "Sederhanakan bentuk akar berikut: $\\sqrt{50} + \\sqrt{18}$.",
+      "options": [
+        { "label": "A", "text_md": "$6\\sqrt{2}$" },
+        { "label": "B", "text_md": "$7\\sqrt{2}$" },
+        { "label": "C", "text_md": "$8\\sqrt{2}$" },
+        { "label": "D", "text_md": "$68$" }
+      ],
+      "correctLabel": "C",
+      "answer": { "display_md": "$8\\sqrt{2}$", "machine": "8*sqrt(2)" },
+      "sourceRef": "Ditulis mengikuti gaya soal Bab 1.B Bilangan Bentuk Akar, Matematika untuk SMP/MTs Kelas VIII (Kemdikbud, 2022), hlm. 26-36 — bukan kutipan langsung."
+    },
+    {
+      "id": "spldv-substitusi-1",
+      "grade": 8,
+      "topicStableKey": "sistem-persamaan-linear-dua-variabel",
+      "difficulty": "sedang",
+      "stem_md": "Diketahui sistem persamaan $x + y = 10$ dan $x - y = 2$. Tentukan nilai $x$ dan $y$.",
+      "options": [
+        { "label": "A", "text_md": "$x = 5, y = 5$" },
+        { "label": "B", "text_md": "$x = 6, y = 4$" },
+        { "label": "C", "text_md": "$x = 4, y = 6$" },
+        { "label": "D", "text_md": "$x = 8, y = 2$" }
+      ],
+      "correctLabel": "B",
+      "answer": { "display_md": "$x = 6, y = 4$", "machine": "x=6;y=4" },
+      "sourceRef": "data/curriculum/grade-8-v1.json, topik sistem-persamaan-linear-dua-variabel; soal orisinal."
+    },
+    {
+      "id": "relasi-fungsi-nilai-1",
+      "grade": 8,
+      "topicStableKey": "relasi-fungsi-dan-persamaan-garis-lurus",
+      "difficulty": "mudah",
+      "stem_md": "Diketahui fungsi $f(x) = 2x - 3$. Tentukan nilai $f(5)$.",
+      "options": [
+        { "label": "A", "text_md": "$7$" },
+        { "label": "B", "text_md": "$10$" },
+        { "label": "C", "text_md": "$13$" },
+        { "label": "D", "text_md": "$-7$" }
+      ],
+      "correctLabel": "A",
+      "answer": { "display_md": "$7$", "machine": "7" },
+      "sourceRef": "data/curriculum/grade-8-v1.json, topik relasi-fungsi-dan-persamaan-garis-lurus; soal orisinal."
+    },
+    {
+      "id": "garis-lurus-gradien-1",
+      "grade": 8,
+      "topicStableKey": "relasi-fungsi-dan-persamaan-garis-lurus",
+      "difficulty": "sedang",
+      "stem_md": "Tentukan gradien garis lurus yang melalui titik $(2, 3)$ dan $(6, 11)$.",
+      "options": [
+        { "label": "A", "text_md": "$m = 1$" },
+        { "label": "B", "text_md": "$m = 2$" },
+        { "label": "C", "text_md": "$m = 4$" },
+        { "label": "D", "text_md": "$m = 0{,}5$" }
+      ],
+      "correctLabel": "B",
+      "answer": { "display_md": "$m = 2$", "machine": "2" },
+      "sourceRef": "Ditulis mengikuti gaya soal Bab 5 Persamaan Garis Lurus, Matematika untuk SMP/MTs Kelas VIII (Kemdikbud, 2022) — bukan kutipan langsung."
+    },
+    {
+      "id": "pythagoras-hipotenusa-1",
+      "grade": 8,
+      "topicStableKey": "teorema-pythagoras",
+      "difficulty": "mudah",
+      "stem_md": "Sebuah segitiga siku-siku memiliki dua sisi siku-siku sepanjang 9 cm dan 12 cm. Berapa panjang sisi miringnya?",
+      "options": [
+        { "label": "A", "text_md": "15 cm" },
+        { "label": "B", "text_md": "18 cm" },
+        { "label": "C", "text_md": "21 cm" },
+        { "label": "D", "text_md": "225 cm" }
+      ],
+      "correctLabel": "A",
+      "answer": { "display_md": "15 cm", "machine": "15" },
+      "sourceRef": "Ditulis mengikuti gaya soal Bab 2 Teorema Pythagoras, Matematika untuk SMP/MTs Kelas VIII (Kemdikbud, 2022), hlm. 45-63 — bukan kutipan langsung."
+    },
+    {
+      "id": "pythagoras-tripel-1",
+      "grade": 8,
+      "topicStableKey": "teorema-pythagoras",
+      "difficulty": "sedang",
+      "stem_md": "Apakah 7 cm, 24 cm, dan 25 cm merupakan tripel Pythagoras?",
+      "options": [
+        { "label": "A", "text_md": "Ya, karena $7^2 + 24^2 = 25^2$" },
+        { "label": "B", "text_md": "Tidak, karena $7^2 + 24^2 \\neq 25^2$" },
+        { "label": "C", "text_md": "Ya, tetapi hanya untuk segitiga tumpul" },
+        { "label": "D", "text_md": "Tidak dapat ditentukan tanpa gambar" }
+      ],
+      "correctLabel": "A",
+      "answer": { "display_md": "Ya, karena $7^2 + 24^2 = 25^2$", "machine": "true" },
+      "sourceRef": "Ditulis mengikuti gaya soal Bab 2.B Tripel Pythagoras, Matematika untuk SMP/MTs Kelas VIII (Kemdikbud, 2022), hlm. 64-75 — bukan kutipan langsung."
+    },
+    {
+      "id": "garis-sudut-pelurus-1",
+      "grade": 8,
+      "topicStableKey": "garis-dan-sudut",
+      "difficulty": "mudah",
+      "stem_md": "Dua garis sejajar dipotong oleh sebuah garis transversal. Salah satu sudut yang terbentuk besarnya $65°$. Tentukan besar sudut yang berpelurus (bersuplemen) dengan sudut tersebut.",
+      "options": [
+        { "label": "A", "text_md": "$25°$" },
+        { "label": "B", "text_md": "$35°$" },
+        { "label": "C", "text_md": "$65°$" },
+        { "label": "D", "text_md": "$115°$" }
+      ],
+      "correctLabel": "D",
+      "answer": { "display_md": "$115°$", "machine": "115" },
+      "sourceRef": "data/curriculum/grade-8-v1.json, topik garis-dan-sudut; soal orisinal berdasarkan sifat sudut berpelurus."
+    },
+    {
+      "id": "lingkaran-luas-1",
+      "grade": 8,
+      "topicStableKey": "lingkaran",
+      "difficulty": "mudah",
+      "stem_md": "Sebuah lingkaran berjari-jari 7 cm. Tentukan luas lingkaran tersebut (gunakan $\\pi = \\frac{22}{7}$).",
+      "options": [
+        { "label": "A", "text_md": "$44 \\text{ cm}^2$" },
+        { "label": "B", "text_md": "$154 \\text{ cm}^2$" },
+        { "label": "C", "text_md": "$308 \\text{ cm}^2$" },
+        { "label": "D", "text_md": "$49 \\text{ cm}^2$" }
+      ],
+      "correctLabel": "B",
+      "answer": { "display_md": "$154 \\text{ cm}^2$", "machine": "154" },
+      "sourceRef": "data/curriculum/grade-8-v1.json, topik lingkaran; soal orisinal."
+    },
+    {
+      "id": "statistika-mean-median-modus-1",
+      "grade": 8,
+      "topicStableKey": "statistika",
+      "difficulty": "sedang",
+      "stem_md": "Data nilai ulangan 8 siswa: 3, 5, 5, 5, 7, 8, 9, 10. Tentukan mean (rata-rata), median, dan modus dari data tersebut.",
+      "options": [
+        { "label": "A", "text_md": "Mean $= 6{,}5$; median $= 6$; modus $= 5$" },
+        { "label": "B", "text_md": "Mean $= 6$; median $= 6{,}5$; modus $= 5$" },
+        { "label": "C", "text_md": "Mean $= 6{,}5$; median $= 5$; modus $= 6$" },
+        { "label": "D", "text_md": "Mean $= 7$; median $= 6$; modus $= 5$" }
+      ],
+      "correctLabel": "A",
+      "answer": {
+        "display_md": "Mean $= 6{,}5$; median $= 6$; modus $= 5$",
+        "machine": "mean=6.5;median=6;modus=5"
+      },
+      "sourceRef": "Ditulis mengikuti gaya soal Bab 6 Statistika, Matematika untuk SMP/MTs Kelas VIII (Kemdikbud, 2022) — bukan kutipan langsung."
+    }
+  ]
+}

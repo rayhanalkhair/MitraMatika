@@ -1,0 +1,190 @@
+{
+  "type": "diff",
+  "version": "9",
+  "dialect": "postgres",
+  "id": "2b88efb6-d4d9-4f8f-b195-8ff666bd8433",
+  "prevIds": ["7d435cae-5a5d-4501-9d7b-72fc22f4211e"],
+  "footprints": [
+    {
+      "statementType": "add_unique",
+      "statementTarget": ["table", "public", "material_pages"],
+      "writes": [
+        "s|uq|public.material_pages.material_pages_id_material_owner_unique",
+        "n|uq|public.material_pages.material_pages_id_material_owner_unique",
+        "e|uq|public.material_pages.material_pages_id_material_owner_unique",
+        "n|con|public.material_pages.material_pages_id_material_owner_unique",
+        "n|rel|public.material_pages_id_material_owner_unique"
+      ],
+      "reads": [
+        "n|tbl|public.material_pages",
+        "n|sch|public",
+        "n|col|public.material_pages.id",
+        "n|col|public.material_pages.material_id",
+        "n|col|public.material_pages.owner_id"
+      ]
+    },
+    {
+      "statementType": "add_check",
+      "statementTarget": ["table", "public", "question_sources"],
+      "writes": [
+        "s|ck|public.question_sources.question_sources_material_pair_check",
+        "n|ck|public.question_sources.question_sources_material_pair_check",
+        "e|ck|public.question_sources.question_sources_material_pair_check",
+        "n|con|public.question_sources.question_sources_material_pair_check"
+      ],
+      "reads": [
+        "n|tbl|public.question_sources",
+        "n|sch|public",
+        "n|col|public.question_sources.material_id",
+        "n|col|public.question_sources.material_page_id",
+        "n|col|public.question_sources.section_id"
+      ]
+    },
+    {
+      "statementType": "add_check",
+      "statementTarget": ["table", "public", "folders"],
+      "writes": [
+        "s|ck|public.folders.folders_name_check",
+        "n|ck|public.folders.folders_name_check",
+        "e|ck|public.folders.folders_name_check",
+        "n|con|public.folders.folders_name_check"
+      ],
+      "reads": ["n|tbl|public.folders", "n|sch|public", "n|col|public.folders.name"]
+    },
+    {
+      "statementType": "add_check",
+      "statementTarget": ["table", "public", "material_sections"],
+      "writes": [
+        "s|ck|public.material_sections.material_sections_title_check",
+        "n|ck|public.material_sections.material_sections_title_check",
+        "e|ck|public.material_sections.material_sections_title_check",
+        "n|con|public.material_sections.material_sections_title_check"
+      ],
+      "reads": [
+        "n|tbl|public.material_sections",
+        "n|sch|public",
+        "n|col|public.material_sections.title"
+      ]
+    },
+    {
+      "statementType": "add_check",
+      "statementTarget": ["table", "public", "materials"],
+      "writes": [
+        "s|ck|public.materials.materials_title_check",
+        "n|ck|public.materials.materials_title_check",
+        "e|ck|public.materials.materials_title_check",
+        "n|con|public.materials.materials_title_check"
+      ],
+      "reads": ["n|tbl|public.materials", "n|sch|public", "n|col|public.materials.title"]
+    },
+    {
+      "statementType": "add_check",
+      "statementTarget": ["table", "public", "solver_solutions"],
+      "writes": [
+        "s|ck|public.solver_solutions.solver_solutions_method_label_check",
+        "n|ck|public.solver_solutions.solver_solutions_method_label_check",
+        "e|ck|public.solver_solutions.solver_solutions_method_label_check",
+        "n|con|public.solver_solutions.solver_solutions_method_label_check"
+      ],
+      "reads": [
+        "n|tbl|public.solver_solutions",
+        "n|sch|public",
+        "n|col|public.solver_solutions.method_label"
+      ]
+    },
+    {
+      "statementType": "alter_policy",
+      "statementTarget": ["table", "public", "folders"],
+      "writes": ["s|pol|public.folders.folders_owner_update"],
+      "reads": ["n|tbl|public.folders", "n|sch|public", "n|role|authenticated"],
+      "sqlHash": "47178d353886046b"
+    },
+    {
+      "statementType": "alter_policy",
+      "statementTarget": ["table", "public", "materials"],
+      "writes": ["s|pol|public.materials.materials_owner_update"],
+      "reads": ["n|tbl|public.materials", "n|sch|public", "n|role|authenticated"],
+      "sqlHash": "00572fcd9bdb1232"
+    }
+  ],
+  "deltas": [
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "material_pages",
+        "name": "material_pages_id_material_owner_unique",
+        "nameExplicit": true,
+        "columns": ["id", "material_id", "owner_id"],
+        "nullsNotDistinct": false,
+        "entityType": "uniques"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "question_sources",
+        "name": "question_sources_material_pair_check",
+        "value": "\"material_id\" is not null or (\"material_page_id\" is null and \"section_id\" is null)",
+        "entityType": "checks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "folders",
+        "name": "folders_name_check",
+        "value": "btrim(\"name\") <> ''",
+        "entityType": "checks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "material_sections",
+        "name": "material_sections_title_check",
+        "value": "btrim(\"title\") <> ''",
+        "entityType": "checks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "materials",
+        "name": "materials_title_check",
+        "value": "btrim(\"title\") <> ''",
+        "entityType": "checks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "solver_solutions",
+        "name": "solver_solutions_method_label_check",
+        "value": "btrim(\"method_label\") <> ''",
+        "entityType": "checks"
+      }
+    },
+    {
+      "op": "alter",
+      "key": "policies\u0000[\"public\",\"folders\",\"folders_owner_update\"]",
+      "set": {
+        "using": "\"folders\".\"owner_id\" = auth.uid() and \"folders\".\"deleted_at\" is null",
+        "withCheck": "\"folders\".\"owner_id\" = auth.uid() and \"folders\".\"deleted_at\" is null"
+      }
+    },
+    {
+      "op": "alter",
+      "key": "policies\u0000[\"public\",\"materials\",\"materials_owner_update\"]",
+      "set": {
+        "using": "\"materials\".\"owner_id\" = auth.uid() and \"materials\".\"deleted_at\" is null",
+        "withCheck": "\"materials\".\"owner_id\" = auth.uid() and \"materials\".\"deleted_at\" is null"
+      }
+    }
+  ]
+}

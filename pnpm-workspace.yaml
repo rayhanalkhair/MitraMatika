@@ -1,0 +1,24 @@
+allowBuilds:
+  esbuild: true
+  unrs-resolver: false
+  "@parcel/watcher": false
+  "@swc/core": false
+# pdfjs-dist's optional @napi-rs/canvas (1.1.x) is for rendering in Node; the app renders PDFs in
+# the browser only. The test suite's own @napi-rs/canvas (devDependency) is unaffected.
+ignoredOptionalDependencies:
+  - "@napi-rs/canvas"
+minimumReleaseAgeExclude:
+  - "@better-auth/core@1.7.25"
+  - "@better-auth/drizzle-adapter@1.7.25"
+  - "@better-auth/kysely-adapter@1.7.25"
+  - "@better-auth/memory-adapter@1.7.25"
+  - "@better-auth/mongo-adapter@1.7.25"
+  - "@better-auth/prisma-adapter@1.7.25"
+  - "@better-auth/telemetry@1.7.25"
+  - better-auth@1.7.25
+auditConfig:
+  ignoreGhsas:
+    # picomatch ReDoS, no patched release exists. Reached only through
+    # next-intl > @parcel/watcher, whose native build is disabled here (allowBuilds)
+    # and which only matches the app's own file globs, never user input.
+    - GHSA-fc5q-39xc-vjpf

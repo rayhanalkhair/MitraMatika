@@ -1,0 +1,37 @@
+{
+  "type": "diff",
+  "version": "9",
+  "dialect": "postgres",
+  "id": "05d6d069-7b8b-41ad-9ae4-f2cbcaf66922",
+  "prevIds": ["2a38b08e-3082-433f-9288-34ca5ef53e4f"],
+  "footprints": [
+    {
+      "statementType": "add_column",
+      "statementTarget": ["column", "public", "material_uploads", "cancelled_at"],
+      "writes": [
+        "s|col|public.material_uploads.cancelled_at",
+        "n|col|public.material_uploads.cancelled_at",
+        "e|col|public.material_uploads.cancelled_at"
+      ],
+      "reads": ["n|tbl|public.material_uploads", "n|sch|public"]
+    }
+  ],
+  "deltas": [
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "material_uploads",
+        "name": "cancelled_at",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    }
+  ]
+}

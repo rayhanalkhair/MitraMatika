@@ -1,0 +1,1 @@
+ALTER TABLE "solver_sessions" ADD COLUMN "photo_sweep_attempted_at" timestamp with time zone;

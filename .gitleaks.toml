@@ -1,0 +1,14 @@
+title = "MitraMatika gitleaks config"
+
+[extend]
+useDefault = true
+
+# Test files that hold made-up credentials (to test redaction and secret
+# detection). They are not real secrets.
+[allowlist]
+description = "fake credentials in tests"
+paths = [
+  '''src/features/materials/test-support\.ts''',
+  '''src/lib/logger\.test\.ts''',
+  '''src/features/export/service/render-pdf\.test\.ts''',
+]

@@ -1,0 +1,46 @@
+# Manually triggered smoke test: REAL Groq calls (a few thousand free-tier tokens) as a throwaway
+# user against the STAGING database. Never runs on push or pull request, never in
+# production. It uses the secrets DATABASE_URL and GROQ_API_KEY of the staging project: repository
+# secrets on the GitHub Free plan with a private repository (the owner's decision of 2026-11-16),
+# where environments cannot have protection rules; keep the `environment: staging` line so they
+# can be used if the plan ever allows them. This workflow deliberately has no branch guard of its
+# own, because staging may be exercised from a feature branch; the owner is the only writer.
+name: Staging smoke
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: 'Type "staging" to confirm this runs against the STAGING project'
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: staging-smoke
+  cancel-in-progress: false
+
+jobs:
+  smoke:
+    if: ${{ inputs.confirm == 'staging' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    environment: staging
+    env:
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      # The script itself asserts that no job is queued or running and cleans up its throwaway user.
+      # Vercel Cron runs only on production deployments against the production database, so
+      # nothing else claims staging jobs; if a production deployment ever points at the staging
+      # database, disable its cron in Vercel, Settings, Cron Jobs.
+      - run: pnpm test:generation:staging --confirm-staging

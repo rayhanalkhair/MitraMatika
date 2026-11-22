@@ -1,0 +1,107 @@
+{
+  "type": "diff",
+  "version": "9",
+  "dialect": "postgres",
+  "id": "af994323-2084-450b-bc6b-6e5cd6d24a07",
+  "prevIds": ["91560815-7275-4338-a658-553fdf4de6b8"],
+  "footprints": [
+    {
+      "statementType": "add_column",
+      "statementTarget": ["column", "public", "question_versions", "difficulty"],
+      "writes": [
+        "s|col|public.question_versions.difficulty",
+        "n|col|public.question_versions.difficulty",
+        "e|col|public.question_versions.difficulty"
+      ],
+      "reads": ["n|tbl|public.question_versions", "n|sch|public"]
+    },
+    {
+      "statementType": "alter_column",
+      "statementTarget": ["column", "public", "deletion_log", "owner_id"],
+      "writes": ["s|colprop|public.deletion_log.owner_id.notNull"],
+      "reads": [
+        "n|tbl|public.deletion_log",
+        "n|sch|public",
+        "n|col|public.deletion_log.owner_id"
+      ],
+      "sqlHash": "936d8c5c4c617ac2"
+    },
+    {
+      "statementType": "recreate_fk",
+      "statementTarget": ["table", "public", "deletion_log"],
+      "writes": [
+        "s|fk|public.deletion_log.deletion_log_owner_id_profiles_id_fkey",
+        "n|fk|public.deletion_log.deletion_log_owner_id_profiles_id_fkey",
+        "e|fk|public.deletion_log.deletion_log_owner_id_profiles_id_fkey",
+        "n|con|public.deletion_log.deletion_log_owner_id_profiles_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.deletion_log",
+        "n|sch|public",
+        "n|tbl|public.profiles",
+        "n|sch|public",
+        "n|col|public.deletion_log.owner_id",
+        "n|col|public.profiles.id",
+        "e|uniqueness|public.profiles.id"
+      ],
+      "sqlHash": "1b94d1043f70fdc6"
+    },
+    {
+      "statementType": "add_check",
+      "statementTarget": ["table", "public", "question_versions"],
+      "writes": [
+        "s|ck|public.question_versions.question_versions_difficulty_check",
+        "n|ck|public.question_versions.question_versions_difficulty_check",
+        "e|ck|public.question_versions.question_versions_difficulty_check",
+        "n|con|public.question_versions.question_versions_difficulty_check"
+      ],
+      "reads": [
+        "n|tbl|public.question_versions",
+        "n|sch|public",
+        "n|col|public.question_versions.difficulty"
+      ]
+    }
+  ],
+  "deltas": [
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "question_versions",
+        "name": "difficulty",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "question_versions",
+        "name": "question_versions_difficulty_check",
+        "value": "\"difficulty\" in ('mudah', 'sedang', 'sulit')",
+        "entityType": "checks"
+      }
+    },
+    {
+      "op": "alter",
+      "key": "columns\u0000[\"public\",\"deletion_log\",\"owner_id\"]",
+      "set": {
+        "notNull": false
+      }
+    },
+    {
+      "op": "alter",
+      "key": "fks\u0000[\"public\",\"deletion_log\",\"deletion_log_owner_id_profiles_id_fkey\"]",
+      "set": {
+        "onDelete": "SET NULL"
+      }
+    }
+  ]
+}

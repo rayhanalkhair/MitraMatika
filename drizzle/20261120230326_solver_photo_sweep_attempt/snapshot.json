@@ -1,0 +1,42 @@
+{
+  "type": "diff",
+  "version": "9",
+  "dialect": "postgres",
+  "id": "94ea8733-d7b6-4e38-b3f1-5992fbaefa49",
+  "prevIds": ["05d6d069-7b8b-41ad-9ae4-f2cbcaf66922"],
+  "footprints": [
+    {
+      "statementType": "add_column",
+      "statementTarget": [
+        "column",
+        "public",
+        "solver_sessions",
+        "photo_sweep_attempted_at"
+      ],
+      "writes": [
+        "s|col|public.solver_sessions.photo_sweep_attempted_at",
+        "n|col|public.solver_sessions.photo_sweep_attempted_at",
+        "e|col|public.solver_sessions.photo_sweep_attempted_at"
+      ],
+      "reads": ["n|tbl|public.solver_sessions", "n|sch|public"]
+    }
+  ],
+  "deltas": [
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "solver_sessions",
+        "name": "photo_sweep_attempted_at",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    }
+  ]
+}

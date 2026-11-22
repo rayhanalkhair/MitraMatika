@@ -1,0 +1,208 @@
+{
+  "version": {
+    "code": "kurikulum-merdeka-fase-d-2025",
+    "title": "Kurikulum Merdeka - Capaian Pembelajaran Fase D (2025)",
+    "sourceTitle": "Keputusan Kepala BSKAP Nomor 046/H/KR/2025 tentang Capaian Pembelajaran pada Pendidikan Anak Usia Dini, Jenjang Pendidikan Dasar, dan Jenjang Pendidikan Menengah pada Kurikulum Merdeka",
+    "sourceUrl": "https://guru.kemendikdasmen.go.id/kurikulum/referensi-penerapan/capaian-pembelajaran/sd-sma/matematika/fase-d/",
+    "decreeRef": "BSKAP 046/H/KR/2025, ditetapkan 16 Juli 2025; tidak terdampak oleh perubahan BKPDM 020/2026 (hanya mengubah CP Pendidikan Agama dan Budi Pekerti)",
+    "publishedOn": "2025-07-16",
+    "retrievedOn": "2026-09-23"
+  },
+  "elements": [
+    {
+      "code": "bilangan",
+      "name": "Bilangan",
+      "outcomeText": "Membaca, menulis, membandingkan, dan mengoperasikan bilangan bulat, bilangan rasional dan irasional, bilangan desimal, bilangan berpangkat bulat dan bentuk akar, serta notasi ilmiah; menerapkan rasio, skala, proporsi, dan laju perubahan pada masalah kontekstual."
+    },
+    {
+      "code": "aljabar",
+      "name": "Aljabar",
+      "outcomeText": "Mengenali dan memperluas pola, menyatakan situasi ke dalam bentuk aljabar, memahami relasi dan fungsi (domain, kodomain, range) dalam berbagai representasi termasuk membedakan grafik linear dan non-linear, serta menyelesaikan persamaan/pertidaksamaan linear satu variabel dan sistem persamaan linear dua variabel."
+    },
+    {
+      "code": "pengukuran",
+      "name": "Pengukuran",
+      "outcomeText": "Menjelaskan dan menghitung keliling, luas, serta unsur sudut pusat/juring pada lingkaran, luas permukaan dan volume prisma, tabung, bola, limas, dan kerucut, serta pengaruh perubahan skala terhadap panjang, sudut, luas, dan volume."
+    },
+    {
+      "code": "geometri",
+      "name": "Geometri",
+      "outcomeText": "Membuat dan membaca jaring-jaring bangun ruang, menjelaskan hubungan sudut pada garis berpotongan dan garis sejajar dipotong garis transversal, kekongruenan dan kesebangunan segitiga dan segiempat, teorema Pythagoras, serta transformasi tunggal (refleksi, translasi, rotasi, dilatasi) pada bidang kartesius."
+    },
+    {
+      "code": "data-peluang",
+      "name": "Analisis Data dan Peluang",
+      "outcomeText": "Merumuskan pertanyaan, mengumpulkan dan menyajikan data melalui diagram batang dan lingkaran, memahami sampel yang representatif, menentukan mean/median/modus/jangkauan, serta menjelaskan peluang empirik dan teoretik."
+    }
+  ],
+  "topics": [
+    {
+      "stableKey": "bilangan-berpangkat-dan-bentuk-akar",
+      "grade": 8,
+      "elementCode": "bilangan",
+      "title": "Bilangan Berpangkat, Bentuk Akar, dan Notasi Ilmiah",
+      "scopeNotes": "Operasi bilangan berpangkat bulat, bentuk akar, dan penulisan bilangan sangat besar/kecil dalam notasi ilmiah.",
+      "sourceRef": "CP Matematika Fase D (BSKAP 046/H/KR/2025), elemen Bilangan; posisi sebagai bab pembuka Kelas VIII dikuatkan oleh kedua sumber sekunder pada docs/research/curriculum-sources.md - perlu dicocokkan dengan buku cetak.",
+      "sortOrder": 1,
+      "objectives": [
+        {
+          "code": "TP-08-BIL-01",
+          "text": "Peserta didik dapat menyederhanakan dan mengoperasikan bilangan berpangkat bulat serta bentuk akar.",
+          "sourceRef": "Disarikan penulis dari elemen Bilangan, CP Fase D (BSKAP 046/H/KR/2025) - bukan kutipan ATP resmi bernomor."
+        },
+        {
+          "code": "TP-08-BIL-02",
+          "text": "Peserta didik dapat menuliskan dan membandingkan bilangan dalam notasi ilmiah.",
+          "sourceRef": "Disarikan penulis dari elemen Bilangan, CP Fase D (BSKAP 046/H/KR/2025) - bukan kutipan ATP resmi bernomor."
+        }
+      ]
+    },
+    {
+      "stableKey": "sistem-persamaan-linear-dua-variabel",
+      "grade": 8,
+      "elementCode": "aljabar",
+      "title": "Sistem Persamaan Linear Dua Variabel (SPLDV)",
+      "scopeNotes": "Menyusun dan menyelesaikan sistem dua persamaan linear dua variabel dengan metode substitusi, eliminasi, dan grafik.",
+      "sourceRef": "CP Matematika Fase D (BSKAP 046/H/KR/2025), elemen Aljabar; disebutkan pada ringkasan bab wirahadie.com pada docs/research/curriculum-sources.md - perlu dicocokkan dengan buku cetak.",
+      "sortOrder": 2,
+      "objectives": [
+        {
+          "code": "TP-08-ALJ-01",
+          "text": "Peserta didik dapat menyusun sistem persamaan linear dua variabel dari masalah kontekstual.",
+          "sourceRef": "Disarikan penulis dari elemen Aljabar, CP Fase D (BSKAP 046/H/KR/2025) - bukan kutipan ATP resmi bernomor."
+        },
+        {
+          "code": "TP-08-ALJ-02",
+          "text": "Peserta didik dapat menyelesaikan sistem persamaan linear dua variabel dengan metode substitusi dan eliminasi.",
+          "sourceRef": "Disarikan penulis dari elemen Aljabar, CP Fase D (BSKAP 046/H/KR/2025) - bukan kutipan ATP resmi bernomor."
+        }
+      ]
+    },
+    {
+      "stableKey": "relasi-fungsi-dan-persamaan-garis-lurus",
+      "grade": 8,
+      "elementCode": "aljabar",
+      "title": "Relasi, Fungsi, dan Persamaan Garis Lurus",
+      "scopeNotes": "Relasi dan fungsi antar dua himpunan (domain, kodomain, range), serta gradien dan persamaan garis lurus.",
+      "sourceRef": "CP Matematika Fase D (BSKAP 046/H/KR/2025), elemen Aljabar; disebutkan pada ringkasan bab wirahadie.com pada docs/research/curriculum-sources.md - perlu dicocokkan dengan buku cetak.",
+      "sortOrder": 3,
+      "objectives": [
+        {
+          "code": "TP-08-ALJ-03",
+          "text": "Peserta didik dapat membedakan relasi yang merupakan fungsi dan menyatakannya dalam berbagai representasi.",
+          "sourceRef": "Disarikan penulis dari elemen Aljabar, CP Fase D (BSKAP 046/H/KR/2025) - bukan kutipan ATP resmi bernomor."
+        },
+        {
+          "code": "TP-08-ALJ-04",
+          "text": "Peserta didik dapat menentukan gradien dan menyusun persamaan garis lurus.",
+          "sourceRef": "Disarikan penulis dari elemen Aljabar, CP Fase D (BSKAP 046/H/KR/2025) - bukan kutipan ATP resmi bernomor."
+        }
+      ]
+    },
+    {
+      "stableKey": "teorema-pythagoras",
+      "grade": 8,
+      "elementCode": "geometri",
+      "title": "Teorema Pythagoras",
+      "scopeNotes": "Menemukan dan membuktikan teorema Pythagoras, tripel Pythagoras, serta penerapannya pada segitiga siku-siku dan jarak dua titik.",
+      "sourceRef": "CP Matematika Fase D (BSKAP 046/H/KR/2025), elemen Geometri; disebutkan konsisten pada kedua sumber sekunder pada docs/research/curriculum-sources.md. Kandidat topik irisan vertikal (B22, implementation-plan.md) - menunggu validasi P0-12 dan keputusan D-024 (decision-log.md), belum final. Urutan bab (sortOrder) mengikuti satu sumber saja, lihat catatan urutan bab yang bertentangan di curriculum-sources.md §3.",
+      "sortOrder": 4,
+      "objectives": [
+        {
+          "code": "TP-08-GEO-01",
+          "text": "Peserta didik dapat menjelaskan dan membuktikan teorema Pythagoras.",
+          "sourceRef": "Disarikan penulis dari elemen Geometri, CP Fase D (BSKAP 046/H/KR/2025) - bukan kutipan ATP resmi bernomor."
+        },
+        {
+          "code": "TP-08-GEO-02",
+          "text": "Peserta didik dapat menerapkan teorema Pythagoras untuk menghitung sisi segitiga siku-siku dan jarak dua titik.",
+          "sourceRef": "Disarikan penulis dari elemen Geometri, CP Fase D (BSKAP 046/H/KR/2025) - bukan kutipan ATP resmi bernomor."
+        }
+      ]
+    },
+    {
+      "stableKey": "garis-dan-sudut",
+      "grade": 8,
+      "elementCode": "geometri",
+      "title": "Garis dan Sudut",
+      "scopeNotes": "Hubungan antar sudut pada dua garis sejajar yang dipotong garis transversal, serta kekongruenan dan kesebangunan bangun datar.",
+      "sourceRef": "CP Matematika Fase D (BSKAP 046/H/KR/2025), elemen Geometri; disebutkan pada ringkasan bab wirahadie.com pada docs/research/curriculum-sources.md - perlu dicocokkan dengan buku cetak.",
+      "sortOrder": 5,
+      "objectives": [
+        {
+          "code": "TP-08-GEO-03",
+          "text": "Peserta didik dapat menentukan hubungan sudut pada dua garis sejajar yang dipotong garis transversal.",
+          "sourceRef": "Disarikan penulis dari elemen Geometri, CP Fase D (BSKAP 046/H/KR/2025) - bukan kutipan ATP resmi bernomor."
+        },
+        {
+          "code": "TP-08-GEO-04",
+          "text": "Peserta didik dapat menjelaskan syarat kekongruenan dan kesebangunan pada segitiga dan segiempat.",
+          "sourceRef": "Disarikan penulis dari elemen Geometri, CP Fase D (BSKAP 046/H/KR/2025) - bukan kutipan ATP resmi bernomor."
+        }
+      ]
+    },
+    {
+      "stableKey": "lingkaran",
+      "grade": 8,
+      "elementCode": "pengukuran",
+      "title": "Lingkaran",
+      "scopeNotes": "Keliling dan luas lingkaran, hubungan sudut pusat dan sudut keliling, serta panjang busur dan luas juring.",
+      "sourceRef": "CP Matematika Fase D (BSKAP 046/H/KR/2025), elemen Pengukuran; disebutkan pada ringkasan bab wirahadie.com pada docs/research/curriculum-sources.md - perlu dicocokkan dengan buku cetak.",
+      "sortOrder": 6,
+      "objectives": [
+        {
+          "code": "TP-08-PGK-01",
+          "text": "Peserta didik dapat menghitung keliling dan luas lingkaran.",
+          "sourceRef": "Disarikan penulis dari elemen Pengukuran, CP Fase D (BSKAP 046/H/KR/2025) - bukan kutipan ATP resmi bernomor."
+        },
+        {
+          "code": "TP-08-PGK-02",
+          "text": "Peserta didik dapat menghitung panjang busur dan luas juring menggunakan hubungan sudut pusat.",
+          "sourceRef": "Disarikan penulis dari elemen Pengukuran, CP Fase D (BSKAP 046/H/KR/2025) - bukan kutipan ATP resmi bernomor."
+        }
+      ]
+    },
+    {
+      "stableKey": "statistika",
+      "grade": 8,
+      "elementCode": "data-peluang",
+      "title": "Statistika: Penyajian dan Ukuran Pemusatan Data",
+      "scopeNotes": "Mengumpulkan, menyajikan data dalam diagram batang/lingkaran, serta menentukan mean, median, modus, dan jangkauan.",
+      "sourceRef": "CP Matematika Fase D (BSKAP 046/H/KR/2025), elemen Analisis Data dan Peluang; disebutkan pada ringkasan bab wirahadie.com pada docs/research/curriculum-sources.md - perlu dicocokkan dengan buku cetak.",
+      "sortOrder": 7,
+      "objectives": [
+        {
+          "code": "TP-08-STA-01",
+          "text": "Peserta didik dapat menyajikan data dalam diagram batang dan diagram lingkaran.",
+          "sourceRef": "Disarikan penulis dari elemen Analisis Data dan Peluang, CP Fase D (BSKAP 046/H/KR/2025) - bukan kutipan ATP resmi bernomor."
+        },
+        {
+          "code": "TP-08-STA-02",
+          "text": "Peserta didik dapat menentukan mean, median, modus, dan jangkauan suatu kumpulan data.",
+          "sourceRef": "Disarikan penulis dari elemen Analisis Data dan Peluang, CP Fase D (BSKAP 046/H/KR/2025) - bukan kutipan ATP resmi bernomor."
+        }
+      ]
+    },
+    {
+      "stableKey": "peluang",
+      "grade": 8,
+      "elementCode": "data-peluang",
+      "title": "Peluang",
+      "scopeNotes": "Peluang empirik dan teoretik suatu kejadian pada percobaan sederhana.",
+      "sourceRef": "CP Matematika Fase D (BSKAP 046/H/KR/2025), elemen Analisis Data dan Peluang; disebutkan pada ringkasan bab wirahadie.com pada docs/research/curriculum-sources.md - perlu dicocokkan dengan buku cetak.",
+      "sortOrder": 8,
+      "objectives": [
+        {
+          "code": "TP-08-PEL-01",
+          "text": "Peserta didik dapat menentukan peluang empirik suatu kejadian dari data percobaan.",
+          "sourceRef": "Disarikan penulis dari elemen Analisis Data dan Peluang, CP Fase D (BSKAP 046/H/KR/2025) - bukan kutipan ATP resmi bernomor."
+        },
+        {
+          "code": "TP-08-PEL-02",
+          "text": "Peserta didik dapat menentukan peluang teoretik suatu kejadian dan membandingkannya dengan peluang empirik.",
+          "sourceRef": "Disarikan penulis dari elemen Analisis Data dan Peluang, CP Fase D (BSKAP 046/H/KR/2025) - bukan kutipan ATP resmi bernomor."
+        }
+      ]
+    }
+  ]
+}

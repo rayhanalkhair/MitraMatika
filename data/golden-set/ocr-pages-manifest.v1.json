@@ -1,0 +1,75 @@
+{
+  "version": "golden-ocr-pages-v1",
+  "items": [
+    {
+      "id": "ocr-text-pdf-bilangan-berpangkat-1",
+      "kind": "text_pdf",
+      "pageNumber": 30,
+      "sha256": "412f55d36d0003fdceea5d5a479e0039eef87ba5aeda411f95f06867a8811f59",
+      "sourceRef": "Matematika untuk SMP/MTs Kelas VIII (Kemdikbud, 2022), ISBN 978-602-427-919-6, hlm. 10 (Ayo Berlatih, Bab 1.A)"
+    },
+    {
+      "id": "ocr-text-pdf-tripel-pythagoras-1",
+      "kind": "text_pdf",
+      "pageNumber": 87,
+      "sha256": "c69637c4850a981b1da78727f4719dc24d4e0239bc0ed1c00f316b5cf01de9e2",
+      "sourceRef": "Matematika untuk SMP/MTs Kelas VIII (Kemdikbud, 2022), ISBN 978-602-427-919-6, hlm. 67 (Ayo Mencoba, Bab 2.B)"
+    },
+    {
+      "id": "ocr-text-pdf-persamaan-linier-1",
+      "kind": "text_pdf",
+      "pageNumber": 130,
+      "sha256": "3538278acf14b72c9f037028b8d8a83920154676526d37cfd843c56ff841cadb",
+      "sourceRef": "Matematika untuk SMP/MTs Kelas VIII (Kemdikbud, 2022), ISBN 978-602-427-919-6, hlm. 110 (Contoh 3.3, Bab 3.A)"
+    },
+    {
+      "id": "ocr-scan-bilangan-berpangkat-definisi-1",
+      "kind": "scan",
+      "pageNumber": 28,
+      "sha256": "b4713f25c7d0857ff428a9c67518eec03fd2ed98df0c448602c7d3a1bf1f29fc",
+      "sourceRef": "Matematika untuk SMP/MTs Kelas VIII (Kemdikbud, 2022), ISBN 978-602-427-919-6, hlm. 8 (Bab 1.A)"
+    },
+    {
+      "id": "ocr-scan-kebalikan-pythagoras-1",
+      "kind": "scan",
+      "pageNumber": 85,
+      "sha256": "942c0b574fe83d85ca32da814eca36555bc6eeceff4c85fb41b4560884c4cc35",
+      "sourceRef": "Matematika untuk SMP/MTs Kelas VIII (Kemdikbud, 2022), ISBN 978-602-427-919-6, hlm. 65 (Bab 2.B)"
+    },
+    {
+      "id": "ocr-scan-himpunan-penyelesaian-1",
+      "kind": "scan",
+      "pageNumber": 128,
+      "sha256": "befc57d74bfdc9278889179c43f9c687bfc2b0f673af3ad22b9e2c01e6cc0918",
+      "sourceRef": "Matematika untuk SMP/MTs Kelas VIII (Kemdikbud, 2022), ISBN 978-602-427-919-6, hlm. 108 (Contoh 3.2, Bab 3.A)"
+    },
+    {
+      "id": "ocr-scan-relasi-himpunan-1",
+      "kind": "scan",
+      "pageNumber": 165,
+      "sha256": "1d08f99e921be64d9f49c393719721e8f6d32920835e4db6e72cec292fe31ed2",
+      "sourceRef": "Matematika untuk SMP/MTs Kelas VIII (Kemdikbud, 2022), ISBN 978-602-427-919-6, hlm. 145 (Contoh 4.3, Bab 4)"
+    },
+    {
+      "id": "ocr-scan-garis-lurus-contoh-1",
+      "kind": "scan",
+      "pageNumber": 234,
+      "sha256": "9d9e74b411f39649d4fe8ba278961a75dbd6a0f067aafb0ffb4a6b7c98406715",
+      "sourceRef": "Matematika untuk SMP/MTs Kelas VIII (Kemdikbud, 2022), ISBN 978-602-427-919-6, hlm. 214 (Contoh 5.1, Bab 5.A)"
+    },
+    {
+      "id": "ocr-scan-statistika-median-1",
+      "kind": "scan",
+      "pageNumber": 283,
+      "sha256": "06ba2013ee11dbf2ec46540494263638e915de50c4beb3583de66c8b0a50770b",
+      "sourceRef": "Matematika untuk SMP/MTs Kelas VIII (Kemdikbud, 2022), ISBN 978-602-427-919-6, hlm. 263 (Bab 6.B)"
+    },
+    {
+      "id": "ocr-phone-photo-kubus-berpangkat-1",
+      "kind": "phone_photo",
+      "pageNumber": 26,
+      "sha256": "70f6a7704ebebbd477c889abc987f1a254de8e00c3e56a45fc6d84ff04f6edf5",
+      "sourceRef": "Matematika untuk SMP/MTs Kelas VIII (Kemdikbud, 2022), ISBN 978-602-427-919-6, hlm. 6 (Bab 1.A)"
+    }
+  ]
+}

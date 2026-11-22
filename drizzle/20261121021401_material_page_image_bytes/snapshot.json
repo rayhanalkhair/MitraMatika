@@ -1,0 +1,37 @@
+{
+  "type": "diff",
+  "version": "9",
+  "dialect": "postgres",
+  "id": "330ca98a-8aa7-41d9-bb28-a6cb9187d0e8",
+  "prevIds": ["94ea8733-d7b6-4e38-b3f1-5992fbaefa49"],
+  "footprints": [
+    {
+      "statementType": "add_column",
+      "statementTarget": ["column", "public", "material_pages", "image_bytes"],
+      "writes": [
+        "s|col|public.material_pages.image_bytes",
+        "n|col|public.material_pages.image_bytes",
+        "e|col|public.material_pages.image_bytes"
+      ],
+      "reads": ["n|tbl|public.material_pages", "n|sch|public"]
+    }
+  ],
+  "deltas": [
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "material_pages",
+        "name": "image_bytes",
+        "type": "integer",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    }
+  ]
+}

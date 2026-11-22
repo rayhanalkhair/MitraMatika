@@ -1,0 +1,3 @@
+ALTER TABLE "audit_log" ALTER COLUMN "owner_id" DROP NOT NULL;--> statement-breakpoint
+ALTER TABLE "audit_log" DROP CONSTRAINT "audit_log_owner_id_profiles_id_fkey", ADD CONSTRAINT "audit_log_owner_id_profiles_id_fkey" FOREIGN KEY ("owner_id") REFERENCES "profiles"("id") ON DELETE SET NULL NOT VALID;--> statement-breakpoint
+ALTER TABLE "audit_log" VALIDATE CONSTRAINT "audit_log_owner_id_profiles_id_fkey";

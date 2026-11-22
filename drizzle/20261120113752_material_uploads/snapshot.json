@@ -1,0 +1,321 @@
+{
+  "type": "diff",
+  "version": "9",
+  "dialect": "postgres",
+  "id": "b44b8ca0-875e-4b67-bced-f8e36669dcae",
+  "prevIds": ["2b88efb6-d4d9-4f8f-b195-8ff666bd8433"],
+  "footprints": [
+    {
+      "statementType": "create_table",
+      "statementTarget": ["table", "public", "material_uploads"],
+      "writes": [
+        "s|tbl|public.material_uploads",
+        "n|tbl|public.material_uploads",
+        "e|tbl|public.material_uploads",
+        "n|rel|public.material_uploads",
+        "n|type|public.material_uploads",
+        "n|rel|public.material_uploads_pkey",
+        "n|rel|public.material_uploads_object_key_unique"
+      ],
+      "reads": ["n|sch|public"]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": [
+        "index",
+        "public",
+        "material_uploads",
+        "material_uploads_owner_expires_idx"
+      ],
+      "writes": [
+        "s|idx|public.material_uploads_owner_expires_idx",
+        "n|idx|public.material_uploads_owner_expires_idx",
+        "e|idx|public.material_uploads_owner_expires_idx",
+        "n|rel|public.material_uploads_owner_expires_idx"
+      ],
+      "reads": [
+        "n|tbl|public.material_uploads",
+        "n|sch|public",
+        "n|col|public.material_uploads.owner_id",
+        "n|col|public.material_uploads.expires_at"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": ["table", "public", "material_uploads"],
+      "writes": [
+        "s|fk|public.material_uploads.material_uploads_owner_id_profiles_id_fkey",
+        "n|fk|public.material_uploads.material_uploads_owner_id_profiles_id_fkey",
+        "e|fk|public.material_uploads.material_uploads_owner_id_profiles_id_fkey",
+        "n|con|public.material_uploads.material_uploads_owner_id_profiles_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.material_uploads",
+        "n|sch|public",
+        "n|tbl|public.profiles",
+        "n|sch|public",
+        "n|col|public.material_uploads.owner_id",
+        "n|col|public.profiles.id",
+        "e|uniqueness|public.profiles.id"
+      ]
+    },
+    {
+      "statementType": "create_policy",
+      "statementTarget": ["table", "public", "material_uploads"],
+      "writes": [
+        "s|pol|public.material_uploads.material_uploads_owner_select",
+        "n|pol|public.material_uploads.material_uploads_owner_select",
+        "e|pol|public.material_uploads.material_uploads_owner_select"
+      ],
+      "reads": [
+        "n|tbl|public.material_uploads",
+        "n|sch|public",
+        "n|role|authenticated",
+        "e|rls|public.material_uploads"
+      ]
+    }
+  ],
+  "deltas": [
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "name": "material_uploads",
+        "isRlsEnabled": true,
+        "entityType": "tables"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "material_uploads",
+        "name": "id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "gen_random_uuid()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "material_uploads",
+        "name": "owner_id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "material_uploads",
+        "name": "object_key",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "material_uploads",
+        "name": "kind",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "material_uploads",
+        "name": "mime",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "material_uploads",
+        "name": "size_bytes",
+        "type": "bigint",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "material_uploads",
+        "name": "expires_at",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "material_uploads",
+        "name": "created_at",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "now()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "material_uploads",
+        "name": "material_uploads_owner_expires_idx",
+        "nameExplicit": true,
+        "columns": [
+          {
+            "value": "owner_id",
+            "isExpression": false,
+            "asc": true,
+            "nullsFirst": false,
+            "opclass": null
+          },
+          {
+            "value": "expires_at",
+            "isExpression": false,
+            "asc": true,
+            "nullsFirst": false,
+            "opclass": null
+          }
+        ],
+        "isUnique": false,
+        "where": null,
+        "with": "",
+        "method": "btree",
+        "concurrently": false,
+        "entityType": "indexes"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "material_uploads",
+        "name": "material_uploads_owner_id_profiles_id_fkey",
+        "nameExplicit": false,
+        "columns": ["owner_id"],
+        "schemaTo": "public",
+        "tableTo": "profiles",
+        "columnsTo": ["id"],
+        "onUpdate": "NO ACTION",
+        "onDelete": "CASCADE",
+        "entityType": "fks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "material_uploads",
+        "name": "material_uploads_pkey",
+        "columns": ["id"],
+        "nameExplicit": false,
+        "entityType": "pks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "material_uploads",
+        "name": "material_uploads_object_key_unique",
+        "nameExplicit": true,
+        "columns": ["object_key"],
+        "nullsNotDistinct": false,
+        "entityType": "uniques"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "material_uploads",
+        "name": "material_uploads_kind_check",
+        "value": "\"kind\" in ('pdf', 'docx', 'image')",
+        "entityType": "checks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "material_uploads",
+        "name": "material_uploads_size_check",
+        "value": "\"size_bytes\" > 0",
+        "entityType": "checks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "material_uploads",
+        "name": "material_uploads_owner_select",
+        "as": "PERMISSIVE",
+        "for": "SELECT",
+        "roles": ["authenticated"],
+        "using": "\"material_uploads\".\"owner_id\" = auth.uid()",
+        "withCheck": null,
+        "entityType": "policies"
+      }
+    }
+  ]
+}

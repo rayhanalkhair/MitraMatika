@@ -1,0 +1,3338 @@
+{
+  "type": "diff",
+  "version": "9",
+  "dialect": "postgres",
+  "id": "fdb23aa4-2af5-41ad-b3d8-57bc824720d4",
+  "prevIds": ["af994323-2084-450b-bc6b-6e5cd6d24a07"],
+  "footprints": [
+    {
+      "statementType": "create_table",
+      "statementTarget": ["table", "public", "assessment_items"],
+      "writes": [
+        "s|tbl|public.assessment_items",
+        "n|tbl|public.assessment_items",
+        "e|tbl|public.assessment_items",
+        "n|rel|public.assessment_items",
+        "n|type|public.assessment_items",
+        "n|rel|public.assessment_items_pkey",
+        "n|rel|public.assessment_items_question_once"
+      ],
+      "reads": ["n|sch|public"]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": ["table", "public", "assessment_sections"],
+      "writes": [
+        "s|tbl|public.assessment_sections",
+        "n|tbl|public.assessment_sections",
+        "e|tbl|public.assessment_sections",
+        "n|rel|public.assessment_sections",
+        "n|type|public.assessment_sections",
+        "n|rel|public.assessment_sections_pkey",
+        "n|rel|public.assessment_sections_id_assessment_owner_unique"
+      ],
+      "reads": ["n|sch|public"]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": ["table", "public", "assessments"],
+      "writes": [
+        "s|tbl|public.assessments",
+        "n|tbl|public.assessments",
+        "e|tbl|public.assessments",
+        "n|rel|public.assessments",
+        "n|type|public.assessments",
+        "n|rel|public.assessments_pkey",
+        "n|rel|public.assessments_id_owner_unique"
+      ],
+      "reads": ["n|sch|public"]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": ["table", "public", "exports"],
+      "writes": [
+        "s|tbl|public.exports",
+        "n|tbl|public.exports",
+        "e|tbl|public.exports",
+        "n|rel|public.exports",
+        "n|type|public.exports",
+        "n|rel|public.exports_pkey",
+        "n|rel|public.exports_id_owner_unique"
+      ],
+      "reads": ["n|sch|public"]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": ["table", "public", "question_usages"],
+      "writes": [
+        "s|tbl|public.question_usages",
+        "n|tbl|public.question_usages",
+        "e|tbl|public.question_usages",
+        "n|rel|public.question_usages",
+        "n|type|public.question_usages",
+        "n|rel|public.question_usages_pkey",
+        "n|rel|public.question_usages_once_per_export"
+      ],
+      "reads": ["n|sch|public"]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": ["table", "public", "school_templates"],
+      "writes": [
+        "s|tbl|public.school_templates",
+        "n|tbl|public.school_templates",
+        "e|tbl|public.school_templates",
+        "n|rel|public.school_templates",
+        "n|type|public.school_templates",
+        "n|rel|public.school_templates_pkey",
+        "n|rel|public.school_templates_id_owner_unique"
+      ],
+      "reads": ["n|sch|public"]
+    },
+    {
+      "statementType": "add_unique",
+      "statementTarget": ["table", "public", "question_versions"],
+      "writes": [
+        "s|uq|public.question_versions.question_versions_id_question_owner_unique",
+        "n|uq|public.question_versions.question_versions_id_question_owner_unique",
+        "e|uq|public.question_versions.question_versions_id_question_owner_unique",
+        "n|con|public.question_versions.question_versions_id_question_owner_unique",
+        "n|rel|public.question_versions_id_question_owner_unique"
+      ],
+      "reads": [
+        "n|tbl|public.question_versions",
+        "n|sch|public",
+        "n|col|public.question_versions.id",
+        "n|col|public.question_versions.question_id",
+        "n|col|public.question_versions.owner_id"
+      ]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": [
+        "index",
+        "public",
+        "assessment_items",
+        "assessment_items_section_idx"
+      ],
+      "writes": [
+        "s|idx|public.assessment_items_section_idx",
+        "n|idx|public.assessment_items_section_idx",
+        "e|idx|public.assessment_items_section_idx",
+        "n|rel|public.assessment_items_section_idx"
+      ],
+      "reads": [
+        "n|tbl|public.assessment_items",
+        "n|sch|public",
+        "n|col|public.assessment_items.section_id"
+      ]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": [
+        "index",
+        "public",
+        "assessment_items",
+        "assessment_items_question_idx"
+      ],
+      "writes": [
+        "s|idx|public.assessment_items_question_idx",
+        "n|idx|public.assessment_items_question_idx",
+        "e|idx|public.assessment_items_question_idx",
+        "n|rel|public.assessment_items_question_idx"
+      ],
+      "reads": [
+        "n|tbl|public.assessment_items",
+        "n|sch|public",
+        "n|col|public.assessment_items.question_id"
+      ]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": [
+        "index",
+        "public",
+        "assessment_items",
+        "assessment_items_version_idx"
+      ],
+      "writes": [
+        "s|idx|public.assessment_items_version_idx",
+        "n|idx|public.assessment_items_version_idx",
+        "e|idx|public.assessment_items_version_idx",
+        "n|rel|public.assessment_items_version_idx"
+      ],
+      "reads": [
+        "n|tbl|public.assessment_items",
+        "n|sch|public",
+        "n|col|public.assessment_items.question_version_id"
+      ]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": [
+        "index",
+        "public",
+        "assessment_sections",
+        "assessment_sections_assessment_idx"
+      ],
+      "writes": [
+        "s|idx|public.assessment_sections_assessment_idx",
+        "n|idx|public.assessment_sections_assessment_idx",
+        "e|idx|public.assessment_sections_assessment_idx",
+        "n|rel|public.assessment_sections_assessment_idx"
+      ],
+      "reads": [
+        "n|tbl|public.assessment_sections",
+        "n|sch|public",
+        "n|col|public.assessment_sections.assessment_id"
+      ]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": [
+        "index",
+        "public",
+        "assessments",
+        "assessments_owner_deleted_idx"
+      ],
+      "writes": [
+        "s|idx|public.assessments_owner_deleted_idx",
+        "n|idx|public.assessments_owner_deleted_idx",
+        "e|idx|public.assessments_owner_deleted_idx",
+        "n|rel|public.assessments_owner_deleted_idx"
+      ],
+      "reads": [
+        "n|tbl|public.assessments",
+        "n|sch|public",
+        "n|col|public.assessments.owner_id",
+        "n|col|public.assessments.deleted_at"
+      ]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": ["index", "public", "assessments", "assessments_template_idx"],
+      "writes": [
+        "s|idx|public.assessments_template_idx",
+        "n|idx|public.assessments_template_idx",
+        "e|idx|public.assessments_template_idx",
+        "n|rel|public.assessments_template_idx"
+      ],
+      "reads": [
+        "n|tbl|public.assessments",
+        "n|sch|public",
+        "n|col|public.assessments.template_id"
+      ]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": ["index", "public", "exports", "exports_assessment_idx"],
+      "writes": [
+        "s|idx|public.exports_assessment_idx",
+        "n|idx|public.exports_assessment_idx",
+        "e|idx|public.exports_assessment_idx",
+        "n|rel|public.exports_assessment_idx"
+      ],
+      "reads": [
+        "n|tbl|public.exports",
+        "n|sch|public",
+        "n|col|public.exports.assessment_id"
+      ]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": ["index", "public", "exports", "exports_job_idx"],
+      "writes": [
+        "s|idx|public.exports_job_idx",
+        "n|idx|public.exports_job_idx",
+        "e|idx|public.exports_job_idx",
+        "n|rel|public.exports_job_idx"
+      ],
+      "reads": ["n|tbl|public.exports", "n|sch|public", "n|col|public.exports.job_id"]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": ["index", "public", "exports", "exports_expires_at_idx"],
+      "writes": [
+        "s|idx|public.exports_expires_at_idx",
+        "n|idx|public.exports_expires_at_idx",
+        "e|idx|public.exports_expires_at_idx",
+        "n|rel|public.exports_expires_at_idx"
+      ],
+      "reads": ["n|tbl|public.exports", "n|sch|public", "n|col|public.exports.expires_at"]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": [
+        "index",
+        "public",
+        "question_usages",
+        "question_usages_question_idx"
+      ],
+      "writes": [
+        "s|idx|public.question_usages_question_idx",
+        "n|idx|public.question_usages_question_idx",
+        "e|idx|public.question_usages_question_idx",
+        "n|rel|public.question_usages_question_idx"
+      ],
+      "reads": [
+        "n|tbl|public.question_usages",
+        "n|sch|public",
+        "n|col|public.question_usages.question_id"
+      ]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": [
+        "index",
+        "public",
+        "question_usages",
+        "question_usages_version_idx"
+      ],
+      "writes": [
+        "s|idx|public.question_usages_version_idx",
+        "n|idx|public.question_usages_version_idx",
+        "e|idx|public.question_usages_version_idx",
+        "n|rel|public.question_usages_version_idx"
+      ],
+      "reads": [
+        "n|tbl|public.question_usages",
+        "n|sch|public",
+        "n|col|public.question_usages.question_version_id"
+      ]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": [
+        "index",
+        "public",
+        "question_usages",
+        "question_usages_export_idx"
+      ],
+      "writes": [
+        "s|idx|public.question_usages_export_idx",
+        "n|idx|public.question_usages_export_idx",
+        "e|idx|public.question_usages_export_idx",
+        "n|rel|public.question_usages_export_idx"
+      ],
+      "reads": [
+        "n|tbl|public.question_usages",
+        "n|sch|public",
+        "n|col|public.question_usages.export_id"
+      ]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": [
+        "index",
+        "public",
+        "school_templates",
+        "school_templates_one_default_per_owner"
+      ],
+      "writes": [
+        "s|idx|public.school_templates_one_default_per_owner",
+        "n|idx|public.school_templates_one_default_per_owner",
+        "e|idx|public.school_templates_one_default_per_owner",
+        "n|rel|public.school_templates_one_default_per_owner"
+      ],
+      "reads": [
+        "n|tbl|public.school_templates",
+        "n|sch|public",
+        "n|col|public.school_templates.owner_id"
+      ]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": [
+        "index",
+        "public",
+        "school_templates",
+        "school_templates_owner_deleted_idx"
+      ],
+      "writes": [
+        "s|idx|public.school_templates_owner_deleted_idx",
+        "n|idx|public.school_templates_owner_deleted_idx",
+        "e|idx|public.school_templates_owner_deleted_idx",
+        "n|rel|public.school_templates_owner_deleted_idx"
+      ],
+      "reads": [
+        "n|tbl|public.school_templates",
+        "n|sch|public",
+        "n|col|public.school_templates.owner_id",
+        "n|col|public.school_templates.deleted_at"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": ["table", "public", "assessment_items"],
+      "writes": [
+        "s|fk|public.assessment_items.assessment_items_owner_id_profiles_id_fkey",
+        "n|fk|public.assessment_items.assessment_items_owner_id_profiles_id_fkey",
+        "e|fk|public.assessment_items.assessment_items_owner_id_profiles_id_fkey",
+        "n|con|public.assessment_items.assessment_items_owner_id_profiles_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.assessment_items",
+        "n|sch|public",
+        "n|tbl|public.profiles",
+        "n|sch|public",
+        "n|col|public.assessment_items.owner_id",
+        "n|col|public.profiles.id",
+        "e|uniqueness|public.profiles.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": ["table", "public", "assessment_items"],
+      "writes": [
+        "s|fk|public.assessment_items.assessment_items_assessment_owner_fk",
+        "n|fk|public.assessment_items.assessment_items_assessment_owner_fk",
+        "e|fk|public.assessment_items.assessment_items_assessment_owner_fk",
+        "n|con|public.assessment_items.assessment_items_assessment_owner_fk"
+      ],
+      "reads": [
+        "n|tbl|public.assessment_items",
+        "n|sch|public",
+        "n|tbl|public.assessments",
+        "n|sch|public",
+        "n|col|public.assessment_items.assessment_id",
+        "n|col|public.assessment_items.owner_id",
+        "n|col|public.assessments.id",
+        "n|col|public.assessments.owner_id",
+        "e|uniqueness|public.assessments.id.owner_id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": ["table", "public", "assessment_items"],
+      "writes": [
+        "s|fk|public.assessment_items.assessment_items_section_owner_fk",
+        "n|fk|public.assessment_items.assessment_items_section_owner_fk",
+        "e|fk|public.assessment_items.assessment_items_section_owner_fk",
+        "n|con|public.assessment_items.assessment_items_section_owner_fk"
+      ],
+      "reads": [
+        "n|tbl|public.assessment_items",
+        "n|sch|public",
+        "n|tbl|public.assessment_sections",
+        "n|sch|public",
+        "n|col|public.assessment_items.section_id",
+        "n|col|public.assessment_items.assessment_id",
+        "n|col|public.assessment_items.owner_id",
+        "n|col|public.assessment_sections.id",
+        "n|col|public.assessment_sections.assessment_id",
+        "n|col|public.assessment_sections.owner_id",
+        "e|uniqueness|public.assessment_sections.assessment_id.id.owner_id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": ["table", "public", "assessment_items"],
+      "writes": [
+        "s|fk|public.assessment_items.assessment_items_question_owner_fk",
+        "n|fk|public.assessment_items.assessment_items_question_owner_fk",
+        "e|fk|public.assessment_items.assessment_items_question_owner_fk",
+        "n|con|public.assessment_items.assessment_items_question_owner_fk"
+      ],
+      "reads": [
+        "n|tbl|public.assessment_items",
+        "n|sch|public",
+        "n|tbl|public.questions",
+        "n|sch|public",
+        "n|col|public.assessment_items.question_id",
+        "n|col|public.assessment_items.owner_id",
+        "n|col|public.questions.id",
+        "n|col|public.questions.owner_id",
+        "e|uniqueness|public.questions.id.owner_id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": ["table", "public", "assessment_items"],
+      "writes": [
+        "s|fk|public.assessment_items.assessment_items_version_owner_fk",
+        "n|fk|public.assessment_items.assessment_items_version_owner_fk",
+        "e|fk|public.assessment_items.assessment_items_version_owner_fk",
+        "n|con|public.assessment_items.assessment_items_version_owner_fk"
+      ],
+      "reads": [
+        "n|tbl|public.assessment_items",
+        "n|sch|public",
+        "n|tbl|public.question_versions",
+        "n|sch|public",
+        "n|col|public.assessment_items.question_version_id",
+        "n|col|public.assessment_items.question_id",
+        "n|col|public.assessment_items.owner_id",
+        "n|col|public.question_versions.id",
+        "n|col|public.question_versions.question_id",
+        "n|col|public.question_versions.owner_id",
+        "e|uniqueness|public.question_versions.id.owner_id.question_id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": ["table", "public", "assessment_sections"],
+      "writes": [
+        "s|fk|public.assessment_sections.assessment_sections_owner_id_profiles_id_fkey",
+        "n|fk|public.assessment_sections.assessment_sections_owner_id_profiles_id_fkey",
+        "e|fk|public.assessment_sections.assessment_sections_owner_id_profiles_id_fkey",
+        "n|con|public.assessment_sections.assessment_sections_owner_id_profiles_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.assessment_sections",
+        "n|sch|public",
+        "n|tbl|public.profiles",
+        "n|sch|public",
+        "n|col|public.assessment_sections.owner_id",
+        "n|col|public.profiles.id",
+        "e|uniqueness|public.profiles.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": ["table", "public", "assessment_sections"],
+      "writes": [
+        "s|fk|public.assessment_sections.assessment_sections_assessment_owner_fk",
+        "n|fk|public.assessment_sections.assessment_sections_assessment_owner_fk",
+        "e|fk|public.assessment_sections.assessment_sections_assessment_owner_fk",
+        "n|con|public.assessment_sections.assessment_sections_assessment_owner_fk"
+      ],
+      "reads": [
+        "n|tbl|public.assessment_sections",
+        "n|sch|public",
+        "n|tbl|public.assessments",
+        "n|sch|public",
+        "n|col|public.assessment_sections.assessment_id",
+        "n|col|public.assessment_sections.owner_id",
+        "n|col|public.assessments.id",
+        "n|col|public.assessments.owner_id",
+        "e|uniqueness|public.assessments.id.owner_id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": ["table", "public", "assessments"],
+      "writes": [
+        "s|fk|public.assessments.assessments_owner_id_profiles_id_fkey",
+        "n|fk|public.assessments.assessments_owner_id_profiles_id_fkey",
+        "e|fk|public.assessments.assessments_owner_id_profiles_id_fkey",
+        "n|con|public.assessments.assessments_owner_id_profiles_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.assessments",
+        "n|sch|public",
+        "n|tbl|public.profiles",
+        "n|sch|public",
+        "n|col|public.assessments.owner_id",
+        "n|col|public.profiles.id",
+        "e|uniqueness|public.profiles.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": ["table", "public", "assessments"],
+      "writes": [
+        "s|fk|public.assessments.assessments_template_owner_fk",
+        "n|fk|public.assessments.assessments_template_owner_fk",
+        "e|fk|public.assessments.assessments_template_owner_fk",
+        "n|con|public.assessments.assessments_template_owner_fk"
+      ],
+      "reads": [
+        "n|tbl|public.assessments",
+        "n|sch|public",
+        "n|tbl|public.school_templates",
+        "n|sch|public",
+        "n|col|public.assessments.template_id",
+        "n|col|public.assessments.owner_id",
+        "n|col|public.school_templates.id",
+        "n|col|public.school_templates.owner_id",
+        "e|uniqueness|public.school_templates.id.owner_id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": ["table", "public", "exports"],
+      "writes": [
+        "s|fk|public.exports.exports_owner_id_profiles_id_fkey",
+        "n|fk|public.exports.exports_owner_id_profiles_id_fkey",
+        "e|fk|public.exports.exports_owner_id_profiles_id_fkey",
+        "n|con|public.exports.exports_owner_id_profiles_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.exports",
+        "n|sch|public",
+        "n|tbl|public.profiles",
+        "n|sch|public",
+        "n|col|public.exports.owner_id",
+        "n|col|public.profiles.id",
+        "e|uniqueness|public.profiles.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": ["table", "public", "exports"],
+      "writes": [
+        "s|fk|public.exports.exports_assessment_owner_fk",
+        "n|fk|public.exports.exports_assessment_owner_fk",
+        "e|fk|public.exports.exports_assessment_owner_fk",
+        "n|con|public.exports.exports_assessment_owner_fk"
+      ],
+      "reads": [
+        "n|tbl|public.exports",
+        "n|sch|public",
+        "n|tbl|public.assessments",
+        "n|sch|public",
+        "n|col|public.exports.assessment_id",
+        "n|col|public.exports.owner_id",
+        "n|col|public.assessments.id",
+        "n|col|public.assessments.owner_id",
+        "e|uniqueness|public.assessments.id.owner_id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": ["table", "public", "exports"],
+      "writes": [
+        "s|fk|public.exports.exports_job_owner_fk",
+        "n|fk|public.exports.exports_job_owner_fk",
+        "e|fk|public.exports.exports_job_owner_fk",
+        "n|con|public.exports.exports_job_owner_fk"
+      ],
+      "reads": [
+        "n|tbl|public.exports",
+        "n|sch|public",
+        "n|tbl|public.jobs",
+        "n|sch|public",
+        "n|col|public.exports.job_id",
+        "n|col|public.exports.owner_id",
+        "n|col|public.jobs.id",
+        "n|col|public.jobs.owner_id",
+        "e|uniqueness|public.jobs.id.owner_id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": ["table", "public", "question_usages"],
+      "writes": [
+        "s|fk|public.question_usages.question_usages_owner_id_profiles_id_fkey",
+        "n|fk|public.question_usages.question_usages_owner_id_profiles_id_fkey",
+        "e|fk|public.question_usages.question_usages_owner_id_profiles_id_fkey",
+        "n|con|public.question_usages.question_usages_owner_id_profiles_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.question_usages",
+        "n|sch|public",
+        "n|tbl|public.profiles",
+        "n|sch|public",
+        "n|col|public.question_usages.owner_id",
+        "n|col|public.profiles.id",
+        "e|uniqueness|public.profiles.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": ["table", "public", "question_usages"],
+      "writes": [
+        "s|fk|public.question_usages.question_usages_question_owner_fk",
+        "n|fk|public.question_usages.question_usages_question_owner_fk",
+        "e|fk|public.question_usages.question_usages_question_owner_fk",
+        "n|con|public.question_usages.question_usages_question_owner_fk"
+      ],
+      "reads": [
+        "n|tbl|public.question_usages",
+        "n|sch|public",
+        "n|tbl|public.questions",
+        "n|sch|public",
+        "n|col|public.question_usages.question_id",
+        "n|col|public.question_usages.owner_id",
+        "n|col|public.questions.id",
+        "n|col|public.questions.owner_id",
+        "e|uniqueness|public.questions.id.owner_id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": ["table", "public", "question_usages"],
+      "writes": [
+        "s|fk|public.question_usages.question_usages_version_owner_fk",
+        "n|fk|public.question_usages.question_usages_version_owner_fk",
+        "e|fk|public.question_usages.question_usages_version_owner_fk",
+        "n|con|public.question_usages.question_usages_version_owner_fk"
+      ],
+      "reads": [
+        "n|tbl|public.question_usages",
+        "n|sch|public",
+        "n|tbl|public.question_versions",
+        "n|sch|public",
+        "n|col|public.question_usages.question_version_id",
+        "n|col|public.question_usages.question_id",
+        "n|col|public.question_usages.owner_id",
+        "n|col|public.question_versions.id",
+        "n|col|public.question_versions.question_id",
+        "n|col|public.question_versions.owner_id",
+        "e|uniqueness|public.question_versions.id.owner_id.question_id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": ["table", "public", "question_usages"],
+      "writes": [
+        "s|fk|public.question_usages.question_usages_assessment_owner_fk",
+        "n|fk|public.question_usages.question_usages_assessment_owner_fk",
+        "e|fk|public.question_usages.question_usages_assessment_owner_fk",
+        "n|con|public.question_usages.question_usages_assessment_owner_fk"
+      ],
+      "reads": [
+        "n|tbl|public.question_usages",
+        "n|sch|public",
+        "n|tbl|public.assessments",
+        "n|sch|public",
+        "n|col|public.question_usages.assessment_id",
+        "n|col|public.question_usages.owner_id",
+        "n|col|public.assessments.id",
+        "n|col|public.assessments.owner_id",
+        "e|uniqueness|public.assessments.id.owner_id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": ["table", "public", "school_templates"],
+      "writes": [
+        "s|fk|public.school_templates.school_templates_owner_id_profiles_id_fkey",
+        "n|fk|public.school_templates.school_templates_owner_id_profiles_id_fkey",
+        "e|fk|public.school_templates.school_templates_owner_id_profiles_id_fkey",
+        "n|con|public.school_templates.school_templates_owner_id_profiles_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.school_templates",
+        "n|sch|public",
+        "n|tbl|public.profiles",
+        "n|sch|public",
+        "n|col|public.school_templates.owner_id",
+        "n|col|public.profiles.id",
+        "e|uniqueness|public.profiles.id"
+      ]
+    },
+    {
+      "statementType": "create_policy",
+      "statementTarget": ["table", "public", "assessment_items"],
+      "writes": [
+        "s|pol|public.assessment_items.assessment_items_owner_select",
+        "n|pol|public.assessment_items.assessment_items_owner_select",
+        "e|pol|public.assessment_items.assessment_items_owner_select"
+      ],
+      "reads": [
+        "n|tbl|public.assessment_items",
+        "n|sch|public",
+        "n|role|authenticated",
+        "e|rls|public.assessment_items"
+      ]
+    },
+    {
+      "statementType": "create_policy",
+      "statementTarget": ["table", "public", "assessment_items"],
+      "writes": [
+        "s|pol|public.assessment_items.assessment_items_owner_insert",
+        "n|pol|public.assessment_items.assessment_items_owner_insert",
+        "e|pol|public.assessment_items.assessment_items_owner_insert"
+      ],
+      "reads": [
+        "n|tbl|public.assessment_items",
+        "n|sch|public",
+        "n|role|authenticated",
+        "e|rls|public.assessment_items"
+      ]
+    },
+    {
+      "statementType": "create_policy",
+      "statementTarget": ["table", "public", "assessment_items"],
+      "writes": [
+        "s|pol|public.assessment_items.assessment_items_owner_update",
+        "n|pol|public.assessment_items.assessment_items_owner_update",
+        "e|pol|public.assessment_items.assessment_items_owner_update"
+      ],
+      "reads": [
+        "n|tbl|public.assessment_items",
+        "n|sch|public",
+        "n|role|authenticated",
+        "e|rls|public.assessment_items"
+      ]
+    },
+    {
+      "statementType": "create_policy",
+      "statementTarget": ["table", "public", "assessment_items"],
+      "writes": [
+        "s|pol|public.assessment_items.assessment_items_owner_delete",
+        "n|pol|public.assessment_items.assessment_items_owner_delete",
+        "e|pol|public.assessment_items.assessment_items_owner_delete"
+      ],
+      "reads": [
+        "n|tbl|public.assessment_items",
+        "n|sch|public",
+        "n|role|authenticated",
+        "e|rls|public.assessment_items"
+      ]
+    },
+    {
+      "statementType": "create_policy",
+      "statementTarget": ["table", "public", "assessment_sections"],
+      "writes": [
+        "s|pol|public.assessment_sections.assessment_sections_owner_select",
+        "n|pol|public.assessment_sections.assessment_sections_owner_select",
+        "e|pol|public.assessment_sections.assessment_sections_owner_select"
+      ],
+      "reads": [
+        "n|tbl|public.assessment_sections",
+        "n|sch|public",
+        "n|role|authenticated",
+        "e|rls|public.assessment_sections"
+      ]
+    },
+    {
+      "statementType": "create_policy",
+      "statementTarget": ["table", "public", "assessment_sections"],
+      "writes": [
+        "s|pol|public.assessment_sections.assessment_sections_owner_insert",
+        "n|pol|public.assessment_sections.assessment_sections_owner_insert",
+        "e|pol|public.assessment_sections.assessment_sections_owner_insert"
+      ],
+      "reads": [
+        "n|tbl|public.assessment_sections",
+        "n|sch|public",
+        "n|role|authenticated",
+        "e|rls|public.assessment_sections"
+      ]
+    },
+    {
+      "statementType": "create_policy",
+      "statementTarget": ["table", "public", "assessment_sections"],
+      "writes": [
+        "s|pol|public.assessment_sections.assessment_sections_owner_update",
+        "n|pol|public.assessment_sections.assessment_sections_owner_update",
+        "e|pol|public.assessment_sections.assessment_sections_owner_update"
+      ],
+      "reads": [
+        "n|tbl|public.assessment_sections",
+        "n|sch|public",
+        "n|role|authenticated",
+        "e|rls|public.assessment_sections"
+      ]
+    },
+    {
+      "statementType": "create_policy",
+      "statementTarget": ["table", "public", "assessment_sections"],
+      "writes": [
+        "s|pol|public.assessment_sections.assessment_sections_owner_delete",
+        "n|pol|public.assessment_sections.assessment_sections_owner_delete",
+        "e|pol|public.assessment_sections.assessment_sections_owner_delete"
+      ],
+      "reads": [
+        "n|tbl|public.assessment_sections",
+        "n|sch|public",
+        "n|role|authenticated",
+        "e|rls|public.assessment_sections"
+      ]
+    },
+    {
+      "statementType": "create_policy",
+      "statementTarget": ["table", "public", "assessments"],
+      "writes": [
+        "s|pol|public.assessments.assessments_owner_select",
+        "n|pol|public.assessments.assessments_owner_select",
+        "e|pol|public.assessments.assessments_owner_select"
+      ],
+      "reads": [
+        "n|tbl|public.assessments",
+        "n|sch|public",
+        "n|role|authenticated",
+        "e|rls|public.assessments"
+      ]
+    },
+    {
+      "statementType": "create_policy",
+      "statementTarget": ["table", "public", "assessments"],
+      "writes": [
+        "s|pol|public.assessments.assessments_owner_insert",
+        "n|pol|public.assessments.assessments_owner_insert",
+        "e|pol|public.assessments.assessments_owner_insert"
+      ],
+      "reads": [
+        "n|tbl|public.assessments",
+        "n|sch|public",
+        "n|role|authenticated",
+        "e|rls|public.assessments"
+      ]
+    },
+    {
+      "statementType": "create_policy",
+      "statementTarget": ["table", "public", "assessments"],
+      "writes": [
+        "s|pol|public.assessments.assessments_owner_update",
+        "n|pol|public.assessments.assessments_owner_update",
+        "e|pol|public.assessments.assessments_owner_update"
+      ],
+      "reads": [
+        "n|tbl|public.assessments",
+        "n|sch|public",
+        "n|role|authenticated",
+        "e|rls|public.assessments"
+      ]
+    },
+    {
+      "statementType": "create_policy",
+      "statementTarget": ["table", "public", "assessments"],
+      "writes": [
+        "s|pol|public.assessments.assessments_owner_delete",
+        "n|pol|public.assessments.assessments_owner_delete",
+        "e|pol|public.assessments.assessments_owner_delete"
+      ],
+      "reads": [
+        "n|tbl|public.assessments",
+        "n|sch|public",
+        "n|role|authenticated",
+        "e|rls|public.assessments"
+      ]
+    },
+    {
+      "statementType": "create_policy",
+      "statementTarget": ["table", "public", "exports"],
+      "writes": [
+        "s|pol|public.exports.exports_owner_select",
+        "n|pol|public.exports.exports_owner_select",
+        "e|pol|public.exports.exports_owner_select"
+      ],
+      "reads": [
+        "n|tbl|public.exports",
+        "n|sch|public",
+        "n|role|authenticated",
+        "e|rls|public.exports"
+      ]
+    },
+    {
+      "statementType": "create_policy",
+      "statementTarget": ["table", "public", "question_usages"],
+      "writes": [
+        "s|pol|public.question_usages.question_usages_owner_select",
+        "n|pol|public.question_usages.question_usages_owner_select",
+        "e|pol|public.question_usages.question_usages_owner_select"
+      ],
+      "reads": [
+        "n|tbl|public.question_usages",
+        "n|sch|public",
+        "n|role|authenticated",
+        "e|rls|public.question_usages"
+      ]
+    },
+    {
+      "statementType": "create_policy",
+      "statementTarget": ["table", "public", "school_templates"],
+      "writes": [
+        "s|pol|public.school_templates.school_templates_owner_select",
+        "n|pol|public.school_templates.school_templates_owner_select",
+        "e|pol|public.school_templates.school_templates_owner_select"
+      ],
+      "reads": [
+        "n|tbl|public.school_templates",
+        "n|sch|public",
+        "n|role|authenticated",
+        "e|rls|public.school_templates"
+      ]
+    },
+    {
+      "statementType": "create_policy",
+      "statementTarget": ["table", "public", "school_templates"],
+      "writes": [
+        "s|pol|public.school_templates.school_templates_owner_insert",
+        "n|pol|public.school_templates.school_templates_owner_insert",
+        "e|pol|public.school_templates.school_templates_owner_insert"
+      ],
+      "reads": [
+        "n|tbl|public.school_templates",
+        "n|sch|public",
+        "n|role|authenticated",
+        "e|rls|public.school_templates"
+      ]
+    },
+    {
+      "statementType": "create_policy",
+      "statementTarget": ["table", "public", "school_templates"],
+      "writes": [
+        "s|pol|public.school_templates.school_templates_owner_update",
+        "n|pol|public.school_templates.school_templates_owner_update",
+        "e|pol|public.school_templates.school_templates_owner_update"
+      ],
+      "reads": [
+        "n|tbl|public.school_templates",
+        "n|sch|public",
+        "n|role|authenticated",
+        "e|rls|public.school_templates"
+      ]
+    },
+    {
+      "statementType": "create_policy",
+      "statementTarget": ["table", "public", "school_templates"],
+      "writes": [
+        "s|pol|public.school_templates.school_templates_owner_delete",
+        "n|pol|public.school_templates.school_templates_owner_delete",
+        "e|pol|public.school_templates.school_templates_owner_delete"
+      ],
+      "reads": [
+        "n|tbl|public.school_templates",
+        "n|sch|public",
+        "n|role|authenticated",
+        "e|rls|public.school_templates"
+      ]
+    }
+  ],
+  "deltas": [
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "name": "assessment_items",
+        "isRlsEnabled": true,
+        "entityType": "tables"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "name": "assessment_sections",
+        "isRlsEnabled": true,
+        "entityType": "tables"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "name": "assessments",
+        "isRlsEnabled": true,
+        "entityType": "tables"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "name": "exports",
+        "isRlsEnabled": true,
+        "entityType": "tables"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "name": "question_usages",
+        "isRlsEnabled": true,
+        "entityType": "tables"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "name": "school_templates",
+        "isRlsEnabled": true,
+        "entityType": "tables"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "assessment_items",
+        "name": "id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "gen_random_uuid()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "assessment_items",
+        "name": "owner_id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "assessment_items",
+        "name": "assessment_id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "assessment_items",
+        "name": "section_id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "assessment_items",
+        "name": "question_id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "assessment_items",
+        "name": "question_version_id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "assessment_items",
+        "name": "sort_order",
+        "type": "integer",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "assessment_items",
+        "name": "points",
+        "type": "numeric(6,2)",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "'0'",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "assessment_items",
+        "name": "created_at",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "now()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "assessment_items",
+        "name": "updated_at",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "now()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "assessment_sections",
+        "name": "id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "gen_random_uuid()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "assessment_sections",
+        "name": "owner_id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "assessment_sections",
+        "name": "assessment_id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "assessment_sections",
+        "name": "title",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "assessment_sections",
+        "name": "instructions_md",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "assessment_sections",
+        "name": "sort_order",
+        "type": "integer",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "assessment_sections",
+        "name": "created_at",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "now()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "assessment_sections",
+        "name": "updated_at",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "now()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "assessments",
+        "name": "id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "gen_random_uuid()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "assessments",
+        "name": "owner_id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "assessments",
+        "name": "title",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "assessments",
+        "name": "kind",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "'latihan'",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "assessments",
+        "name": "grade",
+        "type": "smallint",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "assessments",
+        "name": "template_id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "assessments",
+        "name": "exam_date",
+        "type": "date",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "assessments",
+        "name": "duration_minutes",
+        "type": "integer",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "assessments",
+        "name": "instructions_md",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "assessments",
+        "name": "scoring_mode",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "'equal'",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "assessments",
+        "name": "shuffle_seed",
+        "type": "integer",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "assessments",
+        "name": "status",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "'draft'",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "assessments",
+        "name": "approved_at",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "assessments",
+        "name": "approved_snapshot_hash",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "assessments",
+        "name": "row_version",
+        "type": "integer",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "1",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "assessments",
+        "name": "deleted_at",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "assessments",
+        "name": "purge_after",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "assessments",
+        "name": "created_at",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "now()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "assessments",
+        "name": "updated_at",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "now()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "exports",
+        "name": "id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "gen_random_uuid()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "exports",
+        "name": "owner_id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "exports",
+        "name": "assessment_id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "exports",
+        "name": "document",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "exports",
+        "name": "format",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "exports",
+        "name": "object_key",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "exports",
+        "name": "snapshot_hash",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "exports",
+        "name": "warnings",
+        "type": "jsonb",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "'[]'",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "exports",
+        "name": "expires_at",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "exports",
+        "name": "job_id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "exports",
+        "name": "created_at",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "now()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "question_usages",
+        "name": "id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "gen_random_uuid()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "question_usages",
+        "name": "owner_id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "question_usages",
+        "name": "question_id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "question_usages",
+        "name": "question_version_id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "question_usages",
+        "name": "assessment_id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "question_usages",
+        "name": "export_id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "question_usages",
+        "name": "used_at",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "now()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "school_templates",
+        "name": "id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "gen_random_uuid()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "school_templates",
+        "name": "owner_id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "school_templates",
+        "name": "name",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "school_templates",
+        "name": "school_name",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "school_templates",
+        "name": "header_lines",
+        "type": "jsonb",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "'[]'",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "school_templates",
+        "name": "logo_key",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "school_templates",
+        "name": "subject",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "'Matematika'",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "school_templates",
+        "name": "student_fields",
+        "type": "jsonb",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "'[]'",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "school_templates",
+        "name": "default_instructions_md",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "school_templates",
+        "name": "paper_size",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "'A4'",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "school_templates",
+        "name": "font",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "'times'",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "school_templates",
+        "name": "is_default",
+        "type": "boolean",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "false",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "school_templates",
+        "name": "row_version",
+        "type": "integer",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "1",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "school_templates",
+        "name": "deleted_at",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "school_templates",
+        "name": "purge_after",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "school_templates",
+        "name": "created_at",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "now()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "school_templates",
+        "name": "updated_at",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "now()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "assessment_items",
+        "name": "assessment_items_section_idx",
+        "nameExplicit": true,
+        "columns": [
+          {
+            "value": "section_id",
+            "isExpression": false,
+            "asc": true,
+            "nullsFirst": false,
+            "opclass": null
+          }
+        ],
+        "isUnique": false,
+        "where": null,
+        "with": "",
+        "method": "btree",
+        "concurrently": false,
+        "entityType": "indexes"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "assessment_items",
+        "name": "assessment_items_question_idx",
+        "nameExplicit": true,
+        "columns": [
+          {
+            "value": "question_id",
+            "isExpression": false,
+            "asc": true,
+            "nullsFirst": false,
+            "opclass": null
+          }
+        ],
+        "isUnique": false,
+        "where": null,
+        "with": "",
+        "method": "btree",
+        "concurrently": false,
+        "entityType": "indexes"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "assessment_items",
+        "name": "assessment_items_version_idx",
+        "nameExplicit": true,
+        "columns": [
+          {
+            "value": "question_version_id",
+            "isExpression": false,
+            "asc": true,
+            "nullsFirst": false,
+            "opclass": null
+          }
+        ],
+        "isUnique": false,
+        "where": null,
+        "with": "",
+        "method": "btree",
+        "concurrently": false,
+        "entityType": "indexes"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "assessment_sections",
+        "name": "assessment_sections_assessment_idx",
+        "nameExplicit": true,
+        "columns": [
+          {
+            "value": "assessment_id",
+            "isExpression": false,
+            "asc": true,
+            "nullsFirst": false,
+            "opclass": null
+          }
+        ],
+        "isUnique": false,
+        "where": null,
+        "with": "",
+        "method": "btree",
+        "concurrently": false,
+        "entityType": "indexes"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "assessments",
+        "name": "assessments_owner_deleted_idx",
+        "nameExplicit": true,
+        "columns": [
+          {
+            "value": "owner_id",
+            "isExpression": false,
+            "asc": true,
+            "nullsFirst": false,
+            "opclass": null
+          },
+          {
+            "value": "deleted_at",
+            "isExpression": false,
+            "asc": true,
+            "nullsFirst": false,
+            "opclass": null
+          }
+        ],
+        "isUnique": false,
+        "where": null,
+        "with": "",
+        "method": "btree",
+        "concurrently": false,
+        "entityType": "indexes"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "assessments",
+        "name": "assessments_template_idx",
+        "nameExplicit": true,
+        "columns": [
+          {
+            "value": "template_id",
+            "isExpression": false,
+            "asc": true,
+            "nullsFirst": false,
+            "opclass": null
+          }
+        ],
+        "isUnique": false,
+        "where": null,
+        "with": "",
+        "method": "btree",
+        "concurrently": false,
+        "entityType": "indexes"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "exports",
+        "name": "exports_assessment_idx",
+        "nameExplicit": true,
+        "columns": [
+          {
+            "value": "assessment_id",
+            "isExpression": false,
+            "asc": true,
+            "nullsFirst": false,
+            "opclass": null
+          }
+        ],
+        "isUnique": false,
+        "where": null,
+        "with": "",
+        "method": "btree",
+        "concurrently": false,
+        "entityType": "indexes"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "exports",
+        "name": "exports_job_idx",
+        "nameExplicit": true,
+        "columns": [
+          {
+            "value": "job_id",
+            "isExpression": false,
+            "asc": true,
+            "nullsFirst": false,
+            "opclass": null
+          }
+        ],
+        "isUnique": false,
+        "where": null,
+        "with": "",
+        "method": "btree",
+        "concurrently": false,
+        "entityType": "indexes"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "exports",
+        "name": "exports_expires_at_idx",
+        "nameExplicit": true,
+        "columns": [
+          {
+            "value": "expires_at",
+            "isExpression": false,
+            "asc": true,
+            "nullsFirst": false,
+            "opclass": null
+          }
+        ],
+        "isUnique": false,
+        "where": null,
+        "with": "",
+        "method": "btree",
+        "concurrently": false,
+        "entityType": "indexes"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "question_usages",
+        "name": "question_usages_question_idx",
+        "nameExplicit": true,
+        "columns": [
+          {
+            "value": "question_id",
+            "isExpression": false,
+            "asc": true,
+            "nullsFirst": false,
+            "opclass": null
+          }
+        ],
+        "isUnique": false,
+        "where": null,
+        "with": "",
+        "method": "btree",
+        "concurrently": false,
+        "entityType": "indexes"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "question_usages",
+        "name": "question_usages_version_idx",
+        "nameExplicit": true,
+        "columns": [
+          {
+            "value": "question_version_id",
+            "isExpression": false,
+            "asc": true,
+            "nullsFirst": false,
+            "opclass": null
+          }
+        ],
+        "isUnique": false,
+        "where": null,
+        "with": "",
+        "method": "btree",
+        "concurrently": false,
+        "entityType": "indexes"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "question_usages",
+        "name": "question_usages_export_idx",
+        "nameExplicit": true,
+        "columns": [
+          {
+            "value": "export_id",
+            "isExpression": false,
+            "asc": true,
+            "nullsFirst": false,
+            "opclass": null
+          }
+        ],
+        "isUnique": false,
+        "where": null,
+        "with": "",
+        "method": "btree",
+        "concurrently": false,
+        "entityType": "indexes"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "school_templates",
+        "name": "school_templates_one_default_per_owner",
+        "nameExplicit": true,
+        "columns": [
+          {
+            "value": "owner_id",
+            "isExpression": false,
+            "asc": true,
+            "nullsFirst": false,
+            "opclass": null
+          }
+        ],
+        "isUnique": true,
+        "where": "\"is_default\" and \"deleted_at\" is null",
+        "with": "",
+        "method": "btree",
+        "concurrently": false,
+        "entityType": "indexes"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "school_templates",
+        "name": "school_templates_owner_deleted_idx",
+        "nameExplicit": true,
+        "columns": [
+          {
+            "value": "owner_id",
+            "isExpression": false,
+            "asc": true,
+            "nullsFirst": false,
+            "opclass": null
+          },
+          {
+            "value": "deleted_at",
+            "isExpression": false,
+            "asc": true,
+            "nullsFirst": false,
+            "opclass": null
+          }
+        ],
+        "isUnique": false,
+        "where": null,
+        "with": "",
+        "method": "btree",
+        "concurrently": false,
+        "entityType": "indexes"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "assessment_items",
+        "name": "assessment_items_owner_id_profiles_id_fkey",
+        "nameExplicit": false,
+        "columns": ["owner_id"],
+        "schemaTo": "public",
+        "tableTo": "profiles",
+        "columnsTo": ["id"],
+        "onUpdate": "NO ACTION",
+        "onDelete": "CASCADE",
+        "entityType": "fks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "assessment_items",
+        "name": "assessment_items_assessment_owner_fk",
+        "nameExplicit": true,
+        "columns": ["assessment_id", "owner_id"],
+        "schemaTo": "public",
+        "tableTo": "assessments",
+        "columnsTo": ["id", "owner_id"],
+        "onUpdate": "NO ACTION",
+        "onDelete": "CASCADE",
+        "entityType": "fks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "assessment_items",
+        "name": "assessment_items_section_owner_fk",
+        "nameExplicit": true,
+        "columns": ["section_id", "assessment_id", "owner_id"],
+        "schemaTo": "public",
+        "tableTo": "assessment_sections",
+        "columnsTo": ["id", "assessment_id", "owner_id"],
+        "onUpdate": "NO ACTION",
+        "onDelete": "CASCADE",
+        "entityType": "fks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "assessment_items",
+        "name": "assessment_items_question_owner_fk",
+        "nameExplicit": true,
+        "columns": ["question_id", "owner_id"],
+        "schemaTo": "public",
+        "tableTo": "questions",
+        "columnsTo": ["id", "owner_id"],
+        "onUpdate": "NO ACTION",
+        "onDelete": "NO ACTION",
+        "entityType": "fks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "assessment_items",
+        "name": "assessment_items_version_owner_fk",
+        "nameExplicit": true,
+        "columns": ["question_version_id", "question_id", "owner_id"],
+        "schemaTo": "public",
+        "tableTo": "question_versions",
+        "columnsTo": ["id", "question_id", "owner_id"],
+        "onUpdate": "NO ACTION",
+        "onDelete": "NO ACTION",
+        "entityType": "fks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "assessment_sections",
+        "name": "assessment_sections_owner_id_profiles_id_fkey",
+        "nameExplicit": false,
+        "columns": ["owner_id"],
+        "schemaTo": "public",
+        "tableTo": "profiles",
+        "columnsTo": ["id"],
+        "onUpdate": "NO ACTION",
+        "onDelete": "CASCADE",
+        "entityType": "fks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "assessment_sections",
+        "name": "assessment_sections_assessment_owner_fk",
+        "nameExplicit": true,
+        "columns": ["assessment_id", "owner_id"],
+        "schemaTo": "public",
+        "tableTo": "assessments",
+        "columnsTo": ["id", "owner_id"],
+        "onUpdate": "NO ACTION",
+        "onDelete": "CASCADE",
+        "entityType": "fks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "assessments",
+        "name": "assessments_owner_id_profiles_id_fkey",
+        "nameExplicit": false,
+        "columns": ["owner_id"],
+        "schemaTo": "public",
+        "tableTo": "profiles",
+        "columnsTo": ["id"],
+        "onUpdate": "NO ACTION",
+        "onDelete": "CASCADE",
+        "entityType": "fks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "assessments",
+        "name": "assessments_template_owner_fk",
+        "nameExplicit": true,
+        "columns": ["template_id", "owner_id"],
+        "schemaTo": "public",
+        "tableTo": "school_templates",
+        "columnsTo": ["id", "owner_id"],
+        "onUpdate": "NO ACTION",
+        "onDelete": "NO ACTION",
+        "entityType": "fks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "exports",
+        "name": "exports_owner_id_profiles_id_fkey",
+        "nameExplicit": false,
+        "columns": ["owner_id"],
+        "schemaTo": "public",
+        "tableTo": "profiles",
+        "columnsTo": ["id"],
+        "onUpdate": "NO ACTION",
+        "onDelete": "CASCADE",
+        "entityType": "fks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "exports",
+        "name": "exports_assessment_owner_fk",
+        "nameExplicit": true,
+        "columns": ["assessment_id", "owner_id"],
+        "schemaTo": "public",
+        "tableTo": "assessments",
+        "columnsTo": ["id", "owner_id"],
+        "onUpdate": "NO ACTION",
+        "onDelete": "CASCADE",
+        "entityType": "fks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "exports",
+        "name": "exports_job_owner_fk",
+        "nameExplicit": true,
+        "columns": ["job_id", "owner_id"],
+        "schemaTo": "public",
+        "tableTo": "jobs",
+        "columnsTo": ["id", "owner_id"],
+        "onUpdate": "NO ACTION",
+        "onDelete": "NO ACTION",
+        "entityType": "fks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "question_usages",
+        "name": "question_usages_owner_id_profiles_id_fkey",
+        "nameExplicit": false,
+        "columns": ["owner_id"],
+        "schemaTo": "public",
+        "tableTo": "profiles",
+        "columnsTo": ["id"],
+        "onUpdate": "NO ACTION",
+        "onDelete": "CASCADE",
+        "entityType": "fks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "question_usages",
+        "name": "question_usages_question_owner_fk",
+        "nameExplicit": true,
+        "columns": ["question_id", "owner_id"],
+        "schemaTo": "public",
+        "tableTo": "questions",
+        "columnsTo": ["id", "owner_id"],
+        "onUpdate": "NO ACTION",
+        "onDelete": "CASCADE",
+        "entityType": "fks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "question_usages",
+        "name": "question_usages_version_owner_fk",
+        "nameExplicit": true,
+        "columns": ["question_version_id", "question_id", "owner_id"],
+        "schemaTo": "public",
+        "tableTo": "question_versions",
+        "columnsTo": ["id", "question_id", "owner_id"],
+        "onUpdate": "NO ACTION",
+        "onDelete": "CASCADE",
+        "entityType": "fks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "question_usages",
+        "name": "question_usages_assessment_owner_fk",
+        "nameExplicit": true,
+        "columns": ["assessment_id", "owner_id"],
+        "schemaTo": "public",
+        "tableTo": "assessments",
+        "columnsTo": ["id", "owner_id"],
+        "onUpdate": "NO ACTION",
+        "onDelete": "CASCADE",
+        "entityType": "fks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "school_templates",
+        "name": "school_templates_owner_id_profiles_id_fkey",
+        "nameExplicit": false,
+        "columns": ["owner_id"],
+        "schemaTo": "public",
+        "tableTo": "profiles",
+        "columnsTo": ["id"],
+        "onUpdate": "NO ACTION",
+        "onDelete": "CASCADE",
+        "entityType": "fks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "assessment_items",
+        "name": "assessment_items_pkey",
+        "columns": ["id"],
+        "nameExplicit": false,
+        "entityType": "pks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "assessment_sections",
+        "name": "assessment_sections_pkey",
+        "columns": ["id"],
+        "nameExplicit": false,
+        "entityType": "pks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "assessments",
+        "name": "assessments_pkey",
+        "columns": ["id"],
+        "nameExplicit": false,
+        "entityType": "pks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "exports",
+        "name": "exports_pkey",
+        "columns": ["id"],
+        "nameExplicit": false,
+        "entityType": "pks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "question_usages",
+        "name": "question_usages_pkey",
+        "columns": ["id"],
+        "nameExplicit": false,
+        "entityType": "pks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "school_templates",
+        "name": "school_templates_pkey",
+        "columns": ["id"],
+        "nameExplicit": false,
+        "entityType": "pks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "question_versions",
+        "name": "question_versions_id_question_owner_unique",
+        "nameExplicit": true,
+        "columns": ["id", "question_id", "owner_id"],
+        "nullsNotDistinct": false,
+        "entityType": "uniques"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "assessment_items",
+        "name": "assessment_items_question_once",
+        "nameExplicit": true,
+        "columns": ["assessment_id", "question_id"],
+        "nullsNotDistinct": false,
+        "entityType": "uniques"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "assessment_sections",
+        "name": "assessment_sections_id_assessment_owner_unique",
+        "nameExplicit": true,
+        "columns": ["id", "assessment_id", "owner_id"],
+        "nullsNotDistinct": false,
+        "entityType": "uniques"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "assessments",
+        "name": "assessments_id_owner_unique",
+        "nameExplicit": true,
+        "columns": ["id", "owner_id"],
+        "nullsNotDistinct": false,
+        "entityType": "uniques"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "exports",
+        "name": "exports_id_owner_unique",
+        "nameExplicit": true,
+        "columns": ["id", "owner_id"],
+        "nullsNotDistinct": false,
+        "entityType": "uniques"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "question_usages",
+        "name": "question_usages_once_per_export",
+        "nameExplicit": true,
+        "columns": ["assessment_id", "export_id", "question_version_id"],
+        "nullsNotDistinct": false,
+        "entityType": "uniques"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "school_templates",
+        "name": "school_templates_id_owner_unique",
+        "nameExplicit": true,
+        "columns": ["id", "owner_id"],
+        "nullsNotDistinct": false,
+        "entityType": "uniques"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "assessment_items",
+        "name": "assessment_items_points_check",
+        "value": "\"points\" >= 0",
+        "entityType": "checks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "assessments",
+        "name": "assessments_kind_check",
+        "value": "\"kind\" in ('latihan', 'ulangan_harian', 'sts', 'sas', 'custom')",
+        "entityType": "checks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "assessments",
+        "name": "assessments_grade_check",
+        "value": "\"grade\" in (7, 8, 9)",
+        "entityType": "checks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "assessments",
+        "name": "assessments_scoring_mode_check",
+        "value": "\"scoring_mode\" in ('equal', 'manual', 'normalised')",
+        "entityType": "checks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "assessments",
+        "name": "assessments_status_check",
+        "value": "\"status\" in ('draft', 'approved')",
+        "entityType": "checks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "assessments",
+        "name": "assessments_duration_check",
+        "value": "\"duration_minutes\" is null or \"duration_minutes\" > 0",
+        "entityType": "checks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "assessments",
+        "name": "assessments_approved_check",
+        "value": "\"status\" <> 'approved' or (\"approved_at\" is not null and \"approved_snapshot_hash\" is not null)",
+        "entityType": "checks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "exports",
+        "name": "exports_document_check",
+        "value": "\"document\" in ('paper', 'key', 'solutions', 'zip')",
+        "entityType": "checks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "exports",
+        "name": "exports_format_check",
+        "value": "\"format\" in ('pdf', 'docx', 'zip')",
+        "entityType": "checks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "exports",
+        "name": "exports_zip_format_check",
+        "value": "(\"document\" = 'zip') = (\"format\" = 'zip')",
+        "entityType": "checks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "school_templates",
+        "name": "school_templates_paper_size_check",
+        "value": "\"paper_size\" in ('A4', 'F4')",
+        "entityType": "checks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "school_templates",
+        "name": "school_templates_font_check",
+        "value": "\"font\" in ('times', 'arial')",
+        "entityType": "checks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "assessment_items",
+        "name": "assessment_items_owner_select",
+        "as": "PERMISSIVE",
+        "for": "SELECT",
+        "roles": ["authenticated"],
+        "using": "\"assessment_items\".\"owner_id\" = auth.uid()",
+        "withCheck": null,
+        "entityType": "policies"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "assessment_items",
+        "name": "assessment_items_owner_insert",
+        "as": "PERMISSIVE",
+        "for": "INSERT",
+        "roles": ["authenticated"],
+        "using": null,
+        "withCheck": "\"assessment_items\".\"owner_id\" = auth.uid()",
+        "entityType": "policies"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "assessment_items",
+        "name": "assessment_items_owner_update",
+        "as": "PERMISSIVE",
+        "for": "UPDATE",
+        "roles": ["authenticated"],
+        "using": "\"assessment_items\".\"owner_id\" = auth.uid()",
+        "withCheck": "\"assessment_items\".\"owner_id\" = auth.uid()",
+        "entityType": "policies"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "assessment_items",
+        "name": "assessment_items_owner_delete",
+        "as": "PERMISSIVE",
+        "for": "DELETE",
+        "roles": ["authenticated"],
+        "using": "\"assessment_items\".\"owner_id\" = auth.uid()",
+        "withCheck": null,
+        "entityType": "policies"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "assessment_sections",
+        "name": "assessment_sections_owner_select",
+        "as": "PERMISSIVE",
+        "for": "SELECT",
+        "roles": ["authenticated"],
+        "using": "\"assessment_sections\".\"owner_id\" = auth.uid()",
+        "withCheck": null,
+        "entityType": "policies"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "assessment_sections",
+        "name": "assessment_sections_owner_insert",
+        "as": "PERMISSIVE",
+        "for": "INSERT",
+        "roles": ["authenticated"],
+        "using": null,
+        "withCheck": "\"assessment_sections\".\"owner_id\" = auth.uid()",
+        "entityType": "policies"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "assessment_sections",
+        "name": "assessment_sections_owner_update",
+        "as": "PERMISSIVE",
+        "for": "UPDATE",
+        "roles": ["authenticated"],
+        "using": "\"assessment_sections\".\"owner_id\" = auth.uid()",
+        "withCheck": "\"assessment_sections\".\"owner_id\" = auth.uid()",
+        "entityType": "policies"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "assessment_sections",
+        "name": "assessment_sections_owner_delete",
+        "as": "PERMISSIVE",
+        "for": "DELETE",
+        "roles": ["authenticated"],
+        "using": "\"assessment_sections\".\"owner_id\" = auth.uid()",
+        "withCheck": null,
+        "entityType": "policies"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "assessments",
+        "name": "assessments_owner_select",
+        "as": "PERMISSIVE",
+        "for": "SELECT",
+        "roles": ["authenticated"],
+        "using": "\"assessments\".\"owner_id\" = auth.uid()",
+        "withCheck": null,
+        "entityType": "policies"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "assessments",
+        "name": "assessments_owner_insert",
+        "as": "PERMISSIVE",
+        "for": "INSERT",
+        "roles": ["authenticated"],
+        "using": null,
+        "withCheck": "\"assessments\".\"owner_id\" = auth.uid()",
+        "entityType": "policies"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "assessments",
+        "name": "assessments_owner_update",
+        "as": "PERMISSIVE",
+        "for": "UPDATE",
+        "roles": ["authenticated"],
+        "using": "\"assessments\".\"owner_id\" = auth.uid()",
+        "withCheck": "\"assessments\".\"owner_id\" = auth.uid()",
+        "entityType": "policies"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "assessments",
+        "name": "assessments_owner_delete",
+        "as": "PERMISSIVE",
+        "for": "DELETE",
+        "roles": ["authenticated"],
+        "using": "\"assessments\".\"owner_id\" = auth.uid()",
+        "withCheck": null,
+        "entityType": "policies"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "exports",
+        "name": "exports_owner_select",
+        "as": "PERMISSIVE",
+        "for": "SELECT",
+        "roles": ["authenticated"],
+        "using": "\"exports\".\"owner_id\" = auth.uid()",
+        "withCheck": null,
+        "entityType": "policies"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "question_usages",
+        "name": "question_usages_owner_select",
+        "as": "PERMISSIVE",
+        "for": "SELECT",
+        "roles": ["authenticated"],
+        "using": "\"question_usages\".\"owner_id\" = auth.uid()",
+        "withCheck": null,
+        "entityType": "policies"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "school_templates",
+        "name": "school_templates_owner_select",
+        "as": "PERMISSIVE",
+        "for": "SELECT",
+        "roles": ["authenticated"],
+        "using": "\"school_templates\".\"owner_id\" = auth.uid()",
+        "withCheck": null,
+        "entityType": "policies"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "school_templates",
+        "name": "school_templates_owner_insert",
+        "as": "PERMISSIVE",
+        "for": "INSERT",
+        "roles": ["authenticated"],
+        "using": null,
+        "withCheck": "\"school_templates\".\"owner_id\" = auth.uid()",
+        "entityType": "policies"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "school_templates",
+        "name": "school_templates_owner_update",
+        "as": "PERMISSIVE",
+        "for": "UPDATE",
+        "roles": ["authenticated"],
+        "using": "\"school_templates\".\"owner_id\" = auth.uid()",
+        "withCheck": "\"school_templates\".\"owner_id\" = auth.uid()",
+        "entityType": "policies"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "school_templates",
+        "name": "school_templates_owner_delete",
+        "as": "PERMISSIVE",
+        "for": "DELETE",
+        "roles": ["authenticated"],
+        "using": "\"school_templates\".\"owner_id\" = auth.uid()",
+        "withCheck": null,
+        "entityType": "policies"
+      }
+    }
+  ]
+}
