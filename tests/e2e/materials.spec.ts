@@ -108,16 +108,28 @@ function trashedMaterial(page: Page) {
     .filter({ hasText: TITLE });
 }
 
+/**
+ * Picks a radio drawn as a button: the input is a 1 px "sr-only" box, so Playwright's own click on it
+ * lands on whatever sits beside that box and never succeeds. A person clicks the label, so does this.
+ */
+async function chooseRadio(page: Page, name: string) {
+  await page
+    .locator("label")
+    .filter({ hasText: new RegExp("^" + name + "$") })
+    .click();
+  await expect(page.getByRole("radio", { name, exact: true })).toBeChecked();
+}
+
 /** On /generate: topic SPLDV, source "Dari materi", the PDF, pages 2-3; then submits. */
 async function generateFromPages(page: Page) {
   await page.goto("/generate");
   // Picking the topic first also waits for hydration (the source choice is client state).
   await pickTopic(page);
-  await page.getByRole("radio", { name: "Dari materi" }).check();
+  await chooseRadio(page, "Dari materi");
   await page
     .getByRole("combobox", { name: "Materi", exact: true })
     .selectOption({ label: TITLE });
-  await page.getByRole("radio", { name: "Halaman", exact: true }).check();
+  await chooseRadio(page, "Halaman");
   await page.getByRole("textbox", { name: "Halaman", exact: true }).fill("2-3");
   await page.getByRole("button", { name: T.submit, exact: true }).click();
   await page.waitForURL(REQUEST_URL, { timeout: GENERATION_WAIT });
