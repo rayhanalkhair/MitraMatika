@@ -201,6 +201,27 @@ describe("claimNotice", () => {
 
 describe("notify", () => {
   it(
+    "a throwing approval predicate claims nothing, rejects nothing and sends nothing",
+    async () => {
+      const u = await newUser();
+      const n = notifier({
+        isApproved: () => {
+          throw new Error("env invalid with " + u.email);
+        },
+      });
+      await expect(n.notify(u.id)).resolves.toBeUndefined();
+      expect(n.fake.messages).toEqual([]);
+      expect((await notifiedAt(u.id)) ?? null).toBeNull();
+      expect(logs.join("\n")).not.toContain(u.email);
+      // Once the environment is readable again the same account is announced.
+      const ok = notifier();
+      await ok.notify(u.id);
+      expect(ok.fake.messages).toHaveLength(1);
+    },
+    DB_TEST_TIMEOUT,
+  );
+
+  it(
     "sends one email to the admin with the account details and how to approve",
     async () => {
       const u = await newUser({ name: "Bu Sari", school: "SDN 3 Contoh" });
@@ -428,23 +449,55 @@ describe("the budget", () => {
 
 describe("digest", () => {
   it(
-    "30 waiting accounts: one email with 25, the next call sends the other 5",
+    "30 waiting accounts: the newest 25 with the total of 30, then the other 5",
     async () => {
-      for (let i = 0; i < 30; i += 1) await newUser();
+      const users = [];
+      for (let i = 0; i < 30; i += 1) users.push(await newUser());
       const n = notifier();
       const first = await n.digest();
       expect(first).toEqual({ backlogLeft: true });
       expect(n.fake.messages).toHaveLength(1);
       expect(n.fake.messages[0].to).toBe(ADMIN);
       const lines = (m: string) => m.split("\n").filter((l) => l.startsWith("- "));
-      expect(lines(n.fake.messages[0].text)).toHaveLength(DIGEST_MAX_ACCOUNTS);
+      const firstText = n.fake.messages[0].text;
+      expect(lines(firstText)).toHaveLength(DIGEST_MAX_ACCOUNTS);
+      expect(firstText).toContain("30 akun");
+      expect(firstText).toContain("25 yang terbaru");
+      // Newest first: the newest account is listed, the five oldest are not.
+      expect(firstText).toContain(users[29].email);
+      for (const old of users.slice(0, 5)) expect(firstText).not.toContain(old.email);
       await n.digest();
       expect(n.fake.messages).toHaveLength(2);
       expect(lines(n.fake.messages[1].text)).toHaveLength(5);
+      expect(n.fake.messages[1].text).toContain("5 akun");
       await n.digest();
       expect(n.fake.messages).toHaveLength(2);
     },
     DB_TEST_TIMEOUT * 2,
+  );
+
+  it(
+    "a flood of old sign-ups cannot hide a newer account",
+    async () => {
+      for (let i = 0; i < 40; i += 1) await newUser();
+      const real = await newUser({ name: "Guru Sungguhan" });
+      const n = notifier();
+      await n.digest();
+      expect(n.fake.messages[0].text).toContain(real.email);
+      expect(n.fake.messages[0].text).toContain("41 akun");
+    },
+    DB_TEST_TIMEOUT * 2,
+  );
+
+  it(
+    "two digests at once send one email",
+    async () => {
+      for (let i = 0; i < 3; i += 1) await newUser();
+      const n = notifier();
+      await Promise.all([n.digest(), n.digest()]);
+      expect(n.fake.messages).toHaveLength(1);
+    },
+    DB_TEST_TIMEOUT,
   );
 
   it(
@@ -465,14 +518,50 @@ describe("digest", () => {
   );
 
   it(
-    "a send failure releases every claim and reports failed",
+    "a send failure marks nothing, uses no budget and reports failed; the next run sends",
     async () => {
       const users = [];
       for (let i = 0; i < 3; i += 1) users.push(await newUser());
       const n = notifier({ fake: createFakeEmailSender({ fail: "down" }) });
       expect(await n.digest()).toEqual({ failed: true });
-      for (const u of users) expect(await notifiedAt(u.id)).toBeNull();
+      for (const u of users) expect((await notifiedAt(u.id)) ?? null).toBeNull();
       expect(await t.db.select().from(verification)).toEqual([]);
+      const again = notifier();
+      expect(await again.digest()).toEqual({});
+      expect(again.fake.messages).toHaveLength(1);
+    },
+    DB_TEST_TIMEOUT,
+  );
+
+  it(
+    "a sender that throws (a task dying mid-send) leaves every account unmarked",
+    async () => {
+      const users = [];
+      for (let i = 0; i < 3; i += 1) users.push(await newUser());
+      const n = createAdminNotifier({
+        db: t.db,
+        now: () => NOW,
+        getSender: () => () => Promise.reject(new Error("killed")),
+      });
+      expect(await n.digest()).toEqual({ failed: true });
+      for (const u of users) expect((await notifiedAt(u.id)) ?? null).toBeNull();
+      expect(await t.db.select().from(verification)).toEqual([]);
+    },
+    DB_TEST_TIMEOUT,
+  );
+
+  it(
+    "a throwing approval predicate marks nothing and fails the step",
+    async () => {
+      const u = await newUser();
+      const n = notifier({
+        isApproved: () => {
+          throw new Error("env invalid");
+        },
+      });
+      expect(await n.digest()).toEqual({ failed: true });
+      expect(n.fake.messages).toEqual([]);
+      expect((await notifiedAt(u.id)) ?? null).toBeNull();
     },
     DB_TEST_TIMEOUT,
   );

@@ -787,7 +787,7 @@
       "adminNoticeSubject": "Akun baru menunggu persetujuan di MitraMatika",
       "adminNoticeBody": "Halo,\n\nAda akun baru dengan email yang sudah terverifikasi dan menunggu persetujuan:\n\nEmail: {email}\nNama: {name}\nSekolah: {school}\nDaftar: {time}\n\nUntuk menyetujui, tambahkan email ini ke ALLOWED_EMAILS di Vercel (Settings, Environment Variables, Production), lalu redeploy. Setelah itu akun bisa dipakai pada permintaan berikutnya.",
       "adminDigestSubject": "Ringkasan akun baru yang menunggu persetujuan di MitraMatika",
-      "adminDigestBody": "Halo,\n\n{count, number} akun dengan email yang sudah terverifikasi menunggu persetujuan (email | nama | sekolah | daftar):\n\n{list}\n\nUntuk menyetujui, tambahkan email ke ALLOWED_EMAILS di Vercel (Settings, Environment Variables, Production), lalu redeploy."
+      "adminDigestBody": "Halo,\n\n{total, number} akun dengan email yang sudah terverifikasi menunggu persetujuan. Di bawah ini {count, number} yang terbaru (email | nama | sekolah | daftar); yang lain muncul di ringkasan berikutnya.\n\n{list}\n\nUntuk menyetujui, tambahkan email ke ALLOWED_EMAILS di Vercel (Settings, Environment Variables, Production), lalu redeploy."
     }
   },
   "settings": {

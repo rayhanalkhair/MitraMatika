@@ -37,7 +37,6 @@ export function WaitingApproval({
       <div className="flex flex-col gap-3">
         {/* A plain anchor on purpose: a client-side Link can keep the router cache on this page
             after the approval, and the check must ask the server again. */}
-        {}
         <a href="/home" className={submitClass}>
           {t("recheck")}
         </a>

@@ -1,5 +1,5 @@
 import "server-only";
-import { and, eq, exists, inArray, isNull, sql } from "drizzle-orm";
+import { and, desc, eq, exists, inArray, isNull, sql } from "drizzle-orm";
 import type { PgAsyncDatabase, PgQueryResultHKT } from "drizzle-orm/pg-core";
 import type { AnyRelations } from "drizzle-orm/relations";
 import { getDb } from "@/lib/db/runtime";
@@ -9,6 +9,7 @@ import { getEnv } from "@/lib/env";
 import { createStaticTranslator } from "@/lib/i18n/translator";
 import type { StepReport } from "@/lib/jobs/tick";
 import { logger } from "@/lib/logger";
+import { err } from "@/lib/result";
 import { isApprovedEmail } from "./approval";
 import { createGlobalSendBudget, type Reservation } from "./global-send-budget";
 
@@ -26,8 +27,8 @@ export const DIGEST_MAX_ACCOUNTS = 25;
 const NAME_MAX = 80;
 const SCHOOL_MAX = 120;
 const EMAIL_MAX_SHOWN = 254;
-// The digest looks at this many unclaimed verified accounts per run (oldest first).
-const CANDIDATE_LIMIT = 200;
+// The digest looks at this many unmarked verified accounts per run (newest first).
+const CANDIDATE_LIMIT = 2000;
 
 type Db<
   TQueryResult extends PgQueryResultHKT,
@@ -99,6 +100,9 @@ export async function claimNotice<
       .limit(1)
   ).at(0);
   if (found?.verified !== true) return null;
+  // Decided BEFORE the claim: the predicate reads the environment and can throw, and a throw
+  // after the UPDATE would leave the account claimed and never announced.
+  const approved = isApproved(found.email);
   await ensureProfiles(db, [{ id: userId, name: found.name }]);
   const claimed = await db
     .update(profiles)
@@ -116,7 +120,7 @@ export async function claimNotice<
       ),
     )
     .returning({ displayName: profiles.displayName, schoolName: profiles.schoolName });
-  if (claimed.length === 0 || isApproved(found.email)) return null;
+  if (claimed.length === 0 || approved) return null;
   return {
     userId,
     email: found.email,
@@ -268,11 +272,14 @@ export function createAdminNotifier<
     }
   }
 
+  // The digest marks its accounts only AFTER a successful send, inside one transaction that holds
+  // an advisory lock: a send that fails or a task that dies leaves the accounts unmarked for the
+  // next run, and two digests cannot both send (the second waits, then finds nothing). A single
+  // notice (above) claims BEFORE it sends, which is what keeps it to one email per account; the
+  // price is that a task killed between the claim and the send loses that one notice and the
+  // digest cannot recover it (it only sees unmarked accounts).
   async function digest(): Promise<StepReport> {
     const report: StepReport = {};
-    let claimedIds: string[] = [];
-    let reservation: Reservation | null = null;
-    let sent = false;
     try {
       const to = adminEmail();
       if (to === undefined) {
@@ -282,114 +289,111 @@ export function createAdminNotifier<
         );
         return report;
       }
-      const candidates = await db
-        .select({
-          id: user.id,
-          email: user.email,
-          name: user.name,
-          createdAt: user.createdAt,
-          displayName: profiles.displayName,
-          schoolName: profiles.schoolName,
-        })
-        .from(user)
-        .leftJoin(profiles, eq(profiles.id, user.id))
-        .where(and(eq(user.emailVerified, true), isNull(profiles.adminNotifiedAt)))
-        .orderBy(user.createdAt)
-        .limit(CANDIDATE_LIMIT);
-      const approved = candidates.filter((row) => isApproved(row.email));
-      const waiting = candidates.filter((row) => !isApproved(row.email));
-      // Approved accounts are claimed without a notice.
-      if (approved.length > 0) {
-        await ensureProfiles(
-          db,
-          approved.map((row) => ({ id: row.id, name: row.name })),
+      await db.transaction(async (tx) => {
+        await tx.execute(
+          sql`select pg_advisory_xact_lock(hashtextextended(${"admin_digest"}, 0))`,
         );
-        await db
-          .update(profiles)
-          .set({ adminNotifiedAt: now() })
-          .where(
-            and(
-              inArray(
-                profiles.id,
-                approved.map((row) => row.id),
-              ),
-              isNull(profiles.adminNotifiedAt),
-            ),
+        // The NEWEST first: a flood of old sign-ups cannot hide a new one, and the body states
+        // the total, so the admin always sees how many more are waiting.
+        const candidates = await tx
+          .select({
+            id: user.id,
+            email: user.email,
+            name: user.name,
+            createdAt: user.createdAt,
+            displayName: profiles.displayName,
+            schoolName: profiles.schoolName,
+          })
+          .from(user)
+          .leftJoin(profiles, eq(profiles.id, user.id))
+          .where(and(eq(user.emailVerified, true), isNull(profiles.adminNotifiedAt)))
+          .orderBy(desc(user.createdAt))
+          .limit(CANDIDATE_LIMIT);
+        // Decided before anything is written: a throwing predicate changes nothing.
+        const approved = candidates.filter((row) => isApproved(row.email));
+        const waiting = candidates.filter((row) => !isApproved(row.email));
+        const listed = waiting.slice(0, DIGEST_MAX_ACCOUNTS);
+        if (waiting.length > listed.length) report.backlogLeft = true;
+        const budgetTx = createGlobalSendBudget(tx, now);
+        let reservation: Reservation | null = null;
+        let sent = listed.length === 0;
+        if (listed.length > 0) {
+          reservation = await budgetTx.reserve("adminDigest");
+          if (reservation === null) {
+            logger.warn(
+              { module: "auth", purpose: "adminDigest", accounts: listed.length },
+              "auth: the admin email budget is used up; the digest waits for the next day",
+            );
+            report.backlogLeft = true;
+            return;
+          }
+          const t = createStaticTranslator("auth.email");
+          const lines = listed.map((row) => {
+            const f = entryFields({
+              email: row.email,
+              name: row.displayName ?? row.name,
+              schoolName: row.schoolName,
+              createdAt: row.createdAt,
+            });
+            return `- ${f.email} | ${f.name} | ${f.school} | ${f.time}`;
+          });
+          let result: Awaited<ReturnType<SendEmail>>;
+          try {
+            result = await getSender()({
+              to,
+              subject: t("adminDigestSubject"),
+              text: t("adminDigestBody", {
+                total: waiting.length,
+                count: listed.length,
+                list: lines.join("\n"),
+              }),
+            });
+          } catch (error) {
+            result = err(errorName(error));
+          }
+          sent = result.ok;
+          if (!result.ok) {
+            logger.error(
+              { module: "auth", purpose: "adminDigest", error: result.error },
+              "auth: the admin digest could not be sent",
+            );
+            report.failed = true;
+          }
+          await (sent ? budgetTx.confirm(reservation) : budgetTx.release(reservation));
+        }
+        if (!sent) return;
+        // Marked after the send. An account a single notice claimed meanwhile keeps its first
+        // mark (the conditional update), and may be listed twice (harmless).
+        const marked = [...approved, ...listed].map((row) => ({
+          id: row.id,
+          displayName: row.name,
+          adminNotifiedAt: now(),
+        }));
+        if (marked.length > 0) {
+          await tx
+            .insert(profiles)
+            .values(marked)
+            .onConflictDoUpdate({
+              target: profiles.id,
+              set: { adminNotifiedAt: now() },
+              setWhere: isNull(profiles.adminNotifiedAt),
+            });
+        }
+        if (listed.length > 0) {
+          logger.info(
+            { module: "auth", accounts: listed.length, waiting: waiting.length },
+            "auth: sent the admin digest of accounts waiting for approval",
           );
-      }
-      const chosen = waiting.slice(0, DIGEST_MAX_ACCOUNTS);
-      if (waiting.length > DIGEST_MAX_ACCOUNTS) report.backlogLeft = true;
-      if (chosen.length === 0) return report;
-      await ensureProfiles(
-        db,
-        chosen.map((row) => ({ id: row.id, name: row.name })),
-      );
-      // One statement claims the whole batch; an account claimed meanwhile is simply left out.
-      const claimed = await db
-        .update(profiles)
-        .set({ adminNotifiedAt: now() })
-        .where(
-          and(
-            inArray(
-              profiles.id,
-              chosen.map((row) => row.id),
-            ),
-            isNull(profiles.adminNotifiedAt),
-          ),
-        )
-        .returning({ id: profiles.id });
-      claimedIds = claimed.map((row) => row.id);
-      const listed = chosen.filter((row) => claimedIds.includes(row.id));
-      if (listed.length === 0) return report;
-      reservation = await budget.reserve("adminDigest");
-      if (reservation === null) {
-        logger.warn(
-          { module: "auth", purpose: "adminDigest", accounts: listed.length },
-          "auth: the admin email budget is used up; the digest waits for the next day",
-        );
-        report.backlogLeft = true;
-        return report;
-      }
-      const t = createStaticTranslator("auth.email");
-      const lines = listed.map((row) => {
-        const f = entryFields({
-          email: row.email,
-          name: row.displayName ?? row.name,
-          schoolName: row.schoolName,
-          createdAt: row.createdAt,
-        });
-        return `- ${f.email} | ${f.name} | ${f.school} | ${f.time}`;
+        }
       });
-      const result = await getSender()({
-        to,
-        subject: t("adminDigestSubject"),
-        text: t("adminDigestBody", { count: listed.length, list: lines.join("\n") }),
-      });
-      if (!result.ok) {
-        logger.error(
-          { module: "auth", purpose: "adminDigest", error: result.error },
-          "auth: the admin digest could not be sent",
-        );
-        report.failed = true;
-        return report;
-      }
-      sent = true;
-      logger.info(
-        { module: "auth", accounts: listed.length },
-        "auth: sent the admin digest of accounts waiting for approval",
-      );
-      return report;
     } catch (error) {
       logger.error(
         { module: "auth", purpose: "adminDigest", errorName: errorName(error) },
         "auth: the admin digest failed",
       );
       report.failed = true;
-      return report;
-    } finally {
-      await settle(reservation, sent);
-      if (!sent && claimedIds.length > 0) await giveBack(claimedIds);
     }
+    return report;
   }
 
   return { notify, digest };

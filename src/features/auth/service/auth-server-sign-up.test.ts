@@ -16,6 +16,7 @@ import { createFakeEmailSender, type FakeEmailSender } from "@/lib/email/fake";
 import { logger } from "@/lib/logger";
 import {
   createAuth,
+  createVerifiedAccountTriggers,
   RATE_LIMIT_RULES,
   RESPONSE_FLOOR_MS,
   USED_AUTH_PATHS,
@@ -1002,4 +1003,52 @@ describe("the admin notice trigger (ADR-0022, hook: databaseHooks.user.update.af
     },
     DB_TEST_TIMEOUT,
   );
+});
+
+describe("createVerifiedAccountTriggers", () => {
+  it("schedules only on /verify-email updates, non-sign-up creations and Google links", async () => {
+    const scheduled: string[] = [];
+    const triggers = createVerifiedAccountTriggers((id) => scheduled.push(id));
+    // Other user updates (a name change, another endpoint, no endpoint) schedule nothing.
+    await triggers.userUpdated(
+      { id: "u1", emailVerified: true },
+      { path: "/update-user" },
+    );
+    await triggers.userUpdated({ id: "u2", emailVerified: true }, null);
+    await triggers.userUpdated(
+      { id: "u3", emailVerified: false },
+      { path: "/verify-email" },
+    );
+    // The email sign-up creates an unverified user: nothing.
+    await triggers.userCreated(
+      { id: "u4", emailVerified: false },
+      { path: "/sign-up/email" },
+    );
+    await triggers.userCreated(
+      { id: "u5", emailVerified: true },
+      { path: "/sign-up/email" },
+    );
+    await triggers.accountCreated({ providerId: "credential", userId: "u6" });
+    expect(scheduled).toEqual([]);
+    await triggers.userUpdated(
+      { id: "u7", emailVerified: true },
+      { path: "/verify-email" },
+    );
+    await triggers.userCreated(
+      { id: "u8", emailVerified: true },
+      { path: "/callback/:id" },
+    );
+    await triggers.accountCreated({ providerId: "google", userId: "u9" });
+    expect(scheduled).toEqual(["u7", "u8", "u9"]);
+  });
+
+  it("never throws when scheduling does", async () => {
+    vi.spyOn(logger, "error").mockImplementation(() => undefined);
+    const triggers = createVerifiedAccountTriggers(() => {
+      throw new Error("boom");
+    });
+    await expect(
+      triggers.userUpdated({ id: "u1", emailVerified: true }, { path: "/verify-email" }),
+    ).resolves.toBeUndefined();
+  });
 });
