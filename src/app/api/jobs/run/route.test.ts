@@ -113,6 +113,7 @@ describe("/api/jobs/run", () => {
       "purgeExports",
       "sweepMaterials",
       "sweepSolver",
+      "checkStorageAlerts",
     ]);
     expect(recordRunMock).toHaveBeenCalledTimes(1);
     const [db, input] = recordRunMock.mock.calls[0];

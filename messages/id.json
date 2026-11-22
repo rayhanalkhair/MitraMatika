@@ -787,7 +787,10 @@
       "adminNoticeSubject": "Akun baru menunggu persetujuan di MitraMatika",
       "adminNoticeBody": "Halo,\n\nAda akun baru dengan email yang sudah terverifikasi dan menunggu persetujuan:\n\nEmail: {email}\nNama: {name}\nSekolah: {school}\nDaftar: {time}\n\nUntuk menyetujui, tambahkan email ini ke ALLOWED_EMAILS di Vercel (Settings, Environment Variables, Production), lalu redeploy. Setelah itu akun bisa dipakai pada permintaan berikutnya.",
       "adminDigestSubject": "Ringkasan akun baru yang menunggu persetujuan di MitraMatika",
-      "adminDigestBody": "Halo,\n\n{total, number} akun dengan email yang sudah terverifikasi menunggu persetujuan. Di bawah ini {count, number} yang terbaru (email | nama | sekolah | daftar); yang lain muncul di ringkasan berikutnya.\n\n{list}\n\nUntuk menyetujui, tambahkan email ke ALLOWED_EMAILS di Vercel (Settings, Environment Variables, Production), lalu redeploy."
+      "adminDigestBody": "Halo,\n\n{total, number} akun dengan email yang sudah terverifikasi menunggu persetujuan. Di bawah ini {count, number} yang terbaru (email | nama | sekolah | daftar); yang lain muncul di ringkasan berikutnya.\n\n{list}\n\nUntuk menyetujui, tambahkan email ke ALLOWED_EMAILS di Vercel (Settings, Environment Variables, Production), lalu redeploy.",
+      "storageAlertWarnSubject": "Penyimpanan MitraMatika hampir penuh",
+      "storageAlertFullSubject": "Penyimpanan MitraMatika penuh",
+      "storageAlertBody": "Halo,\n\nPenyimpanan MitraMatika terpakai {percent, number}% dari batas: {used, number} MB dari {cap, number} MB.\n\nCloudflare R2 tidak punya batas biaya, jadi batas ini satu-satunya penjaga: saat penuh, unggahan baru ditolak. Untuk melapangkan ruang, lihat bagian \"Object storage\" di runbook."
     }
   },
   "settings": {

@@ -9,7 +9,8 @@
 // (stepBudgetMs). Only one bounded store call may still be in flight past the cutoff (at most 45 s,
 // the trash purge's), so the runner gets at least about 240 - 120 - 45 = 75 s, usually about
 // 120 s. The uncapped database steps (settling regenerations, 200 rows; pruning accounts, 500
-// users; the admin digest, one email for at most 25 accounts) are single bounded statements that run first. A step that throws is logged and the next
+// users; the admin digest, one email for at most 25 accounts) are single bounded statements that run first;
+// the last step, the storage alert, is one total query and at most one email. A step that throws is logged and the next
 // one runs; a runner that throws is logged by name and recorded. With less than MIN_RUNNER_MS
 // left, no job runs this time.
 import "server-only";
@@ -37,7 +38,8 @@ export type StepName =
   | "purgeTrash"
   | "purgeExports"
   | "sweepMaterials"
-  | "sweepSolver";
+  | "sweepSolver"
+  | "checkStorageAlerts";
 
 /** What a step says about itself; every step catches its own errors and may report them here. */
 export interface StepReport {

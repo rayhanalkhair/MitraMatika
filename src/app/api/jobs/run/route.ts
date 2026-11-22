@@ -1,5 +1,9 @@
 import { after } from "next/server";
-import { pruneUnverifiedAccounts, sendPendingDigest } from "@/features/auth";
+import {
+  checkStorageAlerts,
+  pruneUnverifiedAccounts,
+  sendPendingDigest,
+} from "@/features/auth";
 import { backfillBankSearchText } from "@/features/bank";
 import { settleStrandedRegenerations } from "@/features/generation";
 import { purgeExports } from "@/features/export";
@@ -61,7 +65,8 @@ function handle(request: Request, trigger: RunTrigger): Promise<Response> {
       // day purge the expired trash (at most 60 s of new rows plus one 45 s store call); delete
       // the exported files whose 7 days are over (30 s + 15 s); fail materials whose ingestion
       // died and sweep expired upload reservations (20 s + 10 s); delete solver photos 7 days
-      // after their session (15 s + 10 s). No step starts after 120 s (HOUSEKEEPING_CUTOFF_MS);
+      // after their session (15 s + 10 s); then email the admin once at 80 and at 100 percent of the
+      // app-wide storage cap (one total query and one email). No step starts after 120 s (HOUSEKEEPING_CUTOFF_MS);
       // none throws. The run's record (audit_log `jobs_run`) is written last, in the same task.
       async (runTrigger) => {
         logger.info({ module: "jobs", trigger: runTrigger }, "jobs: run started");
@@ -77,6 +82,8 @@ function handle(request: Request, trigger: RunTrigger): Promise<Response> {
             { name: "purgeExports", run: (left) => purgeExports(new Date(), left) },
             { name: "sweepMaterials", run: (left) => sweepMaterials(new Date(), left) },
             { name: "sweepSolver", run: (left) => sweepSolver(new Date(), left) },
+            // Last, so the total it reads already lacks what the sweeps just freed.
+            { name: "checkStorageAlerts", run: () => checkStorageAlerts() },
           ],
           runJobs: runDefaultJobs,
         });

@@ -787,7 +787,10 @@
       "adminNoticeSubject": "New account waiting for approval on MitraMatika",
       "adminNoticeBody": "Hello,\n\nA new account with a verified email is waiting for approval:\n\nEmail: {email}\nName: {name}\nSchool: {school}\nSigned up: {time}\n\nTo approve it, add this email to ALLOWED_EMAILS in the Vercel project settings (environment variables, Production), then redeploy. The account works from its next request.",
       "adminDigestSubject": "Summary of new accounts waiting for approval on MitraMatika",
-      "adminDigestBody": "Hello,\n\n{total, number} accounts with a verified email are waiting for approval. The newest {count, number} are listed below (email | name | school | signed up); the others follow in the next summary.\n\n{list}\n\nTo approve one, add its email to ALLOWED_EMAILS in the Vercel project settings (environment variables, Production), then redeploy."
+      "adminDigestBody": "Hello,\n\n{total, number} accounts with a verified email are waiting for approval. The newest {count, number} are listed below (email | name | school | signed up); the others follow in the next summary.\n\n{list}\n\nTo approve one, add its email to ALLOWED_EMAILS in the Vercel project settings (environment variables, Production), then redeploy.",
+      "storageAlertWarnSubject": "MitraMatika storage is nearly full",
+      "storageAlertFullSubject": "MitraMatika storage is full",
+      "storageAlertBody": "Hello,\n\nMitraMatika storage is {percent, number}% used: {used, number} MB of {cap, number} MB.\n\nCloudflare R2 has no spending cap, so this limit is the only guard: when it is full, new uploads are refused. To free space, see the \"Object storage\" section of the runbook."
     }
   },
   "settings": {

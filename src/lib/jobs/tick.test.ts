@@ -34,9 +34,10 @@ const NAMES: StepName[] = [
   "purgeExports",
   "sweepMaterials",
   "sweepSolver",
+  "checkStorageAlerts",
 ];
 
-/** A fake clock and the seven steps in the route's order, each taking `ms` of it. */
+/** A fake clock and the steps in the route's order, each taking `ms` of it. */
 function setup(
   stepsMs: number[],
   options: { startedAt?: number; reports?: StepReport[] } = {},
@@ -71,14 +72,14 @@ describe("runTick", () => {
   });
 
   it("all fast steps run in order and the runner gets about 240 s", async () => {
-    const t = setup([100, 100, 100, 100, 100, 100, 100, 100]);
+    const t = setup([100, 100, 100, 100, 100, 100, 100, 100, 100]);
     const result = await runTick(t);
-    expect(t.order).toEqual([...NAMES, `jobs:${String(TICK_BUDGET_MS - 800)}`]);
+    expect(t.order).toEqual([...NAMES, `jobs:${String(TICK_BUDGET_MS - 900)}`]);
     expect(result.steps).toEqual(
       NAMES.map((name) => ({ name, outcome: "ran", ms: 100 })),
     );
     expect(result.jobs).toBe(SUMMARY);
-    expect(result.budgetMs).toBe(TICK_BUDGET_MS - 800);
+    expect(result.budgetMs).toBe(TICK_BUDGET_MS - 900);
   });
 
   it("counts the time since the request, not since the first step", async () => {
@@ -206,6 +207,23 @@ describe("runTick", () => {
       ["sendAdminNotices", "failed"],
       ["backfillSearchText", "ran"],
     ]);
+  });
+
+  it("a throwing storage alert step is reported failed and the runner still runs", async () => {
+    vi.spyOn(logger, "error").mockImplementation(() => undefined);
+    const t = setup([1_000, 1_000, 1_000, 1_000, 1_000, 1_000, 1_000, 1_000, 1_000]);
+    const housekeeping = t.housekeeping.map((step) =>
+      step.name === "checkStorageAlerts"
+        ? { ...step, run: () => Promise.reject(new Error("boom")) }
+        : step,
+    );
+    const result = await runTick({ ...t, housekeeping });
+    expect(result.steps.at(-1)).toMatchObject({
+      name: "checkStorageAlerts",
+      outcome: "failed",
+    });
+    expect(result.steps.slice(0, -1).every((s) => s.outcome === "ran")).toBe(true);
+    expect(result.jobs).toBe(SUMMARY);
   });
 
   it("a step that reports its own failure is recorded failed", async () => {
