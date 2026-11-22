@@ -37,7 +37,7 @@ import { MaterialList } from "./MaterialList";
 import { StorageMeter } from "./StorageMeter";
 
 const MB = 1024 * 1024;
-const GB = 1024 * MB;
+const CAP = 300 * MB;
 const ID = "11111111-1111-4111-8111-111111111111";
 const PARENT = "22222222-2222-4222-8222-222222222222";
 const CHILD = "33333333-3333-4333-8333-333333333333";
@@ -52,18 +52,26 @@ beforeEach(() => {
 afterEach(cleanup);
 
 describe("StorageMeter", () => {
-  it("shows used of 1 GB as text and as a labelled meter", () => {
-    renderWithIntl(<StorageMeter usedBytes={300 * MB} capBytes={GB} />);
-    expect(screen.getByText("300 MB dari 1 GB terpakai")).toBeTruthy();
+  it("shows used of 300 MB as text and as a labelled meter", () => {
+    renderWithIntl(<StorageMeter usedBytes={120 * MB} capBytes={CAP} />);
+    expect(screen.getByText("120 MB dari 300 MB terpakai")).toBeTruthy();
     const meter = screen.getByRole("meter", { name: "Penyimpanan" });
-    expect(meter.getAttribute("aria-valuenow")).toBe(String(300 * MB));
-    expect(meter.getAttribute("aria-valuemax")).toBe(String(GB));
-    expect(meter.getAttribute("aria-valuetext")).toBe("300 MB dari 1 GB terpakai");
+    expect(meter.getAttribute("aria-valuenow")).toBe(String(120 * MB));
+    expect(meter.getAttribute("aria-valuemax")).toBe(String(CAP));
+    expect(meter.getAttribute("aria-valuetext")).toBe("120 MB dari 300 MB terpakai");
     expect(screen.queryByText(/hampir penuh/)).toBeNull();
   });
 
   it("warns in words when nearly full", () => {
-    renderWithIntl(<StorageMeter usedBytes={0.95 * GB} capBytes={GB} />);
+    renderWithIntl(<StorageMeter usedBytes={0.95 * CAP} capBytes={CAP} />);
+    expect(screen.getByText(/Penyimpanan hampir penuh/)).toBeTruthy();
+  });
+
+  it("shows a teacher above the cap as full without breaking the meter", () => {
+    renderWithIntl(<StorageMeter usedBytes={400 * MB} capBytes={CAP} />);
+    expect(screen.getByText("400 MB dari 300 MB terpakai")).toBeTruthy();
+    const meter = screen.getByRole("meter", { name: "Penyimpanan" });
+    expect(meter.getAttribute("aria-valuenow")).toBe(String(CAP));
     expect(screen.getByText(/Penyimpanan hampir penuh/)).toBeTruthy();
   });
 });

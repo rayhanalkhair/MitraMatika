@@ -3,10 +3,17 @@
 // browser (the dropzone checks the same limits before it asks for a URL).
 import { z } from "zod";
 
-/** At most 50 MB per file (the signed PUT is for the exact size, never more). */
-export const MAX_MATERIAL_BYTES = 50 * 1024 * 1024;
-/** Stored materials (trashed ones too, until purged) plus pending uploads, per teacher. */
-export const STORAGE_CAP_BYTES = 1024 * 1024 * 1024;
+// The one place the upload limits live (ADR-0022): the server (startUpload, finalizeUpload), the
+// browser checks and the messages all follow these two numbers. They were 50 MB and 1 GB until
+// 22 Nov 2026; the app has no hard spending cap at the storage provider, so these are the cap.
+/** At most 25 MB per file (the signed PUT is for the exact size, never more). */
+export const MAX_MATERIAL_BYTES = 25 * 1024 * 1024;
+/**
+ * Stored materials (trashed ones too, until purged), OCR page images and pending uploads, per
+ * teacher: 300 MB. It only gates NEW uploads: a teacher already above it keeps and can download
+ * every file and can still delete, but startUpload refuses until they are back under it.
+ */
+export const STORAGE_CAP_BYTES = 300 * 1024 * 1024;
 export const MAX_PDF_PAGES = 300;
 /** A DOCX may inflate to at most 20 times its size and never past 200 MB. */
 export const DOCX_INFLATE_RATIO = 20;

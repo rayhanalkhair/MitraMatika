@@ -35,6 +35,13 @@ describe("handleDevUpload", () => {
     expect(await store.get(KEY)).not.toBeNull();
   });
 
+  it("is 32 MB, larger than the largest signed upload", () => {
+    expect(MAX_DEV_UPLOAD_BYTES).toBe(32 * 1024 * 1024);
+    // The largest signed upload is a 25 MB material (pinned against the constant in the
+    // materials upload tests, since src/lib cannot import features).
+    expect(MAX_DEV_UPLOAD_BYTES).toBeGreaterThan(25 * 1024 * 1024);
+  });
+
   it("refuses a body declared larger than any signed upload before reading it", async () => {
     const { store, url } = await signed();
     const request = new Request(url, {

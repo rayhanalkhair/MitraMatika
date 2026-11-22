@@ -47,9 +47,9 @@ afterEach(() => {
 
 describe("UploadDropzone", () => {
   it("shows the privacy notice, the storage meter and labelled inputs (file and camera)", () => {
-    renderWithIntl(<UploadDropzone usedBytes={300 * 1024 * 1024} />);
+    renderWithIntl(<UploadDropzone usedBytes={120 * 1024 * 1024} />);
     expect(screen.getByText(/data pribadi siswa/)).toBeTruthy();
-    expect(screen.getByText(/300 MB dari 1 GB terpakai/)).toBeTruthy();
+    expect(screen.getByText(/120 MB dari 300 MB terpakai/)).toBeTruthy();
     const file = screen.getByLabelText("Pilih berkas");
     expect(file.getAttribute("type")).toBe("file");
     expect(file.getAttribute("accept")).toContain(".docx");
@@ -71,10 +71,10 @@ describe("UploadDropzone", () => {
     );
     await user.upload(
       screen.getByLabelText("Pilih berkas"),
-      pdf("besar.pdf", 50 * 1024 * 1024 + 1),
+      pdf("besar.pdf", 25 * 1024 * 1024 + 1),
     );
     await waitFor(() => {
-      expect(screen.getByRole("alert").textContent).toMatch(/50 MB/);
+      expect(screen.getByRole("alert").textContent).toMatch(/25 MB/);
     });
     expect(mocks.start).not.toHaveBeenCalled();
   });

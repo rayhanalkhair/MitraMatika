@@ -340,6 +340,11 @@ export async function finalizeUpload(
   let finalKey: string | null = null;
   try {
     // 2. Download and check, outside any transaction.
+    // A reservation made under an earlier, larger limit (the release before ADR-0022 signed up to
+    // 50 MB) is refused here, before anything is downloaded: the file is deleted, the reservation
+    // dropped and the teacher sees the size message. The limit is enforced on the server, at both
+    // start and finalise, never only in the browser.
+    if (upload.sizeBytes > MAX_MATERIAL_BYTES) return await reject("size");
     const bytes = await store.get(objectKey);
     if (!bytes) {
       await db

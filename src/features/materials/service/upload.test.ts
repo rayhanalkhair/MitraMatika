@@ -16,6 +16,7 @@ import {
   type TestDatabase,
 } from "@/lib/db/test-harness";
 import { contains, jpegWithExif } from "@/lib/images/metadata-fixtures";
+import { MAX_DEV_UPLOAD_BYTES } from "@/lib/storage/dev-upload";
 import { createMemoryStore, type MemoryStore } from "@/lib/storage/memory";
 import type { ObjectStore } from "@/lib/storage/types";
 import {
@@ -174,10 +175,13 @@ describe("startUpload", () => {
   );
 
   it(
-    "accepts exactly 50 MB and refuses 51 MB, an empty file and a fractional size",
+    "accepts exactly 25 MB and refuses 26 MB, an empty file and a fractional size",
     async () => {
+      expect(MAX_MATERIAL_BYTES).toBe(25 * 1024 * 1024);
+      // The dev/e2e PUT stand-in must accept every upload the app signs.
+      expect(MAX_DEV_UPLOAD_BYTES).toBeGreaterThan(MAX_MATERIAL_BYTES);
       expect((await start(USER_A, "a.pdf", MAX_MATERIAL_BYTES)).ok).toBe(true);
-      for (const size of [51 * MB, MAX_MATERIAL_BYTES + 1, 0, -1, 1.5]) {
+      for (const size of [26 * MB, MAX_MATERIAL_BYTES + 1, 50 * MB, 0, -1, 1.5]) {
         expect(await start(USER_A, "a.pdf", size), String(size)).toEqual({
           ok: false,
           error: "size",
@@ -188,8 +192,9 @@ describe("startUpload", () => {
   );
 
   it(
-    "holds the 1 GB storage cap over stored materials plus pending uploads",
+    "holds the 300 MB storage cap over stored materials plus pending uploads",
     async () => {
+      expect(STORAGE_CAP_BYTES).toBe(300 * 1024 * 1024);
       await seedStored(USER_A, STORAGE_CAP_BYTES - 10 * MB);
       expect(await start(USER_A, "a.pdf", 10 * MB + 1)).toEqual({
         ok: false,
@@ -205,7 +210,7 @@ describe("startUpload", () => {
   );
 
   it(
-    "counts OCR page images toward the 1 GB cap",
+    "counts OCR page images toward the 300 MB cap",
     async () => {
       await seedStored(USER_A, STORAGE_CAP_BYTES - 10 * MB);
       const [material] = await database.db.select().from(materials);
@@ -221,6 +226,24 @@ describe("startUpload", () => {
         error: "quota",
       });
       expect((await start(USER_A, "a.pdf", 5 * MB)).ok).toBe(true);
+    },
+    DB_TEST_TIMEOUT,
+  );
+
+  it(
+    "refuses every new upload of a teacher already above the new cap, and only theirs",
+    async () => {
+      // Allowed before the cap dropped from 1 GB to 300 MB.
+      await seedStored(USER_A, 400 * MB);
+      for (const size of [1, 10 * MB, MAX_MATERIAL_BYTES]) {
+        expect(await start(USER_A, "a.pdf", size), String(size)).toEqual({
+          ok: false,
+          error: "quota",
+        });
+      }
+      expect(await ticketCount()).toBe(0);
+      // Another teacher is unaffected.
+      expect((await start(USER_B, "b.pdf", MAX_MATERIAL_BYTES)).ok).toBe(true);
     },
     DB_TEST_TIMEOUT,
   );
@@ -469,11 +492,11 @@ describe("finalizeUpload", () => {
   );
 
   it(
-    "refuses a stored object larger than the signed size (51 MB for 50 MB) and deletes it",
+    "refuses a stored object larger than the signed size (26 MB for 25 MB) and deletes it",
     async () => {
       const started = await start(USER_A, "besar.pdf", MAX_MATERIAL_BYTES);
       if (!started.ok) throw new Error(started.error);
-      await store.put(started.data.objectKey, new Uint8Array(51 * MB), "application/pdf");
+      await store.put(started.data.objectKey, new Uint8Array(26 * MB), "application/pdf");
       expect(
         await finalizeUpload(db(), store, {
           ownerId: USER_A,
@@ -484,6 +507,42 @@ describe("finalizeUpload", () => {
       ).toEqual({ ok: false, error: "size" });
       expect(await store.get(started.data.objectKey)).toBeNull();
       expect(await ticketCount()).toBe(0);
+    },
+    DB_TEST_TIMEOUT,
+  );
+
+  it(
+    "fails cleanly a finalise whose reservation was made under the old 50 MB limit",
+    async () => {
+      // Reserved and signed by the previous release: 40 MB is over today's limit.
+      const id = crypto.randomUUID();
+      const objectKey = `uploads/${USER_A}/${id}/source.pdf`;
+      await database.db.insert(materialUploads).values({
+        id,
+        ownerId: USER_A,
+        objectKey,
+        kind: "pdf",
+        mime: "application/pdf",
+        sizeBytes: 40 * MB,
+        expiresAt: later(30),
+        createdAt: NOW,
+      });
+      // The object really has the reserved size, so only the limit check can refuse it as "size"
+      // (a size mismatch cannot).
+      await store.put(objectKey, new Uint8Array(40 * MB), "application/pdf");
+      expect(
+        await finalizeUpload(db(), store, {
+          ownerId: USER_A,
+          objectKey,
+          title: "Lama",
+          now: later(1),
+        }),
+      ).toEqual({ ok: false, error: "size" });
+      // Nothing is kept: no reservation, no object, no material, no job.
+      expect(await ticketCount()).toBe(0);
+      expect(await store.get(objectKey)).toBeNull();
+      expect(await materialCount()).toBe(0);
+      expect(await jobCount()).toBe(0);
     },
     DB_TEST_TIMEOUT,
   );

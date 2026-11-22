@@ -237,7 +237,7 @@ export async function listFolders(
 }
 
 /**
- * The storage meter: what counts toward the 1 GB cap, exactly as startUpload counts it (every
+ * The storage meter: what counts toward the 300 MB cap, exactly as startUpload counts it (every
  * stored material, trashed ones until purged, plus the uploads reserved and not yet expired).
  */
 export async function storageUsage(

@@ -49,7 +49,7 @@ import { isOwnMaterialKey, type MaterialDb } from "./upload";
 
 export const INGEST_STEP_PAGES = 25;
 /**
- * A step needs this much of the runner's budget: download and hash (up to 50 MB), the worker's
+ * A step needs this much of the runner's budget: download and hash (up to 25 MB), the worker's
  * hard timeout (20 s) and the writes.
  */
 export const MIN_STEP_MS = 45_000;

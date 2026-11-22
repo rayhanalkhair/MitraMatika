@@ -3,7 +3,7 @@ import type { useFormatter } from "next-intl";
 const MB = 1024 * 1024;
 const GB = 1024 * MB;
 
-/** "300 MB", "1 GB", "0,4 MB": one decimal at most, in the viewer's locale. */
+/** "300 MB", "1,2 GB", "0,4 MB": one decimal at most, in the viewer's locale. */
 export function formatSize(
   bytes: number,
   format: ReturnType<typeof useFormatter>,

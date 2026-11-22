@@ -262,7 +262,16 @@ describe("storageUsage", () => {
       storageUsage(db, { ownerId: USER_A, now: NOW }),
     );
     expect(usage).toEqual({ usedBytes: 550, capBytes: STORAGE_CAP_BYTES });
-    expect(STORAGE_CAP_BYTES).toBe(1024 * 1024 * 1024);
+    expect(STORAGE_CAP_BYTES).toBe(300 * 1024 * 1024);
+  });
+
+  it("reports a teacher above the cap as used beyond it (nothing is hidden or clipped)", async () => {
+    await seedMaterial(database, { ownerId: USER_A, sizeBytes: 400 * 1024 * 1024 });
+    const usage = await asUser(USER_A, (db) =>
+      storageUsage(db, { ownerId: USER_A, now: NOW }),
+    );
+    expect(usage.usedBytes).toBe(400 * 1024 * 1024);
+    expect(usage.usedBytes).toBeGreaterThan(usage.capBytes);
   });
 
   it("counts the page images OCR keeps for the teacher's materials", async () => {

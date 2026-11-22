@@ -8,7 +8,7 @@ export const NEARLY_FULL = 0.9;
 
 // No "use client": rendered by the materials page (server) and by the upload box (client).
 /**
- * The storage meter: what counts toward the 1 GB cap (stored materials, trashed ones until purged,
+ * The storage meter: what counts toward the 300 MB cap (stored materials, trashed ones until purged,
  * and uploads in progress), as text and as a meter, with a written warning near the cap.
  */
 export function StorageMeter({

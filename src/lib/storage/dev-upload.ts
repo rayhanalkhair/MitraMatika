@@ -3,8 +3,8 @@
 // which never happens in production. The signature in the URL authorises the upload, as on R2.
 import type { MemoryStore } from "./memory";
 
-/** Larger than any upload the app signs (materials: 50 MB). */
-export const MAX_DEV_UPLOAD_BYTES = 64 * 1024 * 1024;
+/** Larger than any upload the app signs (materials: 25 MB; a test pins the relation). */
+export const MAX_DEV_UPLOAD_BYTES = 32 * 1024 * 1024;
 
 export async function handleDevUpload(
   request: Request,

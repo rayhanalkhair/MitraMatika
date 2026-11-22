@@ -152,9 +152,9 @@ test.describe("learning materials, OCR and cited generation", () => {
     const card = materialCard(page, TITLE);
     await expect(card.getByText("3 halaman", { exact: true })).toBeVisible();
     await expect(card.getByText("PDF", { exact: true })).toBeVisible();
-    // The meter counts the stored file against the 1 GB cap.
+    // The meter counts the stored file against the 300 MB cap.
     await expect(page.getByRole("meter", { name: "Penyimpanan" })).toBeVisible();
-    await expect(page.getByText(/dari 1 GB terpakai$/)).toBeVisible();
+    await expect(page.getByText(/dari 300 MB terpakai$/)).toBeVisible();
   });
 
   test("the detail shows the file, its text quality and each page's text", async ({

@@ -4,7 +4,7 @@ import "server-only";
 // browser with pdfjs-dist). The session decides the owner and the row is read on the service
 // connection with an explicit owner filter, so another teacher's material, a trashed one and an
 // unknown or malformed id all answer 404. With R2 the answer is a 302 to a signed URL valid for
-// 300 s (a file of up to 50 MB never passes through the function); with the in-memory store of
+// 300 s (a file of up to 25 MB never passes through the function); with the in-memory store of
 // development and e2e (Ruling R2, whose signed URLs are placeholders) the bytes are sent inline.
 // Nothing is cached, and the file can never run as a page of this origin.
 import { and, eq, isNull } from "drizzle-orm";
