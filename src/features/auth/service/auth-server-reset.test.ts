@@ -600,7 +600,9 @@ describe("constant-time reset requests", () => {
         foreignKnown,
         foreignUnknown,
       ])
-        expect(outcome.ms).toBeGreaterThanOrEqual(FLOOR - 1);
+        // Timers can fire a little early and the clock is read before and after the call, so a
+        // measured 298.9 ms is a 300 ms floor; 10 ms of slack still separates it from no floor.
+        expect(outcome.ms).toBeGreaterThanOrEqual(FLOOR - 10);
     },
     DB_TEST_TIMEOUT,
   );
