@@ -7,6 +7,7 @@ import { schoolTemplates } from "@/lib/db/schema";
 import { logger } from "@/lib/logger";
 import { jpegSize, pngSize } from "@/lib/images/dimensions";
 import { err, ok, type Result } from "@/lib/result";
+import { assertAppStorageRoom, lockAppStorage } from "@/lib/storage/app-total";
 import type { ObjectStore } from "@/lib/storage/types";
 import { assertSafeKey } from "@/lib/storage/types";
 import { MAX_LOGO_BYTES, MAX_LOGO_SIDE, type LogoErrorKey } from "../schema/template";
@@ -37,7 +38,10 @@ export interface ValidLogo {
   declaredMismatch: boolean;
 }
 
-type ValidationError = Exclude<LogoErrorKey, "notFound" | "unauthenticated" | "generic">;
+type ValidationError = Exclude<
+  LogoErrorKey,
+  "notFound" | "unauthenticated" | "generic" | "appFull"
+>;
 
 function decodeUtf8(bytes: Uint8Array): string | null {
   try {
@@ -150,7 +154,7 @@ export async function uploadLogo(
   store: ObjectStore,
   db: TemplateDb,
   input: { ownerId: string; templateId: string; bytes: Uint8Array; declaredType: string },
-): Promise<Result<{ logoKey: string }, ValidationError | "notFound">> {
+): Promise<Result<{ logoKey: string }, ValidationError | "notFound" | "appFull">> {
   const { ownerId, templateId } = input;
   if (!isUuid(templateId)) return err("notFound");
   const valid = await validateLogo(input.bytes, input.declaredType);
@@ -158,9 +162,10 @@ export async function uploadLogo(
 
   const key = logoKey(ownerId, templateId, valid.data.ext);
   // Set inside the transaction callback.
-  const progress: { stored: boolean; previousKey: string | null } = {
+  const progress: { stored: boolean; previousKey: string | null; full: boolean } = {
     stored: false,
     previousKey: null,
+    full: false,
   };
   try {
     // The service connection (Ruling R9 pattern): the authenticated role may not write logo_key, so
@@ -168,7 +173,10 @@ export async function uploadLogo(
     const saved = await db.transaction(async (tx) => {
       const row = (
         await tx
-          .select({ logoKey: schoolTemplates.logoKey })
+          .select({
+            logoKey: schoolTemplates.logoKey,
+            logoBytes: schoolTemplates.logoBytes,
+          })
           .from(schoolTemplates)
           .where(
             and(
@@ -182,6 +190,19 @@ export async function uploadLogo(
       if (!row) return false;
       // Only an object of this template may be replaced (and later deleted).
       progress.previousKey = ownLogoKeyOrNull(ownerId, templateId, row.logoKey);
+      // The app-wide cap (ADR-0022): the template row lock is held, so the global lock comes
+      // second (one fixed order). Held until commit, it covers the row update below. A
+      // replacement needs only the growth over the logo it replaces.
+      await lockAppStorage(tx);
+      const room = await assertAppStorageRoom(
+        tx,
+        Math.max(0, valid.data.bytes.length - (row.logoBytes ?? 0)),
+        "logo",
+      );
+      if (!room.ok) {
+        progress.full = true;
+        return false;
+      }
       await store.put(key, valid.data.bytes, valid.data.contentType);
       progress.stored = true;
       await tx
@@ -190,6 +211,8 @@ export async function uploadLogo(
           logoKey: key,
           // What an approval's hash covers (Ruling R26): a same-format replacement keeps the key.
           logoSha256: logoSha256(valid.data.bytes),
+          // What the app-wide storage total sums (ADR-0022).
+          logoBytes: valid.data.bytes.length,
           rowVersion: sql`${schoolTemplates.rowVersion} + 1`,
           updatedAt: new Date(),
         })
@@ -198,7 +221,7 @@ export async function uploadLogo(
         );
       return true;
     });
-    if (!saved) return err("notFound");
+    if (!saved) return err(progress.full ? "appFull" : "notFound");
   } catch (error) {
     // The row still points at the previous logo: remove the new object unless it replaced it.
     if (progress.stored && key !== progress.previousKey) await deleteQuietly(store, key);

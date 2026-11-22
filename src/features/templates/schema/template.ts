@@ -128,6 +128,7 @@ export type LogoErrorKey =
   | "unsupportedType"
   | "invalidImage"
   | "dimensionsTooLarge"
+  | "appFull"
   | "notFound"
   | "unauthenticated"
   | "generic";

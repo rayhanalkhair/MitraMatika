@@ -17,6 +17,7 @@ export function useSolverErrorText(): (error: string) => string {
         return t("noMore", { max: MAX_METHODS });
       case "empty":
       case "pending":
+      case "appFull":
       case "type":
       case "size":
       case "image":

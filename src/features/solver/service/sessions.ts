@@ -12,6 +12,7 @@ import { jpegSize, pngSize } from "@/lib/images/dimensions";
 import { stripImageMetadata } from "@/lib/images/strip-metadata";
 import { createJobQueue } from "@/lib/jobs/queue";
 import { err, ok, type Result } from "@/lib/result";
+import { assertAppStorageRoom, lockAppStorage } from "@/lib/storage/app-total";
 import type { ObjectStore } from "@/lib/storage/types";
 import { fromDbStatus } from "@/features/generation";
 import { lockVisionOwner, visionReadsLeft } from "@/features/materials";
@@ -225,6 +226,12 @@ export async function startPhotoSession(
         ),
       );
     if (pending.n >= MAX_PENDING_PHOTOS) return err<StartPhotoError>("pending");
+    // The app-wide cap (ADR-0022), last: every owner lock above is held, so the global lock
+    // comes second (one fixed order). Held until commit it covers the insert below, whose
+    // input_bytes is the declared size (replaced by the real one at finalise).
+    await lockAppStorage(tx);
+    const room = await assertAppStorageRoom(tx, input.size, "solver");
+    if (!room.ok) return err<StartPhotoError>("appFull");
     const sessionId = randomUUID();
     const stagingKey = photoStagingKey(
       ownerId,
@@ -236,6 +243,7 @@ export async function startPhotoSession(
       ownerId,
       inputKind: input.kind,
       inputKey: stagingKey,
+      inputBytes: input.size,
       status: "pending",
       createdAt: now,
       updatedAt: now,
@@ -360,7 +368,12 @@ export async function finalizePhotoSession(
     }
     await tx
       .update(solverSessions)
-      .set({ inputKey: finalKey, status: "extracting", updatedAt: now })
+      .set({
+        inputKey: finalKey,
+        inputBytes: clean.length,
+        status: "extracting",
+        updatedAt: now,
+      })
       .where(ofSession(ownerId, sessionId));
     const job = await enqueue(tx, {
       ownerId,

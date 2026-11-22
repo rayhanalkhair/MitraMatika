@@ -1,0 +1,103 @@
+{
+  "type": "diff",
+  "version": "9",
+  "dialect": "postgres",
+  "id": "bebe9100-7d16-4b13-94e1-e8b57aa46d09",
+  "prevIds": ["565bf1ba-f53e-4b76-98f0-0bceb36ba6da"],
+  "footprints": [
+    {
+      "statementType": "add_column",
+      "statementTarget": ["column", "public", "exports", "size_bytes"],
+      "writes": [
+        "s|col|public.exports.size_bytes",
+        "n|col|public.exports.size_bytes",
+        "e|col|public.exports.size_bytes"
+      ],
+      "reads": ["n|tbl|public.exports", "n|sch|public"]
+    },
+    {
+      "statementType": "add_column",
+      "statementTarget": ["column", "public", "school_templates", "logo_bytes"],
+      "writes": [
+        "s|col|public.school_templates.logo_bytes",
+        "n|col|public.school_templates.logo_bytes",
+        "e|col|public.school_templates.logo_bytes"
+      ],
+      "reads": ["n|tbl|public.school_templates", "n|sch|public"]
+    },
+    {
+      "statementType": "add_column",
+      "statementTarget": ["column", "public", "solver_sessions", "input_bytes"],
+      "writes": [
+        "s|col|public.solver_sessions.input_bytes",
+        "n|col|public.solver_sessions.input_bytes",
+        "e|col|public.solver_sessions.input_bytes"
+      ],
+      "reads": ["n|tbl|public.solver_sessions", "n|sch|public"]
+    },
+    {
+      "statementType": "alter_policy",
+      "statementTarget": ["table", "public", "school_templates"],
+      "writes": ["s|pol|public.school_templates.school_templates_owner_insert"],
+      "reads": ["n|tbl|public.school_templates", "n|sch|public", "n|role|authenticated"],
+      "sqlHash": "a78ae4e511cb44b5"
+    }
+  ],
+  "deltas": [
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "exports",
+        "name": "size_bytes",
+        "type": "bigint",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "0",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "school_templates",
+        "name": "logo_bytes",
+        "type": "integer",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "solver_sessions",
+        "name": "input_bytes",
+        "type": "integer",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "alter",
+      "key": "policies\u0000[\"public\",\"school_templates\",\"school_templates_owner_insert\"]",
+      "set": {
+        "withCheck": "\"school_templates\".\"owner_id\" = auth.uid() and \"school_templates\".\"logo_key\" is null and \"school_templates\".\"logo_sha256\" is null and \"school_templates\".\"logo_bytes\" is null and \"school_templates\".\"deleted_at\" is null and \"school_templates\".\"purge_after\" is null"
+      }
+    }
+  ]
+}

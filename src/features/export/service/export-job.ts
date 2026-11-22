@@ -38,6 +38,7 @@ import {
 } from "@/lib/jobs/handler";
 import type { Progress } from "@/lib/jobs/types";
 import { logger } from "@/lib/logger";
+import { assertAppStorageRoom } from "@/lib/storage/app-total";
 import type { ObjectStore } from "@/lib/storage/types";
 import {
   buildDocumentModel,
@@ -108,6 +109,7 @@ export type ExportFailureCode =
   | "export_too_large"
   | "export_renderer_unavailable" // old job rows only: nothing emits it any more
   | "export_render_failed"
+  | "app_storage_full"
   | "export_failed";
 
 const MESSAGES: Record<ExportFailureCode, string> = {
@@ -118,6 +120,7 @@ const MESSAGES: Record<ExportFailureCode, string> = {
   export_too_large: "The export is too large to render.",
   export_renderer_unavailable: "The PDF renderer is not available.",
   export_render_failed: "A document could not be rendered.",
+  app_storage_full: "Penyimpanan MitraMatika penuh.",
   export_failed: "The export could not be completed.",
 };
 
@@ -211,6 +214,8 @@ const LOGO_MISSING: LogoMissingWarning = {
 
 interface StoredFile extends ExportFile {
   key: string;
+  /** The real byte length of the stored object (exports.size_bytes, ADR-0022). */
+  sizeBytes: number;
   warnings: ExportWarning[];
 }
 
@@ -293,6 +298,7 @@ export function createRenderExportHandler(deps: ExportJobDeps): JobHandler {
       // One cache for the three PDFs: the paper and the solutions share formulas.
       const math = createMathCache();
       const stored: StoredFile[] = [];
+      let storedBytes = 0;
       const zipEntries: { name: string; bytes: Uint8Array }[] = [];
       const save = async (
         file: ExportFile,
@@ -300,11 +306,21 @@ export function createRenderExportHandler(deps: ExportJobDeps): JobHandler {
         warnings: StoredFile["warnings"],
       ) => {
         if (bytes.byteLength > MAX_FILE_BYTES) throw permanent("export_too_large");
+        // The app-wide cap (ADR-0022), without the lock: this attempt's earlier files are not in
+        // the database yet, so they are added to the file at hand. Nothing is stored when full.
+        const room = await assertAppStorageRoom(
+          db,
+          storedBytes + bytes.byteLength,
+          "export",
+        );
+        if (!room.ok) throw permanent("app_storage_full");
         const key = exportObjectKey(ownerId, jobId, file);
         await store.put(key, bytes, CONTENT_TYPES[file.format]);
+        storedBytes += bytes.byteLength;
         stored.push({
           ...file,
           key,
+          sizeBytes: bytes.byteLength,
           warnings:
             logoMissing && file.document !== "zip"
               ? [...warnings, LOGO_MISSING]
@@ -427,6 +443,7 @@ async function commitExport(
           document: file.document,
           format: file.format,
           objectKey: file.key,
+          sizeBytes: file.sizeBytes,
           snapshotHash: input.snapshotHash,
           warnings: file.warnings,
           expiresAt,

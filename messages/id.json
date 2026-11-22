@@ -903,7 +903,8 @@
           "dimensionsTooLarge": "Gambar terlalu besar. Paling besar 6000 piksel per sisi.",
           "notFound": "Templat ini tidak ditemukan. Mungkin sudah dihapus.",
           "unauthenticated": "Sesi kamu sudah berakhir. Masuk lagi untuk melanjutkan.",
-          "generic": "Logo belum bisa diunggah. Coba lagi."
+          "generic": "Logo belum bisa diunggah. Coba lagi.",
+          "appFull": "Penyimpanan MitraMatika sedang penuh, jadi unggahan baru ditutup sementara. Admin sudah diberi tahu. Coba lagi nanti."
         }
       },
       "preview": {
@@ -1201,7 +1202,8 @@
         "renderFailed": "Salah satu dokumen tidak dapat dibuat. Coba ekspor lagi.",
         "hourlyLimit": "Batas {limit} ekspor per jam sudah tercapai. Coba lagi setelah pukul {time}.",
         "signedOut": "Sesi Anda berakhir. Masuk lagi untuk mengekspor.",
-        "generic": "Ekspor gagal. Coba lagi sebentar lagi."
+        "generic": "Ekspor gagal. Coba lagi sebentar lagi.",
+        "appFull": "Penyimpanan MitraMatika sedang penuh, jadi ekspor baru ditutup sementara. Admin sudah diberi tahu. Coba lagi nanti."
       }
     }
   },
@@ -1242,7 +1244,8 @@
         "network": "Koneksi terputus saat mengunggah. Periksa internet, lalu coba lagi.",
         "unauthenticated": "Sesi Anda berakhir. Masuk lagi untuk mengunggah.",
         "generic": "Unggahan gagal. Coba lagi sebentar lagi.",
-        "busy": "Server sedang membaca berkas lain. Coba lagi sebentar lagi."
+        "busy": "Server sedang membaca berkas lain. Coba lagi sebentar lagi.",
+        "appFull": "Penyimpanan MitraMatika sedang penuh, jadi unggahan baru ditutup sementara. Admin sudah diberi tahu. Coba lagi nanti."
       }
     },
     "library": {
@@ -1545,7 +1548,8 @@
       "busy": "Soal ini masih sedang diselesaikan.",
       "unauthenticated": "Sesi Anda berakhir. Masuk lagi.",
       "generic": "Terjadi kesalahan. Coba lagi.",
-      "visionLimit": "Jatah {limit} pembacaan gambar hari ini sudah habis (OCR dan foto soal bersama). Coba lagi besok."
+      "visionLimit": "Jatah {limit} pembacaan gambar hari ini sudah habis (OCR dan foto soal bersama). Coba lagi besok.",
+      "appFull": "Penyimpanan MitraMatika sedang penuh, jadi unggahan baru ditutup sementara. Admin sudah diberi tahu. Coba lagi nanti."
     },
     "confirm": {
       "heading": "Periksa hasil bacaan foto",

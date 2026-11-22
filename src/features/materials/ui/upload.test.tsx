@@ -162,6 +162,17 @@ describe("UploadDropzone", () => {
     }
   });
 
+  it("tells the teacher the app storage is full and does not send the file", async () => {
+    const user = userEvent.setup();
+    mocks.start.mockResolvedValue({ ok: false, error: "appFull" });
+    renderWithIntl(<UploadDropzone usedBytes={0} />);
+    await user.upload(screen.getByLabelText("Pilih berkas"), pdf("buku.pdf"));
+    expect((await screen.findByRole("alert")).textContent).toMatch(
+      /Penyimpanan MitraMatika sedang penuh/,
+    );
+    expect(mocks.put).not.toHaveBeenCalled();
+  });
+
   it("announces progress in steps of 10% while the bar shows the exact value", async () => {
     const user = userEvent.setup();
     let release: (sent: boolean) => void = () => undefined;

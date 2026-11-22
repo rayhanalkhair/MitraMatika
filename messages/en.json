@@ -903,7 +903,8 @@
           "dimensionsTooLarge": "The image is too large. At most 6000 pixels per side.",
           "notFound": "This template was not found. It may have been deleted.",
           "unauthenticated": "Your session has ended. Sign in again to continue.",
-          "generic": "The logo could not be uploaded. Try again."
+          "generic": "The logo could not be uploaded. Try again.",
+          "appFull": "MitraMatika storage is full, so new uploads are paused for now. The admin has been told. Try again later."
         }
       },
       "preview": {
@@ -1201,7 +1202,8 @@
         "renderFailed": "One of the documents could not be created. Try the export again.",
         "hourlyLimit": "You reached the limit of {limit} exports per hour. Try again after {time}.",
         "signedOut": "Your session ended. Sign in again to export.",
-        "generic": "The export failed. Try again shortly."
+        "generic": "The export failed. Try again shortly.",
+        "appFull": "MitraMatika storage is full, so new exports are paused for now. The admin has been told. Try again later."
       }
     }
   },
@@ -1242,7 +1244,8 @@
         "network": "The connection dropped while uploading. Check your internet, then try again.",
         "unauthenticated": "Your session has ended. Sign in again to upload.",
         "generic": "The upload failed. Try again in a moment.",
-        "busy": "The server is reading another file. Try again in a moment."
+        "busy": "The server is reading another file. Try again in a moment.",
+        "appFull": "MitraMatika storage is full, so new uploads are paused for now. The admin has been told. Try again later."
       }
     },
     "library": {
@@ -1545,7 +1548,8 @@
       "busy": "This problem is still being solved.",
       "unauthenticated": "Your session has ended. Sign in again.",
       "generic": "Something went wrong. Try again.",
-      "visionLimit": "All {limit} picture reads for today are used (OCR and problem photos together). Try again tomorrow."
+      "visionLimit": "All {limit} picture reads for today are used (OCR and problem photos together). Try again tomorrow.",
+      "appFull": "MitraMatika storage is full, so new uploads are paused for now. The admin has been told. Try again later."
     },
     "confirm": {
       "heading": "Check what was read from the photo",

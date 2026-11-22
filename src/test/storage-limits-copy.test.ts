@@ -27,3 +27,28 @@ describe("storage limit copy", () => {
     expect(en.materials.upload.errors.quota).toContain("300 MB");
   });
 });
+
+// The app-wide cap (ADR-0022): the same refusal sentence is shown by the upload, the photo, the
+// logo and the export, in both languages, with no argument (an ICU placeholder would need one).
+describe("app-wide storage full copy", () => {
+  for (const [locale, messages] of [
+    ["id", id],
+    ["en", en],
+  ] as const) {
+    it(`${locale}: every refusal says the storage is full, that the admin knows and to try later`, () => {
+      const texts = [
+        messages.materials.upload.errors.appFull,
+        messages.solve.errors.appFull,
+        messages.settings.templates.logo.errors.appFull,
+        messages.assessments.export.errors.appFull,
+      ];
+      for (const text of texts) {
+        expect(text).toContain("MitraMatika");
+        expect(text).not.toContain("{");
+        expect(text).toMatch(
+          locale === "id" ? /Admin sudah diberi tahu/ : /admin has been told/,
+        );
+      }
+    });
+  }
+});

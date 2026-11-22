@@ -4,6 +4,7 @@ import {
   check,
   foreignKey,
   index,
+  integer,
   jsonb,
   pgTable,
   text,
@@ -34,6 +35,9 @@ export const solverSessions = pgTable.withRLS(
     inputText: text("input_text"),
     // Object-store key of the photo or file page; the photo itself is deleted after 7 days.
     inputKey: text("input_key"),
+    // Bytes of the stored photo (reserved at start, the stripped size at finalise); summed by the
+    // app-wide storage total while input_key is not null (ADR-0022). Null for older rows.
+    inputBytes: integer("input_bytes"),
     extractedMd: text("extracted_md"),
     extractionFlags: jsonb("extraction_flags")
       .notNull()

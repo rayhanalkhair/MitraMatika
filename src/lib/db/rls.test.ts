@@ -676,6 +676,7 @@ describe("assessment tables (teacher-written, Ruling R1)", () => {
       `insert into school_templates (owner_id, name, school_name, deleted_at) values ('${USER_A}', 'x', 'x', now())`,
       `insert into school_templates (owner_id, name, school_name, purge_after) values ('${USER_A}', 'x', 'x', now())`,
       `insert into school_templates (owner_id, name, school_name, logo_sha256) values ('${USER_A}', 'x', 'x', '${"a".repeat(64)}')`,
+      `insert into school_templates (owner_id, name, school_name, logo_bytes) values ('${USER_A}', 'x', 'x', 1)`,
       `insert into assessments (owner_id, title, kind, grade, deleted_at) values ('${USER_A}', 'x', 'latihan', 7, now())`,
       `insert into assessments (owner_id, title, kind, grade, purge_after) values ('${USER_A}', 'x', 'latihan', 7, now())`,
     ];
@@ -697,6 +698,17 @@ describe("assessment tables (teacher-written, Ruling R1)", () => {
         ),
       ),
     ).toMatch(/permission denied/i);
+    // Nor the logo size the app-wide storage total sums (ADR-0022), nor the other two sizes.
+    for (const statement of [
+      `update school_templates set logo_bytes = 0 where id = '${FIXTURE.template(1)}'`,
+      `update exports set size_bytes = 0 where id = '${FIXTURE.export(1)}'`,
+      `update solver_sessions set input_bytes = 0 where id = '${FIXTURE.solverSession(1)}'`,
+    ]) {
+      expect(
+        await failureOf(() => asA((tx) => tx.execute(sql.raw(statement)))),
+        statement,
+      ).toMatch(/permission denied/i);
+    }
   });
 
   it("lets a teacher create and edit her own template, assessment, section and item, and delete sections and items", async () => {

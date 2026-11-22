@@ -14,6 +14,8 @@ export const MAX_MATERIAL_BYTES = 25 * 1024 * 1024;
  * every file and can still delete, but startUpload refuses until they are back under it.
  */
 export const STORAGE_CAP_BYTES = 300 * 1024 * 1024;
+// The app-wide 6 GiB cap (APP_STORAGE_CAP_BYTES) lives in src/lib/storage/app-total.ts: it is
+// server-only (this file is also bundled for the browser) and is summed from the database.
 export const MAX_PDF_PAGES = 300;
 /** A DOCX may inflate to at most 20 times its size and never past 200 MB. */
 export const DOCX_INFLATE_RATIO = 20;
@@ -62,7 +64,8 @@ export const MATERIAL_ACCEPT = [
 /** The camera input: JPEG or PNG only (a phone converts its own format to one of them). */
 export const CAMERA_ACCEPT = "image/jpeg,image/png";
 
-export type StartUploadError = "type" | "doc" | "size" | "quota" | "pending";
+/** `appFull`: the whole app has reached its storage cap (ADR-0022), whoever the teacher is. */
+export type StartUploadError = "type" | "doc" | "size" | "quota" | "pending" | "appFull";
 export type FileValidationError =
   "type" | "doc" | "encrypted" | "pages" | "zipBomb" | "image" | "damaged";
 /**

@@ -8,6 +8,7 @@ import { createJobQueue } from "@/lib/jobs/queue";
 import { logger } from "@/lib/logger";
 import { err, ok, type Result } from "@/lib/result";
 import { stripImageMetadata } from "@/lib/images/strip-metadata";
+import { assertAppStorageRoom, lockAppStorage } from "@/lib/storage/app-total";
 import { assertSafeKey, type ObjectStore } from "@/lib/storage/types";
 import {
   extensionOf,
@@ -137,7 +138,8 @@ function resolveType(
 
 /**
  * Starts an upload: checks the declared name, type and size and the owner's storage cap (stored
- * materials, trashed ones until purged, plus live reservations), records the reservation and
+ * materials, trashed ones until purged, plus live reservations) and then the app-wide cap (every
+ * teacher's files, ADR-0022), records the reservation and
  * returns a PUT URL signed for exactly `size` bytes of the canonical content type, valid for
  * UPLOAD_URL_SECONDS. Serialised per owner by an advisory lock, so two starts cannot both fit
  * under the cap. Expired reservations of the owner are cleaned up first (object, then row).
@@ -205,6 +207,12 @@ export async function startUpload(
     if (stored + Number(pending.bytes) + size > STORAGE_CAP_BYTES) {
       return err<StartUploadError>("quota");
     }
+    // The app-wide cap (ADR-0022), last: the owner lock is held, so the global lock always comes
+    // second (one fixed order, no deadlock). Held until commit, it makes the check and the
+    // reservation below one step for every teacher at once.
+    await lockAppStorage(tx);
+    const room = await assertAppStorageRoom(tx, size, "materials");
+    if (!room.ok) return err<StartUploadError>("appFull");
 
     const uploadId = crypto.randomUUID();
     const objectKey = uploadStagingKey(ownerId, uploadId, ext);
