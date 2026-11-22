@@ -407,6 +407,9 @@ describe("RecentSessions", () => {
     expect(link.getAttribute("aria-current")).toBe("page");
     expect(link.textContent).toContain("Dari foto");
     expect(link.textContent).toContain("Selesai");
+    // Each is an element of its own, so the e2e spec (and a reader) can pick one out by its text.
+    expect(within(link).getByText("Dari foto", { exact: true })).toBeTruthy();
+    expect(within(link).getByText("Selesai", { exact: true })).toBeTruthy();
     expect(link.textContent).toContain("Terverifikasi otomatis");
   });
 

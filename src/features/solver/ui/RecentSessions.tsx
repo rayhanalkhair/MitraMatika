@@ -50,9 +50,9 @@ export function RecentSessions({
                     ) : (
                       <Camera aria-hidden="true" className="size-3.5" />
                     )}
-                    {session.inputKind === "text" ? t("typed") : t("photo")}
+                    <span>{session.inputKind === "text" ? t("typed") : t("photo")}</span>
                     <span aria-hidden="true">·</span>
-                    {t(`statuses.${statusKey}`)}
+                    <span>{t(`statuses.${statusKey}`)}</span>
                   </span>
                   <MathText
                     text={session.excerptMd || t("untitled")}
