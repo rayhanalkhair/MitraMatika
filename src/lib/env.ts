@@ -42,6 +42,10 @@ const serverSchema = {
   R2_ACCESS_KEY_ID: z.string().min(1).optional(),
   R2_SECRET_ACCESS_KEY: z.string().min(1).optional(),
   R2_APP_BUCKET: z.string().min(1).optional(),
+  // Access gate (ADR-0022): comma-separated approved addresses, and the always-approved admin who
+  // also receives the notices. Read lazily through getEnv() on every request, never at import.
+  ALLOWED_EMAILS: z.string().min(1).optional(),
+  ADMIN_EMAIL: z.string().min(1).optional(),
   LOG_LEVEL: z
     .enum(["fatal", "error", "warn", "info", "debug", "trace", "silent"])
     .optional(),

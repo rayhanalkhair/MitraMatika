@@ -30,6 +30,7 @@ afterEach(() => {
 
 describe("requireAllowedUser", () => {
   it("returns the allowed user", async () => {
+    vi.stubEnv("ADMIN_EMAIL", "teacher@example.test");
     signedInAs({ id: "user-1", email: "teacher@example.test" });
     await expect(requireAllowedUser()).resolves.toMatchObject({
       status: "allowed",
@@ -44,14 +45,10 @@ describe("requireAllowedUser", () => {
     await expect(requireAllowedUser()).rejects.toThrow("NEXT_REDIRECT:/sign-in");
   });
 
-  it("returns any signed-in user, whatever the email", async () => {
+  it("does not return a signed-in user whose email is not approved", async () => {
+    vi.stubEnv("ADMIN_EMAIL", "teacher@example.test");
     signedInAs({ id: "user-2", email: "stranger@example.test" });
-    await expect(requireAllowedUser()).resolves.toMatchObject({
-      status: "allowed",
-      userId: "user-2",
-      email: "stranger@example.test",
-    });
-    expect(mocks.redirect).not.toHaveBeenCalled();
+    await expect(requireAllowedUser()).rejects.toThrow("NEXT_REDIRECT:/sign-in");
   });
 
   it("redirects to /sign-in when Better Auth is not configured or unreachable", async () => {
@@ -62,6 +59,7 @@ describe("requireAllowedUser", () => {
 
 describe("authorizeAction", () => {
   it("authorizes an allowed user", async () => {
+    vi.stubEnv("ADMIN_EMAIL", "teacher@example.test");
     signedInAs({ id: "user-1", email: "teacher@example.test" });
     const result = await authorizeAction();
     expect(result).toMatchObject({ ok: true, data: { userId: "user-1" } });
@@ -76,11 +74,12 @@ describe("authorizeAction", () => {
     expect(mocks.redirect).not.toHaveBeenCalled();
   });
 
-  it("authorizes any signed-in user, whatever the email", async () => {
+  it("rejects a signed-in user whose email is not approved", async () => {
+    vi.stubEnv("ADMIN_EMAIL", "teacher@example.test");
     signedInAs({ id: "user-2", email: "stranger@example.test" });
-    await expect(authorizeAction()).resolves.toMatchObject({
-      ok: true,
-      data: { userId: "user-2", email: "stranger@example.test" },
+    await expect(authorizeAction()).resolves.toEqual({
+      ok: false,
+      error: "unauthenticated",
     });
   });
 });

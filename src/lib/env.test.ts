@@ -33,8 +33,16 @@ describe("getEnv", () => {
     expect(env.GROQ_API_KEY).toBe("gsk_test123");
   });
 
-  it("env schema has no allowlist variable (sign-up is open)", () => {
-    expect(ENV_KEYS.filter((key) => key.includes("ALLOWED"))).toEqual([]);
+  it("declares the approval variables", () => {
+    expect(ENV_KEYS).toContain("ALLOWED_EMAILS");
+    expect(ENV_KEYS).toContain("ADMIN_EMAIL");
+  });
+
+  it("counts a whitespace-only approval list as set, and an empty one as unset", () => {
+    vi.stubEnv("ALLOWED_EMAILS", "  ");
+    vi.stubEnv("ADMIN_EMAIL", "");
+    expect(getEnv().ALLOWED_EMAILS).toBe("  ");
+    expect(getEnv().ADMIN_EMAIL).toBeUndefined();
   });
 });
 

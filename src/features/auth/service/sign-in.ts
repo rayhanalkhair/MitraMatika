@@ -1,5 +1,5 @@
 import { err, ok } from "@/lib/result";
-import { resolveAccess, type Access, type AllowedUser } from "./access";
+import { resolveAccess, type Access, type AllowedUser, type PendingUser } from "./access";
 import type { AuthPort } from "./auth-port";
 import { ensureProfile } from "./profile";
 import type { AuthResult } from "../schema/types";
@@ -20,9 +20,14 @@ async function signOutQuietly(port: AuthPort): Promise<void> {
   }
 }
 
-export type SignedInCallback = (user: AllowedUser) => Promise<void> | void;
+type SignedInUser = AllowedUser | PendingUser;
 
-async function notifySignedIn(callback: SignedInCallback | undefined, user: AllowedUser) {
+export type SignedInCallback = (user: SignedInUser) => Promise<void> | void;
+
+async function notifySignedIn(
+  callback: SignedInCallback | undefined,
+  user: SignedInUser,
+) {
   if (!callback) return;
   try {
     await callback(user);
@@ -42,7 +47,9 @@ export async function completeSignIn(
 ): Promise<AuthResult> {
   const access = await readAccess(port);
 
-  if (access.status === "allowed") {
+  // A pending account (verified, not yet approved) is signed in too: it must reach the waiting
+  // page, and the guards, not this step, keep it away from everything else.
+  if (access.status === "allowed" || access.status === "pending") {
     const profile = await ensureProfile(access);
     if (profile.ok) {
       await notifySignedIn(onSignedIn, access);

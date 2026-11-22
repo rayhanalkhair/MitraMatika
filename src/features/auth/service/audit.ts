@@ -1,5 +1,5 @@
 import { audit, auditExists, AUDIT_SIGN_IN, AUDIT_SIGN_OUT } from "@/lib/events";
-import type { AllowedUser } from "./access";
+import type { AllowedUser, PendingUser } from "./access";
 import type { SignedInCallback } from "./sign-in";
 
 // A sign-in is only recorded for a session this young. /auth/callback is a public GET that any
@@ -13,7 +13,7 @@ export function auditSignIn(
   method: "google" | "email",
   now: () => number = Date.now,
 ): SignedInCallback {
-  return async (user: AllowedUser) => {
+  return async (user: AllowedUser | PendingUser) => {
     const created = user.sessionCreatedAt;
     if (created && now() - created.getTime() > SIGN_IN_AUDIT_WINDOW_MS) return;
     const session = user.sessionId

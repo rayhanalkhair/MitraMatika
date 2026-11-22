@@ -27,7 +27,8 @@ export function isPublicPath(pathname: string): boolean {
 }
 
 export function decideProxy(pathname: string, access: Access): ProxyDecision {
-  if (isPublicPath(pathname) || access.status === "allowed") return { action: "next" };
+  // Pending users carry a session like everyone else; the guards decide what they may see.
+  if (isPublicPath(pathname) || access.status !== "anonymous") return { action: "next" };
   return { action: "redirect", to: "/sign-in" };
 }
 

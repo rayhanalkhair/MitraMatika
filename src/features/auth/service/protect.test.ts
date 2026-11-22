@@ -86,6 +86,17 @@ describe("decideProxy", () => {
     });
   });
 
+  it("lets a pending user through: the guards, not the proxy, keep it out", () => {
+    expect(
+      decideProxy("/home", {
+        status: "pending",
+        userId: "u",
+        email: "new@example.test",
+        displayName: null,
+      }),
+    ).toEqual({ action: "next" });
+  });
+
   it("lets an allowed user through", () => {
     expect(decideProxy("/home", allowed)).toEqual({ action: "next" });
   });

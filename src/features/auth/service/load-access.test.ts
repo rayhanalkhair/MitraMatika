@@ -18,7 +18,8 @@ const withUser = (id: string, email: string) =>
   createFakeAuthPort({ getSessionUser: { user: { id, email } } });
 
 describe("loadAccess (real path)", () => {
-  it("returns allowed for a signed-in account", async () => {
+  it("returns allowed for a signed-in account on the approved list", async () => {
+    vi.stubEnv("ALLOWED_EMAILS", "teacher@example.test");
     const access = await loadAccess(
       deps({
         getPort: () => Promise.resolve(withUser("user-1", "Teacher@Example.test")),
@@ -27,13 +28,34 @@ describe("loadAccess (real path)", () => {
     expect(access).toMatchObject({ status: "allowed", userId: "user-1" });
   });
 
-  it("returns allowed for any email: there is no allowlist", async () => {
+  it("returns pending for a signed-in account that is not approved", async () => {
+    vi.stubEnv("ALLOWED_EMAILS", "teacher@example.test");
     const access = await loadAccess(
       deps({
         getPort: () => Promise.resolve(withUser("u2", "x@example.test")),
       }),
     );
-    expect(access).toMatchObject({ status: "allowed", email: "x@example.test" });
+    expect(access).toMatchObject({
+      status: "pending",
+      userId: "u2",
+      email: "x@example.test",
+    });
+  });
+
+  it("returns allowed for the admin address even when the list is empty", async () => {
+    vi.stubEnv("ADMIN_EMAIL", "Boss@Example.test");
+    const access = await loadAccess(
+      deps({ getPort: () => Promise.resolve(withUser("u3", "boss@example.test")) }),
+    );
+    expect(access).toMatchObject({ status: "allowed", userId: "u3" });
+  });
+
+  it("re-reads the approval list on every call", async () => {
+    const getPort = () => Promise.resolve(withUser("u2", "x@example.test"));
+    vi.stubEnv("ALLOWED_EMAILS", "x@example.test");
+    expect((await loadAccess(deps({ getPort }))).status).toBe("allowed");
+    vi.stubEnv("ALLOWED_EMAILS", "");
+    expect((await loadAccess(deps({ getPort }))).status).toBe("pending");
   });
 
   it("returns anonymous when there is no session", async () => {
@@ -75,12 +97,23 @@ describe("loadAccess (e2e fake session)", () => {
 
   it("uses the cookie and never touches Better Auth", async () => {
     enable();
+    vi.stubEnv("ALLOWED_EMAILS", "teacher@example.test");
     const getPort = vi.fn(() => Promise.resolve(createFakeAuthPort()));
     const access = await loadAccess(
       deps({ getPort, readE2eCookie: () => Promise.resolve("teacher@example.test") }),
     );
     expect(access).toMatchObject({ status: "allowed", email: "teacher@example.test" });
     expect(getPort).not.toHaveBeenCalled();
+  });
+
+  it("sends the fake identity through the approval predicate too", async () => {
+    enable();
+    vi.stubEnv("ALLOWED_EMAILS", "");
+    vi.stubEnv("ADMIN_EMAIL", "");
+    const access = await loadAccess(
+      deps({ readE2eCookie: () => Promise.resolve("teacher@example.test") }),
+    );
+    expect(access).toMatchObject({ status: "pending", email: "teacher@example.test" });
   });
 
   it("treats any cookie other than the fixed test identity as anonymous", async () => {
