@@ -2,7 +2,8 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { act, cleanup, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { renderWithIntl } from "@/test/intl";
+import { renderToString } from "react-dom/server";
+import { IntlWrapper, renderWithIntl } from "@/test/intl";
 
 const mocks = vi.hoisted(() => ({
   push: vi.fn(),
@@ -59,6 +60,30 @@ beforeEach(() => {
   });
 });
 afterEach(cleanup);
+
+describe("QuestionEditor, server render", () => {
+  // React Hook Form gives every step a random key; an id built from it differs between the
+  // server's HTML and the browser's first render, a hydration mismatch React does not repair.
+  it("renders the same ids every time (no random part in a step's id)", () => {
+    const html = () =>
+      renderToString(
+        <IntlWrapper>
+          <QuestionEditor
+            questionId={QUESTION_ID}
+            rowVersion={3}
+            initial={initial}
+            approved={false}
+            banked={false}
+            returnTo="/generate/abc"
+          />
+        </IntlWrapper>,
+      );
+    const first = html();
+    expect(html()).toBe(first);
+    expect(first).toContain("-steps-0");
+    expect(first).toContain("-steps-1");
+  });
+});
 
 describe("QuestionEditor", () => {
   it("shows every field with its current text and a math preview", () => {

@@ -484,7 +484,7 @@ export function QuestionEditor({
         <ol className="flex min-w-0 flex-col gap-3">
           {stepFields.map((field, index) => {
             const number = index + 1;
-            const id = `${ids.steps}-${field.fieldKey}`;
+            const id = `${ids.steps}-${String(index)}`;
             return (
               <li key={field.fieldKey} className="flex min-w-0 flex-col gap-2">
                 <Field

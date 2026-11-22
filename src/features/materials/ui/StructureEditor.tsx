@@ -393,7 +393,7 @@ export function StructureEditor({
           <ol className="flex min-w-0 flex-col gap-3">
             {fields.map((field, index) => {
               const number = index + 1;
-              const errorId = `${id}-chapter-${field.fieldKey}-error`;
+              const errorId = `${id}-chapter-${String(index)}-error`;
               const error = chapterError(index);
               return (
                 <li
