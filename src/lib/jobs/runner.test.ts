@@ -5,6 +5,7 @@ import {
   createTestDatabase,
   DB_TEST_TIMEOUT,
   USER_A,
+  USER_B,
   type TestDatabase,
 } from "@/lib/db/test-harness";
 import { PermanentJobError, RetryableJobError, type JobHandler } from "./handler";
@@ -41,6 +42,7 @@ const run = (
     leaseMs?: number;
     onFailure?: (info: FailureInfo) => Promise<void>;
     runs?: ReturnType<typeof createJobRunLog>;
+    canRun?: (ownerId: string) => Promise<boolean>;
   } = {},
 ) => {
   const registry = createRegistry();
@@ -490,6 +492,145 @@ const runsOf = (jobId: string) =>
     .from(jobRuns)
     .where(eq(jobRuns.jobId, jobId))
     .orderBy(asc(jobRuns.startedAt));
+
+describe("canRun (owner approval)", () => {
+  const ok: JobHandler = () => Promise.resolve({ kind: "done" });
+
+  it("fails the job for good as account_not_approved without calling the handler", async () => {
+    const job = await enqueue();
+    const handler = vi.fn<JobHandler>(ok);
+    const onFailure = vi.fn<(info: FailureInfo) => Promise<void>>(() =>
+      Promise.resolve(),
+    );
+    const summary = await run(handler, {
+      canRun: () => Promise.resolve(false),
+      onFailure,
+    });
+    expect(handler).not.toHaveBeenCalled();
+    expect(onFailure).not.toHaveBeenCalled();
+    expect(summary).toMatchObject({ ran: 1, succeeded: 0, failed: 1, retried: 0 });
+    const row = await rowOf(job.id);
+    expect(row).toMatchObject({
+      status: "failed",
+      error: { code: "account_not_approved", message: "Akun belum disetujui." },
+    });
+    // Not retried: the next run finds nothing to do.
+    nowMs += HOUR;
+    expect(await run(handler, { canRun: () => Promise.resolve(false) })).toMatchObject({
+      ran: 0,
+    });
+  });
+
+  it("records the attempt in job_runs with the code and keeps the job's progress", async () => {
+    const job = await enqueue();
+    await run(ok, { canRun: () => Promise.resolve(false) });
+    const [attempt] = await runsOf(job.id);
+    expect(attempt).toMatchObject({
+      outcome: "failed",
+      errorCode: "account_not_approved",
+    });
+  });
+
+  it("asks once per owner per invocation and per owner separately", async () => {
+    await enqueue();
+    await enqueue();
+    await enqueue({ ownerId: USER_B });
+    const canRun = vi.fn((ownerId: string) => Promise.resolve(ownerId === USER_A));
+    const summary = await run(ok, { canRun });
+    expect(canRun).toHaveBeenCalledTimes(2);
+    expect(canRun.mock.calls.map(([id]) => id).sort()).toEqual([USER_A, USER_B].sort());
+    expect(summary).toMatchObject({ ran: 3, succeeded: 2, failed: 1 });
+  });
+
+  it("asks again in the next invocation: an approval removed between two steps stops the job", async () => {
+    const job = await enqueue();
+    let allowed = true;
+    const handler = vi.fn<JobHandler>(() => {
+      allowed = false; // the address is removed after the first step
+      return Promise.resolve({
+        kind: "defer",
+        runAfter: new Date(T0 + MINUTE),
+        progress: { step: "one", done: 1, total: 2 },
+      });
+    });
+    const first = await run(handler, { canRun: () => Promise.resolve(allowed) });
+    expect(handler).toHaveBeenCalledTimes(1);
+    expect(first).toMatchObject({ deferred: 1, failed: 0 });
+    nowMs = T0 + 2 * MINUTE;
+    const next = await run(handler, { canRun: () => Promise.resolve(allowed) });
+    expect(handler).toHaveBeenCalledTimes(1);
+    expect(next).toMatchObject({ failed: 1 });
+    expect(await rowOf(job.id)).toMatchObject({
+      status: "failed",
+      progress: { step: "one", done: 1, total: 2 },
+      error: { code: "account_not_approved" },
+    });
+  });
+
+  it("keeps the answer for the whole invocation, so a continuing job's next step is not asked again", async () => {
+    await enqueue();
+    const canRun = vi.fn(() => Promise.resolve(true));
+    let step = 0;
+    const handler: JobHandler = () => {
+      step += 1;
+      return Promise.resolve(
+        step < 3
+          ? { kind: "continue", progress: { step: String(step), done: step, total: 3 } }
+          : { kind: "done" },
+      );
+    };
+    const summary = await run(handler, { canRun });
+    expect(summary).toMatchObject({ ran: 3, continued: 2, succeeded: 1 });
+    expect(canRun).toHaveBeenCalledTimes(1);
+  });
+
+  it("runs normally when canRun says yes, and when canRun is absent", async () => {
+    await enqueue();
+    expect(await run(ok, { canRun: () => Promise.resolve(true) })).toMatchObject({
+      succeeded: 1,
+    });
+    await enqueue();
+    expect(await run(ok)).toMatchObject({ succeeded: 1 });
+  });
+
+  it("re-queues with backoff when the lookup throws, without calling the handler", async () => {
+    const job = await enqueue();
+    const handler = vi.fn<JobHandler>(ok);
+    const spy = vi.spyOn(logger, "warn").mockImplementation(() => undefined);
+    const canRun = vi.fn(() => Promise.reject(new TypeError("db down for a@x.com")));
+    const summary = await run(handler, { canRun });
+    expect(handler).not.toHaveBeenCalled();
+    expect(summary).toMatchObject({ ran: 1, retried: 1, failed: 0 });
+    const row = await rowOf(job.id);
+    expect(row).toMatchObject({ status: "queued", attempts: 1 });
+    expect(row.runAfter.getTime()).toBe(T0 + backoffMs(0));
+    expect(row.error).toMatchObject({ code: "approval_check_failed" });
+    expect(JSON.stringify(row.error)).not.toContain("a@x.com");
+    expect(JSON.stringify(spy.mock.calls)).not.toContain("a@x.com");
+    expect(JSON.stringify(spy.mock.calls)).toContain("TypeError");
+  });
+
+  it("asks only once for an owner whose lookup failed (no hammering in one run)", async () => {
+    await enqueue();
+    await enqueue();
+    const canRun = vi.fn(() => Promise.reject(new Error("down")));
+    vi.spyOn(logger, "warn").mockImplementation(() => undefined);
+    const summary = await run(ok, { canRun });
+    expect(canRun).toHaveBeenCalledTimes(1);
+    expect(summary).toMatchObject({ ran: 2, retried: 2 });
+  });
+
+  it("fails for good with onFailure when the lookup keeps failing to the last attempt", async () => {
+    const job = await enqueue({ maxAttempts: 1 });
+    const onFailure = vi.fn<(info: FailureInfo) => Promise<void>>(() =>
+      Promise.resolve(),
+    );
+    vi.spyOn(logger, "warn").mockImplementation(() => undefined);
+    await run(ok, { canRun: () => Promise.reject(new Error("down")), onFailure });
+    expect(await rowOf(job.id)).toMatchObject({ status: "failed" });
+    expect(onFailure).toHaveBeenCalledTimes(1);
+  });
+});
 
 describe("picking up due work", () => {
   it("runs a deferred job whose run_after has passed on the next call", async () => {

@@ -52,7 +52,21 @@ export interface RunnerOptions {
   leaseMs?: number;
   // Called once for a job that has failed for good (never for a retried failure).
   onFailure?: (info: FailureInfo) => Promise<void>;
+  // Whether this owner may still have work run (the account is approved). Absent means everyone
+  // may. Asked before a job's handler runs, once per owner per invocation; false fails the job for
+  // good as `account_not_approved`, a throw re-queues it (the owner cannot be told apart from an
+  // outage, so the job is neither run nor dropped).
+  canRun?: (ownerId: string) => Promise<boolean>;
 }
+
+const NOT_APPROVED_FAILURE: JobFailure = {
+  code: "account_not_approved",
+  message: "Akun belum disetujui.",
+};
+const APPROVAL_CHECK_FAILURE: JobFailure = {
+  code: "approval_check_failed",
+  message: "Persetujuan akun belum bisa diperiksa.",
+};
 
 function describeFailure(error: unknown): JobFailure {
   if (error instanceof PermanentJobError || error instanceof RetryableJobError)
@@ -111,6 +125,19 @@ export async function runJobs(options: RunnerOptions): Promise<RunSummary> {
     budgetExhausted: false,
   };
 
+  // One answer per owner for this invocation (a rejected lookup is remembered too, so an outage
+  // costs one query, not one per job).
+  const approvals = new Map<string, Promise<boolean>>();
+  const mayRun = (ownerId: string): Promise<boolean> => {
+    if (!options.canRun) return Promise.resolve(true);
+    let answer = approvals.get(ownerId);
+    if (!answer) {
+      answer = options.canRun(ownerId);
+      approvals.set(ownerId, answer);
+    }
+    return answer;
+  };
+
   summary.reclaimed = await queue.reclaimStale(leaseMs);
 
   for (;;) {
@@ -138,6 +165,36 @@ export async function runJobs(options: RunnerOptions): Promise<RunSummary> {
         applied ? outcome : "failed",
         applied ? errorCode : "lease_lost",
       );
+    // Before anything of the owner's runs. Fails closed; no data is touched, and onFailure hears
+    // only of the unexpected case (a lookup that never succeeds), not of an expected refusal.
+    let approved: boolean;
+    try {
+      approved = await mayRun(job.ownerId);
+    } catch (error) {
+      logger.warn(
+        { module: "jobs", errorName: error instanceof Error ? error.name : "unknown" },
+        "jobs: the owner's approval could not be checked, the job is retried later",
+      );
+      const retry = job.attempts + 1 < job.maxAttempts;
+      const retryAt = retry ? new Date(now().getTime() + backoffMs(job.attempts)) : null;
+      const applied = await queue.fail(claim, APPROVAL_CHECK_FAILURE, retryAt);
+      record(applied, retry ? "retried" : "failed");
+      await finishRun(
+        applied,
+        retry ? "deferred" : "failed",
+        APPROVAL_CHECK_FAILURE.code,
+      );
+      if (applied && !retry) await reportFailure(job, APPROVAL_CHECK_FAILURE);
+      return;
+    }
+    if (!approved) {
+      // Expected outcome (an address left the approval list): not an error-log row, only counted.
+      const applied = await queue.fail(claim, NOT_APPROVED_FAILURE, null);
+      record(applied, "failed");
+      await finishRun(applied, "failed", NOT_APPROVED_FAILURE.code);
+      return;
+    }
+
     const handler = registry.get(job.type);
 
     if (!handler) {
