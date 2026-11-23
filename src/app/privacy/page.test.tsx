@@ -128,6 +128,9 @@ describe("privacy page", () => {
     expect(text).toContain("Logo sekolah");
     // Trash.
     expect(text).toContain(`disimpan ${String(TRASH_RETENTION_DAYS)} hari`);
+    expect(text).toContain(
+      "soal yang Anda selesaikan (beserta penyelesaian dan fotonya)",
+    );
     // Daily limits, pinned to the constants the app enforces.
     expect(text).toContain(`${String(USER_DAILY_QUESTION_LIMIT)} soal dibuat`);
     expect(text).toContain(`${String(USER_DAILY_SOLVES)} soal diselesaikan`);
@@ -151,6 +154,7 @@ describe("privacy page", () => {
     expect(text).toContain(`expire after ${String(EXPORT_DAYS)} days`);
     expect(text).toContain("School logos");
     expect(text).toContain(`kept for ${String(TRASH_RETENTION_DAYS)} days`);
+    expect(text).toContain("solved problems (with their solutions and photos)");
     expect(text).toContain(`${String(USER_DAILY_QUESTION_LIMIT)} questions created`);
     expect(text).toContain(`${String(USER_DAILY_SOLVES)} problems solved`);
     expect(text).toContain(`${String(USER_DAILY_OCR_PAGES)} material pages read`);
