@@ -20,7 +20,8 @@ export function formatSize(
   if (Math.round(bytes / KB) >= 1024) {
     return `${format.number(bytes / MB, { maximumFractionDigits: 1 })} MB`;
   }
-  if (bytes >= KB) {
+  // From 1000 bytes on KB, so "1.000 B" (a thousands dot that reads like a decimal) never shows.
+  if (bytes >= 1000) {
     return `${format.number(Math.round(bytes / KB), { maximumFractionDigits: 0 })} KB`;
   }
   return `${format.number(bytes, { maximumFractionDigits: 0 })} B`;
