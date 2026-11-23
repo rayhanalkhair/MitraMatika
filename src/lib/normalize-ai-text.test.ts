@@ -62,3 +62,22 @@ describe("unescapeLiteralBreaks (a text segment, no maths in it)", () => {
     expect(unescapeLiteralBreaks(String.raw`\\n tetap`)).toBe(String.raw`\\n tetap`);
   });
 });
+
+describe("bare LaTeX commands outside any delimiter", () => {
+  it.each([
+    String.raw`\text{cm}`,
+    String.raw`3 \times 4`,
+    String.raw`\theta dan \neq`,
+    String.raw`\nu`,
+  ])("keeps %s (a command, not an escape)", (text) => {
+    expect(normalizeAiText(text)).toBe(text);
+    expect(unescapeLiteralBreaks(text)).toBe(text);
+  });
+
+  it("still converts an escape that is followed by a word", () => {
+    expect(normalizeAiText(String.raw`Langkah 1:\nLangkah 2:\nuntuk x`)).toBe(
+      ["Langkah 1:", "Langkah 2:", "untuk x"].join("\n"),
+    );
+    expect(normalizeAiText(String.raw`a\tb`)).toBe("a b");
+  });
+});
