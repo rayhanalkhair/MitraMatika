@@ -160,9 +160,18 @@ describe("message catalogs", () => {
       const caps = (text.match(/\b[A-Z]{3,}\b/g) ?? []).filter(
         (word) =>
           !/^[IVX]+$/.test(word) &&
-          !["SPLDV", "PNG", "JPG", "JPEG", "SVG", "PDF", "ZIP", "DOCX", "OCR"].includes(
-            word,
-          ),
+          ![
+            "SPLDV",
+            "PNG",
+            "JPG",
+            "JPEG",
+            "SVG",
+            "PDF",
+            "ZIP",
+            "DOCX",
+            "OCR",
+            "AWS",
+          ].includes(word),
       );
       expect(caps, key).toEqual([]);
     }
