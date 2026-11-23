@@ -11,7 +11,21 @@ export async function generateMetadata(): Promise<Metadata> {
 
 const SECTIONS = [
   { title: "storedTitle", body: ["storedAccount", "storedContent", "storedTechnical"] },
-  { title: "aiTitle", body: ["aiGroq", "aiGemini", "emailService"] },
+  {
+    title: "filesTitle",
+    body: ["filesService", "filesMaterials", "filesSolver", "filesExports", "filesTrash"],
+  },
+  {
+    title: "aiTitle",
+    body: [
+      "aiGroq",
+      "aiGroqMaterials",
+      "aiSolver",
+      "aiLimits",
+      "aiGemini",
+      "emailService",
+    ],
+  },
   { title: "studentsTitle", body: ["students"] },
   { title: "deleteTitle", body: ["delete"] },
 ] as const;
