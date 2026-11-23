@@ -132,3 +132,17 @@ describe("correction note", () => {
     expect(clamped.startsWith("baris satu baris dua x")).toBe(true);
   });
 });
+
+describe("literal line-break escapes (S-10)", () => {
+  it("tells the model not to write a backslash-n outside formulas", () => {
+    const { prompt } = buildGenerateMcPrompt({
+      grade: 8,
+      topicTitle: "Topik contoh",
+      topicScopeNotes: "Cakupan contoh",
+      difficulty: "mudah",
+      count: 1,
+      dataClass: "C0",
+    });
+    expect(prompt).toContain("Jangan menulis dua karakter \\n");
+  });
+});

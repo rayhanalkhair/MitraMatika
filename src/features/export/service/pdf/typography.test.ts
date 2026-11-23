@@ -116,3 +116,22 @@ describe.each(["times", "arial"] as const)(
     );
   },
 );
+
+describe("a literal backslash-n stored in a step (S-10, rows stored before the fix)", () => {
+  it(
+    "is not printed in the PDF of the solutions",
+    async () => {
+      const step = String.raw`Kurangkan 3 dari kedua sisi:\n$$2x = 11 - 3$$\n$$2x = 8$$ lalu selesai`;
+      const doc = buildDocumentModel(
+        snapshot({}, { i1: version("Soal", "A", { steps: [step, "Langkah dua."] }) }),
+        template,
+      );
+      const { bytes } = await renderForTest(doc, "solutions");
+      const [page] = await readPages(bytes);
+      expect(page.text).toContain("Kurangkan 3 dari kedua sisi:");
+      expect(page.text).toContain("lalu selesai");
+      expect(page.text).not.toContain(String.raw`\n`);
+    },
+    SLOW,
+  );
+});

@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { normalizeAiText } from "@/lib/normalize-ai-text";
 import type { AiUsage, createGateway } from "@/lib/ai";
 import { findInvalidMathSpans } from "./katex-check";
 import {
@@ -11,10 +12,10 @@ export type { SolveIndependentParams } from "./prompts/solve-independent.id";
 const solveIndependentResultSchema = z.object({
   correctLabel: z.enum(["A", "B", "C", "D"]),
   answer: z.object({
-    display_md: z.string().min(1),
+    display_md: z.string().min(1).transform(normalizeAiText),
     machine: z.string().min(1),
   }),
-  steps: z.array(z.string().min(1)).min(1),
+  steps: z.array(z.string().min(1).transform(normalizeAiText)).min(1),
 });
 
 export type SolveIndependentResult = z.infer<typeof solveIndependentResultSchema>;

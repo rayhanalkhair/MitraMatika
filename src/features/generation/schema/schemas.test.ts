@@ -103,3 +103,27 @@ describe("multipleChoiceBatchSchema", () => {
     expect(multipleChoiceBatchSchema.safeParse(batch).success).toBe(false);
   });
 });
+
+describe("literal backslash-n from the model (S-10)", () => {
+  const step = String.raw`Kurangkan 3:\n$$2x = 11 - 3$$\n$$2x = 8$$`;
+  const real = "Kurangkan 3:\n$$2x = 11 - 3$$\n$$2x = 8$$";
+
+  it("becomes a real line break in every displayed field, outside maths only", () => {
+    const q = validQuestion();
+    q.stem_md = String.raw`Jika $a \neq b$:\n$$2x + 3 = 11$$`;
+    q.options[0].text_md = String.raw`$x \neq 1$\n$\nu$`;
+    q.explanation_md = step;
+    q.steps = [step, String.raw`Jadi $\nabla$ ok\n$$x = 4$$`];
+    q.answer.display_md = String.raw`$x = 4$\n$$y$$`;
+    const parsed = multipleChoiceQuestionSchema.parse(q);
+    expect(parsed.stem_md).toBe(String.raw`Jika $a \neq b$:` + "\n$$2x + 3 = 11$$");
+    expect(parsed.options[0].text_md).toBe(
+      String.raw`$x \neq 1$` + "\n" + String.raw`$\nu$`,
+    );
+    expect(parsed.explanation_md).toBe(real);
+    expect(parsed.steps[0]).toBe(real);
+    expect(parsed.steps[1]).toBe(String.raw`Jadi $\nabla$ ok` + "\n$$x = 4$$");
+    expect(parsed.answer.display_md).toBe("$x = 4$\n$$y$$");
+    expect(parsed.answer.machine).toBe("25");
+  });
+});

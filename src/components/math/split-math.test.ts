@@ -66,3 +66,18 @@ describe("splitMath", () => {
     expect(splitMath("")).toEqual([]);
   });
 });
+
+describe("splitMath and a literal backslash-n in the text (S-10, text stored before the fix)", () => {
+  it("shows it as a line break in text segments only", () => {
+    expect(
+      splitMath(String.raw`$$2x = 11 - 3$$\n$$2x = 8$$ dan $a \neq b$\nlalu`),
+    ).toEqual([
+      { kind: "block", value: "2x = 11 - 3" },
+      { kind: "text", value: "\n" },
+      { kind: "block", value: "2x = 8" },
+      { kind: "text", value: " dan " },
+      { kind: "inline", value: String.raw`a \neq b` },
+      { kind: "text", value: "\nlalu" },
+    ]);
+  });
+});

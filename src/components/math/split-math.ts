@@ -1,3 +1,5 @@
+import { unescapeLiteralBreaks } from "@/lib/normalize-ai-text";
+
 export interface MathSegment {
   kind: "text" | "inline" | "block";
   value: string;
@@ -14,7 +16,10 @@ const ESCAPED_DOLLAR = "";
 export function splitMath(text: string): MathSegment[] {
   const guarded = text.replace(/\\\$/g, ESCAPED_DOLLAR);
   // In text a `\$` shows as a literal `$`; inside math it stays `\$` (valid LaTeX for a dollar).
-  const asText = (value: string) => value.replaceAll(ESCAPED_DOLLAR, "$");
+  // A literal backslash-n between formulas (written by a model, stored before S-10 was fixed)
+  // shows as a line break; the maths segments are never touched.
+  const asText = (value: string) =>
+    unescapeLiteralBreaks(value.replaceAll(ESCAPED_DOLLAR, "$"));
   const asMath = (value: string) => value.replaceAll(ESCAPED_DOLLAR, "\\$");
   const segments: MathSegment[] = [];
   let last = 0;

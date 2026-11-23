@@ -57,6 +57,7 @@ ${CLOSE}
 Aturan:
 ${methodRule}- "method": nama singkat metode (maksimal ${String(MAX_METHOD_LABEL_CHARS)} karakter), misalnya "Substitusi" atau "Eliminasi".
 - "steps": 1 sampai 20 langkah; setiap "body_md" berisi Markdown dengan rumus LaTeX ($...$ atau $$...$$). Setiap backslash LaTeX ditulis dua kali di dalam string JSON, misalnya "\\\\frac{1}{2}".
+- Di "body_md" jangan menulis dua karakter \\n (garis miring terbalik lalu n) di luar rumus untuk pindah baris. Untuk baris baru pakai baris baru JSON biasa (satu escape JSON), atau letakkan rumus blok $$...$$ pada barisnya sendiri. Di dalam rumus, perintah LaTeX seperti \\\\neq tetap ditulis dengan backslash ganda.
 - "final_answer": "value" berisi jawaban akhir saja (angka Indonesia boleh, misalnya "0,5"), "unit" berisi satuannya atau null, "rounding" menjelaskan pembulatan (misalnya "dibulatkan ke 2 tempat desimal") atau null bila tidak dibulatkan.
 - "verification_claims": klaim yang bisa dihitung mesin, dengan sintaks matematika polos (bukan LaTeX): operator +, -, *, /, ^, tanda kurung dan fungsi seperti sqrt(...). Nilai "expected" dan "solutions" presisi penuh, tidak dibulatkan, dengan titik sebagai pemisah desimal dan tanpa pemisah ribuan (misalnya "1.5", "1500"). Sertakan setidaknya satu klaim yang menghitung jawaban akhir dari bilangan-bilangan di soal. Hanya tiga jenis ini:
   { "type": "numeric_eval", "expression": "...", "expected": "..." }
