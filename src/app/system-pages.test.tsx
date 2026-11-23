@@ -97,6 +97,7 @@ describe("the error pages", () => {
       <GlobalError error={error} retry={vi.fn()} reset={vi.fn()} />,
     );
     expect(html).toContain('<html lang="id"');
+    expect(html).toContain("<title>Terjadi kesalahan - MitraMatika</title>");
     expect(html).toContain("Terjadi kesalahan");
     expect(html).toContain("Coba lagi");
     expect(html).not.toContain("secret_table");
