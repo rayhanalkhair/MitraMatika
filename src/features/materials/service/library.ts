@@ -466,11 +466,18 @@ export interface MaterialDetail {
   pages: { total: number; high: number; medium: number; low: number };
   /** Page numbers whose text is not rated high (to review, or to OCR in Task 6). */
   flaggedPages: number[];
+  /** The distinct reasons behind those pages (page flags), in a fixed order. */
+  flagReasons: string[];
+  /** Bytes of the stored page pictures (OCR), counted in the storage meter next to the file. */
+  pageImageBytes: number;
   /** The model's proposal, when one was made and still reads as valid. */
   proposal: StoredProposal | null;
   /** The confirmed chapters. */
   sections: MaterialSectionItem[];
 }
+
+/** The order the reasons of a flagged page are listed in (the OCR review lists them the same way). */
+const FLAG_ORDER = ["low_text", "garbled", "formula_text", "uncertain_math", "truncated"];
 
 /** One of the owner's live materials for its detail page, or null (unknown, foreign, trashed). */
 export async function getMaterialDetail(
@@ -529,10 +536,21 @@ export async function getMaterialDetail(
     } else pages.low += n;
   }
   const flagged = await db
-    .select({ pageNo: materialPages.pageNo })
+    .select({ pageNo: materialPages.pageNo, flags: materialPages.flags })
     .from(materialPages)
     .where(and(ofMaterial, ne(materialPages.confidence, "high")))
     .orderBy(asc(materialPages.pageNo));
+  const reasons = new Set(
+    flagged.flatMap((page) =>
+      Array.isArray(page.flags)
+        ? page.flags.filter((flag): flag is string => typeof flag === "string")
+        : [],
+    ),
+  );
+  const [images] = await db
+    .select({ bytes: sql<string>`coalesce(sum(${materialPages.imageBytes}), 0)` })
+    .from(materialPages)
+    .where(ofMaterial);
   const sections = await db
     .select({
       id: materialSections.id,
@@ -567,6 +585,8 @@ export async function getMaterialDetail(
     metadataConfirmedAt: row.metadataConfirmedAt?.toISOString() ?? null,
     pages,
     flaggedPages: flagged.map((page) => page.pageNo),
+    flagReasons: FLAG_ORDER.filter((flag) => reasons.has(flag)),
+    pageImageBytes: Number(images.bytes),
     proposal: proposal.success ? proposal.data : null,
     sections,
   };

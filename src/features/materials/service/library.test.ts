@@ -567,6 +567,8 @@ describe("getMaterialDetail", () => {
       status: "needs_review",
       pages: { total: 3, high: 2, medium: 0, low: 1 },
       flaggedPages: [3],
+      flagReasons: ["low_text"],
+      pageImageBytes: 0,
       proposal: null,
       sections: [],
       metadataConfirmedAt: null,

@@ -90,6 +90,12 @@ export function MaterialDetail({
           <dd>{t(`library.kind.${kind}`)}</dd>
           <dt className="text-muted-foreground">{t("detail.sizeLabel")}</dt>
           <dd>{formatSize(detail.sizeBytes, format)}</dd>
+          {detail.pageImageBytes > 0 && (
+            <>
+              <dt className="text-muted-foreground">{t("detail.imagesLabel")}</dt>
+              <dd>{formatSize(detail.pageImageBytes, format)}</dd>
+            </>
+          )}
           {detail.pageCount !== null && (
             <>
               <dt className="text-muted-foreground">{t("detail.pagesLabel")}</dt>
@@ -101,6 +107,7 @@ export function MaterialDetail({
           <dt className="text-muted-foreground">{t("detail.folderLabel")}</dt>
           <dd className="break-words">{detail.folderName ?? t("detail.noFolder")}</dd>
         </dl>
+        <p className="text-sm text-muted-foreground">{t("detail.sizeNote")}</p>
         <form
           onSubmit={(event) => void move(event)}
           className="flex min-w-0 flex-col gap-2"
@@ -161,6 +168,15 @@ export function MaterialDetail({
                 low: detail.pages.low,
               })}
             </p>
+            {detail.flagReasons.length > 0 && (
+              <p className="text-sm break-words">
+                {t("detail.quality.reasons", {
+                  reasons: detail.flagReasons
+                    .map((flag) => t(`ocr.flags.${flag}`))
+                    .join("; "),
+                })}
+              </p>
+            )}
             {detail.flaggedPages.length > 0 && (
               <p className="text-sm break-words">
                 {t("detail.quality.flagged", {

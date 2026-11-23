@@ -211,14 +211,14 @@ describe("ingest_material: PDF", () => {
   it("offers OCR for a page whose formulas the text layer may have scrambled (medium)", async () => {
     const pdf = makeTextPdf([
       proseLines,
-      [...proseLines, "x + y = 10 dan x - y = 2, jadi x = 6"],
+      [...proseLines, "x + y = 10, x - y = 2, 2x + 3y = 12, 4x - y = 7, jadi x = 6"],
     ]);
     const { id } = await seedMaterial(USER_A, "pdf", pdf, { pageCount: 2 });
     await runToEnd(await claimJob(USER_A, id));
     const pages = await pagesOf(id);
     expect(pages.map((page) => [page.confidence, page.flags, page.ocrStatus])).toEqual([
       ["high", [], "none"],
-      ["medium", ["uncertain_math"], "available"],
+      ["medium", ["formula_text"], "available"],
     ]);
     expect((await materialRow(id)).status).toBe("needs_review");
   });

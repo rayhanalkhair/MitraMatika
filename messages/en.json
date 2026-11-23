@@ -1313,6 +1313,7 @@
     },
     "storage": {
       "label": "Storage",
+      "counted": "Every file counts: materials (also those in the trash), page images, exports, logos and solver photos.",
       "nearlyFull": "Storage is nearly full. Delete materials you no longer use from the trash for good."
     },
     "folders": {
@@ -1354,7 +1355,9 @@
       "back": "Back to the materials",
       "facts": "About the file",
       "kindLabel": "Type",
-      "sizeLabel": "Size",
+      "sizeLabel": "File size",
+      "imagesLabel": "Page images",
+      "sizeNote": "The file and the page images count toward your storage.",
       "pagesLabel": "Pages",
       "addedLabel": "Uploaded",
       "statusLabel": "Status",
@@ -1364,6 +1367,7 @@
         "heading": "Text quality",
         "summary": "{high} pages clear, {medium} to check, {low} hard to read",
         "flagged": "Pages to check: {pages}",
+        "reasons": "Reason: {reasons}",
         "none": "No pages have been read yet.",
         "reading": "The text is being read. Reload this page in a moment.",
         "failed": "The text of this file could not be read. Move it to the trash, then upload it again."
@@ -1451,8 +1455,9 @@
         "failed": "OCR failed, can be tried again"
       },
       "flags": {
-        "uncertain_math": "Has uncertain parts",
-        "low_text": "Little text",
+        "uncertain_math": "Has parts marked [[?]] or formulas that could not be read",
+        "formula_text": "Many formula symbols; their order in the text may be wrong, compare with the page image",
+        "low_text": "Almost no text; perhaps a scanned page or a picture",
         "garbled": "Text looks scrambled",
         "truncated": "Text cut off, check the end of the page"
       },

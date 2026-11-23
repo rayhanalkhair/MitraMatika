@@ -224,6 +224,8 @@ describe("rejected actions and live regions", () => {
           metadataConfirmedAt: null,
           pages: { total: 1, high: 1, medium: 0, low: 0 },
           flaggedPages: [],
+          flagReasons: [],
+          pageImageBytes: 0,
         }}
         folders={FOLDERS}
       />,
@@ -233,6 +235,47 @@ describe("rejected actions and live regions", () => {
     expect(
       screen.getByRole<HTMLButtonElement>("button", { name: "Pindahkan" }).disabled,
     ).toBe(false);
+  });
+});
+
+describe("MaterialDetail sizes", () => {
+  const small = {
+    id: ID,
+    title: "Buku-SPLDV-uji",
+    kind: "pdf",
+    mime: "application/pdf",
+    status: "ready",
+    sizeBytes: 3 * 1024,
+    pageCount: 3,
+    grade: null,
+    academicYear: null,
+    folderId: null,
+    folderName: null,
+    createdAt: "2026-11-20T01:00:00.000Z",
+    metadataConfirmedAt: null,
+    pages: { total: 3, high: 3, medium: 0, low: 0 },
+    flaggedPages: [],
+    flagReasons: [],
+    pageImageBytes: 190 * 1024,
+  };
+
+  it("writes a 3 KB file in KB, not as 0 MB, and says what else is counted", () => {
+    renderWithIntl(<MaterialDetail detail={small} folders={FOLDERS} />);
+    expect(screen.getByText("Ukuran berkas")).toBeTruthy();
+    expect(screen.getByText("3 KB")).toBeTruthy();
+    expect(screen.queryByText(/^0 MB$/)).toBeNull();
+    expect(screen.getByText("Gambar halaman")).toBeTruthy();
+    expect(screen.getByText("190 KB")).toBeTruthy();
+    expect(
+      screen.getByText("Berkas dan gambar halaman dihitung dalam penyimpanan Anda."),
+    ).toBeTruthy();
+  });
+
+  it("shows no page image row when no page picture is stored", () => {
+    renderWithIntl(
+      <MaterialDetail detail={{ ...small, pageImageBytes: 0 }} folders={FOLDERS} />,
+    );
+    expect(screen.queryByText("Gambar halaman")).toBeNull();
   });
 });
 
@@ -253,6 +296,8 @@ describe("MaterialDetail", () => {
     metadataConfirmedAt: null,
     pages: { total: 3, high: 2, medium: 0, low: 1 },
     flaggedPages: [3],
+    flagReasons: ["low_text"],
+    pageImageBytes: 0,
   };
 
   it("labels the folder select by a label of its own, whose text is only the name", () => {
@@ -272,6 +317,12 @@ describe("MaterialDetail", () => {
     ).toBeTruthy();
     expect(screen.getByText("Halaman yang perlu diperiksa: 3")).toBeTruthy();
     expect(screen.getByText("3 MB")).toBeTruthy();
+    // The reason is said in words, not left to the page numbers.
+    expect(
+      screen.getByText(
+        "Alasan: Hampir tidak ada teks; mungkin halaman pindaian atau gambar",
+      ),
+    ).toBeTruthy();
     await userEvent.selectOptions(screen.getByLabelText("Pindahkan ke folder"), CHILD);
     await userEvent.click(screen.getByRole("button", { name: "Pindahkan" }));
     expect(mocks.moveMaterial).toHaveBeenCalledWith({ materialId: ID, folderId: CHILD });

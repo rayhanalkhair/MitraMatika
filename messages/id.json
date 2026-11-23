@@ -1313,6 +1313,7 @@
     },
     "storage": {
       "label": "Penyimpanan",
+      "counted": "Semua berkas dihitung: materi (juga yang di Sampah), gambar halaman, ekspor, logo, dan foto soal.",
       "nearlyFull": "Penyimpanan hampir penuh. Hapus untuk selamanya materi yang tidak dipakai dari Sampah."
     },
     "folders": {
@@ -1354,7 +1355,9 @@
       "back": "Kembali ke daftar materi",
       "facts": "Tentang berkas",
       "kindLabel": "Jenis",
-      "sizeLabel": "Ukuran",
+      "sizeLabel": "Ukuran berkas",
+      "imagesLabel": "Gambar halaman",
+      "sizeNote": "Berkas dan gambar halaman dihitung dalam penyimpanan Anda.",
       "pagesLabel": "Halaman",
       "addedLabel": "Diunggah",
       "statusLabel": "Status",
@@ -1364,6 +1367,7 @@
         "heading": "Kualitas teks",
         "summary": "{high} halaman jelas, {medium} perlu diperiksa, {low} sulit dibaca",
         "flagged": "Halaman yang perlu diperiksa: {pages}",
+        "reasons": "Alasan: {reasons}",
         "none": "Belum ada halaman yang terbaca.",
         "reading": "Teks sedang dibaca. Muat ulang halaman ini sebentar lagi.",
         "failed": "Teks berkas ini tidak dapat dibaca. Pindahkan ke Sampah, lalu unggah lagi."
@@ -1451,8 +1455,9 @@
         "failed": "OCR gagal, bisa dicoba lagi"
       },
       "flags": {
-        "uncertain_math": "Ada bagian yang tidak pasti",
-        "low_text": "Teksnya sedikit",
+        "uncertain_math": "Ada bagian bertanda [[?]] atau rumus yang tidak terbaca",
+        "formula_text": "Banyak simbol rumus; urutannya di teks bisa keliru, cocokkan dengan gambar halaman",
+        "low_text": "Hampir tidak ada teks; mungkin halaman pindaian atau gambar",
         "garbled": "Teksnya tampak acak",
         "truncated": "Teks terpotong, periksa akhir halaman"
       },

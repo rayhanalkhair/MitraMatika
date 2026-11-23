@@ -12,7 +12,13 @@ import { PageViewer } from "./PageViewer";
 import { card, control, primaryButton, secondaryButton } from "./styles";
 
 const MARK = "[[?]]";
-const FLAGS = ["uncertain_math", "low_text", "garbled", "truncated"] as const;
+const FLAGS = [
+  "uncertain_math",
+  "formula_text",
+  "low_text",
+  "garbled",
+  "truncated",
+] as const;
 const SOURCES = ["pdf_text", "docx", "ocr", "manual"] as const;
 const STATUSES = ["none", "available", "queued", "done", "failed"] as const;
 
