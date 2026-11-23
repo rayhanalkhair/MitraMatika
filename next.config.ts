@@ -1,6 +1,7 @@
 import type { NextConfig } from "next";
 import createNextIntlPlugin from "next-intl/plugin";
 import { assertBuildEnv } from "./src/lib/env";
+import { securityHeaders } from "./src/lib/security-headers";
 
 // The locale comes from a cookie (no URL prefix); the request config reads it per request.
 const withNextIntl = createNextIntlPlugin("./src/lib/i18n/request.ts");
@@ -84,6 +85,8 @@ const INGEST_FILES = [...UNPDF_FILES, ...DOCX_FILES];
 export default function config(phase: string): NextConfig {
   assertBuildEnv(phase);
   return withNextIntl({
+    // Security response headers on every page and API route (src/lib/security-headers.ts).
+    headers: () => Promise.resolve(securityHeaders()),
     outputFileTracingIncludes: {
       // Every function that starts the job runner carries the parsers (ingestion): the scheduled
       // tick, the job status poll (it kicks a due job) and the builder page (its export action
