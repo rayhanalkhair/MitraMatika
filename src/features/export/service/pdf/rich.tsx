@@ -13,7 +13,7 @@ import type { TemplateFont } from "@/features/templates";
 import type { RenderWarning } from "../rich-text";
 import { parseRich, type RichBlock, type RichRun } from "../rich-blocks";
 import { cutText, xmlSafe } from "../xml";
-import { breakOverwideWords } from "./text-width";
+import { breakOverwideWords, estimateWidth } from "./text-width";
 import type { PdfContext } from "./context";
 import { fitMath } from "./fit";
 import {
@@ -52,6 +52,19 @@ export interface RichOptions {
 export interface Rich {
   nodes: ReactElement[];
   heightPt: number;
+  /**
+   * How far the baseline of the first line sits below that of a plain text line: a formula taller
+   * than a line makes the line taller and, with the items aligned to its bottom, pushes the
+   * text down. A label drawn beside the text (option letter, item or step number) takes this as
+   * its top margin so both share a baseline (S-02).
+   */
+  firstLineLiftPt: number;
+}
+
+interface Made {
+  node: ReactElement;
+  heightPt: number;
+  firstLineLiftPt?: number;
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -358,7 +371,7 @@ function plainParagraph(
   opts: RichOptions,
   gap: number,
   key: number,
-): { node: ReactElement; heightPt: number } {
+): Made {
   const fontSize = opts.fontSize ?? BODY_PT;
   const family = pdfFontFamily(opts.font, { bold: opts.bold, italic: opts.italic });
   const children: ReactNode[] = [];
@@ -436,7 +449,7 @@ function rowParagraph(
   ctx: PdfContext,
   gap: number,
   key: number,
-): { node: ReactElement; heightPt: number } {
+): Made {
   const fontSize = opts.fontSize ?? BODY_PT;
   const space = SPACE_EM[opts.font] * fontSize;
   const lineHeight = fontSize * LINE_HEIGHT;
@@ -444,8 +457,22 @@ function rowParagraph(
   const estimate = new LineEstimate(fontSize, opts.widthPt);
   let taller = 0;
   let afterBreak = false;
+  // The first line, as the flex wrap will fill it: pieces until one does not fit or a break.
+  let lineOpen = true;
+  let lineUsed = 0;
+  let lineTallest = lineHeight;
+  const joinFirstLine = (widthPt: number, outerPt: number, gapPt: number): void => {
+    if (!lineOpen) return;
+    if (lineUsed > 0 && lineUsed + widthPt > opts.widthPt) {
+      lineOpen = false;
+      return;
+    }
+    lineUsed += widthPt + gapPt;
+    lineTallest = Math.max(lineTallest, outerPt);
+  };
   toPieces(atoms).forEach((piece, index) => {
     if (piece.kind === "break") {
+      if (lineUsed > 0) lineOpen = false;
       // A zero-height full-width item forces the next piece onto a new line; a second one in a
       // row is a blank line.
       items.push(
@@ -465,6 +492,20 @@ function rowParagraph(
       estimate.addChars(
         piece.chunks.reduce((sum, chunk) => sum + Array.from(chunk.text).length, 0),
       );
+      joinFirstLine(
+        piece.chunks.reduce(
+          (sum, chunk) =>
+            sum +
+            estimateWidth(
+              chunk.text,
+              chunk.family,
+              chunk.sup ? fontSize * SUP_SCALE : fontSize,
+            ),
+          0,
+        ),
+        lineHeight,
+        piece.gap ? space : 0,
+      );
       items.push(
         <Text
           key={index}
@@ -478,9 +519,9 @@ function rowParagraph(
     const placed = fitted(piece.box, fontSize, opts.widthPt, piece.source ?? "", ctx);
     estimate.addWidth(placed.widthPt + (piece.gap ? space : 0));
     taller += Math.max(0, placed.heightPt - lineHeight);
-    items.push(
-      formulaSvg(piece.box, placed, BASELINE_EM * fontSize - placed.depthPt, index),
-    );
+    const lift = BASELINE_EM * fontSize - placed.depthPt;
+    joinFirstLine(placed.widthPt, placed.heightPt + lift, piece.gap ? space : 0);
+    items.push(formulaSvg(piece.box, placed, lift, index));
     if (piece.gap) {
       items.push(<View key={`${String(index)}g`} style={{ width: space, height: 0 }} />);
     }
@@ -501,6 +542,7 @@ function rowParagraph(
       </View>
     ),
     heightPt: lines * lineHeight + taller + gap,
+    firstLineLiftPt: Math.max(0, lineTallest - lineHeight),
   };
 }
 
@@ -509,7 +551,7 @@ function paragraph(
   opts: RichOptions,
   ctx: PdfContext,
   key: number,
-): { node: ReactElement; heightPt: number } {
+): Made {
   const gap = opts.inline === true ? 0 : PARAGRAPH_GAP;
   const atoms = runsToAtoms(runs, opts, ctx, false);
   const needsRow = atoms.some((atom) => atom.kind === "formula" || atom.kind === "glyph");
@@ -524,7 +566,7 @@ function displayFormula(
   opts: RichOptions,
   ctx: PdfContext,
   key: number,
-): { node: ReactElement; heightPt: number } {
+): Made {
   const fontSize = opts.fontSize ?? BODY_PT;
   const result = ctx.math(source, true);
   if (result instanceof MathBoxError) {
@@ -562,6 +604,7 @@ export function richBlocks(
 ): Rich {
   const nodes: ReactElement[] = [];
   let heightPt = 0;
+  let firstLineLiftPt = 0;
   blocks.forEach((block, index) => {
     const made =
       block.kind === "display"
@@ -569,8 +612,9 @@ export function richBlocks(
         : paragraph(block.runs, opts, ctx, index);
     nodes.push(made.node);
     heightPt += made.heightPt;
+    if (index === 0) firstLineLiftPt = made.firstLineLiftPt ?? 0;
   });
-  return { nodes, heightPt };
+  return { nodes, heightPt, firstLineLiftPt };
 }
 
 /** Markdown/LaTeX text as elements (the subset of `renderRich`; the same parsing). */

@@ -71,11 +71,12 @@ export function solutionItem(
             width: STEP_INDENT - 4,
             textAlign: "right",
             marginRight: 4,
+            marginTop: rich.firstLineLiftPt,
           })}
         >{`${String(index + 1)}.`}</Text>
         <View style={{ width: stepWidth }}>{rich.nodes}</View>
       </View>,
     );
   });
-  return itemShell(item, body, heightPt, lay);
+  return itemShell(item, body, heightPt, lay, stem.firstLineLiftPt);
 }

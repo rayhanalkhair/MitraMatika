@@ -171,6 +171,7 @@ export function itemShell(
   body: ReactElement[],
   contentHeightPt: number,
   lay: PdfLayout,
+  firstLineLiftPt = 0,
 ): PlacedItem {
   const heightPt = contentHeightPt + ITEM_GAP;
   const whole = keepsWhole(heightPt, lay);
@@ -187,6 +188,7 @@ export function itemShell(
           width: NUMBER_WIDTH,
           textAlign: "right",
           marginRight: NUMBER_GAP,
+          marginTop: firstLineLiftPt,
         })}
       >{`${String(item.number)}.`}</Text>
       <View style={{ flexGrow: 1, flexShrink: 1 }}>{body}</View>
@@ -233,6 +235,7 @@ function optionRows(
             style={textStyle(pdfFontFamily(lay.font), BODY_PT, {
               width: LABEL_WIDTH,
               marginRight: LABEL_GAP,
+              marginTop: rich.firstLineLiftPt,
             })}
           >{`${option.label}.`}</Text>
           <View style={{ width: textWidth }}>{rich.nodes}</View>
@@ -268,5 +271,5 @@ export function paperItem(item: ExportItem, ctx: PdfContext, lay: PdfLayout): Pl
     );
     heightPt += options.heightPt + PARAGRAPH_GAP;
   }
-  return itemShell(item, body, heightPt, lay);
+  return itemShell(item, body, heightPt, lay, stem.firstLineLiftPt);
 }
