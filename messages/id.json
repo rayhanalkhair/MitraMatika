@@ -894,14 +894,16 @@
       },
       "logo": {
         "label": "Logo sekolah",
-        "hint": "PNG, JPG, atau SVG, paling besar 1 MB. Logo baru menggantikan yang lama.",
+        "hint": "PNG atau JPG, paling besar 1 MB. Logo baru menggantikan yang lama.",
+        "svgStored": "Logo yang tersimpan berformat SVG. Logo SVG tidak muncul di berkas PDF dan Word. Unggah logo PNG atau JPG untuk menggantinya.",
         "submit": "Unggah logo",
         "saved": "Logo sudah diunggah.",
         "saveFirst": "Simpan templat dulu, lalu unggah logonya.",
         "errors": {
           "empty": "Pilih berkas logo dulu.",
           "tooLarge": "Ukuran logo paling besar 1 MB.",
-          "unsupportedType": "Logo harus berupa PNG, JPG, atau SVG.",
+          "unsupportedType": "Logo harus berupa PNG atau JPG.",
+          "svgNotAccepted": "Logo SVG tidak diterima. Gunakan PNG atau JPG.",
           "invalidImage": "Berkas logo rusak atau tidak bisa dibaca.",
           "dimensionsTooLarge": "Gambar terlalu besar. Paling besar 6000 piksel per sisi.",
           "notFound": "Templat ini tidak ditemukan. Mungkin sudah dihapus.",

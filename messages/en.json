@@ -894,14 +894,16 @@
       },
       "logo": {
         "label": "School logo",
-        "hint": "PNG, JPG or SVG, up to 1 MB. A new logo replaces the old one.",
+        "hint": "PNG or JPG, up to 1 MB. A new logo replaces the old one.",
+        "svgStored": "The stored logo is an SVG. An SVG logo does not appear in the PDF and Word files. Upload a PNG or JPG logo to replace it.",
         "submit": "Upload logo",
         "saved": "Logo uploaded.",
         "saveFirst": "Save the template first, then upload its logo.",
         "errors": {
           "empty": "Choose a logo file first.",
           "tooLarge": "The logo can be at most 1 MB.",
-          "unsupportedType": "The logo must be a PNG, JPG or SVG.",
+          "unsupportedType": "The logo must be a PNG or JPG.",
+          "svgNotAccepted": "SVG logos are not accepted. Use a PNG or JPG.",
           "invalidImage": "The logo file is damaged or cannot be read.",
           "dimensionsTooLarge": "The image is too large. At most 6000 pixels per side.",
           "notFound": "This template was not found. It may have been deleted.",

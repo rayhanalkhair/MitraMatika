@@ -44,6 +44,7 @@ function toView(row: Row): TemplateView {
     isDefault: row.isDefault,
     rowVersion: row.rowVersion,
     hasLogo: row.logoKey !== null,
+    logoIsSvg: row.logoKey?.endsWith(".svg") ?? false,
   };
 }
 

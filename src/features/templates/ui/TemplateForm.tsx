@@ -53,27 +53,31 @@ const logoSrc = (template: TemplateView | null) =>
     ? `/api/templates/${template.id}/logo?v=${String(template.rowVersion)}`
     : null;
 
-/** The logo upload of a saved template: its own form, next to the template form. */
-function LogoForm({
-  template,
-  onSaved,
-}: {
-  template: TemplateView;
-  onSaved: (message: string) => void;
-}) {
+/** SVG is not accepted (owner decision of 22 Nov); the browser's type or the name tells. */
+const isSvg = (file: File) =>
+  file.type === "image/svg+xml" || file.name.toLowerCase().endsWith(".svg");
+
+/**
+ * The logo upload of a saved template: its own form, next to the template form, with its own
+ * status line (the card's notice is far away, above the list).
+ */
+function LogoForm({ template }: { template: TemplateView }) {
   const t = useTranslations("settings.templates");
   const [state, formAction, pending] = useActionState<LogoFormState, FormData>(
     uploadLogoAction,
     {},
   );
   const [localError, setLocalError] = useState<LogoErrorKey | null>(null);
+  // The confirmation of the last upload, until another file is picked or sent.
+  const [dismissedAt, setDismissedAt] = useState<number | undefined>(undefined);
   const inputRef = useRef<HTMLInputElement>(null);
   const id = useId();
   const error = localError ?? state.error;
 
-  useEffect(() => {
-    if (state.savedAt !== undefined) onSaved(t("logo.saved"));
-  }, [state.savedAt, onSaved, t]);
+  const saved =
+    state.savedAt !== undefined && state.savedAt !== dismissedAt && !error
+      ? t("logo.saved")
+      : "";
   useEffect(() => {
     if (error) inputRef.current?.focus();
   }, [error, state]);
@@ -86,11 +90,16 @@ function LogoForm({
       setLocalError("empty");
       return;
     }
+    if (isSvg(file)) {
+      setLocalError("svgNotAccepted");
+      return;
+    }
     if (file.size > MAX_LOGO_BYTES) {
       setLocalError("tooLarge");
       return;
     }
     setLocalError(null);
+    setDismissedAt(state.savedAt);
     const data = new FormData(event.currentTarget);
     startTransition(() => {
       formAction(data);
@@ -120,11 +129,15 @@ function LogoForm({
             {...a11y}
             onChange={() => {
               setLocalError(null);
+              setDismissedAt(state.savedAt);
             }}
             className="min-h-11 w-full min-w-0 text-sm file:mr-3 file:min-h-11 file:rounded-lg file:border-0 file:bg-card file:px-4 file:font-semibold file:text-primary"
           />
         )}
       </Field>
+      {template.logoIsSvg && (
+        <p className="text-sm text-muted-foreground">{t("logo.svgStored")}</p>
+      )}
       <button
         type="submit"
         disabled={pending}
@@ -133,6 +146,10 @@ function LogoForm({
       >
         {t("logo.submit")}
       </button>
+      {/* Always mounted, so the first confirmation is announced. */}
+      <p role="status" className="text-sm font-medium text-success-foreground">
+        {saved}
+      </p>
     </form>
   );
 }
@@ -393,7 +410,7 @@ export function TemplateForm({
           />
         </form>
         {template ? (
-          <LogoForm template={template} onSaved={onSaved} />
+          <LogoForm template={template} />
         ) : (
           <p className="text-sm text-muted-foreground">{t("logo.saveFirst")}</p>
         )}

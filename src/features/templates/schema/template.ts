@@ -19,7 +19,7 @@ export const TEMPLATE_LIMITS = {
 export const MAX_LOGO_BYTES = 1024 * 1024;
 /** The longest side a raster logo may claim in its header, in pixels. */
 export const MAX_LOGO_SIDE = 6000;
-export const LOGO_ACCEPT = "image/png,image/jpeg,image/svg+xml";
+export const LOGO_ACCEPT = "image/png,image/jpeg";
 
 export const STUDENT_FIELDS = ["name", "class", "number", "date"] as const;
 export type StudentField = (typeof STUDENT_FIELDS)[number];
@@ -88,6 +88,8 @@ export interface TemplateView extends TemplateInput {
   id: string;
   rowVersion: number;
   hasLogo: boolean;
+  /** The stored logo is an SVG (accepted before 22 Nov): PDF and Word leave it out. */
+  logoIsSvg?: boolean;
 }
 
 export const HEADER_LINE_FIELDS = [
@@ -126,6 +128,7 @@ export type LogoErrorKey =
   | "empty"
   | "tooLarge"
   | "unsupportedType"
+  | "svgNotAccepted"
   | "invalidImage"
   | "dimensionsTooLarge"
   | "appFull"

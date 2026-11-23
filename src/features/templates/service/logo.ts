@@ -15,15 +15,15 @@ import {
 import type { ObjectStore } from "@/lib/storage/types";
 import { assertSafeKey } from "@/lib/storage/types";
 import { MAX_LOGO_BYTES, MAX_LOGO_SIDE, type LogoErrorKey } from "../schema/template";
-import { sanitizeSvg } from "./svg-sanitize";
 import { isUuid, type TemplateDb } from "./templates";
 
 export { sanitizeSvg } from "./svg-sanitize";
 
-// The school logo of a template: PNG, JPEG or SVG up to 1 MB (decision 7), kept in the object
-// store under templates/<owner>/<template>/logo.<ext>. What the file IS comes from its bytes
-// (magic numbers, file-type; an SVG by parsing it), never from its name or the type the browser
-// declared. An SVG is stored only as the sanitised rebuild.
+// The school logo of a template: PNG or JPEG up to 1 MB (decision 7; the owner ruled on 22 Nov
+// that SVG is not accepted), kept in the object store under templates/<owner>/<template>/logo.<ext>.
+// What the file IS comes from its bytes (magic numbers, file-type), never from its name or the
+// type the browser declared. An SVG logo stored before that ruling stays and is still served (so
+// LogoExt keeps "svg" and CONTENT_TYPES maps it); the PDF and Word files leave it out with a warning.
 
 export { MAX_LOGO_BYTES, MAX_LOGO_SIDE };
 
@@ -35,7 +35,7 @@ const CONTENT_TYPES: Record<LogoExt, string> = {
 };
 
 export interface ValidLogo {
-  ext: LogoExt;
+  ext: "png" | "jpg";
   contentType: string;
   bytes: Uint8Array;
   /** The browser declared another type than the bytes show (informational only). */
@@ -57,9 +57,9 @@ function decodeUtf8(bytes: Uint8Array): string | null {
 
 /**
  * Decides what the uploaded bytes are. PNG and JPEG by their magic numbers (and a header size of
- * at most MAX_LOGO_SIDE per side); text that is not a known binary type must parse as an SVG and
- * is replaced by its sanitised rebuild. Everything else (an executable renamed .png, GIF, WebP,
- * HTML) is refused. The declared type never decides.
+ * at most MAX_LOGO_SIDE per side). An SVG is recognised by its text and refused with its own
+ * message (`svgNotAccepted`); everything else (an executable renamed .png, GIF, WebP, HTML) is
+ * refused as an unsupported type. The declared type never decides.
  */
 export async function validateLogo(
   bytes: Uint8Array,
@@ -69,7 +69,7 @@ export async function validateLogo(
   if (bytes.length > MAX_LOGO_BYTES) return err("tooLarge");
 
   const detected = await fileTypeFromBuffer(bytes);
-  const accept = (ext: LogoExt, body: Uint8Array) =>
+  const accept = (ext: ValidLogo["ext"], body: Uint8Array) =>
     ok({
       ext,
       contentType: CONTENT_TYPES[ext],
@@ -89,10 +89,7 @@ export async function validateLogo(
   // file-type does not detect SVG (text); it reports "xml" when there is an XML declaration.
   if (detected === undefined || detected.ext === "xml") {
     const text = decodeUtf8(bytes);
-    if (!text?.includes("<")) return err("unsupportedType");
-    const svg = sanitizeSvg(text);
-    if (!svg.ok) return err("invalidImage");
-    return accept("svg", new TextEncoder().encode(svg.data));
+    if (text !== null && /<svg[\s>]/i.test(text)) return err("svgNotAccepted");
   }
   return err("unsupportedType");
 }
