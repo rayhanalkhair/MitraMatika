@@ -19,6 +19,20 @@
     "curriculumContext": "Merdeka curriculum",
     "accountAvatar": "Account {name}"
   },
+  "systemPages": {
+    "notFound": {
+      "title": "Page not found",
+      "description": "This address does not exist, or the page was moved or deleted.",
+      "home": "Back to Home"
+    },
+    "error": {
+      "title": "Something went wrong",
+      "description": "This page could not be shown. Try again; if it still fails, go back to Home.",
+      "retry": "Try again",
+      "home": "Back to Home"
+    },
+    "loading": "Loading the page…"
+  },
   "common": {
     "comingSoon": "Coming soon",
     "soonBadge": "Soon"
