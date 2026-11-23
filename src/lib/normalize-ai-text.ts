@@ -1,3 +1,5 @@
+import { KATEX_N_T_COMMANDS } from "./latex-commands.generated";
+
 // Models sometimes write the two characters backslash and n (or \r\n, \t) where they mean a line
 // break, usually between display formulas: step 2 of a solved equation then printed
 // `2x = 11 - 3`, the text \n, `2x = 8` (smoke finding S-10). These helpers turn such sequences
@@ -18,8 +20,15 @@
  */
 const ESCAPE_SOURCE = String.raw`(?<!\\)\\(?:r\\n|([nt]))([A-Za-z]*)`;
 
-const LATEX_COMMANDS = new Set(
-  (
+// The commands starting with n or t come from the installed KaTeX (latex-commands.generated.ts,
+// written by scripts/generate-latex-commands.mjs; a test keeps it current). The hand-written names
+// below add what real LaTeX has and KaTeX does not define, so bare LaTeX using them survives too.
+// Known limit: an escape followed by a word that is exactly a command name (a sentence ending in
+// a literal backslash-n then "e = 2", or "nu = 2") is read as the command, and a Windows path such as
+// C:, backslash, new, backslash, table is not protected.
+const LATEX_COMMANDS = new Set([
+  ...KATEX_N_T_COMMANDS,
+  ...(
     "neq ne nu nabla natural not notin neg ni nmid ncong nsim nless ngtr nleq ngeq nleqslant " +
     "ngeqslant nrightarrow nleftarrow nRightarrow nLeftarrow nleftrightarrow nLeftrightarrow " +
     "nparallel nexists nshortmid nshortparallel nsubseteq nsupseteq nsubseteqq nsupseteqq nprec " +
@@ -30,7 +39,7 @@ const LATEX_COMMANDS = new Set(
     "triangleleft triangleright therefore thickapprox thicksim thinspace thickspace tfrac " +
     "tbinom tiny tag"
   ).split(" "),
-);
+]);
 
 const ESCAPE = new RegExp(ESCAPE_SOURCE, "g");
 const MATH_OR_ESCAPE = new RegExp(

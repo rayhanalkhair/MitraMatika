@@ -1,4 +1,7 @@
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import { describe, expect, it } from "vitest";
+import { KATEX_N_T_COMMANDS } from "./latex-commands.generated";
 import { normalizeAiText, unescapeLiteralBreaks } from "./normalize-ai-text";
 
 describe("normalizeAiText: literal escapes outside maths", () => {
@@ -79,5 +82,38 @@ describe("bare LaTeX commands outside any delimiter", () => {
       ["Langkah 1:", "Langkah 2:", "untuk x"].join("\n"),
     );
     expect(normalizeAiText(String.raw`a\tb`)).toBe("a b");
+  });
+});
+
+describe("normalizeAiText: every KaTeX command that starts like a JSON escape (review M1)", () => {
+  const root = process.cwd();
+  const source = readFileSync(join(root, "node_modules/katex/dist/katex.mjs"), "utf-8");
+  // Whole double-quoted names with an escaped backslash: function names, macros and symbols.
+  const all = [...new Set([...source.matchAll(/"\\\\([A-Za-z]+)"/g)].map((m) => m[1]))];
+  const startingWith = (letters: string) =>
+    all.filter((name) => letters.includes(name[0])).sort();
+
+  it("the generated list is current with the installed KaTeX (run scripts/generate-latex-commands.mjs)", () => {
+    expect([...KATEX_N_T_COMMANDS]).toEqual(startingWith("nt"));
+    for (const name of ["triangledown", "textcolor", "nonumber", "nearrow", "nwarrow"]) {
+      expect(KATEX_N_T_COMMANDS).toContain(name);
+    }
+  });
+
+  it.each(startingWith("ntrbfav"))(
+    "leaves the bare command \%s alone outside $ delimiters",
+    (name) => {
+      const command = "\\" + name;
+      for (const text of [command, `Rumus ${command}{x} selesai`, `${command} x`]) {
+        expect(normalizeAiText(text)).toBe(text);
+        expect(unescapeLiteralBreaks(text)).toBe(text);
+      }
+    },
+  );
+
+  it("still turns a real escape followed by a word that is not a command into a break", () => {
+    expect(normalizeAiText(String.raw`a\nLangkah`)).toBe("a\nLangkah");
+    expect(normalizeAiText(String.raw`a\nuntuk`)).toBe("a\nuntuk");
+    expect(normalizeAiText(String.raw`a\tkolom`)).toBe("a kolom");
   });
 });
