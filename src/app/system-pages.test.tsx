@@ -1,4 +1,6 @@
 // @vitest-environment jsdom
+import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
+import { join } from "node:path";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { cleanup, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
@@ -19,7 +21,6 @@ import ShellNotFound from "./(shell)/not-found";
 import RootError from "./error";
 import ShellError from "./(shell)/error";
 import GlobalError from "./global-error";
-import ShellLoading from "./(shell)/loading";
 
 afterEach(cleanup);
 
@@ -102,18 +103,33 @@ describe("the error pages", () => {
   });
 });
 
-describe("the loading state", () => {
-  it("is one polite busy status with a text label and skeleton blocks hidden from assistive technology", () => {
-    renderWithIntl(<ShellLoading />);
-    const status = screen.getByRole("status");
-    expect(status.getAttribute("aria-busy")).toBe("true");
-    expect(status.textContent).toContain("Memuat halaman…");
-    for (const block of document.querySelectorAll("[data-skeleton]")) {
-      expect(block.getAttribute("aria-hidden")).toBe("true");
-      // The pulse only runs when the visitor allows motion.
-      expect(block.className).toContain("motion-safe:animate-pulse");
+describe("no loading state in the signed-in group", () => {
+  it("has no loading.tsx above pages that call notFound(): a streamed page would answer 404 as 200", () => {
+    // loading.md, "Status codes": streaming responses start with 200. Pages under (shell) such as
+    // question-bank/[id] and materials/[id] call notFound(); e2e specs expect a real 404.
+    expect(existsSync(join(process.cwd(), "src/app/(shell)/loading.tsx"))).toBe(false);
+  });
+
+  it("only allows a loading.tsx in a segment whose pages never call notFound()", () => {
+    const root = join(process.cwd(), "src/app");
+    const walk = (dir: string): string[] =>
+      readdirSync(dir).flatMap((name) => {
+        const path = join(dir, name);
+        return statSync(path).isDirectory() ? walk(path) : [path];
+      });
+    const files = walk(root);
+    const loadings = files.filter((file) => /[\/]loading\.tsx$/.test(file));
+    for (const loading of loadings) {
+      const segment = loading.replace(/[\/]loading\.tsx$/, "");
+      const callers = files.filter(
+        (file) =>
+          file.startsWith(segment) &&
+          /\.tsx?$/.test(file) &&
+          !file.includes(".test.") &&
+          readFileSync(file, "utf-8").includes("notFound()"),
+      );
+      expect(callers, loading).toEqual([]);
     }
-    expect(document.querySelectorAll("[data-skeleton]").length).toBeGreaterThan(0);
   });
 });
 

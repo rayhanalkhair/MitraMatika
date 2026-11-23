@@ -30,8 +30,7 @@
       "description": "Halaman ini tidak bisa ditampilkan. Coba lagi; jika masih gagal, kembali ke Beranda.",
       "retry": "Coba lagi",
       "home": "Kembali ke Beranda"
-    },
-    "loading": "Memuat halaman…"
+    }
   },
   "common": {
     "comingSoon": "Segera hadir",

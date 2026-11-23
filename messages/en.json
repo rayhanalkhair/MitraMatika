@@ -30,8 +30,7 @@
       "description": "This page could not be shown. Try again; if it still fails, go back to Home.",
       "retry": "Try again",
       "home": "Back to Home"
-    },
-    "loading": "Loading the page…"
+    }
   },
   "common": {
     "comingSoon": "Coming soon",
