@@ -202,12 +202,22 @@ function isInvisibleFormat(code: number): boolean {
     (code >= 0x2028 && code <= 0x202e) ||
     (code >= 0x2060 && code <= 0x206f) ||
     code === 0xfeff ||
+    code === 0x00ad ||
     code === 0xfffe ||
     code === 0xffff ||
     code === 0xfffc ||
     code === 0xfffd
   );
 }
+
+/**
+ * The look-alike hyphens an AI writes. Liberation draws U+2010 as a glyph of its own that text
+ * search cannot match and has none at all for U+2011 (the non-breaking hyphen of "siku‑siku",
+ * which used to vanish: "sikusiku"), so all of them print as the ordinary hyphen-minus. The real
+ * dashes (figure dash, en, em, horizontal bar) and the minus sign U+2212 are in both Liberation
+ * faces and stay as they are.
+ */
+const HYPHEN_LIKE = new Set([0x2010, 0x2011, 0x2043, 0xfe63, 0xff0d]);
 
 /** Arrows and mathematical operators: a MathJax glyph box can draw what no text font has. */
 function drawableAsBox(code: number): boolean {
@@ -245,6 +255,10 @@ export function splitByCoverage(
   const body = covers[FACES[font].source];
   for (const character of text.normalize("NFC")) {
     const code = character === "\t" ? 0x20 : (character.codePointAt(0) ?? 0);
+    if (HYPHEN_LIKE.has(code)) {
+      pushText(base, "-");
+      continue;
+    }
     if (code === 0x0a || code === 0x20) {
       pushText(base, code === 0x20 ? " " : character);
       continue;

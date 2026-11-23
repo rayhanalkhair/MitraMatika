@@ -345,3 +345,12 @@ describe("text subset", () => {
     expect(html).toContain("<p><strong>tebal</strong> dan <em>miring</em></p>");
   });
 });
+
+describe("typographic characters (S-01 audit)", () => {
+  it("keeps the non-breaking hyphen, dashes, quotes and spaces as written", () => {
+    const prose =
+      "siku\u2011siku 1\u20132 a\u2014b \u201cq\u201d 8\u00a0cm 8\u202fcm \u22123";
+    const html = renderHtml(build({}, { i1: version(prose) }), "paper", opts);
+    expect(html).toContain(prose);
+  });
+});
