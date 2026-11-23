@@ -138,7 +138,7 @@ describe("message catalogs", () => {
     // in "mu" are ordinary Indonesian ("tamu" a guest, "ilmu" knowledge), not "kamu" with a clitic.
     const ENDS_IN_MU = new Set(["tamu", "ilmu"]);
     const informalWords = (text: string): string[] =>
-      (text.match(/(?:kamu|kalian|engkau|dikau|kau|[a-z]+-?mu)/gi) ?? []).filter(
+      (text.match(/\b(?:kamu|kalian|engkau|dikau|kau|[a-z]+-?mu)\b/gi) ?? []).filter(
         (word) => !ENDS_IN_MU.has(word.toLowerCase()),
       );
     // The checker itself: clitics, hyphenated clitics and "kau" are caught, whole words are not.
@@ -154,7 +154,7 @@ describe("message catalogs", () => {
       informalWords(value).map((word) => `${key}: ${word}`),
     );
     expect(offenders).toEqual([]);
-    expect(Object.values(id).some((value) => value.includes("Anda"))).toBe(true);
+    expect(Object.values(id).some((value) => /\bAnda\b/.test(value))).toBe(true);
   });
 
   it("writes the English catalog in sentence case", () => {
