@@ -78,13 +78,12 @@ export function SourcePicker({
               {t("noneLink")}
             </Link>
           </p>
-        ) : (
-          <p className="text-sm text-muted-foreground">{t("materialHint")}</p>
-        )}
+        ) : null}
       </fieldset>
 
       {source === "material" && (
         <div className="flex flex-col gap-4">
+          <p className="text-sm text-muted-foreground">{t("materialHint")}</p>
           <div className="flex flex-col gap-2">
             <label htmlFor={`${id}-material`} className={labelClass}>
               {t("pick")}
@@ -192,7 +191,6 @@ export function SourcePicker({
               )}
             </fieldset>
           )}
-          <p className="text-sm text-muted-foreground">{t("topicNote")}</p>
         </div>
       )}
     </div>

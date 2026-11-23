@@ -132,7 +132,7 @@
       "legend": "Sumber soal",
       "topic": "Topik kurikulum",
       "material": "Dari materi",
-      "materialHint": "Soal dibuat dari halaman materi yang kamu pilih dan mencantumkan halaman sumbernya.",
+      "materialHint": "Soal dibuat dari halaman materi yang Anda pilih dan mencantumkan halaman sumbernya. Topik tetap dipilih di langkah berikutnya: dipakai untuk memilih halaman yang paling relevan.",
       "pick": "Materi",
       "pickPlaceholder": "Pilih materi",
       "scopeLegend": "Bagian yang dipakai",
@@ -147,7 +147,6 @@
       "noSections": "Materi ini belum punya bab. Konfirmasi struktur di halaman materi, atau pilih halaman.",
       "none": "Belum ada materi yang siap dipakai.",
       "noneLink": "Buka Materi",
-      "topicNote": "Topik tetap dipilih: dipakai untuk memilih halaman yang paling relevan.",
       "truncated": "Hanya 100 materi terbaru yang ditampilkan."
     }
   },

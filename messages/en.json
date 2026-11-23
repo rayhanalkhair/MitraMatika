@@ -132,7 +132,7 @@
       "legend": "Question source",
       "topic": "Curriculum topic",
       "material": "From material",
-      "materialHint": "Questions are written from the material pages you choose and name their source page.",
+      "materialHint": "Questions are written from the material pages you choose and name their source page. You still choose a topic in the next step: it is used to pick the most relevant pages.",
       "pick": "Material",
       "pickPlaceholder": "Choose a material",
       "scopeLegend": "Part to use",
@@ -147,7 +147,6 @@
       "noSections": "This material has no chapters yet. Confirm its structure on the material page, or choose pages.",
       "none": "No material is ready to use yet.",
       "noneLink": "Open materials",
-      "topicNote": "Still choose a topic: it is used to pick the most relevant pages.",
       "truncated": "Only the newest 100 materials are listed."
     }
   },

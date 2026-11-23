@@ -76,6 +76,16 @@ describe("SourcePicker", () => {
     expect(submitted(container)).toEqual([["source", "topic"]]);
   });
 
+  it('shows the material helper only for "Dari materi", never for the curriculum topic', async () => {
+    const user = userEvent.setup();
+    const { container } = renderPicker();
+    expect(container.textContent).not.toContain("halaman materi yang Anda pilih");
+    await user.click(screen.getByRole("radio", { name: "Dari materi" }));
+    expect(container.textContent).toContain("halaman materi yang Anda pilih");
+    await user.click(screen.getByRole("radio", { name: "Topik kurikulum" }));
+    expect(container.textContent).not.toContain("halaman materi yang Anda pilih");
+  });
+
   it("chooses a material, then the whole document, chapters or pages", async () => {
     const user = userEvent.setup();
     const { container } = renderPicker();
