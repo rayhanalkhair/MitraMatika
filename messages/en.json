@@ -612,7 +612,13 @@
         "approved": "This question is approved. After saving, it goes back to review and needs approval again."
       },
       "fieldMath": "The math in this field is not valid. Check the $ signs and the curly braces.",
-      "fieldInvalid": "This field is empty or too long.",
+      "fieldInvalid": "This entry is not valid.",
+      "fieldRequiredStem": "Enter the question text.",
+      "fieldRequiredOption": "Enter the text of choice {label}.",
+      "fieldRequiredAnswer": "Enter the final answer.",
+      "fieldRequiredExplanation": "Enter the explanation.",
+      "fieldTooLong": "At most {max, number} characters, now {count, number}.",
+      "fieldStepsTooMany": "Too many steps. At most {limit} steps.",
       "errors": {
         "stale": "This question was changed elsewhere. Reload it, then save again; your draft is kept.",
         "notFound": "Question not found.",

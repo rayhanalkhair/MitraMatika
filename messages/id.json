@@ -612,7 +612,13 @@
         "approved": "Soal ini sudah disetujui. Setelah disimpan, soal kembali ke peninjauan dan perlu disetujui lagi."
       },
       "fieldMath": "Rumus di kolom ini tidak valid. Periksa tanda $ dan kurung kurawal.",
-      "fieldInvalid": "Kolom ini kosong atau terlalu panjang.",
+      "fieldInvalid": "Isian ini tidak valid.",
+      "fieldRequiredStem": "Isi teks soal.",
+      "fieldRequiredOption": "Isi teks pilihan {label}.",
+      "fieldRequiredAnswer": "Isi jawaban akhir.",
+      "fieldRequiredExplanation": "Isi pembahasan.",
+      "fieldTooLong": "Maksimal {max, number} karakter, sekarang {count, number}.",
+      "fieldStepsTooMany": "Terlalu banyak langkah. Paling banyak {limit} langkah.",
       "errors": {
         "stale": "Soal ini sudah diubah di tempat lain. Muat ulang soal, lalu simpan lagi; draf Anda tetap tersimpan.",
         "notFound": "Soal tidak ditemukan.",

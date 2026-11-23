@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { act, cleanup, screen, waitFor } from "@testing-library/react";
+import { act, cleanup, fireEvent, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { renderToString } from "react-dom/server";
 import { IntlWrapper, renderWithIntl } from "@/test/intl";
@@ -371,7 +371,7 @@ describe("QuestionEditor", () => {
       expect(stem.getAttribute("aria-invalid")).toBe("true");
     });
     expect(document.activeElement).toBe(stem);
-    expect(screen.getByText("Kolom ini kosong atau terlalu panjang.")).toBeTruthy();
+    expect(screen.getByText("Isi teks soal.")).toBeTruthy();
     expect(screen.getByRole("alert").textContent).toBe("Periksa kolom yang ditandai.");
     expect(mocks.editQuestionAction).not.toHaveBeenCalled();
     // Fixing the field clears its mark and the alert.
@@ -380,6 +380,74 @@ describe("QuestionEditor", () => {
       expect(stem.getAttribute("aria-invalid")).toBeNull();
     });
     expect(screen.queryByRole("alert")).toBeNull();
+  });
+
+  it("says which problem each field has: empty, or too long with the count", async () => {
+    const user = userEvent.setup();
+    renderEditor();
+    // Empty: every required field has its own sentence.
+    await user.clear(screen.getByLabelText("Teks pilihan C"));
+    await user.clear(screen.getByLabelText("Jawaban akhir"));
+    await user.clear(screen.getByLabelText("Pembahasan"));
+    await user.click(screen.getByRole("button", { name: "Simpan versi baru" }));
+    await waitFor(() => {
+      expect(screen.getByLabelText("Teks pilihan C").getAttribute("aria-invalid")).toBe(
+        "true",
+      );
+    });
+    expect(screen.getByText("Isi teks pilihan C.")).toBeTruthy();
+    expect(screen.getByText("Isi jawaban akhir.")).toBeTruthy();
+    expect(screen.getByText("Isi pembahasan.")).toBeTruthy();
+    expect(screen.queryByText(/kosong atau terlalu panjang/)).toBeNull();
+    expect(document.activeElement).toBe(screen.getByLabelText("Teks pilihan C"));
+    expect(screen.getByRole("alert").textContent).toBe("Periksa kolom yang ditandai.");
+
+    // Too long (a pasted text can pass maxLength in some browsers; set the value directly).
+    fireEvent.change(screen.getByLabelText("Teks soal"), {
+      target: { value: "x".repeat(1_300) },
+    });
+    fireEvent.change(screen.getByLabelText("Teks pilihan C"), {
+      target: { value: "y".repeat(301) },
+    });
+    fireEvent.change(screen.getByLabelText("Jawaban akhir"), {
+      target: { value: "z".repeat(310) },
+    });
+    fireEvent.change(screen.getByLabelText("Pembahasan"), {
+      target: { value: "w".repeat(2_001) },
+    });
+    fireEvent.change(screen.getByLabelText("Langkah 2"), {
+      target: { value: "v".repeat(501) },
+    });
+    await user.click(screen.getByRole("button", { name: "Simpan versi baru" }));
+    expect(
+      await screen.findByText("Maksimal 1.200 karakter, sekarang 1.300."),
+    ).toBeTruthy();
+    expect(screen.getByText("Maksimal 300 karakter, sekarang 301.")).toBeTruthy();
+    expect(screen.getByText("Maksimal 300 karakter, sekarang 310.")).toBeTruthy();
+    expect(screen.getByText("Maksimal 2.000 karakter, sekarang 2.001.")).toBeTruthy();
+    expect(screen.getByText("Maksimal 500 karakter, sekarang 501.")).toBeTruthy();
+    expect(document.activeElement).toBe(screen.getByLabelText("Teks soal"));
+    expect(mocks.editQuestionAction).not.toHaveBeenCalled();
+  });
+
+  it("explains a server refusal of an empty or long value the same way, and a math refusal as math", async () => {
+    const user = userEvent.setup();
+    mocks.editQuestionAction.mockResolvedValue({
+      ok: false,
+      reason: "invalid",
+      fields: ["options.0.textMd"],
+    });
+    renderEditor();
+    await user.type(screen.getByLabelText("Pembahasan"), "x");
+    // Emptied after the browser check passed: the server answers with the field's path.
+    await user.click(screen.getByRole("button", { name: "Simpan versi baru" }));
+    await waitFor(() => {
+      expect(screen.getByLabelText("Teks pilihan A").getAttribute("aria-invalid")).toBe(
+        "true",
+      );
+    });
+    // The value is valid (1 to 300 characters): the fallback sentence, not a wrong claim.
+    expect(screen.getByText("Isian ini tidak valid.")).toBeTruthy();
   });
 
   it("marks the option the server refuses and focuses it", async () => {
