@@ -119,9 +119,9 @@ describe("no loading state in the signed-in group", () => {
         return statSync(path).isDirectory() ? walk(path) : [path];
       });
     const files = walk(root);
-    const loadings = files.filter((file) => /[\/]loading\.tsx$/.test(file));
+    const loadings = files.filter((file) => /[\\/]loading\.tsx$/.test(file));
     for (const loading of loadings) {
-      const segment = loading.replace(/[\/]loading\.tsx$/, "");
+      const segment = loading.replace(/[\\/]loading\.tsx$/, "");
       const callers = files.filter(
         (file) =>
           file.startsWith(segment) &&
