@@ -134,16 +134,27 @@ describe("message catalogs", () => {
   });
 
   it("addresses the teacher as 'Anda' in the Indonesian catalog, never 'kamu' or its -mu forms (S-15)", () => {
-    // The Stitch designs and the product voice use the polite "Anda". "tamu" (a guest) is a word
-    // of its own, not "kamu" with a clitic.
-    const informal = /\b(?:kamu|kalian|engkau|[a-z]+mu)\b/gi;
+    // The Stitch designs and the product voice use the polite "Anda". Whole words that merely end
+    // in "mu" are ordinary Indonesian ("tamu" a guest, "ilmu" knowledge), not "kamu" with a clitic.
+    const ENDS_IN_MU = new Set(["tamu", "ilmu"]);
+    const informalWords = (text: string): string[] =>
+      (text.match(/(?:kamu|kalian|engkau|dikau|kau|[a-z]+-?mu)/gi) ?? []).filter(
+        (word) => !ENDS_IN_MU.has(word.toLowerCase()),
+      );
+    // The checker itself: clitics, hyphenated clitics and "kau" are caught, whole words are not.
+    expect(informalWords("Ilmu bagi tamu, dan ilmunya")).toEqual([]);
+    expect(informalWords("tanya-mu, akunmu, Kamu, kau, dikau")).toEqual([
+      "tanya-mu",
+      "akunmu",
+      "Kamu",
+      "kau",
+      "dikau",
+    ]);
     const offenders = Object.entries(id).flatMap(([key, value]) =>
-      (value.match(informal) ?? [])
-        .filter((word) => word.toLowerCase() !== "tamu")
-        .map((word) => `${key}: ${word}`),
+      informalWords(value).map((word) => `${key}: ${word}`),
     );
     expect(offenders).toEqual([]);
-    expect(Object.values(id).some((value) => /\bAnda\b/.test(value))).toBe(true);
+    expect(Object.values(id).some((value) => value.includes("Anda"))).toBe(true);
   });
 
   it("writes the English catalog in sentence case", () => {
