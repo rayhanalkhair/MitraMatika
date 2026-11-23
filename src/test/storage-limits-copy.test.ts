@@ -1,4 +1,8 @@
 import { describe, expect, it } from "vitest";
+import {
+  MAX_TEMPLATES_PER_TEACHER,
+  TEACHER_STORAGE_CAP_BYTES,
+} from "@/lib/storage/limits";
 import en from "../../messages/en.json";
 import id from "../../messages/id.json";
 
@@ -49,6 +53,30 @@ describe("app-wide storage full copy", () => {
           locale === "id" ? /Admin sudah diberi tahu/ : /admin has been told/,
         );
       }
+    });
+  }
+});
+
+// The per-teacher cap counts every kind of file and templates are limited per teacher (security
+// review F1): the copy names the same numbers as the constants.
+describe("per-teacher cap copy", () => {
+  for (const [locale, messages] of [
+    ["id", id],
+    ["en", en],
+  ] as const) {
+    it(`${locale}: the quota sentence names 300 MB and the template limit names ${String(MAX_TEMPLATES_PER_TEACHER)}`, () => {
+      const texts = [
+        messages.solve.errors.quota,
+        messages.assessments.export.errors.quota,
+        messages.settings.templates.logo.errors.quota,
+      ];
+      for (const text of texts) {
+        expect(text).toContain(`${String(TEACHER_STORAGE_CAP_BYTES / 1024 / 1024)} MB`);
+        expect(text).not.toContain("{");
+      }
+      const tooMany = messages.settings.templates.formErrors.tooMany;
+      expect(tooMany).toContain(String(MAX_TEMPLATES_PER_TEACHER));
+      expect(tooMany).not.toContain("{");
     });
   }
 });

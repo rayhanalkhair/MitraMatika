@@ -111,7 +111,7 @@ export type TemplateFieldErrors = Partial<Record<TemplateField, TemplateFieldErr
 
 /** A form-level message (settings.templates.formErrors). */
 export type TemplateFormErrorKey =
-  "generic" | "unauthenticated" | "notFound" | "conflict";
+  "generic" | "unauthenticated" | "notFound" | "conflict" | "tooMany";
 
 export interface TemplateFormState {
   error?: TemplateFormErrorKey;
@@ -129,6 +129,7 @@ export type LogoErrorKey =
   | "invalidImage"
   | "dimensionsTooLarge"
   | "appFull"
+  | "quota"
   | "notFound"
   | "unauthenticated"
   | "generic";

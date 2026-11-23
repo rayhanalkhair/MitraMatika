@@ -890,7 +890,8 @@
         "generic": "Something went wrong. Try again.",
         "unauthenticated": "Your session has ended. Sign in again to continue.",
         "notFound": "This template was not found. It may have been deleted.",
-        "conflict": "This template was just changed elsewhere. Reload the page, then try again."
+        "conflict": "This template was just changed elsewhere. Reload the page, then try again.",
+        "tooMany": "You already have 20 templates. Delete the ones you no longer use (trashed ones count until they are emptied) to create a new one."
       },
       "logo": {
         "label": "School logo",
@@ -907,7 +908,8 @@
           "notFound": "This template was not found. It may have been deleted.",
           "unauthenticated": "Your session has ended. Sign in again to continue.",
           "generic": "The logo could not be uploaded. Try again.",
-          "appFull": "MitraMatika storage is full, so new uploads are paused for now. The admin has been told. Try again later."
+          "appFull": "MitraMatika storage is full, so new uploads are paused for now. The admin has been told. Try again later.",
+          "quota": "Your storage is full (300 MB, counting every file: materials, exports, logos and problem photos). Delete some files you no longer need, then try again."
         }
       },
       "preview": {
@@ -1206,7 +1208,8 @@
         "hourlyLimit": "You reached the limit of {limit} exports per hour. Try again after {time}.",
         "signedOut": "Your session ended. Sign in again to export.",
         "generic": "The export failed. Try again shortly.",
-        "appFull": "MitraMatika storage is full, so new exports are paused for now. The admin has been told. Try again later."
+        "appFull": "MitraMatika storage is full, so new exports are paused for now. The admin has been told. Try again later.",
+        "quota": "Your storage is full (300 MB, counting every file: materials, exports, logos and problem photos). Delete some files you no longer need, then try again."
       }
     }
   },
@@ -1553,7 +1556,8 @@
       "unauthenticated": "Your session has ended. Sign in again.",
       "generic": "Something went wrong. Try again.",
       "visionLimit": "All {limit} picture reads for today are used (OCR and problem photos together). Try again tomorrow.",
-      "appFull": "MitraMatika storage is full, so new uploads are paused for now. The admin has been told. Try again later."
+      "appFull": "MitraMatika storage is full, so new uploads are paused for now. The admin has been told. Try again later.",
+      "quota": "Your storage is full (300 MB, counting every file: materials, exports, logos and problem photos). Delete some files you no longer need, then try again."
     },
     "confirm": {
       "heading": "Check what was read from the photo",

@@ -18,6 +18,7 @@ export function useSolverErrorText(): (error: string) => string {
       case "empty":
       case "pending":
       case "appFull":
+      case "quota":
       case "type":
       case "size":
       case "image":

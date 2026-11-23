@@ -21,6 +21,7 @@ import {
   type TestDatabase,
 } from "@/lib/db/test-harness";
 import { logger } from "@/lib/logger";
+import { MAX_TEMPLATES_PER_TEACHER } from "@/lib/storage/limits";
 import { createMemoryStore } from "@/lib/storage/memory";
 import type { ObjectStore } from "@/lib/storage";
 import type { TemplateInput } from "../schema/template";
@@ -85,6 +86,40 @@ afterAll(async () => {
 beforeEach(async () => {
   await database.db.delete(schoolTemplates);
   store = createMemoryStore();
+});
+
+describe("saveTemplate: at most MAX_TEMPLATES_PER_TEACHER rows per teacher", () => {
+  it(
+    "refuses the next template (trashed ones count), updates stay possible, another teacher is not affected",
+    async () => {
+      const ids: string[] = [];
+      for (let n = 0; n < MAX_TEMPLATES_PER_TEACHER; n += 1) {
+        ids.push((await create(USER_A, { name: `Kop ${String(n)}` })).id);
+      }
+      const another = (ownerId: string) =>
+        asUser(ownerId, (tx) =>
+          saveTemplate(tx, { ownerId, input: { ...INPUT, name: "Satu lagi" } }),
+        );
+      expect(await another(USER_A)).toEqual({ ok: false, error: "tooMany" });
+      // A trashed template still counts until it is purged.
+      await database.db.execute(
+        sql`update school_templates set deleted_at = now(), purge_after = now() + interval '30 days' where id = ${ids[0]}`,
+      );
+      expect(await another(USER_A)).toEqual({ ok: false, error: "tooMany" });
+      // Editing an existing one is not creating.
+      const edited = await asUser(USER_A, (tx) =>
+        saveTemplate(tx, {
+          ownerId: USER_A,
+          templateId: ids[1],
+          expectedRowVersion: 1,
+          input: { ...INPUT, name: "Diubah" },
+        }),
+      );
+      expect(edited.ok).toBe(true);
+      expect((await another(USER_B)).ok).toBe(true);
+    },
+    DB_TEST_TIMEOUT,
+  );
 });
 
 describe("saveTemplate", () => {

@@ -2,6 +2,7 @@
 // typed reasons an upload is refused. Shared by the server (startUpload, finalizeUpload) and the
 // browser (the dropzone checks the same limits before it asks for a URL).
 import { z } from "zod";
+import { TEACHER_STORAGE_CAP_BYTES } from "@/lib/storage/limits";
 
 // The one place the upload limits live (ADR-0022): the server (startUpload, finalizeUpload), the
 // browser checks and the messages all follow these two numbers. They were 50 MB and 1 GB until
@@ -9,13 +10,14 @@ import { z } from "zod";
 /** At most 25 MB per file (the signed PUT is for the exact size, never more). */
 export const MAX_MATERIAL_BYTES = 25 * 1024 * 1024;
 /**
- * Stored materials (trashed ones too, until purged), OCR page images and pending uploads, per
- * teacher: 300 MB. It only gates NEW uploads: a teacher already above it keeps and can download
- * every file and can still delete, but startUpload refuses until they are back under it.
+ * Everything one teacher keeps, per teacher: 300 MB (src/lib/storage/limits.ts): stored materials
+ * (trashed ones too, until purged), OCR page images, exports, template logos, solver photos and
+ * pending uploads. It only gates NEW files: a teacher already above it keeps and can download
+ * every file and can still delete, but every writer refuses until they are back under it.
  */
-export const STORAGE_CAP_BYTES = 300 * 1024 * 1024;
-// The app-wide 6 GiB cap (APP_STORAGE_CAP_BYTES) lives in src/lib/storage/app-total.ts: it is
-// server-only (this file is also bundled for the browser) and is summed from the database.
+export const STORAGE_CAP_BYTES = TEACHER_STORAGE_CAP_BYTES;
+// The app-wide 6 GiB cap (APP_STORAGE_CAP_BYTES) lives in src/lib/storage/limits.ts too and is
+// summed from the database by src/lib/storage/app-total.ts (server-only).
 export const MAX_PDF_PAGES = 300;
 /** A DOCX may inflate to at most 20 times its size and never past 200 MB. */
 export const DOCX_INFLATE_RATIO = 20;

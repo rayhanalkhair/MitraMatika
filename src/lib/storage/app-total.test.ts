@@ -1,6 +1,7 @@
 import { sql } from "drizzle-orm";
 import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { logger } from "@/lib/logger";
+import { TEACHER_STORAGE_CAP_BYTES } from "./limits";
 import { FIXTURE, seedFixtures } from "@/lib/db/test-fixtures";
 import {
   createTestDatabase,
@@ -14,6 +15,9 @@ import {
   AppStorageBusyError,
   appStorageUsage,
   assertAppStorageRoom,
+  assertOwnerStorageRoom,
+  ownerStorageBytes,
+  ownerStoredBytes,
   lockAppStorage,
   type AppTotalDb,
 } from "./app-total";
@@ -244,6 +248,63 @@ describe("assertAppStorageRoom", () => {
           error: "appFull",
         });
       }
+    },
+    DB_TEST_TIMEOUT,
+  );
+});
+
+describe("one teacher's total (security review F1)", () => {
+  // A: materials 1000, pages 200, exports 40000, logos 5000, photos 60000 (uploads 3000 apart).
+  it(
+    "sums every kind of file of ONE owner and nothing of the other",
+    async () => {
+      await seedBoth();
+      expect(await ownerStoredBytes(db(), USER_A)).toBe(
+        1000 + 200 + 40000 + 5000 + 60000,
+      );
+      expect(await ownerStoredBytes(db(), USER_B)).toBe(10 + 20 + 400 + 50 + 600);
+    },
+    DB_TEST_TIMEOUT,
+  );
+
+  it(
+    "adds the owner's live reservations only (an expired one is not hers to count)",
+    async () => {
+      await seedBoth();
+      const stored = await ownerStoredBytes(db(), USER_A);
+      // The fixture reservation of owner 1 expires in 2026-11-20.
+      const before = await ownerStorageBytes(
+        db(),
+        USER_A,
+        new Date("2026-11-19T00:00:00Z"),
+      );
+      const after = await ownerStorageBytes(
+        db(),
+        USER_A,
+        new Date("2026-11-21T00:00:00Z"),
+      );
+      expect(before).toBe(stored + 3000);
+      expect(after).toBe(stored);
+    },
+    DB_TEST_TIMEOUT,
+  );
+
+  it(
+    "passes at exactly the cap and refuses one byte more or a bad size",
+    async () => {
+      await seedBoth();
+      const now = new Date("2026-11-21T00:00:00Z");
+      const used = await ownerStorageBytes(db(), USER_A, now);
+      const room = TEACHER_STORAGE_CAP_BYTES - used;
+      const ask = (extraBytes: number, ownerId = USER_A) =>
+        assertOwnerStorageRoom(db(), { ownerId, extraBytes, now });
+      expect(await ask(room)).toEqual({ ok: true, data: { usedBytes: used } });
+      expect(await ask(room + 1)).toEqual({ ok: false, error: "quota" });
+      for (const bad of [-1, 1.5, Number.NaN]) {
+        expect(await ask(bad)).toEqual({ ok: false, error: "quota" });
+      }
+      // The other teacher is not touched by A's files.
+      expect((await ask(room + 1, USER_B)).ok).toBe(true);
     },
     DB_TEST_TIMEOUT,
   );

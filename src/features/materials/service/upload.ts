@@ -3,12 +3,16 @@ import { createHash } from "node:crypto";
 import { and, asc, count, eq, gt, isNull, lte, or, sql } from "drizzle-orm";
 import type { PgAsyncDatabase, PgQueryResultHKT } from "drizzle-orm/pg-core";
 import type { AnyRelations } from "drizzle-orm/relations";
-import { folders, materialPages, materials, materialUploads } from "@/lib/db/schema";
+import { folders, materials, materialUploads } from "@/lib/db/schema";
 import { createJobQueue } from "@/lib/jobs/queue";
 import { logger } from "@/lib/logger";
 import { err, ok, type Result } from "@/lib/result";
 import { stripImageMetadata } from "@/lib/images/strip-metadata";
-import { assertAppStorageRoom, lockAppStorage } from "@/lib/storage/app-total";
+import {
+  assertAppStorageRoom,
+  lockAppStorage,
+  ownerStoredBytes,
+} from "@/lib/storage/app-total";
 import { assertSafeKey, type ObjectStore } from "@/lib/storage/types";
 import {
   extensionOf,
@@ -56,19 +60,12 @@ function sourceKey(root: Root, ownerId: string, id: string, ext: MaterialExt): s
 }
 
 /**
- * Bytes the owner keeps in storage: every material's file (trashed ones too, until purged) and the
- * page images OCR kept for them (material_pages.image_bytes).
+ * Bytes the owner keeps in storage, whatever the file is (the figure of the teacher's meter and
+ * of the 300 MB cap): materials (trashed ones too, until purged), OCR page images, exports, template
+ * logos and solver photos (security review F1). Live upload reservations are added by startUpload.
  */
 export async function storedBytes(db: MaterialDb, ownerId: string): Promise<number> {
-  const [files] = await db
-    .select({ bytes: sql<string>`coalesce(sum(${materials.sizeBytes}), 0)` })
-    .from(materials)
-    .where(eq(materials.ownerId, ownerId));
-  const [images] = await db
-    .select({ bytes: sql<string>`coalesce(sum(${materialPages.imageBytes}), 0)` })
-    .from(materialPages)
-    .where(eq(materialPages.ownerId, ownerId));
-  return Number(files.bytes) + Number(images.bytes);
+  return ownerStoredBytes(db, ownerId);
 }
 
 /** Where the browser uploads (staging; the only key a PUT URL is ever signed for). */

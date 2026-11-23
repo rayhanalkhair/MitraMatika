@@ -1,5 +1,5 @@
 import "server-only";
-import { sql, type AnyColumn } from "drizzle-orm";
+import { and, eq, gt, sql, type AnyColumn } from "drizzle-orm";
 import { unionAll } from "drizzle-orm/pg-core";
 import type { PgAsyncDatabase, PgQueryResultHKT } from "drizzle-orm/pg-core";
 import type { AnyRelations } from "drizzle-orm/relations";
@@ -12,6 +12,7 @@ import {
   solverSessions,
 } from "@/lib/db/schema";
 import { logger } from "@/lib/logger";
+import { APP_STORAGE_CAP_BYTES, TEACHER_STORAGE_CAP_BYTES } from "./limits";
 import { err, ok, type Result } from "@/lib/result";
 
 // The app-wide storage total (ADR-0022). Cloudflare R2 has no spending cap, so the app refuses new
@@ -32,8 +33,7 @@ import { err, ok, type Result } from "@/lib/result";
 // cleanup, a PUT after its reservation was swept) are invisible to it: the 6 GiB cap leaves
 // headroom under the provider's free allowance and the bucket lifecycle rules are the backstop.
 
-/** The most the app may store, in all, before every new file is refused: 6 GiB. */
-export const APP_STORAGE_CAP_BYTES = 6 * 1024 ** 3;
+export { APP_STORAGE_CAP_BYTES };
 
 /** The structural database type of the services (a connection or a transaction). */
 export type AppTotalDb = PgAsyncDatabase<PgQueryResultHKT, AnyRelations>;
@@ -58,38 +58,62 @@ type Part = keyof AppStorageUsage["parts"];
 
 const total = (column: AnyColumn) => sql<string>`coalesce(sum(${column}), 0)::text`;
 
-/** The sum of the six sources, in one statement (one snapshot, so the parts agree). */
-export async function appStorageUsage(db: AppTotalDb): Promise<AppStorageUsage> {
+interface Scope {
+  /** One teacher's rows only (default: every owner's). */
+  ownerId?: string;
+  /** Which upload reservations count: every row, the live ones at `now`, or none. */
+  uploads: "all" | "live" | "none";
+  now?: Date;
+}
+
+/** The six sources, in one statement (one snapshot, so the parts agree), for one scope. */
+async function sumParts(db: AppTotalDb, scope: Scope): Promise<AppStorageUsage["parts"]> {
+  const { ownerId } = scope;
   const part = (name: Part) => sql<string>`${name}::text`.as("part");
+  const of = (column: AnyColumn) =>
+    ownerId === undefined ? undefined : eq(column, ownerId);
+  const uploadsFilter =
+    scope.uploads === "none"
+      ? sql`false`
+      : scope.uploads === "live"
+        ? gt(materialUploads.expiresAt, scope.now ?? new Date())
+        : undefined;
   const rows = await unionAll(
     db
       .select({ part: part("materials"), bytes: total(materials.sizeBytes).as("bytes") })
-      .from(materials),
+      .from(materials)
+      .where(of(materials.ownerId)),
     db
       .select({ part: part("pages"), bytes: total(materialPages.imageBytes).as("bytes") })
-      .from(materialPages),
+      .from(materialPages)
+      .where(of(materialPages.ownerId)),
     db
       .select({
         part: part("uploads"),
         bytes: total(materialUploads.sizeBytes).as("bytes"),
       })
-      .from(materialUploads),
+      .from(materialUploads)
+      .where(and(of(materialUploads.ownerId), uploadsFilter)),
     db
       .select({ part: part("exports"), bytes: total(exportFiles.sizeBytes).as("bytes") })
-      .from(exportFiles),
+      .from(exportFiles)
+      .where(of(exportFiles.ownerId)),
     db
       .select({
         part: part("logos"),
         bytes: total(schoolTemplates.logoBytes).as("bytes"),
       })
-      .from(schoolTemplates),
+      .from(schoolTemplates)
+      .where(of(schoolTemplates.ownerId)),
     db
       .select({
         part: part("photos"),
         bytes: total(solverSessions.inputBytes).as("bytes"),
       })
       .from(solverSessions)
-      .where(sql`${solverSessions.inputKey} is not null`),
+      .where(
+        and(of(solverSessions.ownerId), sql`${solverSessions.inputKey} is not null`),
+      ),
   );
   const parts: AppStorageUsage["parts"] = {
     materials: 0,
@@ -100,8 +124,55 @@ export async function appStorageUsage(db: AppTotalDb): Promise<AppStorageUsage> 
     photos: 0,
   };
   for (const row of rows) parts[row.part as Part] = Number(row.bytes);
-  const usedBytes = Object.values(parts).reduce((sum, bytes) => sum + bytes, 0);
-  return { usedBytes, capBytes: APP_STORAGE_CAP_BYTES, parts };
+  return parts;
+}
+
+const sumOf = (parts: AppStorageUsage["parts"]) =>
+  Object.values(parts).reduce((sum, bytes) => sum + bytes, 0);
+
+/** The sum of the six sources over every owner, in one statement. */
+export async function appStorageUsage(db: AppTotalDb): Promise<AppStorageUsage> {
+  const parts = await sumParts(db, { uploads: "all" });
+  return { usedBytes: sumOf(parts), capBytes: APP_STORAGE_CAP_BYTES, parts };
+}
+
+/**
+ * Bytes one teacher keeps in storage, whatever the file is (ADR-0022, security review F1): every
+ * material's file (trashed ones until purged), the OCR page images, the exports, the template
+ * logos (trashed templates until purged) and the solver photos not yet swept. Upload reservations
+ * are not in it (see ownerStorageBytes). This is the figure of the teacher's meter.
+ */
+export async function ownerStoredBytes(db: AppTotalDb, ownerId: string): Promise<number> {
+  return sumOf(await sumParts(db, { ownerId, uploads: "none" }));
+}
+
+/** ownerStoredBytes plus the teacher's live upload reservations at `now`: what must fit the cap. */
+export async function ownerStorageBytes(
+  db: AppTotalDb,
+  ownerId: string,
+  now: Date,
+): Promise<number> {
+  return sumOf(await sumParts(db, { ownerId, uploads: "live", now }));
+}
+
+/**
+ * Whether `extraBytes` more fit under the per-teacher cap (TEACHER_STORAGE_CAP_BYTES, 300 MB).
+ * Exactly the cap passes. A writer calls it inside its own transaction, under its per-owner lock
+ * where it has one; the export job calls it without (best effort, one export).
+ */
+export async function assertOwnerStorageRoom(
+  db: AppTotalDb,
+  input: { ownerId: string; extraBytes: number; now: Date },
+): Promise<Result<{ usedBytes: number }, "quota">> {
+  const usedBytes = await ownerStorageBytes(db, input.ownerId, input.now);
+  if (
+    !Number.isSafeInteger(input.extraBytes) ||
+    input.extraBytes < 0 ||
+    usedBytes + input.extraBytes > TEACHER_STORAGE_CAP_BYTES
+  ) {
+    return err("quota");
+  }
+  return ok({ usedBytes });
 }
 
 /** How long a reservation may wait for the app-wide lock before it gives up (a retry). */

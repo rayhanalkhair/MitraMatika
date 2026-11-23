@@ -92,9 +92,9 @@ export interface FinalAnswer {
 export type TextSessionError = "empty" | "tooLong" | "limit";
 /**
  * `visionLimit`: the day's 25 vision reads (OCR pages and photos together, R28) are used.
- * `appFull`: the app-wide storage cap is reached (ADR-0022).
+ * `appFull`: the app-wide storage cap is reached (ADR-0022). `quota`: the teacher's own 300 MB.
  */
-export type StartPhotoError = "limit" | "visionLimit" | "pending" | "appFull";
+export type StartPhotoError = "limit" | "visionLimit" | "pending" | "appFull" | "quota";
 export type FinalizePhotoError =
   | "notFound"
   | "missing"

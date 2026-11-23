@@ -38,7 +38,7 @@ import {
 } from "@/lib/jobs/handler";
 import type { Progress } from "@/lib/jobs/types";
 import { logger } from "@/lib/logger";
-import { assertAppStorageRoom } from "@/lib/storage/app-total";
+import { assertAppStorageRoom, assertOwnerStorageRoom } from "@/lib/storage/app-total";
 import type { ObjectStore } from "@/lib/storage/types";
 import {
   buildDocumentModel,
@@ -110,6 +110,7 @@ export type ExportFailureCode =
   | "export_renderer_unavailable" // old job rows only: nothing emits it any more
   | "export_render_failed"
   | "app_storage_full"
+  | "export_quota"
   | "export_failed";
 
 const MESSAGES: Record<ExportFailureCode, string> = {
@@ -121,6 +122,7 @@ const MESSAGES: Record<ExportFailureCode, string> = {
   export_renderer_unavailable: "The PDF renderer is not available.",
   export_render_failed: "A document could not be rendered.",
   app_storage_full: "Penyimpanan MitraMatika penuh.",
+  export_quota: "Penyimpanan kamu penuh.",
   export_failed: "The export could not be completed.",
 };
 
@@ -306,8 +308,14 @@ export function createRenderExportHandler(deps: ExportJobDeps): JobHandler {
         warnings: StoredFile["warnings"],
       ) => {
         if (bytes.byteLength > MAX_FILE_BYTES) throw permanent("export_too_large");
-        // The app-wide cap (ADR-0022), without the lock: this attempt's earlier files are not in
+        // The teacher's own 300 MB, then the app-wide cap (ADR-0022), both without a lock: this attempt's earlier files are not in
         // the database yet, so they are added to the file at hand. Nothing is stored when full.
+        const own = await assertOwnerStorageRoom(db, {
+          ownerId,
+          extraBytes: storedBytes + bytes.byteLength,
+          now: clock(),
+        });
+        if (!own.ok) throw permanent("export_quota");
         const room = await assertAppStorageRoom(
           db,
           storedBytes + bytes.byteLength,

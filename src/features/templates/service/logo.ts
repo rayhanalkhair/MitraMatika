@@ -7,7 +7,11 @@ import { schoolTemplates } from "@/lib/db/schema";
 import { logger } from "@/lib/logger";
 import { jpegSize, pngSize } from "@/lib/images/dimensions";
 import { err, ok, type Result } from "@/lib/result";
-import { assertAppStorageRoom, lockAppStorage } from "@/lib/storage/app-total";
+import {
+  assertAppStorageRoom,
+  assertOwnerStorageRoom,
+  lockAppStorage,
+} from "@/lib/storage/app-total";
 import type { ObjectStore } from "@/lib/storage/types";
 import { assertSafeKey } from "@/lib/storage/types";
 import { MAX_LOGO_BYTES, MAX_LOGO_SIDE, type LogoErrorKey } from "../schema/template";
@@ -40,7 +44,7 @@ export interface ValidLogo {
 
 type ValidationError = Exclude<
   LogoErrorKey,
-  "notFound" | "unauthenticated" | "generic" | "appFull"
+  "notFound" | "unauthenticated" | "generic" | "appFull" | "quota"
 >;
 
 function decodeUtf8(bytes: Uint8Array): string | null {
@@ -154,7 +158,9 @@ export async function uploadLogo(
   store: ObjectStore,
   db: TemplateDb,
   input: { ownerId: string; templateId: string; bytes: Uint8Array; declaredType: string },
-): Promise<Result<{ logoKey: string }, ValidationError | "notFound" | "appFull">> {
+): Promise<
+  Result<{ logoKey: string }, ValidationError | "notFound" | "appFull" | "quota">
+> {
   const { ownerId, templateId } = input;
   if (!isUuid(templateId)) return err("notFound");
   const valid = await validateLogo(input.bytes, input.declaredType);
@@ -168,7 +174,8 @@ export async function uploadLogo(
     /** The bytes a same-key upload overwrote, to put back when the write is undone. */
     previousBody: Uint8Array | null;
     full: boolean;
-  } = { stored: false, previousKey: null, previousBody: null, full: false };
+    quota: boolean;
+  } = { stored: false, previousKey: null, previousBody: null, full: false, quota: false };
   // Undoes the put of an upload that did not commit: the new object goes, or, when it overwrote
   // the previous logo (same extension, same key), the previous bytes come back.
   const undoPut = async () => {
@@ -211,6 +218,16 @@ export async function uploadLogo(
       // The app-wide cap (ADR-0022). A replacement needs only the growth over the logo it
       // replaces. First without the app lock, so a full app stores nothing at all...
       const growth = Math.max(0, valid.data.bytes.length - (row.logoBytes ?? 0));
+      // The teacher's own 300 MB first (every kind of file counts, F1), then the app's.
+      const own = await assertOwnerStorageRoom(tx, {
+        ownerId,
+        extraBytes: growth,
+        now: new Date(),
+      });
+      if (!own.ok) {
+        progress.quota = true;
+        return false;
+      }
       const early = await assertAppStorageRoom(tx, growth, "logo");
       if (!early.ok) {
         progress.full = true;
@@ -246,7 +263,9 @@ export async function uploadLogo(
         );
       return true;
     });
-    if (!saved) return err(progress.full ? "appFull" : "notFound");
+    if (!saved) {
+      return err(progress.quota ? "quota" : progress.full ? "appFull" : "notFound");
+    }
   } catch (error) {
     // The row still points at the previous logo (a busy app lock included): undo the put.
     await undoPut();

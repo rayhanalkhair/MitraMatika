@@ -14,6 +14,7 @@ import { PermanentJobError, type JobContext } from "@/lib/jobs/handler";
 import { createJobQueue } from "@/lib/jobs/queue";
 import { logger } from "@/lib/logger";
 import { APP_STORAGE_CAP_BYTES } from "@/lib/storage/app-total";
+import { TEACHER_STORAGE_CAP_BYTES } from "@/lib/storage/limits";
 import type { ClaimedJob } from "@/lib/jobs/types";
 import { reopen, type AssessmentDb } from "@/features/assessments";
 import { clearAll } from "@/features/assessments/test-support";
@@ -285,6 +286,42 @@ describe("render_export", () => {
           name: "PermanentJobError",
           code: "app_storage_full",
           message: "Penyimpanan MitraMatika penuh.",
+        });
+        expect(store.keys()).toEqual([]);
+        expect(await exportRows(job.id)).toHaveLength(0);
+      } finally {
+        await database.db.delete(materials).where(eq(materials.id, filler));
+      }
+    },
+    DB_TEST_TIMEOUT,
+  );
+
+  it(
+    "fails for good as export_quota, storing nothing, when the teacher's own 300 MB is full",
+    async () => {
+      const seeded = await seedApprovedAssessment(database, { ownerId: USER_A });
+      const job = await enqueueAndClaim({
+        assessmentId: seeded.assessmentId,
+        snapshotHash: seeded.hash,
+      });
+      // Teacher A's stored materials fill her cap (the app as a whole is nowhere near full).
+      const filler = crypto.randomUUID();
+      await database.db.insert(materials).values({
+        id: filler,
+        ownerId: USER_A,
+        title: "Buku",
+        kind: "pdf",
+        mime: "application/pdf",
+        sizeBytes: TEACHER_STORAGE_CAP_BYTES,
+        sha256: "0".repeat(64),
+        objectKey: `materials/${USER_A}/${filler}/source.pdf`,
+      });
+      try {
+        const { store, handler } = setup();
+        const error = await rejection(handler(context(job)));
+        expect(error).toMatchObject({
+          name: "PermanentJobError",
+          code: "export_quota",
         });
         expect(store.keys()).toEqual([]);
         expect(await exportRows(job.id)).toHaveLength(0);

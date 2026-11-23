@@ -890,7 +890,8 @@
         "generic": "Terjadi kesalahan. Coba lagi.",
         "unauthenticated": "Sesi kamu sudah berakhir. Masuk lagi untuk melanjutkan.",
         "notFound": "Templat ini tidak ditemukan. Mungkin sudah dihapus.",
-        "conflict": "Templat ini baru saja diubah di tempat lain. Muat ulang halaman, lalu coba lagi."
+        "conflict": "Templat ini baru saja diubah di tempat lain. Muat ulang halaman, lalu coba lagi.",
+        "tooMany": "Kamu sudah punya 20 templat. Hapus yang tidak dipakai (yang ada di tempat sampah tetap dihitung sampai dikosongkan) untuk membuat yang baru."
       },
       "logo": {
         "label": "Logo sekolah",
@@ -907,7 +908,8 @@
           "notFound": "Templat ini tidak ditemukan. Mungkin sudah dihapus.",
           "unauthenticated": "Sesi kamu sudah berakhir. Masuk lagi untuk melanjutkan.",
           "generic": "Logo belum bisa diunggah. Coba lagi.",
-          "appFull": "Penyimpanan MitraMatika sedang penuh, jadi unggahan baru ditutup sementara. Admin sudah diberi tahu. Coba lagi nanti."
+          "appFull": "Penyimpanan MitraMatika sedang penuh, jadi unggahan baru ditutup sementara. Admin sudah diberi tahu. Coba lagi nanti.",
+          "quota": "Penyimpanan kamu sudah penuh (300 MB, semua berkas dihitung: materi, ekspor, logo, dan foto soal). Hapus berkas yang tidak dipakai, lalu coba lagi."
         }
       },
       "preview": {
@@ -1206,7 +1208,8 @@
         "hourlyLimit": "Batas {limit} ekspor per jam sudah tercapai. Coba lagi setelah pukul {time}.",
         "signedOut": "Sesi Anda berakhir. Masuk lagi untuk mengekspor.",
         "generic": "Ekspor gagal. Coba lagi sebentar lagi.",
-        "appFull": "Penyimpanan MitraMatika sedang penuh, jadi ekspor baru ditutup sementara. Admin sudah diberi tahu. Coba lagi nanti."
+        "appFull": "Penyimpanan MitraMatika sedang penuh, jadi ekspor baru ditutup sementara. Admin sudah diberi tahu. Coba lagi nanti.",
+        "quota": "Penyimpanan kamu sudah penuh (300 MB, semua berkas dihitung: materi, ekspor, logo, dan foto soal). Hapus berkas yang tidak dipakai, lalu coba lagi."
       }
     }
   },
@@ -1553,7 +1556,8 @@
       "unauthenticated": "Sesi Anda berakhir. Masuk lagi.",
       "generic": "Terjadi kesalahan. Coba lagi.",
       "visionLimit": "Jatah {limit} pembacaan gambar hari ini sudah habis (OCR dan foto soal bersama). Coba lagi besok.",
-      "appFull": "Penyimpanan MitraMatika sedang penuh, jadi unggahan baru ditutup sementara. Admin sudah diberi tahu. Coba lagi nanti."
+      "appFull": "Penyimpanan MitraMatika sedang penuh, jadi unggahan baru ditutup sementara. Admin sudah diberi tahu. Coba lagi nanti.",
+      "quota": "Penyimpanan kamu sudah penuh (300 MB, semua berkas dihitung: materi, ekspor, logo, dan foto soal). Hapus berkas yang tidak dipakai, lalu coba lagi."
     },
     "confirm": {
       "heading": "Periksa hasil bacaan foto",

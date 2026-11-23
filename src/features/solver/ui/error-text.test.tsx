@@ -11,4 +11,11 @@ describe("useSolverErrorText", () => {
     const en = renderHook(() => useSolverErrorText(), { wrapper: intlWrapper("en") });
     expect(en.result.current("appFull")).toMatch(/MitraMatika storage is full/);
   });
+
+  it("explains the teacher's own full storage in both languages", () => {
+    const id = renderHook(() => useSolverErrorText(), { wrapper: intlWrapper("id") });
+    expect(id.result.current("quota")).toMatch(/Penyimpanan kamu sudah penuh/);
+    const en = renderHook(() => useSolverErrorText(), { wrapper: intlWrapper("en") });
+    expect(en.result.current("quota")).toMatch(/Your storage is full/);
+  });
 });

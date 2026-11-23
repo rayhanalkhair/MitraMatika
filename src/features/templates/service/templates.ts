@@ -2,9 +2,10 @@
 // runs under RLS (Ruling R1); each one names owner_id as well. A trashed template (deleted_at set)
 // is invisible here: not listed, not found, not editable.
 import "server-only";
-import { and, asc, desc, eq, isNull, ne, sql } from "drizzle-orm";
+import { and, asc, count, desc, eq, isNull, ne, sql } from "drizzle-orm";
 import type { PgAsyncDatabase, PgQueryResultHKT } from "drizzle-orm/pg-core";
 import type { AnyRelations } from "drizzle-orm/relations";
+import { MAX_TEMPLATES_PER_TEACHER } from "@/lib/storage/limits";
 import { schoolTemplates } from "@/lib/db/schema";
 import { err, ok, type Result } from "@/lib/result";
 import {
@@ -123,7 +124,7 @@ const columns = (input: TemplateInput) => ({
   font: input.font,
 });
 
-type WriteFailure = "notFound" | "conflict";
+type WriteFailure = "notFound" | "conflict" | "tooMany";
 
 /** Thrown inside a write to roll it back as a whole; mapped to a Result by `atomically`. */
 class TemplateWriteAborted extends Error {
@@ -209,6 +210,13 @@ export async function saveTemplate(
 
   if (templateId === undefined) {
     return atomically(tx, async (sp) => {
+      // A bounded number of rows per teacher (trashed ones count until purged): each may hold a
+      // logo, and the rows themselves must not pile up (security review F1).
+      const [owned] = await sp
+        .select({ n: count() })
+        .from(schoolTemplates)
+        .where(eq(schoolTemplates.ownerId, ownerId));
+      if (owned.n >= MAX_TEMPLATES_PER_TEACHER) throw new TemplateWriteAborted("tooMany");
       const makeDefault = input.input.isDefault || !(await hasDefault(sp, ownerId));
       if (makeDefault) await clearDefault(sp, ownerId);
       const created = (
