@@ -1476,7 +1476,7 @@
       "flags": {
         "uncertain_math": "Ada bagian bertanda [[?]] atau rumus yang tidak terbaca",
         "formula_text": "Banyak simbol rumus; urutannya di teks bisa keliru, cocokkan dengan gambar halaman",
-        "low_text": "Hampir tidak ada teks; mungkin halaman pindaian atau gambar",
+        "low_text": "Halaman ini hanya berisi sedikit teks",
         "garbled": "Teksnya tampak acak",
         "truncated": "Teks terpotong, periksa akhir halaman"
       },

@@ -429,9 +429,7 @@ describe("OcrReview", () => {
         nextFlagged={null}
       />,
     );
-    expect(
-      screen.getByText("Hampir tidak ada teks; mungkin halaman pindaian atau gambar"),
-    ).toBeTruthy();
+    expect(screen.getByText("Halaman ini hanya berisi sedikit teks")).toBeTruthy();
   });
 
   it("shows the page beside its text, says 'perlu diperiksa' and never a percentage", () => {

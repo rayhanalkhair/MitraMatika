@@ -319,9 +319,7 @@ describe("MaterialDetail", () => {
     expect(screen.getByText("3 MB")).toBeTruthy();
     // The reason is said in words, not left to the page numbers.
     expect(
-      screen.getByText(
-        "Alasan: Hampir tidak ada teks; mungkin halaman pindaian atau gambar",
-      ),
+      screen.getByText("Alasan: Halaman ini hanya berisi sedikit teks"),
     ).toBeTruthy();
     await userEvent.selectOptions(screen.getByLabelText("Pindahkan ke folder"), CHILD);
     await userEvent.click(screen.getByRole("button", { name: "Pindahkan" }));

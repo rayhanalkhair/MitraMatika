@@ -20,16 +20,15 @@ describe("pageQuality", () => {
     });
   });
 
-  it("does not mark a short but clean page: a title and a few lines read fine", () => {
+  it("keeps the 40-character floor: a scan whose only text is a running header is low and OCR-able", () => {
+    expect(MIN_TEXT_CHARS).toBe(40);
+    // About 25 letters and digits: a header and a page number over a scanned page.
+    const headerOnly = "Matematika SMP Kelas VIII Bab 3\n42";
+    expect(pageQuality(headerOnly)).toEqual({ confidence: "low", flags: ["low_text"] });
+    // Short but over the floor (a title and two lines) is not flagged for its length.
     const shortPage =
       "Sistem persamaan linear dua variabel\nContoh: x + y = 5 dan x - y = 1";
     expect(pageQuality(shortPage)).toEqual({ confidence: "high", flags: [] });
-    // Around MIN_TEXT_CHARS letters and digits is a heading with a sentence, not a scan.
-    expect(pageQuality("Luas persegi sama dengan sisi kali sisi")).toEqual({
-      confidence: "high",
-      flags: [],
-    });
-    expect(MIN_TEXT_CHARS).toBeLessThanOrEqual(15);
   });
 
   it("rates text full of replacement or private-use characters low (garbled)", () => {

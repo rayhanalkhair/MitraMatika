@@ -2,9 +2,9 @@
 // documented heuristics over character classes; nothing here calls a model.
 //
 // - low_text: fewer than MIN_TEXT_CHARS letters and digits on the page. A scanned page has no
-//   text layer at all, or only a page number or a running header (a handful of characters). A short
-//   page that reads well (a title and a sentence, 15 letters or more) is NOT flagged: being short
-//   is not a quality problem (smoke test S-07).
+//   text layer at all, or only a running header and a page number (about 25 characters). The floor
+//   stays at 40 so such a scan keeps its OCR offer; smoke test S-07 is answered by saying the
+//   reason in words ("Halaman ini hanya berisi sedikit teks"), not by lowering the floor.
 // - garbled: in a page with at least MIN_GARBLED_SAMPLE visible characters, more than
 //   MAX_BAD_RATIO of them are replacement, control, private-use or unassigned characters (a font
 //   without a usable Unicode map), or fewer than MIN_WORD_RATIO of them are letters, marks or digits
@@ -31,7 +31,7 @@ export interface PageQuality {
   flags: PageFlag[];
 }
 
-export const MIN_TEXT_CHARS = 15;
+export const MIN_TEXT_CHARS = 40;
 export const MIN_GARBLED_SAMPLE = 20;
 export const MAX_BAD_RATIO = 0.02;
 export const MIN_WORD_RATIO = 0.5;

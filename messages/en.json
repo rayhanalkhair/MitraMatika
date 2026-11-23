@@ -1476,7 +1476,7 @@
       "flags": {
         "uncertain_math": "Has parts marked [[?]] or formulas that could not be read",
         "formula_text": "Many formula symbols; their order in the text may be wrong, compare with the page image",
-        "low_text": "Almost no text; perhaps a scanned page or a picture",
+        "low_text": "This page has only a little text",
         "garbled": "Text looks scrambled",
         "truncated": "Text cut off, check the end of the page"
       },
