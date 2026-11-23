@@ -10,7 +10,10 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 const SECTIONS = [
-  { title: "storedTitle", body: ["storedAccount", "storedContent", "storedTechnical"] },
+  {
+    title: "storedTitle",
+    body: ["storedAccount", "storedContent", "storedWhere", "storedTechnical"],
+  },
   {
     title: "filesTitle",
     body: ["filesService", "filesMaterials", "filesSolver", "filesExports", "filesTrash"],

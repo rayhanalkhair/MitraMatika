@@ -126,6 +126,11 @@ describe("privacy page", () => {
     // Exports and logos.
     expect(text).toContain(`kedaluwarsa setelah ${String(EXPORT_DAYS)} hari`);
     expect(text).toContain("Logo sekolah");
+    expect(text).toContain("hanya PNG atau JPEG");
+    expect(text).toContain("Logo SVG yang diunggah sebelum aturan ini");
+    expect(text).toContain("Vercel (wilayah Singapura)");
+    expect(text).toContain("Neon (Postgres di AWS Singapura)");
+    expect(text).toContain("menghitung permintaan");
     // Trash.
     expect(text).toContain(`disimpan ${String(TRASH_RETENTION_DAYS)} hari`);
     expect(text).toContain(
@@ -153,6 +158,11 @@ describe("privacy page", () => {
     expect(text).toContain(`kept in R2 for ${String(PHOTO_DAYS)} days`);
     expect(text).toContain(`expire after ${String(EXPORT_DAYS)} days`);
     expect(text).toContain("School logos");
+    expect(text).toContain("PNG or JPEG only");
+    expect(text).toContain("An SVG logo uploaded before this rule");
+    expect(text).toContain("Vercel (Singapore region)");
+    expect(text).toContain("Neon (Postgres on AWS Singapore)");
+    expect(text).toContain("count requests");
     expect(text).toContain(`kept for ${String(TRASH_RETENTION_DAYS)} days`);
     expect(text).toContain("solved problems (with their solutions and photos)");
     expect(text).toContain(`${String(USER_DAILY_QUESTION_LIMIT)} questions created`);
