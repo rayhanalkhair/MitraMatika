@@ -133,7 +133,7 @@ describe("privacy page", () => {
     expect(text).toContain(`${String(USER_DAILY_SOLVES)} soal diselesaikan`);
     expect(text).toContain(`${String(USER_DAILY_OCR_PAGES)} halaman materi dibaca`);
     expect(text).toContain(`${String(USER_DAILY_STRUCTURE_PROPOSALS)} usulan struktur`);
-    expect(text).not.toMatch(/kamu/i);
+    expect(text).not.toMatch(/\bkamu\b/i);
   });
 
   it("covers the same topics in English", async () => {

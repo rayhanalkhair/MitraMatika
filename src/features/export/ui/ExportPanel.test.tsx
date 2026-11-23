@@ -233,7 +233,7 @@ describe("ExportPanel", () => {
     ["export_renderer_unavailable", /Pencetak PDF/],
     ["export_stale", /berubah setelah disetujui/],
     ["app_storage_full", /Penyimpanan MitraMatika sedang penuh/],
-    ["export_quota", /Penyimpanan kamu sudah penuh/],
+    ["export_quota", /Penyimpanan Anda sudah penuh/],
     ["something_else", /Ekspor gagal/],
   ])("explains a failed export (%s)", (code, text) => {
     render({

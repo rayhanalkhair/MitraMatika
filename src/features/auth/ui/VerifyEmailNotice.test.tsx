@@ -108,9 +108,9 @@ describe("VerifyEmailNotice approval note", () => {
       const { unmount } = renderWithIntl(
         <VerifyEmailNotice defaultEmail={email} initialCooldown={0} />,
       );
-      const note = screen.getByText(/kecuali emailmu sudah disetujui/);
+      const note = screen.getByText(/kecuali email Anda sudah disetujui/);
       expect(note.textContent).toBe(
-        "Akun baru perlu disetujui admin sebelum bisa dipakai, kecuali emailmu sudah disetujui. Admin diberi tahu setelah emailmu terverifikasi.",
+        "Akun baru perlu disetujui admin sebelum bisa dipakai, kecuali email Anda sudah disetujui. Admin diberi tahu setelah email Anda terverifikasi.",
       );
       unmount();
     }

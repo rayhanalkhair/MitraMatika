@@ -133,6 +133,19 @@ describe("message catalogs", () => {
     }
   });
 
+  it("addresses the teacher as 'Anda' in the Indonesian catalog, never 'kamu' or its -mu forms (S-15)", () => {
+    // The Stitch designs and the product voice use the polite "Anda". "tamu" (a guest) is a word
+    // of its own, not "kamu" with a clitic.
+    const informal = /\b(?:kamu|kalian|engkau|[a-z]+mu)\b/gi;
+    const offenders = Object.entries(id).flatMap(([key, value]) =>
+      (value.match(informal) ?? [])
+        .filter((word) => word.toLowerCase() !== "tamu")
+        .map((word) => `${key}: ${word}`),
+    );
+    expect(offenders).toEqual([]);
+    expect(Object.values(id).some((value) => /\bAnda\b/.test(value))).toBe(true);
+  });
+
   it("writes the English catalog in sentence case", () => {
     // Only the curriculum name and the Times New Roman font name are exempt; the product name MitraMatika is a single word.
     const strip = (text: string): string =>

@@ -50,7 +50,7 @@ const PAGES: [
   ["Lainnya", () => import("./(shell)/more/page"), "Lainnya"],
   ["Masuk", () => import("./(auth)/sign-in/page"), "Masuk"],
   ["Daftar", () => import("./(auth)/sign-up/page"), "Daftar"],
-  ["Cek email", () => import("./(auth)/verify-email/page"), "Cek email kamu"],
+  ["Cek email", () => import("./(auth)/verify-email/page"), "Cek email Anda"],
   ["Lupa kata sandi", () => import("./(auth)/forgot-password/page"), "Lupa kata sandi"],
   [
     "Kata sandi baru",

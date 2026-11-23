@@ -19,7 +19,7 @@ function desktopOnly(projectName: string) {
 
 const SCREENS: { url: string; heading: string }[] = [
   { url: "/sign-up", heading: "Daftar" },
-  { url: "/verify-email", heading: "Cek email kamu" },
+  { url: "/verify-email", heading: "Cek email Anda" },
   { url: "/verify-email?error=invalid", heading: "Tautan tidak berlaku" },
   { url: "/forgot-password", heading: "Lupa kata sandi" },
   { url: "/reset-password?token=e2e-token", heading: "Buat kata sandi baru" },
@@ -169,7 +169,7 @@ test.describe("auth screens", () => {
     await main.getByRole("button", { name: "Buat akun" }).click();
 
     await expect(page).toHaveURL(/\/verify-email$/);
-    await expect(page.getByRole("heading", { level: 1 })).toHaveText("Cek email kamu");
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText("Cek email Anda");
     await expect(page.getByRole("main").getByLabel("Email", { exact: true })).toHaveValue(
       email,
     );

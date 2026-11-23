@@ -19,6 +19,20 @@
     "curriculumContext": "Kurikulum Merdeka",
     "accountAvatar": "Akun {name}"
   },
+  "systemPages": {
+    "notFound": {
+      "title": "Halaman tidak ditemukan",
+      "description": "Alamat ini tidak ada, atau halamannya sudah dipindahkan atau dihapus.",
+      "home": "Kembali ke Beranda"
+    },
+    "error": {
+      "title": "Terjadi kesalahan",
+      "description": "Halaman ini tidak bisa ditampilkan. Coba lagi; jika masih gagal, kembali ke Beranda.",
+      "retry": "Coba lagi",
+      "home": "Kembali ke Beranda"
+    },
+    "loading": "Memuat halaman…"
+  },
   "common": {
     "comingSoon": "Segera hadir",
     "soonBadge": "Segera"
@@ -90,9 +104,9 @@
       "generic": "Terjadi kesalahan. Coba lagi.",
       "unauthenticated": "Silakan masuk terlebih dahulu."
     },
-    "activeRequest": "Kamu masih punya permintaan yang sedang berjalan.",
+    "activeRequest": "Anda masih punya permintaan yang sedang berjalan.",
     "openActiveRequest": "Buka permintaan itu",
-    "dailyLimit": "Kamu sudah meminta {used} dari {limit} soal hari ini. Sisa {remaining} soal. Batas harian dihitung ulang pada {time}.",
+    "dailyLimit": "Anda sudah meminta {used} dari {limit} soal hari ini. Sisa {remaining} soal. Batas harian dihitung ulang pada {time}.",
     "status": {
       "pageHeading": "Permintaan soal",
       "summaryTopic": "Topik",
@@ -688,8 +702,8 @@
   "approval": {
     "title": "Menunggu persetujuan admin",
     "account": "Akun: {email}",
-    "body": "Akun kamu sudah dibuat, email sudah terverifikasi, dan menunggu persetujuan admin.",
-    "adminNotified": "Admin sudah diberi tahu saat emailmu terverifikasi. Kamu bisa menutup halaman ini; setelah disetujui, masuk lagi atau muat ulang halaman ini.",
+    "body": "Akun Anda sudah dibuat, email sudah terverifikasi, dan menunggu persetujuan admin.",
+    "adminNotified": "Admin sudah diberi tahu saat email Anda terverifikasi. Anda bisa menutup halaman ini; setelah disetujui, masuk lagi atau muat ulang halaman ini.",
     "recheck": "Cek lagi",
     "signOut": "Keluar",
     "privacy": "Pemberitahuan privasi"
@@ -732,12 +746,12 @@
       "generic": "Terjadi kesalahan. Coba lagi.",
       "rateLimited": "Terlalu banyak percobaan. Tunggu sebentar, lalu coba lagi.",
       "invalidCredentials": "Email atau kata sandi salah.",
-      "emailNotVerified": "Email kamu belum dikonfirmasi. Buka tautan konfirmasi yang kami kirim ke email kamu."
+      "emailNotVerified": "Email Anda belum dikonfirmasi. Buka tautan konfirmasi yang kami kirim ke email Anda."
     },
     "notices": {
       "passwordReset": "Kata sandi baru sudah disimpan. Masuk dengan kata sandi itu.",
       "linkUsed": "Tautan konfirmasi ini sudah dipakai atau tidak berlaku lagi. Masuk untuk melanjutkan, atau minta tautan baru jika belum bisa masuk.",
-      "accountDeleted": "Akun kamu sudah dihapus."
+      "accountDeleted": "Akun Anda sudah dihapus."
     },
     "signIn": {
       "submit": "Masuk",
@@ -756,27 +770,27 @@
       "signInLink": "Masuk"
     },
     "verify": {
-      "title": "Cek email kamu",
-      "description": "Kami sudah mengirim email ke alamat yang kamu daftarkan. Ikuti petunjuk di email itu untuk melanjutkan. Tautan konfirmasi berlaku 24 jam.",
+      "title": "Cek email Anda",
+      "description": "Kami sudah mengirim email ke alamat yang Anda daftarkan. Ikuti petunjuk di email itu untuk melanjutkan. Tautan konfirmasi berlaku 24 jam.",
       "invalidTitle": "Tautan tidak berlaku",
       "invalidDescription": "Tautan konfirmasi ini sudah kedaluwarsa atau tidak valid. Minta tautan baru di bawah.",
       "resendHint": "Tidak menerima email? Periksa folder spam, atau kirim ulang tautannya.",
       "resend": "Kirim ulang tautan",
       "resendIn": "Kirim ulang dalam {seconds, number} detik",
       "sent": "Jika alamat itu menunggu konfirmasi, tautan baru sudah dikirim.",
-      "approvalNote": "Akun baru perlu disetujui admin sebelum bisa dipakai, kecuali emailmu sudah disetujui. Admin diberi tahu setelah emailmu terverifikasi.",
+      "approvalNote": "Akun baru perlu disetujui admin sebelum bisa dipakai, kecuali email Anda sudah disetujui. Admin diberi tahu setelah email Anda terverifikasi.",
       "backToSignIn": "Kembali ke halaman masuk"
     },
     "forgot": {
       "title": "Lupa kata sandi",
-      "description": "Masukkan email akun kamu. Kami akan mengirim tautan untuk membuat kata sandi baru.",
+      "description": "Masukkan email akun Anda. Kami akan mengirim tautan untuk membuat kata sandi baru.",
       "submit": "Kirim tautan",
       "sent": "Jika ada akun dengan email itu, kami sudah mengirim tautan untuk membuat kata sandi baru. Tautan berlaku 1 jam. Periksa juga folder spam.",
       "backToSignIn": "Kembali ke halaman masuk"
     },
     "reset": {
       "title": "Buat kata sandi baru",
-      "description": "Setelah kata sandi baru disimpan, semua perangkat keluar dan kamu perlu masuk lagi.",
+      "description": "Setelah kata sandi baru disimpan, semua perangkat keluar dan Anda perlu masuk lagi.",
       "submit": "Simpan kata sandi",
       "expiredTitle": "Tautan tidak berlaku",
       "expired": "Tautan ini sudah kedaluwarsa atau pernah dipakai. Minta tautan baru untuk membuat kata sandi baru.",
@@ -784,11 +798,11 @@
     },
     "email": {
       "verifySubject": "Konfirmasi email akun MitraMatika",
-      "verifyBody": "Halo,\n\nBuka tautan berikut untuk mengonfirmasi alamat email akun MitraMatika kamu:\n\n{url}\n\nTautan ini berlaku {hours, number, ::group-off} jam. Seseorang memakai alamat email ini untuk membuat akun MitraMatika dengan kata sandi. Jika bukan kamu, jangan buka tautan ini dan abaikan email ini: membukanya akan mengaktifkan akun dengan kata sandi yang tidak kamu buat.",
+      "verifyBody": "Halo,\n\nBuka tautan berikut untuk mengonfirmasi alamat email akun MitraMatika Anda:\n\n{url}\n\nTautan ini berlaku {hours, number, ::group-off} jam. Seseorang memakai alamat email ini untuk membuat akun MitraMatika dengan kata sandi. Jika bukan Anda, jangan buka tautan ini dan abaikan email ini: membukanya akan mengaktifkan akun dengan kata sandi yang tidak Anda buat.",
       "resetSubject": "Atur ulang kata sandi MitraMatika",
-      "resetBody": "Halo,\n\nBuka tautan berikut untuk membuat kata sandi baru akun MitraMatika kamu:\n\n{url}\n\nTautan ini berlaku {minutes, number, ::group-off} menit dan hanya bisa dipakai sekali. Jika kamu tidak memintanya, abaikan email ini; kata sandimu tidak berubah.",
-      "accountExistsSubject": "Akun MitraMatika kamu sudah ada",
-      "accountExistsBody": "Halo,\n\nAda yang mencoba mendaftar di MitraMatika dengan alamat email ini, padahal akunnya sudah ada. Tidak ada akun baru yang dibuat.\n\nMasuk dengan Google atau kata sandi kamu di {signInUrl}\n\nJika lupa kata sandi, buat yang baru di {resetUrl}\n\nJika bukan kamu yang mencoba mendaftar, abaikan email ini. Akunmu tetap aman.",
+      "resetBody": "Halo,\n\nBuka tautan berikut untuk membuat kata sandi baru akun MitraMatika Anda:\n\n{url}\n\nTautan ini berlaku {minutes, number, ::group-off} menit dan hanya bisa dipakai sekali. Jika Anda tidak memintanya, abaikan email ini; kata sandi Anda tidak berubah.",
+      "accountExistsSubject": "Akun MitraMatika Anda sudah ada",
+      "accountExistsBody": "Halo,\n\nAda yang mencoba mendaftar di MitraMatika dengan alamat email ini, padahal akunnya sudah ada. Tidak ada akun baru yang dibuat.\n\nMasuk dengan Google atau kata sandi Anda di {signInUrl}\n\nJika lupa kata sandi, buat yang baru di {resetUrl}\n\nJika bukan Anda yang mencoba mendaftar, abaikan email ini. Akun Anda tetap aman.",
       "adminNoticeSubject": "Akun baru menunggu persetujuan di MitraMatika",
       "adminNoticeBody": "Halo,\n\nAda akun baru dengan email yang sudah terverifikasi dan menunggu persetujuan:\n\nEmail: {email}\nNama: {name}\nSekolah: {school}\nDaftar: {time}\n\nUntuk menyetujui, tambahkan email ini ke ALLOWED_EMAILS di Vercel (Settings, Environment Variables, Production), lalu redeploy. Setelah itu akun bisa dipakai pada permintaan berikutnya.\n\nCatatan: nama dan sekolah di atas diketik sendiri oleh pendaftar. Jadikan alamat email sebagai satu-satunya dasar persetujuan.",
       "adminDigestSubject": "Ringkasan akun baru yang menunggu persetujuan di MitraMatika",
@@ -802,13 +816,13 @@
     "heading": "Pengaturan",
     "account": {
       "heading": "Akun",
-      "description": "Nama dan sekolah kamu tampil di aplikasi. Email akun tidak bisa diubah.",
+      "description": "Nama dan sekolah Anda tampil di aplikasi. Email akun tidak bisa diubah.",
       "emailLabel": "Email akun",
       "loadFailed": "Data akun tidak bisa dimuat. Muat ulang halaman ini untuk mencoba lagi.",
       "formErrors": {
         "generic": "Terjadi kesalahan. Coba lagi.",
         "rateLimited": "Terlalu banyak percobaan. Tunggu sebentar, lalu coba lagi.",
-        "unauthenticated": "Sesi kamu sudah berakhir. Masuk lagi untuk melanjutkan.",
+        "unauthenticated": "Sesi Anda sudah berakhir. Masuk lagi untuk melanjutkan.",
         "signInAgain": "Untuk menghapus akun, masuk lagi dulu. Keluar, masuk lagi dengan Google, lalu hapus akun dalam 10 menit."
       },
       "profile": {
@@ -826,15 +840,15 @@
       },
       "delete": {
         "heading": "Hapus akun",
-        "description": "Akun, profil, dan semua soal serta permintaan soal kamu dihapus untuk selamanya. Tindakan ini tidak bisa dibatalkan.",
+        "description": "Akun, profil, dan semua soal serta permintaan soal Anda dihapus untuk selamanya. Tindakan ini tidak bisa dibatalkan.",
         "open": "Hapus akun",
         "dialogTitle": "Hapus akun untuk selamanya?",
-        "dialogDescription": "Semua data akun ini dihapus dan tidak bisa dikembalikan. Ketik email akun kamu untuk melanjutkan.",
+        "dialogDescription": "Semua data akun ini dihapus dan tidak bisa dikembalikan. Ketik email akun Anda untuk melanjutkan.",
         "confirmLabel": "Ketik {email}",
         "confirm": "Hapus akun saya",
         "cancel": "Batal",
         "emailMismatch": "Email yang diketik tidak sama dengan email akun.",
-        "passwordHint": "Masukkan kata sandi kamu untuk memastikan ini memang kamu.",
+        "passwordHint": "Masukkan kata sandi Anda untuk memastikan ini memang Anda.",
         "freshSignIn": "Untuk keamanan, akun tanpa kata sandi hanya bisa dihapus dalam 10 menit setelah masuk.",
         "signOut": "Keluar sekarang"
       }
@@ -859,7 +873,7 @@
       "setDefaultFailed": "Templat default belum bisa diganti. Coba lagi.",
       "fields": {
         "name": "Nama templat",
-        "nameHint": "Hanya untuk kamu, misalnya \"Kop ujian semester\".",
+        "nameHint": "Hanya untuk Anda, misalnya \"Kop ujian semester\".",
         "schoolName": "Nama sekolah",
         "headerLines": "Baris kop",
         "headerLinesHint": "Tampil di atas nama sekolah, misalnya pemerintah daerah, dinas pendidikan, atau alamat. Paling banyak 4 baris; yang kosong dilewati.",
@@ -893,10 +907,10 @@
       },
       "formErrors": {
         "generic": "Terjadi kesalahan. Coba lagi.",
-        "unauthenticated": "Sesi kamu sudah berakhir. Masuk lagi untuk melanjutkan.",
+        "unauthenticated": "Sesi Anda sudah berakhir. Masuk lagi untuk melanjutkan.",
         "notFound": "Templat ini tidak ditemukan. Mungkin sudah dihapus.",
         "conflict": "Templat ini baru saja diubah di tempat lain. Muat ulang halaman, lalu coba lagi.",
-        "tooMany": "Kamu sudah punya 20 templat. Hapus yang tidak dipakai (yang ada di tempat sampah tetap dihitung sampai dikosongkan) untuk membuat yang baru."
+        "tooMany": "Anda sudah punya 20 templat. Hapus yang tidak dipakai (yang ada di tempat sampah tetap dihitung sampai dikosongkan) untuk membuat yang baru."
       },
       "logo": {
         "label": "Logo sekolah",
@@ -913,10 +927,10 @@
           "invalidImage": "Berkas logo rusak atau tidak bisa dibaca.",
           "dimensionsTooLarge": "Gambar terlalu besar. Paling besar 6000 piksel per sisi.",
           "notFound": "Templat ini tidak ditemukan. Mungkin sudah dihapus.",
-          "unauthenticated": "Sesi kamu sudah berakhir. Masuk lagi untuk melanjutkan.",
+          "unauthenticated": "Sesi Anda sudah berakhir. Masuk lagi untuk melanjutkan.",
           "generic": "Logo belum bisa diunggah. Coba lagi.",
           "appFull": "Penyimpanan MitraMatika sedang penuh, jadi unggahan baru ditutup sementara. Admin sudah diberi tahu. Coba lagi nanti.",
-          "quota": "Penyimpanan kamu sudah penuh (300 MB, semua berkas dihitung: materi, ekspor, logo, dan foto soal). Hapus berkas yang tidak dipakai, lalu coba lagi."
+          "quota": "Penyimpanan Anda sudah penuh (300 MB, semua berkas dihitung: materi, ekspor, logo, dan foto soal). Hapus berkas yang tidak dipakai, lalu coba lagi."
         }
       },
       "preview": {
@@ -1225,7 +1239,7 @@
         "signedOut": "Sesi Anda berakhir. Masuk lagi untuk mengekspor.",
         "generic": "Ekspor gagal. Coba lagi sebentar lagi.",
         "appFull": "Penyimpanan MitraMatika sedang penuh, jadi ekspor baru ditutup sementara. Admin sudah diberi tahu. Coba lagi nanti.",
-        "quota": "Penyimpanan kamu sudah penuh (300 MB, semua berkas dihitung: materi, ekspor, logo, dan foto soal). Hapus berkas yang tidak dipakai, lalu coba lagi."
+        "quota": "Penyimpanan Anda sudah penuh (300 MB, semua berkas dihitung: materi, ekspor, logo, dan foto soal). Hapus berkas yang tidak dipakai, lalu coba lagi."
       }
     }
   },
@@ -1578,7 +1592,7 @@
       "generic": "Terjadi kesalahan. Coba lagi.",
       "visionLimit": "Jatah {limit} pembacaan gambar hari ini sudah habis (OCR dan foto soal bersama). Coba lagi besok.",
       "appFull": "Penyimpanan MitraMatika sedang penuh, jadi unggahan baru ditutup sementara. Admin sudah diberi tahu. Coba lagi nanti.",
-      "quota": "Penyimpanan kamu sudah penuh (300 MB, semua berkas dihitung: materi, ekspor, logo, dan foto soal). Hapus berkas yang tidak dipakai, lalu coba lagi."
+      "quota": "Penyimpanan Anda sudah penuh (300 MB, semua berkas dihitung: materi, ekspor, logo, dan foto soal). Hapus berkas yang tidak dipakai, lalu coba lagi."
     },
     "confirm": {
       "heading": "Periksa hasil bacaan foto",

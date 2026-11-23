@@ -122,7 +122,7 @@ const MESSAGES: Record<ExportFailureCode, string> = {
   export_renderer_unavailable: "The PDF renderer is not available.",
   export_render_failed: "A document could not be rendered.",
   app_storage_full: "Penyimpanan MitraMatika penuh.",
-  export_quota: "Penyimpanan kamu penuh.",
+  export_quota: "Penyimpanan Anda penuh.",
   export_failed: "The export could not be completed.",
 };
 

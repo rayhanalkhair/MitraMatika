@@ -44,7 +44,7 @@ test.describe("daily question limit", () => {
 
     const alert = page
       .getByRole("alert")
-      .filter({ hasText: "Kamu sudah meminta 30 dari 30 soal hari ini." });
+      .filter({ hasText: "Anda sudah meminta 30 dari 30 soal hari ini." });
     await expect(alert).toBeVisible();
     await expect(alert).toContainText("Sisa 0 soal.");
     await expect(alert).toContainText(

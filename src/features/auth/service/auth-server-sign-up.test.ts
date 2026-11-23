@@ -377,7 +377,7 @@ describe("email and password sign-up", () => {
       // New address: the verification email. Existing address: the account-exists email.
       expect(fake.messages.map((m) => [m.to, m.subject])).toEqual([
         ["baru@example.test", "Konfirmasi email akun MitraMatika"],
-        ["pak@example.test", "Akun MitraMatika kamu sudah ada"],
+        ["pak@example.test", "Akun MitraMatika Anda sudah ada"],
       ]);
     },
     DB_TEST_TIMEOUT,
@@ -396,7 +396,7 @@ describe("email and password sign-up", () => {
       expect(await usersWithEmail(t, "guru@example.test")).toHaveLength(1);
       expect(fake.messages.map((m) => m.subject)).toEqual([
         "Konfirmasi email akun MitraMatika",
-        "Akun MitraMatika kamu sudah ada",
+        "Akun MitraMatika Anda sudah ada",
       ]);
       await get(linkFrom(fake));
       expect(

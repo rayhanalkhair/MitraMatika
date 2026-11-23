@@ -186,7 +186,7 @@ describe("TemplateCard", () => {
       screen.getByRole("button", { name: "Jadikan default: Kop ujian" }),
     );
     expect((await screen.findByRole("alert")).textContent).toBe(
-      "Sesi kamu sudah berakhir. Masuk lagi untuk melanjutkan.",
+      "Sesi Anda sudah berakhir. Masuk lagi untuk melanjutkan.",
     );
   });
 
