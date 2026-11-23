@@ -57,6 +57,11 @@ describe("privacy page", () => {
     expect(text).toContain("bentuk acak satu arah dari ID akun");
     expect(text).not.toContain("tanpa nama, email, atau ID akun");
     expect(text).toContain("alamat IP dan browser");
+    // The owner is emailed each new account's name, email and school (through Resend), and an
+    // account that is never approved is kept until its user deletes it (security review F4).
+    expect(text).toContain("email kepada pemilik MitraMatika");
+    expect(text).toContain("namamu, alamat emailmu, dan nama sekolahmu");
+    expect(text).toContain("belum disetujui pemilik tetap disimpan");
     // No contact channel exists, so the notice promises none (ruling S10).
     expect(text).not.toMatch(/hubungi|kontak/i);
     expect(screen.getByRole("group", { name: "Bahasa tampilan" })).toBeTruthy();
@@ -81,5 +86,8 @@ describe("privacy page", () => {
     expect(text).toContain("a one-way scrambled form of the account ID");
     expect(text).not.toContain("no name, email or account ID");
     expect(text).toContain("IP address and browser");
+    expect(text).toContain("email to the MitraMatika owner");
+    expect(text).toContain("your name, your email address and your school name");
+    expect(text).toContain("has not approved is still kept");
   });
 });
