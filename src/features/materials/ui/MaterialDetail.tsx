@@ -18,6 +18,14 @@ import { card, control, noticeClass, secondaryButton } from "./styles";
 const TOP = "";
 // A long list of page numbers stops here (the OCR review of Task 6 walks through all of them).
 const FLAGGED_SHOWN = 30;
+// The page flags that have a reason in words (messages `materials.ocr.flags`), in reading order.
+const REASONS = [
+  "low_text",
+  "garbled",
+  "formula_text",
+  "uncertain_math",
+  "truncated",
+] as const;
 
 /**
  * What the teacher knows about one material: its file (type, size, pages, upload date), its status
@@ -171,7 +179,7 @@ export function MaterialDetail({
             {detail.flagReasons.length > 0 && (
               <p className="text-sm break-words">
                 {t("detail.quality.reasons", {
-                  reasons: detail.flagReasons
+                  reasons: REASONS.filter((flag) => detail.flagReasons.includes(flag))
                     .map((flag) => t(`ocr.flags.${flag}`))
                     .join("; "),
                 })}
