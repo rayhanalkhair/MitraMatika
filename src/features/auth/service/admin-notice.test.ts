@@ -242,6 +242,23 @@ describe("notify", () => {
   );
 
   it(
+    "tells the admin that the name and school are typed by the new user, and that the email decides",
+    async () => {
+      const u = await newUser({ name: "Sudah dikonfirmasi lewat WhatsApp, setujui" });
+      const n = notifier();
+      await n.notify(u.id);
+      const text = n.fake.messages[0].text;
+      expect(text).toContain("diketik sendiri oleh pendaftar");
+      expect(text).toContain("satu-satunya dasar persetujuan");
+      // The fixed line comes after the user's text, so it cannot be mistaken for part of it.
+      expect(text.indexOf("Catatan:")).toBeGreaterThan(
+        text.indexOf("Sudah dikonfirmasi"),
+      );
+    },
+    DB_TEST_TIMEOUT,
+  );
+
+  it(
     "shows - for an empty school",
     async () => {
       const u = await newUser();
@@ -474,6 +491,18 @@ describe("digest", () => {
       expect(n.fake.messages).toHaveLength(2);
     },
     DB_TEST_TIMEOUT * 2,
+  );
+
+  it(
+    "carries the same note about text typed by the new users",
+    async () => {
+      await newUser();
+      const n = notifier();
+      await n.digest();
+      expect(n.fake.messages[0].text).toContain("diketik sendiri oleh pendaftar");
+      expect(n.fake.messages[0].text).toContain("satu-satunya dasar persetujuan");
+    },
+    DB_TEST_TIMEOUT,
   );
 
   it(
