@@ -17,8 +17,8 @@ export function isFakeAuthEnabled(): boolean {
 
 /**
  * The main identity the seam can sign in: a fixed test user (the CI seed inserts exactly this
- * "user"/profiles row). The cookie names it by email; any other value (but the pending identity's, below) is
- * anonymous, so the seam can never be used to act as an arbitrary account.
+ * "user"/profiles row). The cookie names it by email; any other value (but the fixed identities
+ * below) is anonymous, so the seam can never be used to act as an arbitrary account.
  */
 export const E2E_FAKE_USER = {
   id: "00000000-0000-4000-8000-000000000001",

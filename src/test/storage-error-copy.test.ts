@@ -84,8 +84,10 @@ describe("storage writer errors have copy in both languages", () => {
 
   it("says storageBusy differently from appFull, so a teacher knows to retry", () => {
     for (const messages of [en, id]) {
-      const { errors } = messages.materials.upload;
-      expect(errors.storageBusy).not.toBe(errors.appFull);
+      for (const group of groups) {
+        const copy = group.pick(messages);
+        expect(copy.storageBusy, group.name).not.toBe(copy.appFull);
+      }
     }
   });
 });
