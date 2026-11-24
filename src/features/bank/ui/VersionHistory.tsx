@@ -133,7 +133,12 @@ export function VersionHistory({
         })}
       </ol>
 
-      <div ref={statusRef} role="status" tabIndex={-1} className="text-sm outline-none">
+      <div
+        ref={statusRef}
+        role="status"
+        tabIndex={-1}
+        className="text-sm outline-none focus-visible:ring-2 focus-visible:ring-ring"
+      >
         {notice && (
           <p className="rounded-lg border bg-card p-3 text-muted-foreground">{notice}</p>
         )}

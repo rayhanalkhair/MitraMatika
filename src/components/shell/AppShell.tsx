@@ -28,7 +28,7 @@ export function AppShell({
         <main
           id="main-content"
           tabIndex={-1}
-          className="min-w-0 flex-1 pb-[calc(var(--bottom-nav-h)+0.5rem+env(safe-area-inset-bottom))] outline-none md:pb-0"
+          className="min-w-0 flex-1 pb-[calc(var(--bottom-nav-h)+0.5rem+env(safe-area-inset-bottom))] outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset md:pb-0"
         >
           {children}
         </main>
