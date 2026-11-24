@@ -222,6 +222,24 @@ export async function lockAppStorage(tx: AppTotalDb): Promise<void> {
 }
 
 /**
+ * Runs a writer that takes lockAppStorage and turns its AppStorageBusyError into the expected
+ * `storageBusy` result, so the teacher sees "try again in a moment" and not a generic failure.
+ * Wrap the WHOLE writer from outside, including any try/catch that cleans up after itself (the
+ * logo upload removes the object it put): the error must reach that cleanup before it is mapped.
+ * Any other error is rethrown unchanged.
+ */
+export async function withAppStorageBusy<T, E>(
+  run: () => Promise<Result<T, E>>,
+): Promise<Result<T, E | "storageBusy">> {
+  try {
+    return await run();
+  } catch (error) {
+    if (error instanceof AppStorageBusyError) return err("storageBusy");
+    throw error;
+  }
+}
+
+/**
  * Whether `extraBytes` more fit under the cap (`used + extra <= cap`: exactly the cap passes, one
  * byte more is `appFull`). A reservation writer calls it right after lockAppStorage, in its own
  * transaction, so two near the cap cannot both pass. A job writer calls it without the lock (best

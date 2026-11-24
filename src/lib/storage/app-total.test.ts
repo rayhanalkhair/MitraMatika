@@ -19,6 +19,7 @@ import {
   ownerStorageBytes,
   ownerStoredBytes,
   lockAppStorage,
+  withAppStorageBusy,
   type AppTotalDb,
 } from "./app-total";
 
@@ -354,6 +355,32 @@ describe("lockAppStorage", () => {
     ).rejects.toBeInstanceOf(AppStorageBusyError);
     await expect(
       lockAppStorage(failing(Object.assign(new Error("boom"), { code: "XX000" }))),
+    ).rejects.toThrow("boom");
+  });
+});
+
+describe("withAppStorageBusy", () => {
+  it("passes a result through unchanged", async () => {
+    await expect(
+      withAppStorageBusy(() => Promise.resolve({ ok: true as const, data: 7 })),
+    ).resolves.toEqual({ ok: true, data: 7 });
+    await expect(
+      withAppStorageBusy(() =>
+        Promise.resolve({ ok: false as const, error: "quota" as const }),
+      ),
+    ).resolves.toEqual({ ok: false, error: "quota" });
+  });
+
+  it("turns AppStorageBusyError into the storageBusy error", async () => {
+    const result = await withAppStorageBusy<number, "quota">(() => {
+      throw new AppStorageBusyError();
+    });
+    expect(result).toEqual({ ok: false, error: "storageBusy" });
+  });
+
+  it("rethrows any other error", async () => {
+    await expect(
+      withAppStorageBusy(() => Promise.reject(new Error("boom"))),
     ).rejects.toThrow("boom");
   });
 });
