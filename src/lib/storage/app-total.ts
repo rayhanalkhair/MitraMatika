@@ -244,7 +244,14 @@ export async function withAppStorageBusy<T, E>(
   try {
     return await run();
   } catch (error) {
-    if (error instanceof AppStorageBusyError) return err("storageBusy");
+    if (error instanceof AppStorageBusyError) {
+      // Counts only: no owner, no file, so repeated contention stays visible without personal data.
+      logger.warn(
+        { module: "storage" },
+        "storage: the app-wide lock was busy, retry told",
+      );
+      return err("storageBusy");
+    }
     throw error;
   }
 }

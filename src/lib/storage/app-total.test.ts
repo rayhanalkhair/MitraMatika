@@ -378,6 +378,16 @@ describe("withAppStorageBusy", () => {
     expect(result).toEqual({ ok: false, error: "storageBusy" });
   });
 
+  it("logs one warning without a user or a file, so repeated lock contention stays visible", async () => {
+    const warn = vi.spyOn(logger, "warn").mockImplementation(() => undefined);
+    await withAppStorageBusy<number, "quota">(() => {
+      throw new AppStorageBusyError();
+    });
+    expect(warn).toHaveBeenCalledTimes(1);
+    expect(JSON.stringify(warn.mock.calls[0])).not.toMatch(/owner|user|key|email/i);
+    warn.mockRestore();
+  });
+
   it("rethrows any other error", async () => {
     await expect(
       withAppStorageBusy(() => Promise.reject(new Error("boom"))),
