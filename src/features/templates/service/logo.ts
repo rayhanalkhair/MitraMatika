@@ -11,6 +11,7 @@ import {
   assertAppStorageRoom,
   assertOwnerStorageRoom,
   lockAppStorage,
+  withAppStorageBusy,
 } from "@/lib/storage/app-total";
 import type { ObjectStore } from "@/lib/storage/types";
 import { assertSafeKey } from "@/lib/storage/types";
@@ -44,7 +45,7 @@ export interface ValidLogo {
 
 type ValidationError = Exclude<
   LogoErrorKey,
-  "notFound" | "unauthenticated" | "generic" | "appFull" | "quota"
+  "notFound" | "unauthenticated" | "generic" | "appFull" | "storageBusy" | "quota"
 >;
 
 function decodeUtf8(bytes: Uint8Array): string | null {
@@ -151,7 +152,7 @@ function contentTypeOfKey(key: string): string {
  * service connection with explicit owner and template filters (only this path may write
  * logo_key): another teacher's template, or a trashed one, is notFound and nothing is stored. A replaced logo with another extension is deleted after the commit.
  */
-export async function uploadLogo(
+async function uploadLogoUnguarded(
   store: ObjectStore,
   db: TemplateDb,
   input: { ownerId: string; templateId: string; bytes: Uint8Array; declaredType: string },
@@ -279,6 +280,24 @@ export async function uploadLogo(
     );
   }
   return ok({ logoKey: key });
+}
+
+/**
+ * uploadLogo, answering `storageBusy` when the app-wide storage lock was not free in time. The
+ * guard sits OUTSIDE uploadLogoUnguarded on purpose: its catch removes the object it put (or puts
+ * the previous bytes back) and rethrows, so the busy error must pass through that cleanup first.
+ */
+export async function uploadLogo(
+  store: ObjectStore,
+  db: TemplateDb,
+  input: { ownerId: string; templateId: string; bytes: Uint8Array; declaredType: string },
+): Promise<
+  Result<
+    { logoKey: string },
+    ValidationError | "notFound" | "appFull" | "quota" | "storageBusy"
+  >
+> {
+  return withAppStorageBusy(() => uploadLogoUnguarded(store, db, input));
 }
 
 async function deleteQuietly(store: ObjectStore, key: string): Promise<void> {

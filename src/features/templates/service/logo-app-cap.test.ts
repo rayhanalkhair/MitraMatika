@@ -10,11 +10,7 @@ import {
   type TestDatabase,
 } from "@/lib/db/test-harness";
 import { logger } from "@/lib/logger";
-import {
-  APP_STORAGE_CAP_BYTES,
-  AppStorageBusyError,
-  appStorageUsage,
-} from "@/lib/storage/app-total";
+import { APP_STORAGE_CAP_BYTES, appStorageUsage } from "@/lib/storage/app-total";
 import {
   APP_LOCK_EVENT,
   lockTimeoutError,
@@ -151,20 +147,19 @@ describe("uploadLogo and the app-wide cap", () => {
   );
 
   it(
-    "gives up with AppStorageBusyError when the app lock is busy and removes the object it put",
+    "answers storageBusy when the app lock is busy and removes the object it put",
     async () => {
       const busy = recordLocks(db(), [], (statement) => {
         if (statement.includes("app_storage_cap")) throw lockTimeoutError();
         return Promise.resolve();
       });
-      await expect(
-        uploadLogo(store, busy, {
-          ownerId: USER_A,
-          templateId: TEMPLATE,
-          bytes: png(),
-          declaredType: "image/png",
-        }),
-      ).rejects.toBeInstanceOf(AppStorageBusyError);
+      const result = await uploadLogo(store, busy, {
+        ownerId: USER_A,
+        templateId: TEMPLATE,
+        bytes: png(),
+        declaredType: "image/png",
+      });
+      expect(result).toEqual({ ok: false, error: "storageBusy" });
       expect(await row()).toEqual({ logo_key: null, logo_bytes: null });
       expect(await store.get(`templates/${USER_A}/${TEMPLATE}/logo.png`)).toBeNull();
     },

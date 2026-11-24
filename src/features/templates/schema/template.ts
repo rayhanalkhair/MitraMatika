@@ -132,6 +132,7 @@ export type LogoErrorKey =
   | "invalidImage"
   | "dimensionsTooLarge"
   | "appFull"
+  | "storageBusy"
   | "quota"
   | "notFound"
   | "unauthenticated"
