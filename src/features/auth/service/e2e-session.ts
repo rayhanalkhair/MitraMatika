@@ -36,10 +36,23 @@ export const E2E_FAKE_PENDING_USER = {
   email: "pending@example.test",
 } as const;
 
+/**
+ * A third fixed identity for the admin specs: a verified account that the e2e approval list does
+ * not name. It is approved only because the environment sets ADMIN_EMAIL to its address (the seam
+ * carries no approval of its own), so the spec proves the ADMIN_EMAIL path of the access gate.
+ */
+export const E2E_FAKE_ADMIN_USER = {
+  id: "00000000-0000-4000-8000-000000000003",
+  email: "admin@example.test",
+} as const;
+
 export function fakeSessionUser(cookieValue: string | undefined): SessionUser | null {
   if (!isFakeAuthEnabled()) return null;
   if (cookieValue === E2E_FAKE_USER.email) {
     return { id: E2E_FAKE_USER.id, email: E2E_FAKE_USER.email };
+  }
+  if (cookieValue === E2E_FAKE_ADMIN_USER.email) {
+    return { id: E2E_FAKE_ADMIN_USER.id, email: E2E_FAKE_ADMIN_USER.email };
   }
   if (cookieValue === E2E_FAKE_PENDING_USER.email) {
     return {

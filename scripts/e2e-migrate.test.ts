@@ -6,11 +6,12 @@ import { drizzle } from "drizzle-orm/pglite";
 import { migrate } from "drizzle-orm/pglite/migrator";
 import { describe, expect, it } from "vitest";
 import {
+  E2E_FAKE_ADMIN_USER,
   E2E_FAKE_PENDING_USER,
   E2E_FAKE_USER,
 } from "../src/features/auth/service/e2e-session";
 import { runAsUser } from "../src/lib/db/client";
-import { seedFakePendingUser, seedFakeUser } from "./e2e-user";
+import { seedFakeAdminUser, seedFakePendingUser, seedFakeUser } from "./e2e-user";
 
 // Mirrors the CI e2e job: a stock Postgres with nothing pre-created is migrated with the real
 // migrations, then the fake teacher is seeded.
@@ -28,10 +29,13 @@ describe("e2e database setup", () => {
     expect(id).toBe(E2E_FAKE_USER.id);
     expect(await seedFakePendingUser(run)).toBe(E2E_FAKE_PENDING_USER.id);
     await seedFakePendingUser(run);
+    expect(await seedFakeAdminUser(run)).toBe(E2E_FAKE_ADMIN_USER.id);
+    await seedFakeAdminUser(run);
     const users = await client.query<{ email: string }>(
       'select email from "user" order by email',
     );
     expect(users.rows.map((row) => row.email)).toEqual([
+      E2E_FAKE_ADMIN_USER.email,
       E2E_FAKE_PENDING_USER.email,
       E2E_FAKE_USER.email,
     ]);

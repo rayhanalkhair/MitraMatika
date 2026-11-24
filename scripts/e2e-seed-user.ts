@@ -1,6 +1,6 @@
 import postgres from "postgres";
 import { assertLocalE2eDatabase } from "./e2e-guard";
-import { seedFakePendingUser, seedFakeUser } from "./e2e-user";
+import { seedFakeAdminUser, seedFakePendingUser, seedFakeUser } from "./e2e-user";
 
 // CI-only: seeds the fake e2e teacher and the pending account. Refuses anything but a local database with E2E_CI=1.
 async function main(): Promise<void> {
@@ -13,6 +13,7 @@ async function main(): Promise<void> {
       client.unsafe(query, params as postgres.ParameterOrJSON<never>[]);
     console.log(`Pengguna e2e siap: ${await seedFakeUser(run)}`);
     console.log(`Pengguna e2e menunggu siap: ${await seedFakePendingUser(run)}`);
+    console.log(`Admin e2e siap: ${await seedFakeAdminUser(run)}`);
   } finally {
     await client.end();
   }

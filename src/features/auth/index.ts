@@ -9,7 +9,11 @@ export { checkStorageAlerts } from "./service/storage-alert";
 export { isOwnerApproved } from "./service/owner-approval";
 export { CLIENT_IP_HEADER, requestWithClientIp } from "./service/client-ip";
 export { resolvePostSignInRedirect, signOutUser } from "./service/core";
-export { E2E_FAKE_PENDING_USER, E2E_FAKE_USER } from "./service/e2e-session";
+export {
+  E2E_FAKE_ADMIN_USER,
+  E2E_FAKE_PENDING_USER,
+  E2E_FAKE_USER,
+} from "./service/e2e-session";
 export { clearFakeSession } from "./service/e2e-session-server";
 export { createFakeAuthPort } from "./service/fake-port";
 export {

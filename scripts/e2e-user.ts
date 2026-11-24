@@ -1,4 +1,5 @@
 import {
+  E2E_FAKE_ADMIN_USER,
   E2E_FAKE_PENDING_USER,
   E2E_FAKE_USER,
 } from "../src/features/auth/service/e2e-session";
@@ -32,4 +33,10 @@ export function seedFakeUser(run: Run): Promise<string> {
 // The second fixed identity, a verified account that CI's approval list does not name (pending).
 export function seedFakePendingUser(run: Run): Promise<string> {
   return seedIdentity(run, E2E_FAKE_PENDING_USER, "Guru Menunggu");
+}
+
+// The third fixed identity: a verified account that the approval list does not name either, but
+// whose address is ADMIN_EMAIL in the e2e environment, so the gate approves it as the admin.
+export function seedFakeAdminUser(run: Run): Promise<string> {
+  return seedIdentity(run, E2E_FAKE_ADMIN_USER, "Admin Uji");
 }
