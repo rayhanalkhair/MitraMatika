@@ -29,6 +29,16 @@ import { err, ok, type Result } from "@/lib/result";
 //   exports            exports.size_bytes of every stored file, the ZIP included
 //   logos              school_templates.logo_bytes while the row exists (trashed ones too)
 //   photos             solver_sessions.input_bytes while input_key is not null
+// Cost, measured on PGlite (single-threaded WebAssembly, so slower than Postgres 16: an upper
+// bound), six tables seeded with generate_series, median of 5 runs of appStorageUsage():
+//   1,000 materials + 10,000 pages + 1,000 photos + 500 exports        4 ms
+//   10,000 materials + 100,000 pages + 10,000 photos + 5,000 exports  20 ms
+//   50,000 materials + 500,000 pages + 50,000 photos + 25,000 exports 115 ms
+// Growth is about linear and the pages table is about three quarters of it, so the sum stays
+// under 300 ms (3 s lock wait / roughly 10 writers queued at a busy moment) up to about 1.3
+// million OCR pages. Below that, nothing needs caching. If real data ever approaches it, cache
+// the five slow-changing parts for about 30 s and sum only material_uploads under the lock: a
+// slightly stale total is already tolerated by the headroom below.
 // A null size counts as 0 (rows from before the columns existed). Orphan objects (a failed
 // cleanup, a PUT after its reservation was swept) are invisible to it: the 6 GiB cap leaves
 // headroom under the provider's free allowance and the bucket lifecycle rules are the backstop.
