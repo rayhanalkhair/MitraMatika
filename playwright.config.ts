@@ -78,6 +78,10 @@ export default defineConfig({
       E2E_FAKE_AUTH: "1",
       E2E_FAKE_AI: "1",
       E2E_CI: "1",
+      // The access gate (ADR-0022): the fake teacher is approved, pending@example.test is
+      // not, so the pending-account spec runs against the real gate.
+      ALLOWED_EMAILS: process.env.ALLOWED_EMAILS ?? "teacher@example.test",
+      ADMIN_EMAIL: process.env.ADMIN_EMAIL ?? "admin@example.test",
       // The CI job's local Postgres service (checked above).
       DATABASE_URL: process.env.DATABASE_URL ?? "",
       CRON_SECRET: E2E_RUNNER_SECRET,

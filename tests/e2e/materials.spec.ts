@@ -108,16 +108,39 @@ function trashedMaterial(page: Page) {
     .filter({ hasText: TITLE });
 }
 
+/**
+ * Picks a radio drawn as a button: the input is a 1 px "sr-only" box, so Playwright's own click on it
+ * lands on whatever sits beside that box and never succeeds. A person clicks the label, so does this.
+ */
+async function chooseRadio(page: Page, name: string) {
+  await page
+    .locator("label")
+    .filter({ hasText: new RegExp("^" + name + "$") })
+    .click();
+  await expect(page.getByRole("radio", { name, exact: true })).toBeChecked();
+}
+
+/**
+ * The card of the scripted question "n + n" (the fake AI writes question n as n + n and cites the
+ * offered passages in turn, so question n cites the (n-1) mod 2-th of P2, P3). The cards are NOT
+ * in the order the questions were written: a batch shares one created_at and the list breaks the
+ * tie by a random id, so "Soal 1" is any of them.
+ */
+function questionCard(page: Page, n: number) {
+  const sum = new RegExp(String(n) + /\s*\+\s*/.source + String(n));
+  return page.getByRole("article").filter({ hasText: sum });
+}
+
 /** On /generate: topic SPLDV, source "Dari materi", the PDF, pages 2-3; then submits. */
 async function generateFromPages(page: Page) {
   await page.goto("/generate");
   // Picking the topic first also waits for hydration (the source choice is client state).
   await pickTopic(page);
-  await page.getByRole("radio", { name: "Dari materi" }).check();
+  await chooseRadio(page, "Dari materi");
   await page
     .getByRole("combobox", { name: "Materi", exact: true })
     .selectOption({ label: TITLE });
-  await page.getByRole("radio", { name: "Halaman", exact: true }).check();
+  await chooseRadio(page, "Halaman");
   await page.getByRole("textbox", { name: "Halaman", exact: true }).fill("2-3");
   await page.getByRole("button", { name: T.submit, exact: true }).click();
   await page.waitForURL(REQUEST_URL, { timeout: GENERATION_WAIT });
@@ -152,9 +175,9 @@ test.describe("learning materials, OCR and cited generation", () => {
     const card = materialCard(page, TITLE);
     await expect(card.getByText("3 halaman", { exact: true })).toBeVisible();
     await expect(card.getByText("PDF", { exact: true })).toBeVisible();
-    // The meter counts the stored file against the 1 GB cap.
+    // The meter counts the stored file against the 300 MB cap.
     await expect(page.getByRole("meter", { name: "Penyimpanan" })).toBeVisible();
-    await expect(page.getByText(/dari 1 GB terpakai$/)).toBeVisible();
+    await expect(page.getByText(/dari 300 MB terpakai$/)).toBeVisible();
   });
 
   test("the detail shows the file, its text quality and each page's text", async ({
@@ -273,12 +296,10 @@ test.describe("learning materials, OCR and cited generation", () => {
     await waitForReviewReady(page, 5);
 
     // The scripted answer cites the offered passages in turn: P2, P3, P2, ...
-    const first = page.getByRole("article", { name: "Soal 1", exact: true });
+    const first = questionCard(page, 1);
     await expect(first.getByText(`Sumber: ${TITLE}, hal. 2`)).toBeVisible();
     await expect(
-      page
-        .getByRole("article", { name: "Soal 2", exact: true })
-        .getByText(`Sumber: ${TITLE}, hal. 3`),
+      questionCard(page, 2).getByText(`Sumber: ${TITLE}, hal. 3`),
     ).toBeVisible();
     await expect(first.getByText(T.verified, { exact: true })).toBeVisible();
 
@@ -310,15 +331,13 @@ test.describe("learning materials, OCR and cited generation", () => {
     await generateFromPages(page);
     await waitForReviewReady(page, 5);
 
-    const first = page.getByRole("article", { name: "Soal 1", exact: true });
+    const first = questionCard(page, 1);
     await expect(
       first.getByText("Belum dapat diverifikasi", { exact: true }),
     ).toBeVisible();
     await expect(first.getByText(/^Sumber:/)).toHaveCount(0);
     await expect(
-      page
-        .getByRole("article", { name: "Soal 2", exact: true })
-        .getByText(`Sumber: ${TITLE}, hal. 3`),
+      questionCard(page, 2).getByText(`Sumber: ${TITLE}, hal. 3`),
     ).toBeVisible();
   });
 
@@ -410,6 +429,8 @@ test.describe("learning materials, OCR and cited generation", () => {
     // it, so repeat the click until the refusal shows.
     await expect(async () => {
       await title.fill("");
+      // A fill that races hydration can leave a cut title, which is a valid save: click on empty.
+      await expect(title).toHaveValue("", { timeout: 1_000 });
       await editor.getByRole("button", { name: "Simpan struktur" }).click();
       await expect(title).toHaveAttribute("aria-invalid", "true", { timeout: 2_000 });
     }).toPass({ timeout: NAVIGATION_TIMEOUT, intervals: [500, 1_000, 2_000] });

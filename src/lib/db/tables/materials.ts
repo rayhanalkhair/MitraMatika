@@ -215,7 +215,7 @@ export const materialPages = pgTable.withRLS(
     ocrStatus: text("ocr_status").notNull().default("none"),
     reviewedAt: timestamp("reviewed_at", { withTimezone: true }),
     // Bytes of the page image OCR keeps under materials/<owner>/<material>/pages/ (server-only);
-    // they count toward the teacher's 1 GB storage cap.
+    // they count toward the teacher's 300 MB storage cap.
     imageBytes: integer("image_bytes"),
     // Full-text search over the page (Indonesian stemming), kept in step with text_md by Postgres.
     tsv: tsvector("tsv")
@@ -257,7 +257,7 @@ export const materialPages = pgTable.withRLS(
 
 // An upload that startUpload signed and finalise has not consumed yet. Written by the server only
 // (service connection): finalise accepts only a key that has a live row of the same owner, and the
-// 1 GB storage cap counts these reservations next to the stored materials. A row past expires_at
+// 300 MB storage cap counts these reservations next to the stored materials. A row past expires_at
 // no longer counts and is swept (object and row) by the owner's next startUpload. The id is the
 // future material's id, so the object key never changes.
 export const materialUploads = pgTable.withRLS(

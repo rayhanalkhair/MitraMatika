@@ -1,5 +1,7 @@
 // @vitest-environment jsdom
 import { afterEach, describe, expect, it, vi } from "vitest";
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import { cleanup, screen } from "@testing-library/react";
 import { createTranslator } from "next-intl";
 import { renderWithIntl } from "@/test/intl";
@@ -24,6 +26,43 @@ vi.mock("next-intl/server", () => ({
 vi.mock("@/features/settings/actions/set-locale", () => ({ setLocaleAction: vi.fn() }));
 
 import PrivacyPage from "./page";
+// The notice states limits and retention times that other features enforce. Features may not
+// import each other's internals, so the numbers are read from their source: a changed constant
+// fails this test until the notice is updated.
+function constant(file: string, name: string): number {
+  const source = readFileSync(join(process.cwd(), file), "utf-8");
+  const match = new RegExp(`export const ${name} = ([^;]+);`).exec(source);
+  if (!match) throw new Error(`${name} not found in ${file}`);
+  // The constants are plain products such as `7 * 24 * 60 * 60_000`.
+  return match[1]
+    .split("*")
+    .reduce((product, factor) => product * Number(factor.trim().replaceAll("_", "")), 1);
+}
+const DAY_MS = 86_400_000;
+const USER_DAILY_QUESTION_LIMIT = constant(
+  "src/features/generation/service/quota.ts",
+  "USER_DAILY_QUESTION_LIMIT",
+);
+const USER_DAILY_OCR_PAGES = constant(
+  "src/features/materials/schema/ocr.ts",
+  "USER_DAILY_OCR_PAGES",
+);
+const USER_DAILY_STRUCTURE_PROPOSALS = constant(
+  "src/features/materials/schema/structure.ts",
+  "USER_DAILY_STRUCTURE_PROPOSALS",
+);
+const USER_DAILY_SOLVES = constant(
+  "src/features/solver/schema/solver.ts",
+  "USER_DAILY_SOLVES",
+);
+const PHOTO_DAYS =
+  constant("src/features/solver/schema/solver.ts", "PHOTO_RETENTION_MS") / DAY_MS;
+const EXPORT_DAYS =
+  constant("src/features/export/service/export-job.ts", "EXPORT_TTL_MS") / DAY_MS;
+const TRASH_RETENTION_DAYS = constant(
+  "src/features/trash/service/retention.ts",
+  "TRASH_RETENTION_DAYS",
+);
 
 afterEach(() => {
   cleanup();
@@ -41,6 +80,7 @@ describe("privacy page", () => {
       .map((h) => h.textContent);
     expect(sections).toEqual([
       "Data yang kami simpan",
+      "Berkas dan tempat penyimpanannya",
       "Layanan AI dan data yang dikirim",
       "Tanpa data siswa",
       "Menghapus akun",
@@ -57,12 +97,80 @@ describe("privacy page", () => {
     expect(text).toContain("bentuk acak satu arah dari ID akun");
     expect(text).not.toContain("tanpa nama, email, atau ID akun");
     expect(text).toContain("alamat IP dan browser");
+    // The owner is emailed each new account's name, email and school (through Resend), and an
+    // account that is never approved is kept until its user deletes it (security review F4).
+    expect(text).toContain("email kepada pemilik MitraMatika");
+    expect(text).toContain("nama Anda, alamat email Anda, dan nama sekolah Anda");
+    expect(text).toContain("belum disetujui pemilik tetap disimpan");
     // No contact channel exists, so the notice promises none (ruling S10).
     expect(text).not.toMatch(/hubungi|kontak/i);
     expect(screen.getByRole("group", { name: "Bahasa tampilan" })).toBeTruthy();
     expect(
       screen.getByRole("link", { name: "Kembali ke halaman masuk" }).getAttribute("href"),
     ).toBe("/sign-in");
+  });
+
+  it("covers learning materials, the solver, exports, logos, Cloudflare R2, retention and the daily limits (Indonesian)", async () => {
+    renderWithIntl(await PrivacyPage());
+    const text = document.body.textContent;
+    // Materials: read from uploaded files, stored on R2, text and page images go to Groq as C2.
+    expect(text).toContain("Materi pembelajaran");
+    expect(text).toContain("gambar halaman");
+    expect(text).toContain("Cloudflare R2");
+    expect(text).toContain("kelas data C2");
+    expect(text).toContain("zero data retention");
+    expect(text).toContain("tidak ada penyedia lain");
+    // Solver questions and photos.
+    expect(text).toContain("foto soal");
+    expect(text).toContain(`disimpan di R2 selama ${String(PHOTO_DAYS)} hari`);
+    // Exports and logos.
+    expect(text).toContain(`kedaluwarsa setelah ${String(EXPORT_DAYS)} hari`);
+    expect(text).toContain("Logo sekolah");
+    expect(text).toContain("hanya PNG atau JPEG");
+    expect(text).toContain("Logo SVG yang diunggah sebelum aturan ini");
+    expect(text).toContain("Vercel (wilayah Singapura)");
+    expect(text).toContain("Neon (Postgres di AWS Singapura)");
+    expect(text).toContain("menghitung permintaan");
+    // Trash.
+    expect(text).toContain(`disimpan ${String(TRASH_RETENTION_DAYS)} hari`);
+    expect(text).toContain(
+      "soal yang Anda selesaikan (beserta penyelesaian dan fotonya)",
+    );
+    // Daily limits, pinned to the constants the app enforces.
+    expect(text).toContain(`${String(USER_DAILY_QUESTION_LIMIT)} soal dibuat`);
+    expect(text).toContain(`${String(USER_DAILY_SOLVES)} soal diselesaikan`);
+    expect(text).toContain(`${String(USER_DAILY_OCR_PAGES)} halaman materi dibaca`);
+    expect(text).toContain(`${String(USER_DAILY_STRUCTURE_PROPOSALS)} usulan struktur`);
+    expect(text).not.toMatch(/\bkamu\b/i);
+  });
+
+  it("covers the same topics in English", async () => {
+    locale.current = "en";
+    renderWithIntl(await PrivacyPage(), { locale: "en" });
+    const text = document.body.textContent;
+    expect(text).toContain("Learning materials");
+    expect(text).toContain("page images");
+    expect(text).toContain("Cloudflare R2");
+    expect(text).toContain("data class C2");
+    expect(text).toContain("zero data retention");
+    expect(text).toContain("no other provider");
+    expect(text).toContain("photo of a problem");
+    expect(text).toContain(`kept in R2 for ${String(PHOTO_DAYS)} days`);
+    expect(text).toContain(`expire after ${String(EXPORT_DAYS)} days`);
+    expect(text).toContain("School logos");
+    expect(text).toContain("PNG or JPEG only");
+    expect(text).toContain("An SVG logo uploaded before this rule");
+    expect(text).toContain("Vercel (Singapore region)");
+    expect(text).toContain("Neon (Postgres on AWS Singapore)");
+    expect(text).toContain("count requests");
+    expect(text).toContain(`kept for ${String(TRASH_RETENTION_DAYS)} days`);
+    expect(text).toContain("solved problems (with their solutions and photos)");
+    expect(text).toContain(`${String(USER_DAILY_QUESTION_LIMIT)} questions created`);
+    expect(text).toContain(`${String(USER_DAILY_SOLVES)} problems solved`);
+    expect(text).toContain(`${String(USER_DAILY_OCR_PAGES)} material pages read`);
+    expect(text).toContain(
+      `${String(USER_DAILY_STRUCTURE_PROPOSALS)} structure proposals`,
+    );
   });
 
   it("is available in English", async () => {
@@ -81,5 +189,8 @@ describe("privacy page", () => {
     expect(text).toContain("a one-way scrambled form of the account ID");
     expect(text).not.toContain("no name, email or account ID");
     expect(text).toContain("IP address and browser");
+    expect(text).toContain("email to the MitraMatika owner");
+    expect(text).toContain("your name, your email address and your school name");
+    expect(text).toContain("has not approved is still kept");
   });
 });

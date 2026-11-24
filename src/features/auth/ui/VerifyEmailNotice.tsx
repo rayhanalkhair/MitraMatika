@@ -73,6 +73,7 @@ export function VerifyEmailNotice({
       noValidate
       className="flex flex-col gap-4"
     >
+      <p className="text-sm text-muted-foreground">{t("verify.approvalNote")}</p>
       <p className="text-sm text-muted-foreground">{t("verify.resendHint")}</p>
       <TextField
         id="verify-email"

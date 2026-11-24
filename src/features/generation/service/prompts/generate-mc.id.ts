@@ -124,6 +124,7 @@ Ketentuan wajib untuk setiap soal:
   di dalam JSON. Contoh yang benar: "\\\\frac{1}{2}". Contoh yang SALAH: "\\frac{1}{2}" (backslash
   tunggal akan diartikan sebagai escape character JSON seperti \\f atau \\t dan merusak notasi
   matematika).
+- Jangan menulis dua karakter \\n (garis miring terbalik lalu n) di luar rumus untuk pindah baris. Untuk baris baru pakai baris baru JSON biasa (satu escape JSON), atau letakkan rumus blok $$...$$ pada barisnya sendiri. Di dalam rumus, perintah LaTeX seperti \\\\neq tetap ditulis dengan backslash ganda.
 - Semua nilai dalam field yang berakhiran "_md" (untuk ditampilkan ke guru) menggunakan format
   angka Indonesia, misalnya "2,5" dan "1.000", BUKAN "2.5".
 - Field "machine" pada jawaban HARUS berupa angka desimal biasa dengan titik, tanpa pemisah ribuan,

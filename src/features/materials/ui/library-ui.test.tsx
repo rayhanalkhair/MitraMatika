@@ -37,7 +37,7 @@ import { MaterialList } from "./MaterialList";
 import { StorageMeter } from "./StorageMeter";
 
 const MB = 1024 * 1024;
-const GB = 1024 * MB;
+const CAP = 300 * MB;
 const ID = "11111111-1111-4111-8111-111111111111";
 const PARENT = "22222222-2222-4222-8222-222222222222";
 const CHILD = "33333333-3333-4333-8333-333333333333";
@@ -52,18 +52,26 @@ beforeEach(() => {
 afterEach(cleanup);
 
 describe("StorageMeter", () => {
-  it("shows used of 1 GB as text and as a labelled meter", () => {
-    renderWithIntl(<StorageMeter usedBytes={300 * MB} capBytes={GB} />);
-    expect(screen.getByText("300 MB dari 1 GB terpakai")).toBeTruthy();
+  it("shows used of 300 MB as text and as a labelled meter", () => {
+    renderWithIntl(<StorageMeter usedBytes={120 * MB} capBytes={CAP} />);
+    expect(screen.getByText("120 MB dari 300 MB terpakai")).toBeTruthy();
     const meter = screen.getByRole("meter", { name: "Penyimpanan" });
-    expect(meter.getAttribute("aria-valuenow")).toBe(String(300 * MB));
-    expect(meter.getAttribute("aria-valuemax")).toBe(String(GB));
-    expect(meter.getAttribute("aria-valuetext")).toBe("300 MB dari 1 GB terpakai");
+    expect(meter.getAttribute("aria-valuenow")).toBe(String(120 * MB));
+    expect(meter.getAttribute("aria-valuemax")).toBe(String(CAP));
+    expect(meter.getAttribute("aria-valuetext")).toBe("120 MB dari 300 MB terpakai");
     expect(screen.queryByText(/hampir penuh/)).toBeNull();
   });
 
   it("warns in words when nearly full", () => {
-    renderWithIntl(<StorageMeter usedBytes={0.95 * GB} capBytes={GB} />);
+    renderWithIntl(<StorageMeter usedBytes={0.95 * CAP} capBytes={CAP} />);
+    expect(screen.getByText(/Penyimpanan hampir penuh/)).toBeTruthy();
+  });
+
+  it("shows a teacher above the cap as full without breaking the meter", () => {
+    renderWithIntl(<StorageMeter usedBytes={400 * MB} capBytes={CAP} />);
+    expect(screen.getByText("400 MB dari 300 MB terpakai")).toBeTruthy();
+    const meter = screen.getByRole("meter", { name: "Penyimpanan" });
+    expect(meter.getAttribute("aria-valuenow")).toBe(String(CAP));
     expect(screen.getByText(/Penyimpanan hampir penuh/)).toBeTruthy();
   });
 });
@@ -216,6 +224,8 @@ describe("rejected actions and live regions", () => {
           metadataConfirmedAt: null,
           pages: { total: 1, high: 1, medium: 0, low: 0 },
           flaggedPages: [],
+          flagReasons: [],
+          pageImageBytes: 0,
         }}
         folders={FOLDERS}
       />,
@@ -225,6 +235,47 @@ describe("rejected actions and live regions", () => {
     expect(
       screen.getByRole<HTMLButtonElement>("button", { name: "Pindahkan" }).disabled,
     ).toBe(false);
+  });
+});
+
+describe("MaterialDetail sizes", () => {
+  const small = {
+    id: ID,
+    title: "Buku-SPLDV-uji",
+    kind: "pdf",
+    mime: "application/pdf",
+    status: "ready",
+    sizeBytes: 3 * 1024,
+    pageCount: 3,
+    grade: null,
+    academicYear: null,
+    folderId: null,
+    folderName: null,
+    createdAt: "2026-11-20T01:00:00.000Z",
+    metadataConfirmedAt: null,
+    pages: { total: 3, high: 3, medium: 0, low: 0 },
+    flaggedPages: [],
+    flagReasons: [],
+    pageImageBytes: 190 * 1024,
+  };
+
+  it("writes a 3 KB file in KB, not as 0 MB, and says what else is counted", () => {
+    renderWithIntl(<MaterialDetail detail={small} folders={FOLDERS} />);
+    expect(screen.getByText("Ukuran berkas")).toBeTruthy();
+    expect(screen.getByText("3 KB")).toBeTruthy();
+    expect(screen.queryByText(/^0 MB$/)).toBeNull();
+    expect(screen.getByText("Gambar halaman")).toBeTruthy();
+    expect(screen.getByText("190 KB")).toBeTruthy();
+    expect(
+      screen.getByText("Berkas dan gambar halaman dihitung dalam penyimpanan Anda."),
+    ).toBeTruthy();
+  });
+
+  it("shows no page image row when no page picture is stored", () => {
+    renderWithIntl(
+      <MaterialDetail detail={{ ...small, pageImageBytes: 0 }} folders={FOLDERS} />,
+    );
+    expect(screen.queryByText("Gambar halaman")).toBeNull();
   });
 });
 
@@ -245,7 +296,18 @@ describe("MaterialDetail", () => {
     metadataConfirmedAt: null,
     pages: { total: 3, high: 2, medium: 0, low: 1 },
     flaggedPages: [3],
+    flagReasons: ["low_text"],
+    pageImageBytes: 0,
   };
+
+  it("labels the folder select by a label of its own, whose text is only the name", () => {
+    renderWithIntl(<MaterialDetail detail={detail} folders={FOLDERS} />);
+    const select = screen.getByRole("combobox", { name: "Pindahkan ke folder" });
+    const label = document.querySelector(`label[for="${select.id}"]`);
+    // A label that wraps the select also holds its option texts, and a test that looks the
+    // control up by the exact label text (getByLabel in Playwright) then never finds it.
+    expect(label?.textContent).toBe("Pindahkan ke folder");
+  });
 
   it("shows the facts and text quality, and moves the material into a folder", async () => {
     mocks.moveMaterial.mockResolvedValue({ ok: true });
@@ -255,6 +317,10 @@ describe("MaterialDetail", () => {
     ).toBeTruthy();
     expect(screen.getByText("Halaman yang perlu diperiksa: 3")).toBeTruthy();
     expect(screen.getByText("3 MB")).toBeTruthy();
+    // The reason is said in words, not left to the page numbers.
+    expect(
+      screen.getByText("Alasan: Halaman ini hanya berisi sedikit teks"),
+    ).toBeTruthy();
     await userEvent.selectOptions(screen.getByLabelText("Pindahkan ke folder"), CHILD);
     await userEvent.click(screen.getByRole("button", { name: "Pindahkan" }));
     expect(mocks.moveMaterial).toHaveBeenCalledWith({ materialId: ID, folderId: CHILD });

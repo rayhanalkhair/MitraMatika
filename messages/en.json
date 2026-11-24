@@ -19,6 +19,19 @@
     "curriculumContext": "Merdeka curriculum",
     "accountAvatar": "Account {name}"
   },
+  "systemPages": {
+    "notFound": {
+      "title": "Page not found",
+      "description": "This address does not exist, or the page was moved or deleted.",
+      "home": "Back to Home"
+    },
+    "error": {
+      "title": "Something went wrong",
+      "description": "This page could not be shown. Try again; if it still fails, go back to Home.",
+      "retry": "Try again",
+      "home": "Back to Home"
+    }
+  },
   "common": {
     "comingSoon": "Coming soon",
     "soonBadge": "Soon"
@@ -132,7 +145,7 @@
       "legend": "Question source",
       "topic": "Curriculum topic",
       "material": "From material",
-      "materialHint": "Questions are written from the material pages you choose and name their source page.",
+      "materialHint": "Questions are written from the material pages you choose and name their source page. You still choose a topic in the next step: it is used to pick the most relevant pages.",
       "pick": "Material",
       "pickPlaceholder": "Choose a material",
       "scopeLegend": "Part to use",
@@ -147,7 +160,6 @@
       "noSections": "This material has no chapters yet. Confirm its structure on the material page, or choose pages.",
       "none": "No material is ready to use yet.",
       "noneLink": "Open materials",
-      "topicNote": "Still choose a topic: it is used to pick the most relevant pages.",
       "truncated": "Only the newest 100 materials are listed."
     }
   },
@@ -613,7 +625,13 @@
         "approved": "This question is approved. After saving, it goes back to review and needs approval again."
       },
       "fieldMath": "The math in this field is not valid. Check the $ signs and the curly braces.",
-      "fieldInvalid": "This field is empty or too long.",
+      "fieldInvalid": "This entry is not valid.",
+      "fieldRequiredStem": "Enter the question text.",
+      "fieldRequiredOption": "Enter the text of choice {label}.",
+      "fieldRequiredAnswer": "Enter the final answer.",
+      "fieldRequiredExplanation": "Enter the explanation.",
+      "fieldTooLong": "At most {max, number} characters, now {count, number}.",
+      "fieldStepsTooMany": "Too many steps. At most {limit} steps.",
       "errors": {
         "stale": "This question was changed elsewhere. Reload it, then save again; your draft is kept.",
         "notFound": "Question not found.",
@@ -679,6 +697,15 @@
       "deleted": "The source material has been deleted",
       "unknownPage": "Source: {title}"
     }
+  },
+  "approval": {
+    "title": "Waiting for admin approval",
+    "account": "Account: {email}",
+    "body": "Your account has been created and your email is verified. It is waiting for the admin to approve it.",
+    "adminNotified": "The admin was told when your email was verified. You can close this page; once you are approved, sign in again or reload this page.",
+    "recheck": "Check again",
+    "signOut": "Sign out",
+    "privacy": "Privacy notice"
   },
   "auth": {
     "title": "Sign in",
@@ -750,6 +777,7 @@
       "resend": "Send the link again",
       "resendIn": "Send again in {seconds, number} s",
       "sent": "If that address is waiting for confirmation, a new link is on its way.",
+      "approvalNote": "A new account needs the admin's approval before it can be used, unless your email is already approved. The admin is told once your email is verified.",
       "backToSignIn": "Back to sign in"
     },
     "forgot": {
@@ -773,7 +801,14 @@
       "resetSubject": "Reset your MitraMatika password",
       "resetBody": "Hello,\n\nOpen this link to choose a new password for your MitraMatika account:\n\n{url}\n\nThe link is valid for {minutes, number, ::group-off} minutes and works only once. If you did not ask for it, ignore this email; your password stays the same.",
       "accountExistsSubject": "You already have a MitraMatika account",
-      "accountExistsBody": "Hello,\n\nSomeone tried to sign up for MitraMatika with this email address, but an account already exists. No new account was created.\n\nSign in with Google or your password at {signInUrl}\n\nIf you forgot your password, choose a new one at {resetUrl}\n\nIf this was not you, ignore this email. Your account is safe."
+      "accountExistsBody": "Hello,\n\nSomeone tried to sign up for MitraMatika with this email address, but an account already exists. No new account was created.\n\nSign in with Google or your password at {signInUrl}\n\nIf you forgot your password, choose a new one at {resetUrl}\n\nIf this was not you, ignore this email. Your account is safe.",
+      "adminNoticeSubject": "New account waiting for approval on MitraMatika",
+      "adminNoticeBody": "Hello,\n\nA new account with a verified email is waiting for approval:\n\nEmail: {email}\nName: {name}\nSchool: {school}\nSigned up: {time}\n\nTo approve it, add this email to ALLOWED_EMAILS in the Vercel project settings (environment variables, Production), then redeploy. The account works from its next request.\n\nNote: the name and school above were typed by the person who signed up. Use the email address as the only basis for approval.",
+      "adminDigestSubject": "Summary of new accounts waiting for approval on MitraMatika",
+      "adminDigestBody": "Hello,\n\n{total, number} accounts with a verified email are waiting for approval. The newest {count, number} are listed below (email | name | school | signed up); the others follow in the next summary.\n\n{list}\n\nTo approve one, add its email to ALLOWED_EMAILS in the Vercel project settings (environment variables, Production), then redeploy.\n\nNote: the name and school were typed by the person who signed up. Use the email address as the only basis for approval.",
+      "storageAlertWarnSubject": "MitraMatika storage is nearly full",
+      "storageAlertFullSubject": "MitraMatika storage is full",
+      "storageAlertBody": "Hello,\n\nMitraMatika storage is {percent, number}% used: {used, number} MB of {cap, number} MB.\n\nFile storage has no automatic spending cap, so this limit is the only guard: when it is full, new uploads are refused. To free space, see the \"Object storage\" section of the runbook."
     }
   },
   "settings": {
@@ -873,23 +908,29 @@
         "generic": "Something went wrong. Try again.",
         "unauthenticated": "Your session has ended. Sign in again to continue.",
         "notFound": "This template was not found. It may have been deleted.",
-        "conflict": "This template was just changed elsewhere. Reload the page, then try again."
+        "conflict": "This template was just changed elsewhere. Reload the page, then try again.",
+        "tooMany": "You already have 20 templates. Delete the ones you no longer use (trashed ones count until they are emptied) to create a new one."
       },
       "logo": {
         "label": "School logo",
-        "hint": "PNG, JPG or SVG, up to 1 MB. A new logo replaces the old one.",
+        "hint": "PNG or JPG, up to 1 MB. A new logo replaces the old one.",
+        "svgStored": "The stored logo is an SVG. An SVG logo does not appear in the PDF and Word files. Upload a PNG or JPG logo to replace it.",
         "submit": "Upload logo",
         "saved": "Logo uploaded.",
         "saveFirst": "Save the template first, then upload its logo.",
         "errors": {
           "empty": "Choose a logo file first.",
           "tooLarge": "The logo can be at most 1 MB.",
-          "unsupportedType": "The logo must be a PNG, JPG or SVG.",
+          "unsupportedType": "The logo must be a PNG or JPG.",
+          "svgNotAccepted": "SVG logos are not accepted. Use a PNG or JPG.",
           "invalidImage": "The logo file is damaged or cannot be read.",
           "dimensionsTooLarge": "The image is too large. At most 6000 pixels per side.",
           "notFound": "This template was not found. It may have been deleted.",
           "unauthenticated": "Your session has ended. Sign in again to continue.",
-          "generic": "The logo could not be uploaded. Try again."
+          "generic": "The logo could not be uploaded. Try again.",
+          "appFull": "MitraMatika storage is full, so new uploads are paused for now. The admin has been told. Try again later.",
+          "storageBusy": "Many files are being uploaded right now. Try again in a moment.",
+          "quota": "Your storage is full (300 MB, counting every file: materials, exports, logos and problem photos). Delete some files you no longer need, then try again."
         }
       },
       "preview": {
@@ -908,19 +949,29 @@
   },
   "privacy": {
     "title": "Privacy notice",
-    "intro": "This page explains what data MitraMatika stores, where that data is sent and how to delete your account.",
+    "intro": "This page explains what data MitraMatika stores, where that data is sent, how long it is kept and how to delete your account.",
     "storedTitle": "Data we store",
-    "storedAccount": "Account: your name, email address, school name if you give one, and your password as a hash (the password itself is never stored). If you sign in with Google, we receive your name and email address from Google.",
-    "storedContent": "Your work: question requests, the generated questions, your review decisions and your question bank.",
+    "storedAccount": "Account: your name, email address, school name if you give one, and your password as a hash (the password itself is never stored). If you sign in with Google, we receive your name and email address from Google. An account that the owner has not approved is still kept (name, email address and school name if given) until you delete it; you can delete your account at any time from the waiting-for-approval page or from Settings.",
+    "storedContent": "Your work: question requests, the generated questions, your review decisions, your question bank, assessments, header templates, learning materials (the text read from your files and the result of reading their pages) and the problems you ask to have solved, with their solutions.",
+    "storedWhere": "Where data lives: the app runs on Vercel (Singapore region) and the database with your account and work is on Neon (Postgres on AWS Singapore). Vercel and Neon receive that data as the hosting and database providers; files are stored separately in Cloudflare R2 (see the next section).",
     "storedTechnical": "Technical data: sign-in sessions together with the IP address and browser they were started from, your language choice, counters by IP address and by hashed email address that limit how often sign-in, sign-up and email requests can be made (they expire within a day), and an activity log that holds only your account ID, not your email or name.",
+    "filesTitle": "Files and where they are kept",
+    "filesService": "Your files are stored in Cloudflare R2, a storage service from Cloudflare, so Cloudflare receives your files as the storage provider. Storage addresses contain only ID numbers, not file names or your name, and a file is handed only to its owner, through the app or a temporary download link (at most 5 minutes).",
+    "filesMaterials": "Learning materials: the files you upload (PDF, DOCX or photo) are stored in Cloudflare R2. The text and page images are read from those files; for pages you ask to have read with AI, your browser makes a page image and that image is also stored in R2. The files and page images are kept until the material is deleted.",
+    "filesSolver": "Solved problems: the text of the problem and its solution are stored in your account. A photo of a problem that you upload is kept in R2 for 7 days and then deleted automatically; hidden data in the photo (such as its location) is removed before the photo is kept.",
+    "filesExports": "Exports and logos: exported documents (PDF, Word and ZIP) are stored in R2 and expire after 7 days. School logos on templates (PNG or JPEG only) are stored in R2 until the template is permanently deleted. An SVG logo uploaded before this rule, if any, stays stored but is not used in documents.",
+    "filesTrash": "Trash: questions, assessments, templates, materials, folders and solved problems (with their solutions and photos) that you move to the Trash are kept for 30 days and then deleted for good, together with their files. While in the Trash, files still count toward your storage limit.",
     "aiTitle": "AI services and the data they get",
     "aiGroq": "Groq writes and checks the questions. Groq receives curriculum data (grade, topic, learning objectives, difficulty) and the text of the questions being written. Your name, email and school name are never sent.",
+    "aiGroqMaterials": "Learning materials: when you use a material to create questions, propose its structure or read its pages with AI, the text and page images of that material are sent to Groq. This is data class C2 (teacher material): only Groq may receive it and there is no other provider as a fallback. We ask Groq not to keep this data (zero data retention).",
+    "aiSolver": "Solve a problem: the text of the problem and the photo of a problem that you send are sent to Groq, also as data class C2, to be read, solved and cross-checked.",
+    "aiLimits": "Daily limits per account, counted by the day in Jakarta: 30 questions created, 30 problems solved, 20 material pages read with AI and 10 structure proposals. These limits count requests, not the size of data.",
     "aiGemini": "Gemini by Google is only a fallback and only receives curriculum data that is public anyway.",
-    "emailService": "Resend sends the confirmation and new password emails, so Resend receives your email address.",
+    "emailService": "Resend sends the confirmation and new password emails, so Resend receives your email address. Resend also sends an email to the MitraMatika owner whenever a new account with a verified email is waiting for approval; that email contains your name, your email address and your school name if you gave one.",
     "studentsTitle": "No student data",
     "students": "MitraMatika does not collect student data. Do not write student names or other personal student data in the app; such data must never be sent to any AI service.",
     "deleteTitle": "Deleting your account",
-    "delete": "You can delete your account at any time in Settings, under Account. Your account, your sessions, your questions and the rest of your work are deleted with it. What remains: a record that an account was deleted, which holds no name or email, only a one-way scrambled form of the account ID; earlier activity and error records, with your account ID removed; and the weekly database backups, which keep a copy of your data for up to 8 weeks until they are deleted. Resend keeps its own log of the emails it sent you.",
+    "delete": "You can delete your account at any time in Settings, under Account. Your account, your sessions, your questions and the rest of your work are deleted with it, including your files in Cloudflare R2; if some files fail to be deleted, the rest can no longer be opened through the app. What remains: a record that an account was deleted, which holds no name or email, only a one-way scrambled form of the account ID; earlier activity and error records, with your account ID removed; and the weekly database backups, which keep a copy of your data for up to 8 weeks until they are deleted. Resend keeps its own log of the emails it sent you.",
     "back": "Back to sign in"
   },
   "assessments": {
@@ -1187,7 +1238,9 @@
         "renderFailed": "One of the documents could not be created. Try the export again.",
         "hourlyLimit": "You reached the limit of {limit} exports per hour. Try again after {time}.",
         "signedOut": "Your session ended. Sign in again to export.",
-        "generic": "The export failed. Try again shortly."
+        "generic": "The export failed. Try again shortly.",
+        "appFull": "MitraMatika storage is full, so new exports are paused for now. The admin has been told. Try again later.",
+        "quota": "Your storage is full (300 MB, counting every file: materials, exports, logos and problem photos). Delete some files you no longer need, then try again."
       }
     }
   },
@@ -1198,7 +1251,7 @@
       "dropLabel": "Drag a file here or choose a file",
       "chooseFile": "Choose file",
       "takePhoto": "Take a photo",
-      "hint": "PDF, DOCX, JPG or PNG, at most 50 MB and 300 pages.",
+      "hint": "PDF, DOCX, JPG or PNG, at most 25 MB and 300 pages.",
       "storage": "{used} of {cap} used",
       "uploading": "Uploading {name}: {percent}%",
       "checking": "Checking {name}…",
@@ -1212,8 +1265,8 @@
       "errors": {
         "type": "File type not supported. Use PDF, DOCX, JPG or PNG.",
         "doc": ".doc files are not supported. Open it in Word and save it as .docx.",
-        "size": "The file is larger than 50 MB or changed size while uploading.",
-        "quota": "Your storage (1 GB) is full. Delete old materials from the trash first.",
+        "size": "The file is larger than 25 MB or changed size while uploading.",
+        "quota": "Your storage (300 MB) is full. Delete old materials from the trash first.",
         "pending": "Too many uploads in progress. Wait for them to finish, then try again.",
         "encrypted": "This PDF is password-protected. Save it again without a password, then upload it.",
         "pages": "The PDF has more than 300 pages. Split it into several files.",
@@ -1228,7 +1281,9 @@
         "network": "The connection dropped while uploading. Check your internet, then try again.",
         "unauthenticated": "Your session has ended. Sign in again to upload.",
         "generic": "The upload failed. Try again in a moment.",
-        "busy": "The server is reading another file. Try again in a moment."
+        "busy": "The server is reading another file. Try again in a moment.",
+        "appFull": "MitraMatika storage is full, so new uploads are paused for now. The admin has been told. Try again later.",
+        "storageBusy": "Many files are being uploaded right now. Try again in a moment."
       }
     },
     "library": {
@@ -1280,6 +1335,7 @@
     },
     "storage": {
       "label": "Storage",
+      "counted": "Every file counts: materials (also those in the trash), page images, exports, logos and solver photos.",
       "nearlyFull": "Storage is nearly full. Delete materials you no longer use from the trash for good."
     },
     "folders": {
@@ -1321,7 +1377,9 @@
       "back": "Back to the materials",
       "facts": "About the file",
       "kindLabel": "Type",
-      "sizeLabel": "Size",
+      "sizeLabel": "File size",
+      "imagesLabel": "Page images",
+      "sizeNote": "The file and the page images count toward your storage.",
       "pagesLabel": "Pages",
       "addedLabel": "Uploaded",
       "statusLabel": "Status",
@@ -1331,6 +1389,7 @@
         "heading": "Text quality",
         "summary": "{high} pages clear, {medium} to check, {low} hard to read",
         "flagged": "Pages to check: {pages}",
+        "reasons": "Reason: {reasons}",
         "none": "No pages have been read yet.",
         "reading": "The text is being read. Reload this page in a moment.",
         "failed": "The text of this file could not be read. Move it to the trash, then upload it again."
@@ -1418,8 +1477,9 @@
         "failed": "OCR failed, can be tried again"
       },
       "flags": {
-        "uncertain_math": "Has uncertain parts",
-        "low_text": "Little text",
+        "uncertain_math": "Has parts marked [[?]] or formulas that could not be read",
+        "formula_text": "Many formula symbols; their order in the text may be wrong, compare with the page image",
+        "low_text": "This page has only a little text",
         "garbled": "Text looks scrambled",
         "truncated": "Text cut off, check the end of the page"
       },
@@ -1465,6 +1525,7 @@
           "notFound": "This material was not found. Reload the page.",
           "pages": "Some pages can no longer be OCR'd. Reload the page and choose again.",
           "limit": "Today's remaining OCR pages are not enough for the chosen pages.",
+          "appFull": "MitraMatika storage is full, so new uploads are paused for now. The admin has been told. Try again later.",
           "render": "The page images could not be prepared. Try again.",
           "upload": "The page images failed to upload. Try again.",
           "invalid": "The page choice is not valid. Reload the page.",
@@ -1531,7 +1592,10 @@
       "busy": "This problem is still being solved.",
       "unauthenticated": "Your session has ended. Sign in again.",
       "generic": "Something went wrong. Try again.",
-      "visionLimit": "All {limit} picture reads for today are used (OCR and problem photos together). Try again tomorrow."
+      "visionLimit": "All {limit} picture reads for today are used (OCR and problem photos together). Try again tomorrow.",
+      "appFull": "MitraMatika storage is full, so new uploads are paused for now. The admin has been told. Try again later.",
+      "storageBusy": "Many files are being uploaded right now. Try again in a moment.",
+      "quota": "Your storage is full (300 MB, counting every file: materials, exports, logos and problem photos). Delete some files you no longer need, then try again."
     },
     "confirm": {
       "heading": "Check what was read from the photo",

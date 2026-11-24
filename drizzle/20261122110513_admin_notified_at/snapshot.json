@@ -1,0 +1,37 @@
+{
+  "type": "diff",
+  "version": "9",
+  "dialect": "postgres",
+  "id": "565bf1ba-f53e-4b76-98f0-0bceb36ba6da",
+  "prevIds": ["330ca98a-8aa7-41d9-bb28-a6cb9187d0e8"],
+  "footprints": [
+    {
+      "statementType": "add_column",
+      "statementTarget": ["column", "public", "profiles", "admin_notified_at"],
+      "writes": [
+        "s|col|public.profiles.admin_notified_at",
+        "n|col|public.profiles.admin_notified_at",
+        "e|col|public.profiles.admin_notified_at"
+      ],
+      "reads": ["n|tbl|public.profiles", "n|sch|public"]
+    }
+  ],
+  "deltas": [
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "profiles",
+        "name": "admin_notified_at",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    }
+  ]
+}

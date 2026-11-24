@@ -101,3 +101,25 @@ describe("VerifyEmailNotice", () => {
     expect(resendButton().disabled).toBe(false);
   });
 });
+
+describe("VerifyEmailNotice approval note", () => {
+  it("tells everyone, whatever the address, that an account may need admin approval", () => {
+    for (const email of ["", "rina@example.test", "other@example.org"]) {
+      const { unmount } = renderWithIntl(
+        <VerifyEmailNotice defaultEmail={email} initialCooldown={0} />,
+      );
+      const note = screen.getByText(/kecuali email Anda sudah disetujui/);
+      expect(note.textContent).toBe(
+        "Akun baru perlu disetujui admin sebelum bisa dipakai, kecuali email Anda sudah disetujui. Admin diberi tahu setelah email Anda terverifikasi.",
+      );
+      unmount();
+    }
+  });
+
+  it("has English copy", () => {
+    renderWithIntl(<VerifyEmailNotice defaultEmail="" initialCooldown={0} />, {
+      locale: "en",
+    });
+    expect(screen.getByText(/unless your email is already approved/)).toBeTruthy();
+  });
+});

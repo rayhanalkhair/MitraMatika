@@ -7,7 +7,7 @@ import { crc32, deflateSync } from "node:zlib";
 /** A word found only on page 3 of the PDF (the search shows "Ditemukan di hal. 3"). */
 export const SEARCH_WORD = "zebrakuning";
 
-// Plain prose: no + = < > symbols, so every page is "clear" (3 or more would ask for a check).
+// Plain prose: no + = < > symbols, so every page is "clear" (6 or more symbols would ask for a check).
 const PAGES = [
   "Bab satu. Buku latihan ini disusun untuk siswa kelas delapan. Bacalah setiap " +
     "penjelasan dengan teliti sebelum mengerjakan latihan di halaman berikutnya.",

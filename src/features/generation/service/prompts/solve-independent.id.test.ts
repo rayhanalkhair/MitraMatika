@@ -19,3 +19,14 @@ describe("buildSolveIndependentPrompt", () => {
     expect(prompt).toContain(singleBackslashExample);
   });
 });
+
+describe("literal line-break escapes (S-10)", () => {
+  it("tells the model not to write a backslash-n outside formulas", () => {
+    const { prompt } = buildSolveIndependentPrompt({
+      questionStemMd: "Soal contoh",
+      optionTexts_md: ["1", "2", "3", "4"],
+      dataClass: "C0",
+    });
+    expect(prompt).toContain("Jangan menulis dua karakter \\n");
+  });
+});

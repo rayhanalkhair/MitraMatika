@@ -676,3 +676,13 @@ describe("renderDocx OOXML injection", () => {
     }
   });
 });
+
+describe("typographic characters (S-01 audit)", () => {
+  it("keeps the non-breaking hyphen, dashes, quotes and spaces in the Word text", async () => {
+    const prose =
+      "siku\u2011siku 1\u20132 a\u2014b \u201cq\u201d 8\u00a0cm 8\u202fcm \u22123";
+    const bytes = await renderDocx(build({}, { i1: version(prose) }), "paper", A4);
+    const texts = wordText(await part(bytes, "word/document.xml"));
+    expect(texts.join("")).toContain(prose);
+  });
+});

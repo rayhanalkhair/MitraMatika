@@ -68,7 +68,9 @@ test.describe("Buat Soal topic picker", () => {
   }) => {
     for (const id of ["not-a-uuid", "6f1b1d0e-3c52-4a0b-9d34-2f6a3b1c7e55"]) {
       await page.goto(`/generate/${id}`);
-      await expect(page.getByText("This page could not be found.")).toBeVisible();
+      await expect(
+        page.getByRole("heading", { name: "Halaman tidak ditemukan" }),
+      ).toBeVisible();
     }
   });
 });

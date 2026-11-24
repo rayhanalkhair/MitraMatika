@@ -1,4 +1,5 @@
 import "server-only";
+import { isOwnerApproved } from "@/features/auth";
 import { registerExportHandlers } from "@/features/export";
 import { registerGenerationHandlers } from "@/features/generation";
 import { registerMaterialHandlers } from "@/features/materials";
@@ -31,6 +32,8 @@ export function runDefaultJobs(budgetMs?: number): Promise<RunSummary> {
     queue: getJobQueue(),
     registry: defaultRegistry,
     runs: createJobRunLog(getDb()),
+    // An account that is not approved (any more) has its queued jobs failed, not run.
+    canRun: (ownerId) => isOwnerApproved(ownerId),
     onFailure: async ({ job, failure }) => {
       await recordJobError(failureToErrorEntry({ job, failure }));
     },

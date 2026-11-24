@@ -28,6 +28,7 @@ describe("BankList", () => {
     renderWithIntl(<BankList items={[item()]} bankTotal={1} />);
     const link = screen.getByRole("link");
     expect(link.querySelector("a, button, input")).toBeNull();
+    // A link must keep its focus-visible outline: the class that removes it must be absent.
     expect(link.className).not.toContain("outline-none");
     expect(screen.getAllByRole("link")).toHaveLength(1);
   });

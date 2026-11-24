@@ -1,7 +1,10 @@
 import { describe, expect, it, vi } from "vitest";
 
 // The pages only export their title statically; nothing here renders or reaches a database.
-vi.mock("@/features/auth/service/guard", () => ({ requireAllowedUser: vi.fn() }));
+vi.mock("@/features/auth/service/guard", () => ({
+  requireAllowedUser: vi.fn(),
+  requireSignedInUser: vi.fn(),
+}));
 vi.mock("@/lib/db/runtime", () => ({ getDb: vi.fn() }));
 vi.mock("@/lib/db/client", () => ({ runAsUser: vi.fn() }));
 vi.mock("@/features/auth/actions/actions", () => ({ signOutAction: vi.fn() }));
@@ -47,7 +50,7 @@ const PAGES: [
   ["Lainnya", () => import("./(shell)/more/page"), "Lainnya"],
   ["Masuk", () => import("./(auth)/sign-in/page"), "Masuk"],
   ["Daftar", () => import("./(auth)/sign-up/page"), "Daftar"],
-  ["Cek email", () => import("./(auth)/verify-email/page"), "Cek email kamu"],
+  ["Cek email", () => import("./(auth)/verify-email/page"), "Cek email Anda"],
   ["Lupa kata sandi", () => import("./(auth)/forgot-password/page"), "Lupa kata sandi"],
   [
     "Kata sandi baru",
@@ -55,6 +58,11 @@ const PAGES: [
     "Buat kata sandi baru",
   ],
   ["Privasi", () => import("./privacy/page"), "Pemberitahuan privasi"],
+  [
+    "Menunggu persetujuan",
+    () => import("./(pending)/waiting-approval/page"),
+    "Menunggu persetujuan admin",
+  ],
 ];
 
 describe("root title template", () => {

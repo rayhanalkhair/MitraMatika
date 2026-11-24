@@ -55,10 +55,12 @@ export function UploadProgress({
 }) {
   const t = useTranslations("materials.upload");
   const [phase, setPhase] = useState<Phase>({ step: "uploading", percent: 0 });
-  const started = useRef(false);
   const signed = useRef<Signed | null>(null);
   const resume = useRef<Resume>("start");
   const controller = useRef<AbortController | null>(null);
+  // The reservation being asked for. React's development StrictMode runs the effect twice (mount,
+  // clean up, mount): both runs share this one request instead of reserving twice.
+  const starting = useRef<ReturnType<typeof startUploadAction> | null>(null);
 
   const finalize = useCallback(
     async (target: Signed) => {
@@ -100,11 +102,19 @@ export function UploadProgress({
       let target = signed.current;
       if (resume.current === "start" || target === null) {
         setPhase({ step: "uploading", percent: 0 });
-        const answer = await startUploadAction({
+        const pending = (starting.current ??= startUploadAction({
           fileName: file.name,
           declaredType: file.type,
           size: file.size,
-        });
+        }));
+        let answer: Awaited<typeof pending>;
+        try {
+          answer = await pending;
+        } finally {
+          if (starting.current === pending) starting.current = null;
+        }
+        // Left or cancelled while the URL was being signed; a run started since carries on.
+        if (abort.signal.aborted) return;
         if (!answer.ok) {
           setPhase({ step: "failed", error: answer.error });
           return;
@@ -144,16 +154,22 @@ export function UploadProgress({
     }
   }, [file, finalize]);
 
+  // The parent passes fresh callbacks on every render, which changes `run`; the upload must not
+  // restart (or be aborted) because of that, so the mount effect below reads the latest run.
+  const latestRun = useRef(run);
   useEffect(() => {
-    // Once per file, also under StrictMode's double effects.
-    if (!started.current) {
-      started.current = true;
-      void run();
-    }
+    latestRun.current = run;
+  }, [run]);
+
+  useEffect(() => {
+    // Every mount starts a run. Under StrictMode's double effects the first run is aborted by the
+    // clean-up and the second one takes over (they share the one signed URL request above); a
+    // guard that skipped the second mount left the aborted first run, and no upload, behind.
+    void latestRun.current();
     return () => {
       controller.current?.abort();
     };
-  }, [run]);
+  }, []);
 
   async function cancel() {
     controller.current?.abort();

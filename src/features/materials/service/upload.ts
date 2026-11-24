@@ -3,11 +3,17 @@ import { createHash } from "node:crypto";
 import { and, asc, count, eq, gt, isNull, lte, or, sql } from "drizzle-orm";
 import type { PgAsyncDatabase, PgQueryResultHKT } from "drizzle-orm/pg-core";
 import type { AnyRelations } from "drizzle-orm/relations";
-import { folders, materialPages, materials, materialUploads } from "@/lib/db/schema";
+import { folders, materials, materialUploads } from "@/lib/db/schema";
 import { createJobQueue } from "@/lib/jobs/queue";
 import { logger } from "@/lib/logger";
 import { err, ok, type Result } from "@/lib/result";
 import { stripImageMetadata } from "@/lib/images/strip-metadata";
+import {
+  assertAppStorageRoom,
+  lockAppStorage,
+  withAppStorageBusy,
+  ownerStoredBytes,
+} from "@/lib/storage/app-total";
 import { assertSafeKey, type ObjectStore } from "@/lib/storage/types";
 import {
   extensionOf,
@@ -55,19 +61,12 @@ function sourceKey(root: Root, ownerId: string, id: string, ext: MaterialExt): s
 }
 
 /**
- * Bytes the owner keeps in storage: every material's file (trashed ones too, until purged) and the
- * page images OCR kept for them (material_pages.image_bytes).
+ * Bytes the owner keeps in storage, whatever the file is (the figure of the teacher's meter and
+ * of the 300 MB cap): materials (trashed ones too, until purged), OCR page images, exports, template
+ * logos and solver photos (security review F1). Live upload reservations are added by startUpload.
  */
 export async function storedBytes(db: MaterialDb, ownerId: string): Promise<number> {
-  const [files] = await db
-    .select({ bytes: sql<string>`coalesce(sum(${materials.sizeBytes}), 0)` })
-    .from(materials)
-    .where(eq(materials.ownerId, ownerId));
-  const [images] = await db
-    .select({ bytes: sql<string>`coalesce(sum(${materialPages.imageBytes}), 0)` })
-    .from(materialPages)
-    .where(eq(materialPages.ownerId, ownerId));
-  return Number(files.bytes) + Number(images.bytes);
+  return ownerStoredBytes(db, ownerId);
 }
 
 /** Where the browser uploads (staging; the only key a PUT URL is ever signed for). */
@@ -137,7 +136,8 @@ function resolveType(
 
 /**
  * Starts an upload: checks the declared name, type and size and the owner's storage cap (stored
- * materials, trashed ones until purged, plus live reservations), records the reservation and
+ * materials, trashed ones until purged, plus live reservations) and then the app-wide cap (every
+ * teacher's files, ADR-0022), records the reservation and
  * returns a PUT URL signed for exactly `size` bytes of the canonical content type, valid for
  * UPLOAD_URL_SECONDS. Serialised per owner by an advisory lock, so two starts cannot both fit
  * under the cap. Expired reservations of the owner are cleaned up first (object, then row).
@@ -164,63 +164,76 @@ export async function startUpload(
   const ext = type.data;
   const { kind, mime } = MATERIAL_TYPES[ext];
 
-  return db.transaction(async (rawTx) => {
-    const tx = rawTx as unknown as MaterialDb;
-    await lockOwner(tx, ownerId);
+  return withAppStorageBusy(() =>
+    db.transaction(async (rawTx) => {
+      const tx = rawTx as unknown as MaterialDb;
+      await lockOwner(tx, ownerId);
 
-    const expired = await tx
-      .select({ id: materialUploads.id, objectKey: materialUploads.objectKey })
-      .from(materialUploads)
-      .where(
-        and(
-          eq(materialUploads.ownerId, ownerId),
-          lte(materialUploads.expiresAt, now),
-          // A finalise still checking this upload keeps it.
-          or(
-            isNull(materialUploads.claimedAt),
-            lte(materialUploads.claimedAt, new Date(now.getTime() - CLAIM_TTL_MS)),
+      const expired = await tx
+        .select({ id: materialUploads.id, objectKey: materialUploads.objectKey })
+        .from(materialUploads)
+        .where(
+          and(
+            eq(materialUploads.ownerId, ownerId),
+            lte(materialUploads.expiresAt, now),
+            // A finalise still checking this upload keeps it.
+            or(
+              isNull(materialUploads.claimedAt),
+              lte(materialUploads.claimedAt, new Date(now.getTime() - CLAIM_TTL_MS)),
+            ),
           ),
-        ),
-      )
-      .orderBy(asc(materialUploads.expiresAt))
-      .limit(SWEEP_LIMIT);
-    for (const row of expired) {
-      // A row whose object could not be deleted stays for the next start.
-      if (await deleteQuietly(store, ownerId, row.objectKey)) {
-        await tx.delete(materialUploads).where(eq(materialUploads.id, row.id));
+        )
+        .orderBy(asc(materialUploads.expiresAt))
+        .limit(SWEEP_LIMIT);
+      for (const row of expired) {
+        // A row whose object could not be deleted stays for the next start.
+        if (await deleteQuietly(store, ownerId, row.objectKey)) {
+          await tx.delete(materialUploads).where(eq(materialUploads.id, row.id));
+        }
       }
-    }
 
-    const [pending] = await tx
-      .select({
-        uploads: count(),
-        bytes: sql<string>`coalesce(sum(${materialUploads.sizeBytes}), 0)`,
-      })
-      .from(materialUploads)
-      .where(
-        and(eq(materialUploads.ownerId, ownerId), gt(materialUploads.expiresAt, now)),
+      const [pending] = await tx
+        .select({
+          uploads: count(),
+          bytes: sql<string>`coalesce(sum(${materialUploads.sizeBytes}), 0)`,
+        })
+        .from(materialUploads)
+        .where(
+          and(eq(materialUploads.ownerId, ownerId), gt(materialUploads.expiresAt, now)),
+        );
+      if (pending.uploads >= MAX_PENDING_UPLOADS) return err<StartUploadError>("pending");
+      const stored = await storedBytes(tx, ownerId);
+      if (stored + Number(pending.bytes) + size > STORAGE_CAP_BYTES) {
+        return err<StartUploadError>("quota");
+      }
+      // The app-wide cap (ADR-0022), last: the owner lock is held, so the global lock always comes
+      // second (one fixed order, no deadlock). Held until commit, it makes the check and the
+      // reservation below one step for every teacher at once.
+      await lockAppStorage(tx);
+      const room = await assertAppStorageRoom(tx, size, "materials");
+      if (!room.ok) return err<StartUploadError>("appFull");
+
+      const uploadId = crypto.randomUUID();
+      const objectKey = uploadStagingKey(ownerId, uploadId, ext);
+      await tx.insert(materialUploads).values({
+        id: uploadId,
+        ownerId,
+        objectKey,
+        kind,
+        mime,
+        sizeBytes: size,
+        expiresAt: new Date(now.getTime() + FINALIZE_WINDOW_MS),
+        createdAt: now,
+      });
+      const uploadUrl = await store.signedPutUrl(
+        objectKey,
+        mime,
+        size,
+        UPLOAD_URL_SECONDS,
       );
-    if (pending.uploads >= MAX_PENDING_UPLOADS) return err<StartUploadError>("pending");
-    const stored = await storedBytes(tx, ownerId);
-    if (stored + Number(pending.bytes) + size > STORAGE_CAP_BYTES) {
-      return err<StartUploadError>("quota");
-    }
-
-    const uploadId = crypto.randomUUID();
-    const objectKey = uploadStagingKey(ownerId, uploadId, ext);
-    await tx.insert(materialUploads).values({
-      id: uploadId,
-      ownerId,
-      objectKey,
-      kind,
-      mime,
-      sizeBytes: size,
-      expiresAt: new Date(now.getTime() + FINALIZE_WINDOW_MS),
-      createdAt: now,
-    });
-    const uploadUrl = await store.signedPutUrl(objectKey, mime, size, UPLOAD_URL_SECONDS);
-    return ok({ uploadUrl, objectKey, contentType: mime });
-  });
+      return ok({ uploadUrl, objectKey, contentType: mime });
+    }),
+  );
 }
 
 /** A claim older than this is taken over (its finalise died); longer than any honest check. */
@@ -340,6 +353,11 @@ export async function finalizeUpload(
   let finalKey: string | null = null;
   try {
     // 2. Download and check, outside any transaction.
+    // A reservation made under an earlier, larger limit (the release before ADR-0022 signed up to
+    // 50 MB) is refused here, before anything is downloaded: the file is deleted, the reservation
+    // dropped and the teacher sees the size message. The limit is enforced on the server, at both
+    // start and finalise, never only in the browser.
+    if (upload.sizeBytes > MAX_MATERIAL_BYTES) return await reject("size");
     const bytes = await store.get(objectKey);
     if (!bytes) {
       await db

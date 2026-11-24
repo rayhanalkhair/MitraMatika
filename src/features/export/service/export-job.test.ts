@@ -2,7 +2,7 @@ import { createHash } from "node:crypto";
 import { and, eq, sql } from "drizzle-orm";
 import JSZip from "jszip";
 import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import { exports, questionUsages, schoolTemplates } from "@/lib/db/schema";
+import { exports, materials, questionUsages, schoolTemplates } from "@/lib/db/schema";
 import {
   createTestDatabase,
   DB_TEST_TIMEOUT,
@@ -12,6 +12,9 @@ import {
 } from "@/lib/db/test-harness";
 import { PermanentJobError, type JobContext } from "@/lib/jobs/handler";
 import { createJobQueue } from "@/lib/jobs/queue";
+import { logger } from "@/lib/logger";
+import { APP_STORAGE_CAP_BYTES } from "@/lib/storage/app-total";
+import { TEACHER_STORAGE_CAP_BYTES } from "@/lib/storage/limits";
 import type { ClaimedJob } from "@/lib/jobs/types";
 import { reopen, type AssessmentDb } from "@/features/assessments";
 import { clearAll } from "@/features/assessments/test-support";
@@ -151,7 +154,11 @@ describe("render_export", () => {
         expect(row.expiresAt.getTime()).toBe(NOW.getTime() + EXPORT_TTL_MS);
         expect(row.objectKey.startsWith(prefix)).toBe(true);
         expect(row.id).toBe(exportRowId(job.id, row as ExportFile));
-        expect(await store.get(row.objectKey)).not.toBeNull();
+        // The real byte length of every stored file, the ZIP included (ADR-0022).
+        const stored = await store.get(row.objectKey);
+        expect(stored).not.toBeNull();
+        expect(row.sizeBytes).toBe(stored?.byteLength);
+        expect(row.sizeBytes).toBeGreaterThan(0);
       }
       expect(rows.map((row) => `${row.document}.${row.format}`).sort()).toEqual(
         EXPORT_FILES.map((file) => `${file.document}.${file.format}`).sort(),
@@ -248,6 +255,125 @@ describe("render_export", () => {
       expect((await retry(context(job))).kind).toBe("done");
       expect(store.keys()).toHaveLength(7);
       expect(await exportRows(job.id)).toHaveLength(7);
+    },
+    DB_TEST_TIMEOUT,
+  );
+
+  it(
+    "fails for good as app_storage_full and stores nothing when the app has no room left",
+    async () => {
+      const seeded = await seedApprovedAssessment(database, { ownerId: USER_A });
+      const job = await enqueueAndClaim({
+        assessmentId: seeded.assessmentId,
+        snapshotHash: seeded.hash,
+      });
+      const filler = crypto.randomUUID();
+      await database.db.insert(materials).values({
+        id: filler,
+        ownerId: USER_B,
+        title: "Buku",
+        kind: "pdf",
+        mime: "application/pdf",
+        sizeBytes: APP_STORAGE_CAP_BYTES,
+        sha256: "0".repeat(64),
+        objectKey: `materials/${USER_B}/${filler}/source.pdf`,
+      });
+      vi.spyOn(logger, "warn").mockImplementation(() => undefined);
+      try {
+        const { store, handler } = setup();
+        const error = await rejection(handler(context(job)));
+        expect(error).toMatchObject({
+          name: "PermanentJobError",
+          code: "app_storage_full",
+          message: "Penyimpanan MitraMatika penuh.",
+        });
+        expect(store.keys()).toEqual([]);
+        expect(await exportRows(job.id)).toHaveLength(0);
+      } finally {
+        await database.db.delete(materials).where(eq(materials.id, filler));
+      }
+    },
+    DB_TEST_TIMEOUT,
+  );
+
+  it(
+    "fails for good as export_quota, storing nothing, when the teacher's own 300 MB is full",
+    async () => {
+      const seeded = await seedApprovedAssessment(database, { ownerId: USER_A });
+      const job = await enqueueAndClaim({
+        assessmentId: seeded.assessmentId,
+        snapshotHash: seeded.hash,
+      });
+      // Teacher A's stored materials fill her cap (the app as a whole is nowhere near full).
+      const filler = crypto.randomUUID();
+      await database.db.insert(materials).values({
+        id: filler,
+        ownerId: USER_A,
+        title: "Buku",
+        kind: "pdf",
+        mime: "application/pdf",
+        sizeBytes: TEACHER_STORAGE_CAP_BYTES,
+        sha256: "0".repeat(64),
+        objectKey: `materials/${USER_A}/${filler}/source.pdf`,
+      });
+      try {
+        const { store, handler } = setup();
+        const error = await rejection(handler(context(job)));
+        expect(error).toMatchObject({
+          name: "PermanentJobError",
+          code: "export_quota",
+        });
+        expect(store.keys()).toEqual([]);
+        expect(await exportRows(job.id)).toHaveLength(0);
+      } finally {
+        await database.db.delete(materials).where(eq(materials.id, filler));
+      }
+    },
+    DB_TEST_TIMEOUT,
+  );
+
+  it(
+    "counts the files already stored by the attempt, so the ZIP cannot push past the cap",
+    async () => {
+      const seeded = await seedApprovedAssessment(database, { ownerId: USER_A });
+      const job = await enqueueAndClaim({
+        assessmentId: seeded.assessmentId,
+        snapshotHash: seeded.hash,
+      });
+      const { store: probe, handler: probeHandler } = setup();
+      await probeHandler(context(job));
+      const probed = await exportRows(job.id);
+      const total = probed.reduce((sum, row) => sum + row.sizeBytes, 0);
+      const bundle = probed.find((row) => row.document === "zip")?.sizeBytes ?? 0;
+      expect(bundle).toBeGreaterThan(1000);
+      await database.db.delete(exports).where(eq(exports.jobId, job.id));
+      expect(probe.keys()).toHaveLength(7);
+
+      // Room for every file but half of the ZIP: robust to small size differences between renders.
+      const second = await enqueueAndClaim({
+        assessmentId: seeded.assessmentId,
+        snapshotHash: seeded.hash,
+      });
+      const filler = crypto.randomUUID();
+      await database.db.insert(materials).values({
+        id: filler,
+        ownerId: USER_B,
+        title: "Buku",
+        kind: "pdf",
+        mime: "application/pdf",
+        sizeBytes: APP_STORAGE_CAP_BYTES - total + Math.floor(bundle / 2),
+        sha256: "0".repeat(64),
+        objectKey: `materials/${USER_B}/${filler}/source.pdf`,
+      });
+      vi.spyOn(logger, "warn").mockImplementation(() => undefined);
+      try {
+        const { store, handler } = setup();
+        const error = await rejection(handler(context(second)));
+        expect(error).toMatchObject({ code: "app_storage_full" });
+        expect(store.keys()).toEqual([]);
+      } finally {
+        await database.db.delete(materials).where(eq(materials.id, filler));
+      }
     },
     DB_TEST_TIMEOUT,
   );

@@ -25,7 +25,10 @@ export async function setDefaultTemplateAction(
     const result = await runAsUser(getDb(), ownerId, (tx) =>
       setDefaultTemplate(tx as unknown as TemplateDb, { ownerId, templateId }),
     );
-    if (!result.ok) return { ok: false, reason: result.error };
+    // Only creating a template can be refused as tooMany; setting a default never is.
+    if (!result.ok) {
+      return { ok: false, reason: result.error === "tooMany" ? "generic" : result.error };
+    }
     revalidatePath("/settings");
     return { ok: true };
   } catch (error) {

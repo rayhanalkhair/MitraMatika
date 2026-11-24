@@ -107,11 +107,13 @@ describe("/api/jobs/run", () => {
     expect(runTickMock.mock.calls[0][0].housekeeping.map((step) => step.name)).toEqual([
       "settleRegenerations",
       "pruneAccounts",
+      "sendAdminNotices",
       "backfillSearchText",
       "purgeTrash",
       "purgeExports",
       "sweepMaterials",
       "sweepSolver",
+      "checkStorageAlerts",
     ]);
     expect(recordRunMock).toHaveBeenCalledTimes(1);
     const [db, input] = recordRunMock.mock.calls[0];

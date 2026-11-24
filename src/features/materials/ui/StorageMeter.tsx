@@ -8,8 +8,9 @@ export const NEARLY_FULL = 0.9;
 
 // No "use client": rendered by the materials page (server) and by the upload box (client).
 /**
- * The storage meter: what counts toward the 1 GB cap (stored materials, trashed ones until purged,
- * and uploads in progress), as text and as a meter, with a written warning near the cap.
+ * The storage meter: what counts toward the 300 MB cap (every kind of file: materials, trashed
+ * ones until purged, page pictures, exports, logos, solver photos, and uploads in progress), as
+ * text, a meter and one line saying what is counted, with a written warning near the cap.
  */
 export function StorageMeter({
   usedBytes,
@@ -29,6 +30,7 @@ export function StorageMeter({
   return (
     <div className="flex min-w-0 flex-col gap-2">
       <p className="text-sm text-muted-foreground">{text}</p>
+      <p className="text-sm text-muted-foreground">{t("storage.counted")}</p>
       <div
         role="meter"
         aria-label={t("storage.label")}

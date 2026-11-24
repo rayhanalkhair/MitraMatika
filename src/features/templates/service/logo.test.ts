@@ -110,30 +110,30 @@ describe("validateLogo: magic bytes decide", () => {
     });
   });
 
-  it("accepts an SVG (with or without an XML declaration) and stores the sanitised copy", async () => {
-    const result = await validateLogo(
-      svgBytes(
-        `<?xml version="1.0" encoding="UTF-8"?>\n<svg ${SVG_NS} viewBox="0 0 10 10"><script>alert(1)</script><circle cx="5" cy="5" r="4" fill="#3730a3"/></svg>`,
-      ),
-      "image/svg+xml",
-    );
-    expect(result.ok).toBe(true);
-    if (!result.ok) return;
-    expect(result.data).toMatchObject({ ext: "svg", contentType: "image/svg+xml" });
-    const text = new TextDecoder().decode(result.data.bytes);
-    expect(text).not.toContain("script");
-    expect(text).toContain("<circle");
+  it("refuses an SVG with its own message (owner decision of 22 Nov: PNG and JPEG only)", async () => {
+    for (const text of [
+      `<svg ${SVG_NS} viewBox="0 0 10 10"><circle cx="5" cy="5" r="4" fill="#3730a3"/></svg>`,
+      `<?xml version="1.0" encoding="UTF-8"?>\n<svg ${SVG_NS}><script>alert(1)</script></svg>`,
+      `<svg ${SVG_NS}><unclosed></svg>`,
+    ]) {
+      // Whatever the browser declared, an SVG is recognised by its bytes.
+      for (const declared of ["image/svg+xml", "image/png", ""]) {
+        expect(await validateLogo(svgBytes(text), declared), text).toEqual({
+          ok: false,
+          error: "svgNotAccepted",
+        });
+      }
+    }
   });
 
-  it("rejects HTML and XML that is not an SVG", async () => {
+  it("refuses HTML and XML that is not an SVG as an unsupported type", async () => {
     for (const text of [
       "<html><body><script>alert(1)</script></body></html>",
       '<?xml version="1.0"?><note>hi</note>',
-      `<svg ${SVG_NS}><unclosed></svg>`,
     ]) {
       expect(await validateLogo(svgBytes(text), "image/svg+xml"), text).toEqual({
         ok: false,
-        error: "invalidImage",
+        error: "unsupportedType",
       });
     }
   });

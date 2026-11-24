@@ -19,6 +19,19 @@
     "curriculumContext": "Kurikulum Merdeka",
     "accountAvatar": "Akun {name}"
   },
+  "systemPages": {
+    "notFound": {
+      "title": "Halaman tidak ditemukan",
+      "description": "Alamat ini tidak ada, atau halamannya sudah dipindahkan atau dihapus.",
+      "home": "Kembali ke Beranda"
+    },
+    "error": {
+      "title": "Terjadi kesalahan",
+      "description": "Halaman ini tidak bisa ditampilkan. Coba lagi; jika masih gagal, kembali ke Beranda.",
+      "retry": "Coba lagi",
+      "home": "Kembali ke Beranda"
+    }
+  },
   "common": {
     "comingSoon": "Segera hadir",
     "soonBadge": "Segera"
@@ -90,9 +103,9 @@
       "generic": "Terjadi kesalahan. Coba lagi.",
       "unauthenticated": "Silakan masuk terlebih dahulu."
     },
-    "activeRequest": "Kamu masih punya permintaan yang sedang berjalan.",
+    "activeRequest": "Anda masih punya permintaan yang sedang berjalan.",
     "openActiveRequest": "Buka permintaan itu",
-    "dailyLimit": "Kamu sudah meminta {used} dari {limit} soal hari ini. Sisa {remaining} soal. Batas harian dihitung ulang pada {time}.",
+    "dailyLimit": "Anda sudah meminta {used} dari {limit} soal hari ini. Sisa {remaining} soal. Batas harian dihitung ulang pada {time}.",
     "status": {
       "pageHeading": "Permintaan soal",
       "summaryTopic": "Topik",
@@ -132,7 +145,7 @@
       "legend": "Sumber soal",
       "topic": "Topik kurikulum",
       "material": "Dari materi",
-      "materialHint": "Soal dibuat dari halaman materi yang kamu pilih dan mencantumkan halaman sumbernya.",
+      "materialHint": "Soal dibuat dari halaman materi yang Anda pilih dan mencantumkan halaman sumbernya. Topik tetap dipilih di langkah berikutnya: dipakai untuk memilih halaman yang paling relevan.",
       "pick": "Materi",
       "pickPlaceholder": "Pilih materi",
       "scopeLegend": "Bagian yang dipakai",
@@ -147,7 +160,6 @@
       "noSections": "Materi ini belum punya bab. Konfirmasi struktur di halaman materi, atau pilih halaman.",
       "none": "Belum ada materi yang siap dipakai.",
       "noneLink": "Buka Materi",
-      "topicNote": "Topik tetap dipilih: dipakai untuk memilih halaman yang paling relevan.",
       "truncated": "Hanya 100 materi terbaru yang ditampilkan."
     }
   },
@@ -613,7 +625,13 @@
         "approved": "Soal ini sudah disetujui. Setelah disimpan, soal kembali ke peninjauan dan perlu disetujui lagi."
       },
       "fieldMath": "Rumus di kolom ini tidak valid. Periksa tanda $ dan kurung kurawal.",
-      "fieldInvalid": "Kolom ini kosong atau terlalu panjang.",
+      "fieldInvalid": "Isian ini tidak valid.",
+      "fieldRequiredStem": "Isi teks soal.",
+      "fieldRequiredOption": "Isi teks pilihan {label}.",
+      "fieldRequiredAnswer": "Isi jawaban akhir.",
+      "fieldRequiredExplanation": "Isi pembahasan.",
+      "fieldTooLong": "Maksimal {max, number} karakter, sekarang {count, number}.",
+      "fieldStepsTooMany": "Terlalu banyak langkah. Paling banyak {limit} langkah.",
       "errors": {
         "stale": "Soal ini sudah diubah di tempat lain. Muat ulang soal, lalu simpan lagi; draf Anda tetap tersimpan.",
         "notFound": "Soal tidak ditemukan.",
@@ -680,6 +698,15 @@
       "unknownPage": "Sumber: {title}"
     }
   },
+  "approval": {
+    "title": "Menunggu persetujuan admin",
+    "account": "Akun: {email}",
+    "body": "Akun Anda sudah dibuat, email sudah terverifikasi, dan menunggu persetujuan admin.",
+    "adminNotified": "Admin sudah diberi tahu saat email Anda terverifikasi. Anda bisa menutup halaman ini; setelah disetujui, masuk lagi atau muat ulang halaman ini.",
+    "recheck": "Cek lagi",
+    "signOut": "Keluar",
+    "privacy": "Pemberitahuan privasi"
+  },
   "auth": {
     "title": "Masuk",
     "subtitle": "Masuk untuk melanjutkan ke MitraMatika.",
@@ -718,12 +745,12 @@
       "generic": "Terjadi kesalahan. Coba lagi.",
       "rateLimited": "Terlalu banyak percobaan. Tunggu sebentar, lalu coba lagi.",
       "invalidCredentials": "Email atau kata sandi salah.",
-      "emailNotVerified": "Email kamu belum dikonfirmasi. Buka tautan konfirmasi yang kami kirim ke email kamu."
+      "emailNotVerified": "Email Anda belum dikonfirmasi. Buka tautan konfirmasi yang kami kirim ke email Anda."
     },
     "notices": {
       "passwordReset": "Kata sandi baru sudah disimpan. Masuk dengan kata sandi itu.",
       "linkUsed": "Tautan konfirmasi ini sudah dipakai atau tidak berlaku lagi. Masuk untuk melanjutkan, atau minta tautan baru jika belum bisa masuk.",
-      "accountDeleted": "Akun kamu sudah dihapus."
+      "accountDeleted": "Akun Anda sudah dihapus."
     },
     "signIn": {
       "submit": "Masuk",
@@ -742,26 +769,27 @@
       "signInLink": "Masuk"
     },
     "verify": {
-      "title": "Cek email kamu",
-      "description": "Kami sudah mengirim email ke alamat yang kamu daftarkan. Ikuti petunjuk di email itu untuk melanjutkan. Tautan konfirmasi berlaku 24 jam.",
+      "title": "Cek email Anda",
+      "description": "Kami sudah mengirim email ke alamat yang Anda daftarkan. Ikuti petunjuk di email itu untuk melanjutkan. Tautan konfirmasi berlaku 24 jam.",
       "invalidTitle": "Tautan tidak berlaku",
       "invalidDescription": "Tautan konfirmasi ini sudah kedaluwarsa atau tidak valid. Minta tautan baru di bawah.",
       "resendHint": "Tidak menerima email? Periksa folder spam, atau kirim ulang tautannya.",
       "resend": "Kirim ulang tautan",
       "resendIn": "Kirim ulang dalam {seconds, number} detik",
       "sent": "Jika alamat itu menunggu konfirmasi, tautan baru sudah dikirim.",
+      "approvalNote": "Akun baru perlu disetujui admin sebelum bisa dipakai, kecuali email Anda sudah disetujui. Admin diberi tahu setelah email Anda terverifikasi.",
       "backToSignIn": "Kembali ke halaman masuk"
     },
     "forgot": {
       "title": "Lupa kata sandi",
-      "description": "Masukkan email akun kamu. Kami akan mengirim tautan untuk membuat kata sandi baru.",
+      "description": "Masukkan email akun Anda. Kami akan mengirim tautan untuk membuat kata sandi baru.",
       "submit": "Kirim tautan",
       "sent": "Jika ada akun dengan email itu, kami sudah mengirim tautan untuk membuat kata sandi baru. Tautan berlaku 1 jam. Periksa juga folder spam.",
       "backToSignIn": "Kembali ke halaman masuk"
     },
     "reset": {
       "title": "Buat kata sandi baru",
-      "description": "Setelah kata sandi baru disimpan, semua perangkat keluar dan kamu perlu masuk lagi.",
+      "description": "Setelah kata sandi baru disimpan, semua perangkat keluar dan Anda perlu masuk lagi.",
       "submit": "Simpan kata sandi",
       "expiredTitle": "Tautan tidak berlaku",
       "expired": "Tautan ini sudah kedaluwarsa atau pernah dipakai. Minta tautan baru untuk membuat kata sandi baru.",
@@ -769,24 +797,31 @@
     },
     "email": {
       "verifySubject": "Konfirmasi email akun MitraMatika",
-      "verifyBody": "Halo,\n\nBuka tautan berikut untuk mengonfirmasi alamat email akun MitraMatika kamu:\n\n{url}\n\nTautan ini berlaku {hours, number, ::group-off} jam. Seseorang memakai alamat email ini untuk membuat akun MitraMatika dengan kata sandi. Jika bukan kamu, jangan buka tautan ini dan abaikan email ini: membukanya akan mengaktifkan akun dengan kata sandi yang tidak kamu buat.",
+      "verifyBody": "Halo,\n\nBuka tautan berikut untuk mengonfirmasi alamat email akun MitraMatika Anda:\n\n{url}\n\nTautan ini berlaku {hours, number, ::group-off} jam. Seseorang memakai alamat email ini untuk membuat akun MitraMatika dengan kata sandi. Jika bukan Anda, jangan buka tautan ini dan abaikan email ini: membukanya akan mengaktifkan akun dengan kata sandi yang tidak Anda buat.",
       "resetSubject": "Atur ulang kata sandi MitraMatika",
-      "resetBody": "Halo,\n\nBuka tautan berikut untuk membuat kata sandi baru akun MitraMatika kamu:\n\n{url}\n\nTautan ini berlaku {minutes, number, ::group-off} menit dan hanya bisa dipakai sekali. Jika kamu tidak memintanya, abaikan email ini; kata sandimu tidak berubah.",
-      "accountExistsSubject": "Akun MitraMatika kamu sudah ada",
-      "accountExistsBody": "Halo,\n\nAda yang mencoba mendaftar di MitraMatika dengan alamat email ini, padahal akunnya sudah ada. Tidak ada akun baru yang dibuat.\n\nMasuk dengan Google atau kata sandi kamu di {signInUrl}\n\nJika lupa kata sandi, buat yang baru di {resetUrl}\n\nJika bukan kamu yang mencoba mendaftar, abaikan email ini. Akunmu tetap aman."
+      "resetBody": "Halo,\n\nBuka tautan berikut untuk membuat kata sandi baru akun MitraMatika Anda:\n\n{url}\n\nTautan ini berlaku {minutes, number, ::group-off} menit dan hanya bisa dipakai sekali. Jika Anda tidak memintanya, abaikan email ini; kata sandi Anda tidak berubah.",
+      "accountExistsSubject": "Akun MitraMatika Anda sudah ada",
+      "accountExistsBody": "Halo,\n\nAda yang mencoba mendaftar di MitraMatika dengan alamat email ini, padahal akunnya sudah ada. Tidak ada akun baru yang dibuat.\n\nMasuk dengan Google atau kata sandi Anda di {signInUrl}\n\nJika lupa kata sandi, buat yang baru di {resetUrl}\n\nJika bukan Anda yang mencoba mendaftar, abaikan email ini. Akun Anda tetap aman.",
+      "adminNoticeSubject": "Akun baru menunggu persetujuan di MitraMatika",
+      "adminNoticeBody": "Halo,\n\nAda akun baru dengan email yang sudah terverifikasi dan menunggu persetujuan:\n\nEmail: {email}\nNama: {name}\nSekolah: {school}\nDaftar: {time}\n\nUntuk menyetujui, tambahkan email ini ke ALLOWED_EMAILS di Vercel (Settings, Environment Variables, Production), lalu redeploy. Setelah itu akun bisa dipakai pada permintaan berikutnya.\n\nCatatan: nama dan sekolah di atas diketik sendiri oleh pendaftar. Jadikan alamat email sebagai satu-satunya dasar persetujuan.",
+      "adminDigestSubject": "Ringkasan akun baru yang menunggu persetujuan di MitraMatika",
+      "adminDigestBody": "Halo,\n\n{total, number} akun dengan email yang sudah terverifikasi menunggu persetujuan. Di bawah ini {count, number} yang terbaru (email | nama | sekolah | daftar); yang lain muncul di ringkasan berikutnya.\n\n{list}\n\nUntuk menyetujui, tambahkan email ke ALLOWED_EMAILS di Vercel (Settings, Environment Variables, Production), lalu redeploy.\n\nCatatan: nama dan sekolah diketik sendiri oleh pendaftar. Jadikan alamat email sebagai satu-satunya dasar persetujuan.",
+      "storageAlertWarnSubject": "Penyimpanan MitraMatika hampir penuh",
+      "storageAlertFullSubject": "Penyimpanan MitraMatika penuh",
+      "storageAlertBody": "Halo,\n\nPenyimpanan MitraMatika terpakai {percent, number}% dari batas: {used, number} MB dari {cap, number} MB.\n\nPenyimpanan berkas tidak punya batas biaya otomatis, jadi batas ini satu-satunya penjaga: saat penuh, unggahan baru ditolak. Untuk melapangkan ruang, lihat bagian \"Object storage\" di runbook."
     }
   },
   "settings": {
     "heading": "Pengaturan",
     "account": {
       "heading": "Akun",
-      "description": "Nama dan sekolah kamu tampil di aplikasi. Email akun tidak bisa diubah.",
+      "description": "Nama dan sekolah Anda tampil di aplikasi. Email akun tidak bisa diubah.",
       "emailLabel": "Email akun",
       "loadFailed": "Data akun tidak bisa dimuat. Muat ulang halaman ini untuk mencoba lagi.",
       "formErrors": {
         "generic": "Terjadi kesalahan. Coba lagi.",
         "rateLimited": "Terlalu banyak percobaan. Tunggu sebentar, lalu coba lagi.",
-        "unauthenticated": "Sesi kamu sudah berakhir. Masuk lagi untuk melanjutkan.",
+        "unauthenticated": "Sesi Anda sudah berakhir. Masuk lagi untuk melanjutkan.",
         "signInAgain": "Untuk menghapus akun, masuk lagi dulu. Keluar, masuk lagi dengan Google, lalu hapus akun dalam 10 menit."
       },
       "profile": {
@@ -804,15 +839,15 @@
       },
       "delete": {
         "heading": "Hapus akun",
-        "description": "Akun, profil, dan semua soal serta permintaan soal kamu dihapus untuk selamanya. Tindakan ini tidak bisa dibatalkan.",
+        "description": "Akun, profil, dan semua soal serta permintaan soal Anda dihapus untuk selamanya. Tindakan ini tidak bisa dibatalkan.",
         "open": "Hapus akun",
         "dialogTitle": "Hapus akun untuk selamanya?",
-        "dialogDescription": "Semua data akun ini dihapus dan tidak bisa dikembalikan. Ketik email akun kamu untuk melanjutkan.",
+        "dialogDescription": "Semua data akun ini dihapus dan tidak bisa dikembalikan. Ketik email akun Anda untuk melanjutkan.",
         "confirmLabel": "Ketik {email}",
         "confirm": "Hapus akun saya",
         "cancel": "Batal",
         "emailMismatch": "Email yang diketik tidak sama dengan email akun.",
-        "passwordHint": "Masukkan kata sandi kamu untuk memastikan ini memang kamu.",
+        "passwordHint": "Masukkan kata sandi Anda untuk memastikan ini memang Anda.",
         "freshSignIn": "Untuk keamanan, akun tanpa kata sandi hanya bisa dihapus dalam 10 menit setelah masuk.",
         "signOut": "Keluar sekarang"
       }
@@ -837,7 +872,7 @@
       "setDefaultFailed": "Templat default belum bisa diganti. Coba lagi.",
       "fields": {
         "name": "Nama templat",
-        "nameHint": "Hanya untuk kamu, misalnya \"Kop ujian semester\".",
+        "nameHint": "Hanya untuk Anda, misalnya \"Kop ujian semester\".",
         "schoolName": "Nama sekolah",
         "headerLines": "Baris kop",
         "headerLinesHint": "Tampil di atas nama sekolah, misalnya pemerintah daerah, dinas pendidikan, atau alamat. Paling banyak 4 baris; yang kosong dilewati.",
@@ -871,25 +906,31 @@
       },
       "formErrors": {
         "generic": "Terjadi kesalahan. Coba lagi.",
-        "unauthenticated": "Sesi kamu sudah berakhir. Masuk lagi untuk melanjutkan.",
+        "unauthenticated": "Sesi Anda sudah berakhir. Masuk lagi untuk melanjutkan.",
         "notFound": "Templat ini tidak ditemukan. Mungkin sudah dihapus.",
-        "conflict": "Templat ini baru saja diubah di tempat lain. Muat ulang halaman, lalu coba lagi."
+        "conflict": "Templat ini baru saja diubah di tempat lain. Muat ulang halaman, lalu coba lagi.",
+        "tooMany": "Anda sudah punya 20 templat. Hapus yang tidak dipakai (yang ada di tempat sampah tetap dihitung sampai dikosongkan) untuk membuat yang baru."
       },
       "logo": {
         "label": "Logo sekolah",
-        "hint": "PNG, JPG, atau SVG, paling besar 1 MB. Logo baru menggantikan yang lama.",
+        "hint": "PNG atau JPG, paling besar 1 MB. Logo baru menggantikan yang lama.",
+        "svgStored": "Logo yang tersimpan berformat SVG. Logo SVG tidak muncul di berkas PDF dan Word. Unggah logo PNG atau JPG untuk menggantinya.",
         "submit": "Unggah logo",
         "saved": "Logo sudah diunggah.",
         "saveFirst": "Simpan templat dulu, lalu unggah logonya.",
         "errors": {
           "empty": "Pilih berkas logo dulu.",
           "tooLarge": "Ukuran logo paling besar 1 MB.",
-          "unsupportedType": "Logo harus berupa PNG, JPG, atau SVG.",
+          "unsupportedType": "Logo harus berupa PNG atau JPG.",
+          "svgNotAccepted": "Logo SVG tidak diterima. Gunakan PNG atau JPG.",
           "invalidImage": "Berkas logo rusak atau tidak bisa dibaca.",
           "dimensionsTooLarge": "Gambar terlalu besar. Paling besar 6000 piksel per sisi.",
           "notFound": "Templat ini tidak ditemukan. Mungkin sudah dihapus.",
-          "unauthenticated": "Sesi kamu sudah berakhir. Masuk lagi untuk melanjutkan.",
-          "generic": "Logo belum bisa diunggah. Coba lagi."
+          "unauthenticated": "Sesi Anda sudah berakhir. Masuk lagi untuk melanjutkan.",
+          "generic": "Logo belum bisa diunggah. Coba lagi.",
+          "appFull": "Penyimpanan MitraMatika sedang penuh, jadi unggahan baru ditutup sementara. Admin sudah diberi tahu. Coba lagi nanti.",
+          "storageBusy": "Sedang banyak unggahan masuk. Coba lagi sebentar lagi.",
+          "quota": "Penyimpanan Anda sudah penuh (300 MB, semua berkas dihitung: materi, ekspor, logo, dan foto soal). Hapus berkas yang tidak dipakai, lalu coba lagi."
         }
       },
       "preview": {
@@ -908,19 +949,29 @@
   },
   "privacy": {
     "title": "Pemberitahuan privasi",
-    "intro": "Halaman ini menjelaskan data apa yang disimpan MitraMatika, ke mana data itu dikirim, dan cara menghapus akun kamu.",
+    "intro": "Halaman ini menjelaskan data apa yang disimpan MitraMatika, ke mana data itu dikirim, berapa lama data itu disimpan, dan cara menghapus akun Anda.",
     "storedTitle": "Data yang kami simpan",
-    "storedAccount": "Akun: nama, alamat email, nama sekolah jika kamu mengisinya, dan kata sandi dalam bentuk hash (kata sandi aslinya tidak pernah disimpan). Jika kamu masuk dengan Google, kami menerima nama dan alamat email dari Google.",
-    "storedContent": "Pekerjaan kamu: permintaan soal, soal yang dibuat, keputusan tinjauanmu, dan Bank Soal.",
+    "storedAccount": "Akun: nama, alamat email, nama sekolah jika Anda mengisinya, dan kata sandi dalam bentuk hash (kata sandi aslinya tidak pernah disimpan). Jika Anda masuk dengan Google, kami menerima nama dan alamat email dari Google. Akun yang belum disetujui pemilik tetap disimpan (nama, alamat email, dan nama sekolah jika diisi) sampai Anda menghapusnya; Anda bisa menghapus akun Anda kapan saja dari halaman menunggu persetujuan atau dari Pengaturan.",
+    "storedContent": "Pekerjaan Anda: permintaan soal, soal yang dibuat, keputusan tinjauan Anda, Bank Soal, asesmen, templat kop, materi pembelajaran (teks yang dibaca dari berkas Anda dan hasil pembacaan halamannya), serta soal yang Anda minta diselesaikan beserta penyelesaiannya.",
+    "storedWhere": "Tempat data berada: aplikasi berjalan di Vercel (wilayah Singapura) dan basis data akun serta pekerjaan Anda ada di Neon (Postgres di AWS Singapura). Vercel dan Neon menerima data itu sebagai penyedia hosting dan basis data; berkas disimpan terpisah di Cloudflare R2 (lihat bagian berikutnya).",
     "storedTechnical": "Data teknis: sesi masuk beserta alamat IP dan browser yang memulainya, pilihan bahasa, penghitung per alamat IP dan per alamat email (dalam bentuk hash) yang membatasi seberapa sering permintaan masuk, daftar, dan email bisa dibuat (kedaluwarsa dalam sehari), dan catatan aktivitas yang hanya memuat ID akun, bukan email atau nama.",
+    "filesTitle": "Berkas dan tempat penyimpanannya",
+    "filesService": "Berkas Anda disimpan di Cloudflare R2, layanan penyimpanan dari Cloudflare, sehingga Cloudflare menerima berkas Anda sebagai penyedia penyimpanan. Alamat penyimpanan hanya memuat nomor ID, bukan nama berkas atau nama Anda, dan berkas hanya diberikan kepada pemiliknya, lewat aplikasi atau tautan unduhan sementara (paling lama 5 menit).",
+    "filesMaterials": "Materi pembelajaran: berkas yang Anda unggah (PDF, DOCX, atau foto) disimpan di Cloudflare R2. Teks dan gambar halaman dibaca dari berkas itu; untuk halaman yang Anda minta dibaca dengan AI, browser Anda membuat gambar halaman dan gambar itu juga disimpan di R2. Berkas dan gambar halaman disimpan sampai materinya dihapus.",
+    "filesSolver": "Soal yang diselesaikan: teks soal dan penyelesaiannya disimpan di akun Anda. Foto soal yang Anda unggah disimpan di R2 selama 7 hari, lalu dihapus otomatis; data tersembunyi dalam foto (misalnya lokasi) dibuang sebelum foto disimpan.",
+    "filesExports": "Ekspor dan logo: dokumen ekspor (PDF, Word, dan ZIP) disimpan di R2 dan kedaluwarsa setelah 7 hari. Logo sekolah pada templat (hanya PNG atau JPEG) disimpan di R2 sampai templatnya dihapus permanen. Logo SVG yang diunggah sebelum aturan ini, jika ada, tetap tersimpan tetapi tidak dipakai di dokumen.",
+    "filesTrash": "Sampah: soal, asesmen, templat, materi, folder, dan soal yang Anda selesaikan (beserta penyelesaian dan fotonya) yang Anda pindahkan ke Sampah disimpan 30 hari, lalu dihapus untuk selamanya beserta berkasnya. Selama berada di Sampah, berkas tetap dihitung dalam batas penyimpanan Anda.",
     "aiTitle": "Layanan AI dan data yang dikirim",
-    "aiGroq": "Groq membuat dan memeriksa soal. Groq menerima data kurikulum (kelas, topik, tujuan pembelajaran, tingkat kesulitan) dan isi soal yang sedang dibuat. Nama, email, dan nama sekolah kamu tidak pernah dikirim.",
+    "aiGroq": "Groq membuat dan memeriksa soal. Groq menerima data kurikulum (kelas, topik, tujuan pembelajaran, tingkat kesulitan) dan isi soal yang sedang dibuat. Nama, email, dan nama sekolah Anda tidak pernah dikirim.",
+    "aiGroqMaterials": "Materi pembelajaran: saat Anda memakai materi untuk membuat soal, menyusun struktur, atau membaca halaman dengan AI, teks dan gambar halaman dari materi itu dikirim ke Groq. Ini kelas data C2 (bahan milik guru): hanya Groq yang boleh menerimanya dan tidak ada penyedia lain sebagai cadangan. Kami meminta Groq untuk tidak menyimpan data ini (zero data retention).",
+    "aiSolver": "Selesaikan soal: teks soal dan foto soal yang Anda kirim dikirim ke Groq, juga sebagai kelas data C2, untuk dibaca, diselesaikan, dan diperiksa silang.",
+    "aiLimits": "Batas harian per akun, dihitung menurut hari di Jakarta: 30 soal dibuat, 30 soal diselesaikan, 20 halaman materi dibaca dengan AI, dan 10 usulan struktur materi. Batas ini menghitung permintaan, bukan ukuran data.",
     "aiGemini": "Gemini dari Google hanya dipakai sebagai cadangan, dan hanya menerima data kurikulum yang memang publik.",
-    "emailService": "Resend mengirim email konfirmasi dan email untuk membuat kata sandi baru, jadi Resend menerima alamat email kamu.",
+    "emailService": "Resend mengirim email konfirmasi dan email untuk membuat kata sandi baru, jadi Resend menerima alamat email Anda. Resend juga mengirim email kepada pemilik MitraMatika setiap kali ada akun baru yang emailnya sudah terverifikasi dan menunggu persetujuan; email itu memuat nama Anda, alamat email Anda, dan nama sekolah Anda jika Anda mengisinya.",
     "studentsTitle": "Tanpa data siswa",
     "students": "MitraMatika tidak mengumpulkan data siswa. Jangan menulis nama atau data pribadi siswa di dalam aplikasi; data seperti itu tidak boleh dikirim ke layanan AI mana pun.",
     "deleteTitle": "Menghapus akun",
-    "delete": "Kamu bisa menghapus akun kapan saja di Pengaturan, bagian Akun. Akun, sesi, soal, dan semua pekerjaanmu ikut terhapus. Yang tersisa: catatan bahwa sebuah akun telah dihapus, tanpa nama atau email, hanya berisi bentuk acak satu arah dari ID akun; catatan aktivitas dan galat sebelumnya, dengan ID akunmu dihapus; dan cadangan basis data mingguan, yang menyimpan salinan datamu paling lama 8 minggu sampai cadangan itu dihapus. Resend menyimpan catatannya sendiri tentang email yang dikirim kepadamu.",
+    "delete": "Anda bisa menghapus akun kapan saja di Pengaturan, bagian Akun. Akun, sesi, soal, dan semua pekerjaan Anda ikut terhapus, termasuk berkas Anda di Cloudflare R2; jika sebagian berkas gagal terhapus, sisanya tidak lagi bisa dibuka lewat aplikasi. Yang tersisa: catatan bahwa sebuah akun telah dihapus, tanpa nama atau email, hanya berisi bentuk acak satu arah dari ID akun; catatan aktivitas dan galat sebelumnya, dengan ID akun Anda dihapus; dan cadangan basis data mingguan, yang menyimpan salinan data Anda paling lama 8 minggu sampai cadangan itu dihapus. Resend menyimpan catatannya sendiri tentang email yang dikirim kepada Anda.",
     "back": "Kembali ke halaman masuk"
   },
   "assessments": {
@@ -1187,7 +1238,9 @@
         "renderFailed": "Salah satu dokumen tidak dapat dibuat. Coba ekspor lagi.",
         "hourlyLimit": "Batas {limit} ekspor per jam sudah tercapai. Coba lagi setelah pukul {time}.",
         "signedOut": "Sesi Anda berakhir. Masuk lagi untuk mengekspor.",
-        "generic": "Ekspor gagal. Coba lagi sebentar lagi."
+        "generic": "Ekspor gagal. Coba lagi sebentar lagi.",
+        "appFull": "Penyimpanan MitraMatika sedang penuh, jadi ekspor baru ditutup sementara. Admin sudah diberi tahu. Coba lagi nanti.",
+        "quota": "Penyimpanan Anda sudah penuh (300 MB, semua berkas dihitung: materi, ekspor, logo, dan foto soal). Hapus berkas yang tidak dipakai, lalu coba lagi."
       }
     }
   },
@@ -1198,7 +1251,7 @@
       "dropLabel": "Seret berkas ke sini atau pilih berkas",
       "chooseFile": "Pilih berkas",
       "takePhoto": "Ambil foto",
-      "hint": "PDF, DOCX, JPG atau PNG, paling besar 50 MB dan 300 halaman.",
+      "hint": "PDF, DOCX, JPG atau PNG, paling besar 25 MB dan 300 halaman.",
       "storage": "{used} dari {cap} terpakai",
       "uploading": "Mengunggah {name}: {percent}%",
       "checking": "Memeriksa {name}…",
@@ -1212,8 +1265,8 @@
       "errors": {
         "type": "Jenis berkas tidak didukung. Gunakan PDF, DOCX, JPG atau PNG.",
         "doc": "Berkas .doc tidak didukung. Buka di Word lalu simpan sebagai .docx.",
-        "size": "Berkas lebih besar dari 50 MB atau ukurannya berubah saat diunggah.",
-        "quota": "Penyimpanan Anda (1 GB) penuh. Hapus materi lama dari tempat sampah dulu.",
+        "size": "Berkas lebih besar dari 25 MB atau ukurannya berubah saat diunggah.",
+        "quota": "Penyimpanan Anda (300 MB) penuh. Hapus materi lama dari tempat sampah dulu.",
         "pending": "Terlalu banyak unggahan berjalan. Tunggu sampai selesai, lalu coba lagi.",
         "encrypted": "PDF ini terkunci kata sandi. Simpan ulang tanpa kata sandi, lalu unggah lagi.",
         "pages": "PDF lebih dari 300 halaman. Pisahkan menjadi beberapa berkas.",
@@ -1228,7 +1281,9 @@
         "network": "Koneksi terputus saat mengunggah. Periksa internet, lalu coba lagi.",
         "unauthenticated": "Sesi Anda berakhir. Masuk lagi untuk mengunggah.",
         "generic": "Unggahan gagal. Coba lagi sebentar lagi.",
-        "busy": "Server sedang membaca berkas lain. Coba lagi sebentar lagi."
+        "busy": "Server sedang membaca berkas lain. Coba lagi sebentar lagi.",
+        "appFull": "Penyimpanan MitraMatika sedang penuh, jadi unggahan baru ditutup sementara. Admin sudah diberi tahu. Coba lagi nanti.",
+        "storageBusy": "Sedang banyak unggahan masuk. Coba lagi sebentar lagi."
       }
     },
     "library": {
@@ -1280,6 +1335,7 @@
     },
     "storage": {
       "label": "Penyimpanan",
+      "counted": "Semua berkas dihitung: materi (juga yang di Sampah), gambar halaman, ekspor, logo, dan foto soal.",
       "nearlyFull": "Penyimpanan hampir penuh. Hapus untuk selamanya materi yang tidak dipakai dari Sampah."
     },
     "folders": {
@@ -1321,7 +1377,9 @@
       "back": "Kembali ke daftar materi",
       "facts": "Tentang berkas",
       "kindLabel": "Jenis",
-      "sizeLabel": "Ukuran",
+      "sizeLabel": "Ukuran berkas",
+      "imagesLabel": "Gambar halaman",
+      "sizeNote": "Berkas dan gambar halaman dihitung dalam penyimpanan Anda.",
       "pagesLabel": "Halaman",
       "addedLabel": "Diunggah",
       "statusLabel": "Status",
@@ -1331,6 +1389,7 @@
         "heading": "Kualitas teks",
         "summary": "{high} halaman jelas, {medium} perlu diperiksa, {low} sulit dibaca",
         "flagged": "Halaman yang perlu diperiksa: {pages}",
+        "reasons": "Alasan: {reasons}",
         "none": "Belum ada halaman yang terbaca.",
         "reading": "Teks sedang dibaca. Muat ulang halaman ini sebentar lagi.",
         "failed": "Teks berkas ini tidak dapat dibaca. Pindahkan ke Sampah, lalu unggah lagi."
@@ -1418,8 +1477,9 @@
         "failed": "OCR gagal, bisa dicoba lagi"
       },
       "flags": {
-        "uncertain_math": "Ada bagian yang tidak pasti",
-        "low_text": "Teksnya sedikit",
+        "uncertain_math": "Ada bagian bertanda [[?]] atau rumus yang tidak terbaca",
+        "formula_text": "Banyak simbol rumus; urutannya di teks bisa keliru, cocokkan dengan gambar halaman",
+        "low_text": "Halaman ini hanya berisi sedikit teks",
         "garbled": "Teksnya tampak acak",
         "truncated": "Teks terpotong, periksa akhir halaman"
       },
@@ -1465,6 +1525,7 @@
           "notFound": "Materi ini tidak ditemukan. Muat ulang halaman.",
           "pages": "Sebagian halaman tidak bisa di-OCR lagi. Muat ulang halaman, lalu pilih lagi.",
           "limit": "Sisa batas OCR hari ini tidak cukup untuk halaman yang dipilih.",
+          "appFull": "Penyimpanan MitraMatika sedang penuh, jadi unggahan baru ditutup sementara. Admin sudah diberi tahu. Coba lagi nanti.",
           "render": "Gambar halaman tidak dapat disiapkan. Coba lagi.",
           "upload": "Gambar halaman gagal diunggah. Coba lagi.",
           "invalid": "Pilihan halaman tidak valid. Muat ulang halaman.",
@@ -1531,7 +1592,10 @@
       "busy": "Soal ini masih sedang diselesaikan.",
       "unauthenticated": "Sesi Anda berakhir. Masuk lagi.",
       "generic": "Terjadi kesalahan. Coba lagi.",
-      "visionLimit": "Jatah {limit} pembacaan gambar hari ini sudah habis (OCR dan foto soal bersama). Coba lagi besok."
+      "visionLimit": "Jatah {limit} pembacaan gambar hari ini sudah habis (OCR dan foto soal bersama). Coba lagi besok.",
+      "appFull": "Penyimpanan MitraMatika sedang penuh, jadi unggahan baru ditutup sementara. Admin sudah diberi tahu. Coba lagi nanti.",
+      "storageBusy": "Sedang banyak unggahan masuk. Coba lagi sebentar lagi.",
+      "quota": "Penyimpanan Anda sudah penuh (300 MB, semua berkas dihitung: materi, ekspor, logo, dan foto soal). Hapus berkas yang tidak dipakai, lalu coba lagi."
     },
     "confirm": {
       "heading": "Periksa hasil bacaan foto",

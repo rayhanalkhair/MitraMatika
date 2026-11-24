@@ -7,18 +7,24 @@ import { schoolTemplates } from "@/lib/db/schema";
 import { logger } from "@/lib/logger";
 import { jpegSize, pngSize } from "@/lib/images/dimensions";
 import { err, ok, type Result } from "@/lib/result";
+import {
+  assertAppStorageRoom,
+  assertOwnerStorageRoom,
+  lockAppStorage,
+  withAppStorageBusy,
+} from "@/lib/storage/app-total";
 import type { ObjectStore } from "@/lib/storage/types";
 import { assertSafeKey } from "@/lib/storage/types";
 import { MAX_LOGO_BYTES, MAX_LOGO_SIDE, type LogoErrorKey } from "../schema/template";
-import { sanitizeSvg } from "./svg-sanitize";
 import { isUuid, type TemplateDb } from "./templates";
 
 export { sanitizeSvg } from "./svg-sanitize";
 
-// The school logo of a template: PNG, JPEG or SVG up to 1 MB (decision 7), kept in the object
-// store under templates/<owner>/<template>/logo.<ext>. What the file IS comes from its bytes
-// (magic numbers, file-type; an SVG by parsing it), never from its name or the type the browser
-// declared. An SVG is stored only as the sanitised rebuild.
+// The school logo of a template: PNG or JPEG up to 1 MB (decision 7; the owner ruled on 22 Nov
+// that SVG is not accepted), kept in the object store under templates/<owner>/<template>/logo.<ext>.
+// What the file IS comes from its bytes (magic numbers, file-type), never from its name or the
+// type the browser declared. An SVG logo stored before that ruling stays and is still served (so
+// LogoExt keeps "svg" and CONTENT_TYPES maps it); the PDF and Word files leave it out with a warning.
 
 export { MAX_LOGO_BYTES, MAX_LOGO_SIDE };
 
@@ -30,14 +36,17 @@ const CONTENT_TYPES: Record<LogoExt, string> = {
 };
 
 export interface ValidLogo {
-  ext: LogoExt;
+  ext: "png" | "jpg";
   contentType: string;
   bytes: Uint8Array;
   /** The browser declared another type than the bytes show (informational only). */
   declaredMismatch: boolean;
 }
 
-type ValidationError = Exclude<LogoErrorKey, "notFound" | "unauthenticated" | "generic">;
+type ValidationError = Exclude<
+  LogoErrorKey,
+  "notFound" | "unauthenticated" | "generic" | "appFull" | "storageBusy" | "quota"
+>;
 
 function decodeUtf8(bytes: Uint8Array): string | null {
   try {
@@ -49,9 +58,9 @@ function decodeUtf8(bytes: Uint8Array): string | null {
 
 /**
  * Decides what the uploaded bytes are. PNG and JPEG by their magic numbers (and a header size of
- * at most MAX_LOGO_SIDE per side); text that is not a known binary type must parse as an SVG and
- * is replaced by its sanitised rebuild. Everything else (an executable renamed .png, GIF, WebP,
- * HTML) is refused. The declared type never decides.
+ * at most MAX_LOGO_SIDE per side). An SVG is recognised by its text and refused with its own
+ * message (`svgNotAccepted`); everything else (an executable renamed .png, GIF, WebP, HTML) is
+ * refused as an unsupported type. The declared type never decides.
  */
 export async function validateLogo(
   bytes: Uint8Array,
@@ -61,7 +70,7 @@ export async function validateLogo(
   if (bytes.length > MAX_LOGO_BYTES) return err("tooLarge");
 
   const detected = await fileTypeFromBuffer(bytes);
-  const accept = (ext: LogoExt, body: Uint8Array) =>
+  const accept = (ext: ValidLogo["ext"], body: Uint8Array) =>
     ok({
       ext,
       contentType: CONTENT_TYPES[ext],
@@ -81,10 +90,7 @@ export async function validateLogo(
   // file-type does not detect SVG (text); it reports "xml" when there is an XML declaration.
   if (detected === undefined || detected.ext === "xml") {
     const text = decodeUtf8(bytes);
-    if (!text?.includes("<")) return err("unsupportedType");
-    const svg = sanitizeSvg(text);
-    if (!svg.ok) return err("invalidImage");
-    return accept("svg", new TextEncoder().encode(svg.data));
+    if (text !== null && /<svg[\s>]/i.test(text)) return err("svgNotAccepted");
   }
   return err("unsupportedType");
 }
@@ -146,11 +152,13 @@ function contentTypeOfKey(key: string): string {
  * service connection with explicit owner and template filters (only this path may write
  * logo_key): another teacher's template, or a trashed one, is notFound and nothing is stored. A replaced logo with another extension is deleted after the commit.
  */
-export async function uploadLogo(
+async function uploadLogoUnguarded(
   store: ObjectStore,
   db: TemplateDb,
   input: { ownerId: string; templateId: string; bytes: Uint8Array; declaredType: string },
-): Promise<Result<{ logoKey: string }, ValidationError | "notFound">> {
+): Promise<
+  Result<{ logoKey: string }, ValidationError | "notFound" | "appFull" | "quota">
+> {
   const { ownerId, templateId } = input;
   if (!isUuid(templateId)) return err("notFound");
   const valid = await validateLogo(input.bytes, input.declaredType);
@@ -158,9 +166,29 @@ export async function uploadLogo(
 
   const key = logoKey(ownerId, templateId, valid.data.ext);
   // Set inside the transaction callback.
-  const progress: { stored: boolean; previousKey: string | null } = {
-    stored: false,
-    previousKey: null,
+  const progress: {
+    stored: boolean;
+    previousKey: string | null;
+    /** The bytes a same-key upload overwrote, to put back when the write is undone. */
+    previousBody: Uint8Array | null;
+    full: boolean;
+    quota: boolean;
+  } = { stored: false, previousKey: null, previousBody: null, full: false, quota: false };
+  // Undoes the put of an upload that did not commit: the new object goes, or, when it overwrote
+  // the previous logo (same extension, same key), the previous bytes come back.
+  const undoPut = async () => {
+    if (!progress.stored) return;
+    progress.stored = false;
+    if (key !== progress.previousKey) return deleteQuietly(store, key);
+    if (progress.previousBody === null) return deleteQuietly(store, key);
+    try {
+      await store.put(key, progress.previousBody, valid.data.contentType);
+    } catch (error) {
+      logger.warn(
+        { module: "templates", err: error instanceof Error ? error.name : typeof error },
+        "templates: could not restore the previous logo object",
+      );
+    }
   };
   try {
     // The service connection (Ruling R9 pattern): the authenticated role may not write logo_key, so
@@ -168,7 +196,10 @@ export async function uploadLogo(
     const saved = await db.transaction(async (tx) => {
       const row = (
         await tx
-          .select({ logoKey: schoolTemplates.logoKey })
+          .select({
+            logoKey: schoolTemplates.logoKey,
+            logoBytes: schoolTemplates.logoBytes,
+          })
           .from(schoolTemplates)
           .where(
             and(
@@ -182,14 +213,46 @@ export async function uploadLogo(
       if (!row) return false;
       // Only an object of this template may be replaced (and later deleted).
       progress.previousKey = ownLogoKeyOrNull(ownerId, templateId, row.logoKey);
+      // The app-wide cap (ADR-0022). A replacement needs only the growth over the logo it
+      // replaces. First without the app lock, so a full app stores nothing at all...
+      const growth = Math.max(0, valid.data.bytes.length - (row.logoBytes ?? 0));
+      // The teacher's own 300 MB first (every kind of file counts, F1), then the app's.
+      const own = await assertOwnerStorageRoom(tx, {
+        ownerId,
+        extraBytes: growth,
+        now: new Date(),
+      });
+      if (!own.ok) {
+        progress.quota = true;
+        return false;
+      }
+      const early = await assertAppStorageRoom(tx, growth, "logo");
+      if (!early.ok) {
+        progress.full = true;
+        return false;
+      }
+      if (key === progress.previousKey) progress.previousBody = await store.get(key);
+      // ...then the put, outside the app-wide lock (a slow object store must not stall every
+      // other upload), and only then the lock for the authoritative check and the row write: the
+      // template row lock is held, so the app lock comes second (one fixed order).
       await store.put(key, valid.data.bytes, valid.data.contentType);
       progress.stored = true;
+      await lockAppStorage(tx);
+      const room = await assertAppStorageRoom(tx, growth, "logo");
+      if (!room.ok) {
+        // Lost a race for the last room between the two checks.
+        progress.full = true;
+        await undoPut();
+        return false;
+      }
       await tx
         .update(schoolTemplates)
         .set({
           logoKey: key,
           // What an approval's hash covers (Ruling R26): a same-format replacement keeps the key.
           logoSha256: logoSha256(valid.data.bytes),
+          // What the app-wide storage total sums (ADR-0022).
+          logoBytes: valid.data.bytes.length,
           rowVersion: sql`${schoolTemplates.rowVersion} + 1`,
           updatedAt: new Date(),
         })
@@ -198,10 +261,12 @@ export async function uploadLogo(
         );
       return true;
     });
-    if (!saved) return err("notFound");
+    if (!saved) {
+      return err(progress.quota ? "quota" : progress.full ? "appFull" : "notFound");
+    }
   } catch (error) {
-    // The row still points at the previous logo: remove the new object unless it replaced it.
-    if (progress.stored && key !== progress.previousKey) await deleteQuietly(store, key);
+    // The row still points at the previous logo (a busy app lock included): undo the put.
+    await undoPut();
     throw error;
   }
 
@@ -215,6 +280,24 @@ export async function uploadLogo(
     );
   }
   return ok({ logoKey: key });
+}
+
+/**
+ * uploadLogo, answering `storageBusy` when the app-wide storage lock was not free in time. The
+ * guard sits OUTSIDE uploadLogoUnguarded on purpose: its catch removes the object it put (or puts
+ * the previous bytes back) and rethrows, so the busy error must pass through that cleanup first.
+ */
+export async function uploadLogo(
+  store: ObjectStore,
+  db: TemplateDb,
+  input: { ownerId: string; templateId: string; bytes: Uint8Array; declaredType: string },
+): Promise<
+  Result<
+    { logoKey: string },
+    ValidationError | "notFound" | "appFull" | "quota" | "storageBusy"
+  >
+> {
+  return withAppStorageBusy(() => uploadLogoUnguarded(store, db, input));
 }
 
 async function deleteQuietly(store: ObjectStore, key: string): Promise<void> {

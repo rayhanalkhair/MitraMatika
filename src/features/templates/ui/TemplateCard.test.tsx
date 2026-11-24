@@ -169,10 +169,14 @@ describe("TemplateCard", () => {
 
   it("keeps the status region mounted before any notice, so the first one is announced", () => {
     renderWithIntl(<TemplateCard templates={[TEMPLATE]} />);
-    const status = screen.getByRole("status");
-    expect(status.textContent).toBe("");
-    // Not display:none while empty: some screen readers ignore a region that appears later.
-    expect(status.className).not.toMatch(/hidden/);
+    // The card's notice and the logo form's own status line.
+    const statuses = screen.getAllByRole("status");
+    expect(statuses).toHaveLength(2);
+    for (const status of statuses) {
+      expect(status.textContent).toBe("");
+      // Not display:none while empty: some screen readers ignore a region that appears later.
+      expect(status.className).not.toMatch(/hidden/);
+    }
   });
 
   it("says the session ended when making a default fails for that reason", async () => {
@@ -182,7 +186,7 @@ describe("TemplateCard", () => {
       screen.getByRole("button", { name: "Jadikan default: Kop ujian" }),
     );
     expect((await screen.findByRole("alert")).textContent).toBe(
-      "Sesi kamu sudah berakhir. Masuk lagi untuk melanjutkan.",
+      "Sesi Anda sudah berakhir. Masuk lagi untuk melanjutkan.",
     );
   });
 
@@ -237,7 +241,10 @@ describe("TemplateCard", () => {
   it("uploads a logo for a saved template and refuses a file above 1 MB in the browser", async () => {
     renderWithIntl(<TemplateCard templates={[TEMPLATE]} />);
     const input = screen.getByLabelText<HTMLInputElement>("Logo sekolah");
-    expect(input.getAttribute("accept")).toBe("image/png,image/jpeg,image/svg+xml");
+    expect(input.getAttribute("accept")).toBe("image/png,image/jpeg");
+    expect(
+      screen.getByText("PNG atau JPG, paling besar 1 MB.", { exact: false }),
+    ).toBeTruthy();
     const big = new File([new Uint8Array(1024 * 1024 + 1)], "big.png", {
       type: "image/png",
     });
@@ -253,5 +260,57 @@ describe("TemplateCard", () => {
       expect(actions.upload).toHaveBeenCalled();
     });
     expect(actions.upload.mock.calls[0][1].get("templateId")).toBe(TEMPLATE.id);
+  });
+
+  it("says in a status line next to the button when the logo was uploaded", async () => {
+    actions.upload.mockResolvedValue({ savedAt: 1 });
+    renderWithIntl(<TemplateCard templates={[TEMPLATE]} />);
+    const input = screen.getByLabelText<HTMLInputElement>("Logo sekolah");
+    const form = input.closest("form");
+    if (!form) throw new Error("the logo form is missing");
+    expect(within(form).getByRole("status").textContent).toBe("");
+    await userEvent.upload(
+      input,
+      new File([new Uint8Array(10)], "logo.png", { type: "image/png" }),
+    );
+    await userEvent.click(screen.getByRole("button", { name: "Unggah logo" }));
+    await waitFor(() => {
+      expect(within(form).getByRole("status").textContent).toBe("Logo sudah diunggah.");
+    });
+    // Picking another file clears the old confirmation.
+    await userEvent.upload(
+      input,
+      new File([new Uint8Array(10)], "other.png", { type: "image/png" }),
+    );
+    expect(within(form).getByRole("status").textContent).toBe("");
+  });
+
+  it("refuses an SVG in the browser with a clear message and sends nothing", async () => {
+    // Some browsers offer "all files" in the picker even with accept set.
+    const user = userEvent.setup({ applyAccept: false });
+    renderWithIntl(<TemplateCard templates={[TEMPLATE]} />);
+    const input = screen.getByLabelText<HTMLInputElement>("Logo sekolah");
+    await user.upload(input, new File(["<svg/>"], "logo.svg", { type: "image/svg+xml" }));
+    await user.click(screen.getByRole("button", { name: "Unggah logo" }));
+    expect(
+      (await screen.findByText("Logo SVG tidak diterima. Gunakan PNG atau JPG.")).id,
+    ).toBeTruthy();
+    expect(actions.upload).not.toHaveBeenCalled();
+    // A file named .svg is refused even when the browser reports no type.
+    await user.upload(input, new File(["<svg/>"], "kop.SVG", { type: "" }));
+    await user.click(screen.getByRole("button", { name: "Unggah logo" }));
+    expect(actions.upload).not.toHaveBeenCalled();
+  });
+
+  it("explains that a stored SVG logo stays but is left out of PDF and Word", () => {
+    renderWithIntl(<TemplateCard templates={[{ ...TEMPLATE, logoIsSvg: true }]} />);
+    expect(
+      screen.getByText(
+        /Logo yang tersimpan berformat SVG.*tidak muncul di berkas PDF dan Word/,
+      ),
+    ).toBeTruthy();
+    cleanup();
+    renderWithIntl(<TemplateCard templates={[TEMPLATE]} />);
+    expect(screen.queryByText(/berformat SVG/)).toBeNull();
   });
 });

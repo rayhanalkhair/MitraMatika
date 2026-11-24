@@ -44,24 +44,57 @@ export async function withViewport(
   }
 }
 
+type AxeViolation = Awaited<ReturnType<AxeBuilder["analyze"]>>["violations"][number];
+
+function reportViolations(violations: AxeViolation[], label?: string) {
+  if (violations.length === 0) return;
+  console.log(
+    `axe violations${label ? ` on ${label}` : ""}:`,
+    JSON.stringify(
+      violations.map((v) => ({
+        id: v.id,
+        impact: v.impact,
+        help: v.help,
+        targets: v.nodes.map((n) => n.target),
+      })),
+      null,
+      2,
+    ),
+  );
+}
+
+// axe cannot look inside an iframe whose sandbox forbids scripts (the document preview): it
+// injects its script into every frame and the analysis then never ends. So that frame is left out
+// of the page scan and its document, the srcdoc, is scanned on a page of its own instead.
+const SANDBOXED_FRAME = "iframe[sandbox]";
+
 export async function expectNoAxeViolations(page: Page, label?: string) {
-  const results = await new AxeBuilder({ page }).withTags(WCAG_TAGS).analyze();
-  if (results.violations.length > 0) {
-    console.log(
-      `axe violations${label ? ` on ${label}` : ""}:`,
-      JSON.stringify(
-        results.violations.map((v) => ({
-          id: v.id,
-          impact: v.impact,
-          help: v.help,
-          targets: v.nodes.map((n) => n.target),
-        })),
-        null,
-        2,
-      ),
-    );
-  }
+  const results = await new AxeBuilder({ page })
+    .exclude(SANDBOXED_FRAME)
+    .withTags(WCAG_TAGS)
+    .analyze();
+  reportViolations(results.violations, label);
   expect(results.violations, label).toEqual([]);
+
+  const documents = await page
+    .locator(SANDBOXED_FRAME)
+    .evaluateAll((frames) =>
+      frames.map((frame) => frame.getAttribute("srcdoc") ?? "").filter(Boolean),
+    );
+  for (const html of documents) {
+    const standalone = await page.context().newPage();
+    try {
+      await standalone.setContent(html);
+      const inner = await new AxeBuilder({ page: standalone })
+        .withTags(WCAG_TAGS)
+        .analyze();
+      const innerLabel = `${label ?? "page"} (sandboxed document)`;
+      reportViolations(inner.violations, innerLabel);
+      expect(inner.violations, innerLabel).toEqual([]);
+    } finally {
+      await standalone.close();
+    }
+  }
 }
 
 export async function expectNoHorizontalScroll(page: Page, label?: string) {

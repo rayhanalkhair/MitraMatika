@@ -84,6 +84,20 @@ describe("globals.css theme tokens", () => {
       expect(css).toContain("--color-primary-hover: var(--primary-hover);");
     });
 
+    it.each(["--background", "--card", "--accent", "--muted", "--sidebar-accent"])(
+      "the focus ring meets 3:1 on %s (WCAG 1.4.11)",
+      (surface) => {
+        expect(ratio(token("--ring"), token(surface))).toBeGreaterThanOrEqual(3);
+      },
+    );
+
+    it("draws the global default outline at full strength, with no alpha", () => {
+      const base = css.slice(css.indexOf("@layer base"));
+      expect(base).toMatch(/outline-ring(?![/\w-])/);
+      expect(base).not.toMatch(/outline-ring\//);
+      expect(base).toMatch(/:focus-visible\s*\{[^}]*outline:\s*2px solid var\(--ring\)/);
+    });
+
     it("primary-foreground meets 4.5:1 on primary", () => {
       expect(
         ratio(token("--primary-foreground"), token("--primary")),

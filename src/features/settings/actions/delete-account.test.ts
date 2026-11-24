@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const mocks = vi.hoisted(() => ({
-  authorizeAction: vi.fn(),
+  authorizeSignedIn: vi.fn(),
   deleteAccount: vi.fn(),
   signOutUser: vi.fn(),
   getAuthPort: vi.fn(),
@@ -14,7 +14,7 @@ const mocks = vi.hoisted(() => ({
 vi.mock("@/features/auth", async () => ({
   ...(await vi.importActual<object>("@/features/auth/schema/auth-forms")),
   ...(await vi.importActual<object>("@/features/auth/schema/account-forms")),
-  authorizeAction: mocks.authorizeAction,
+  authorizeSignedIn: mocks.authorizeSignedIn,
   deleteAccount: mocks.deleteAccount,
   signOutUser: mocks.signOutUser,
   getAuthPort: mocks.getAuthPort,
@@ -45,7 +45,7 @@ function form(confirmEmail: string, extra: Record<string, string> = {}): FormDat
 
 beforeEach(() => {
   vi.clearAllMocks();
-  mocks.authorizeAction.mockResolvedValue(SIGNED_IN);
+  mocks.authorizeSignedIn.mockResolvedValue(SIGNED_IN);
   mocks.deleteAccount.mockResolvedValue({ ok: true, data: undefined });
   mocks.signOutUser.mockResolvedValue({ ok: true, data: undefined });
 });
@@ -94,7 +94,7 @@ describe("deleteAccountAction", () => {
   });
 
   it("changes nothing for an anonymous caller", async () => {
-    mocks.authorizeAction.mockResolvedValue({ ok: false, error: "unauthenticated" });
+    mocks.authorizeSignedIn.mockResolvedValue({ ok: false, error: "unauthenticated" });
     expect(await deleteAccountAction({}, form("guru@example.test"))).toEqual({
       error: "unauthenticated",
     });
@@ -137,5 +137,18 @@ describe("deleteAccountAction", () => {
       "NEXT_REDIRECT:/sign-in?notice=accountDeleted",
     );
     expect(mocks.signOutUser).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe("deleteAccountAction for a pending account", () => {
+  it("lets a pending user delete the account", async () => {
+    mocks.authorizeSignedIn.mockResolvedValue({
+      ok: true,
+      data: { ...SIGNED_IN.data, status: "pending" },
+    });
+    await expect(deleteAccountAction({}, form("guru@example.test"))).rejects.toThrow(
+      "NEXT_REDIRECT:/sign-in?notice=accountDeleted",
+    );
+    expect(mocks.deleteAccount).toHaveBeenCalledTimes(1);
   });
 });

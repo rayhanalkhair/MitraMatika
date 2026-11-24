@@ -13,6 +13,7 @@ const PROTECTED_ROUTES = [
   "/assessment-builder",
   "/trash",
   "/settings",
+  "/waiting-approval",
 ];
 
 // Reachable without a session: the auth screens and the privacy notice.
@@ -114,6 +115,13 @@ test.describe("signed-in user", () => {
     await expect(
       page.getByRole("heading", { level: 1, name: /^(Halo, |Selamat datang)/ }),
     ).toBeVisible();
+  });
+
+  test("an approved account is sent from /waiting-approval to /home", async ({
+    page,
+  }) => {
+    await page.goto("/waiting-approval");
+    await expect(page).toHaveURL(/\/home$/);
   });
 
   test("is protected again after pressing Keluar", async ({ page }) => {

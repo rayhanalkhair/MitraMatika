@@ -21,6 +21,7 @@ import {
   type TestDatabase,
 } from "@/lib/db/test-harness";
 import { logger } from "@/lib/logger";
+import { MAX_TEMPLATES_PER_TEACHER } from "@/lib/storage/limits";
 import { createMemoryStore } from "@/lib/storage/memory";
 import type { ObjectStore } from "@/lib/storage";
 import type { TemplateInput } from "../schema/template";
@@ -72,8 +73,13 @@ function png(): Uint8Array {
   canvas.getContext("2d").fillRect(0, 0, 4, 4);
   return new Uint8Array(canvas.encodeSync("png"));
 }
+function jpeg(): Uint8Array {
+  const canvas = createCanvas(4, 4);
+  canvas.getContext("2d").fillRect(0, 0, 4, 4);
+  return new Uint8Array(canvas.encodeSync("jpeg"));
+}
 const SVG = new TextEncoder().encode(
-  '<svg xmlns="http://www.w3.org/2000/svg" onload="alert(1)"><circle r="1"/></svg>',
+  '<svg xmlns="http://www.w3.org/2000/svg"><circle r="1"/></svg>',
 );
 
 beforeAll(async () => {
@@ -85,6 +91,40 @@ afterAll(async () => {
 beforeEach(async () => {
   await database.db.delete(schoolTemplates);
   store = createMemoryStore();
+});
+
+describe("saveTemplate: at most MAX_TEMPLATES_PER_TEACHER rows per teacher", () => {
+  it(
+    "refuses the next template (trashed ones count), updates stay possible, another teacher is not affected",
+    async () => {
+      const ids: string[] = [];
+      for (let n = 0; n < MAX_TEMPLATES_PER_TEACHER; n += 1) {
+        ids.push((await create(USER_A, { name: `Kop ${String(n)}` })).id);
+      }
+      const another = (ownerId: string) =>
+        asUser(ownerId, (tx) =>
+          saveTemplate(tx, { ownerId, input: { ...INPUT, name: "Satu lagi" } }),
+        );
+      expect(await another(USER_A)).toEqual({ ok: false, error: "tooMany" });
+      // A trashed template still counts until it is purged.
+      await database.db.execute(
+        sql`update school_templates set deleted_at = now(), purge_after = now() + interval '30 days' where id = ${ids[0]}`,
+      );
+      expect(await another(USER_A)).toEqual({ ok: false, error: "tooMany" });
+      // Editing an existing one is not creating.
+      const edited = await asUser(USER_A, (tx) =>
+        saveTemplate(tx, {
+          ownerId: USER_A,
+          templateId: ids[1],
+          expectedRowVersion: 1,
+          input: { ...INPUT, name: "Diubah" },
+        }),
+      );
+      expect(edited.ok).toBe(true);
+      expect((await another(USER_B)).ok).toBe(true);
+    },
+    DB_TEST_TIMEOUT,
+  );
 });
 
 describe("saveTemplate", () => {
@@ -102,6 +142,7 @@ describe("saveTemplate", () => {
         isDefault: true,
         rowVersion: 1,
         hasLogo: false,
+        logoIsSvg: false,
       },
     });
   });
@@ -432,10 +473,10 @@ describe("another teacher's template", () => {
       await uploadLogo(store, db(), {
         ownerId: USER_A,
         templateId: mine.id,
-        bytes: SVG,
-        declaredType: "image/svg+xml",
+        bytes: jpeg(),
+        declaredType: "image/jpeg",
       }),
-    ).toEqual({ ok: true, data: { logoKey: `templates/${USER_A}/${mine.id}/logo.svg` } });
+    ).toEqual({ ok: true, data: { logoKey: `templates/${USER_A}/${mine.id}/logo.jpg` } });
     expect(await store.get(theirKey)).not.toBeNull();
     // Logged without the key itself.
     expect(warned).toHaveBeenCalledWith(
@@ -505,20 +546,44 @@ describe("uploadLogo", () => {
     const result = await uploadLogo(store, db(), {
       ownerId: USER_A,
       templateId: id,
-      bytes: SVG,
-      declaredType: "image/svg+xml",
+      bytes: jpeg(),
+      declaredType: "image/jpeg",
     });
     expect(result).toEqual({
       ok: true,
-      data: { logoKey: `templates/${USER_A}/${id}/logo.svg` },
+      data: { logoKey: `templates/${USER_A}/${id}/logo.jpg` },
     });
     expect(await store.get(`templates/${USER_A}/${id}/logo.png`)).toBeNull();
     const served = await readLogo(store, db(), { ownerId: USER_A, templateId: id });
     expect(served.ok).toBe(true);
     if (!served.ok) return;
-    expect(served.data.contentType).toBe("image/svg+xml");
-    const text = new TextDecoder().decode(served.data.bytes);
-    expect(text).not.toContain("onload");
+    expect(served.data.contentType).toBe("image/jpeg");
+  });
+
+  it("refuses an SVG upload and stores nothing, while an SVG stored earlier is still served", async () => {
+    const { id } = await create(USER_A);
+    expect(
+      await uploadLogo(store, db(), {
+        ownerId: USER_A,
+        templateId: id,
+        bytes: SVG,
+        declaredType: "image/svg+xml",
+      }),
+    ).toEqual({ ok: false, error: "svgNotAccepted" });
+    expect(await store.get(`templates/${USER_A}/${id}/logo.svg`)).toBeNull();
+    // A logo stored before the decision stays: it is served, and the list marks it as an SVG.
+    const key = `templates/${USER_A}/${id}/logo.svg`;
+    await store.put(key, SVG, "image/svg+xml");
+    await database.db.execute(
+      sql`update school_templates set logo_key = ${key} where id = ${id}`,
+    );
+    const served = await readLogo(store, db(), { ownerId: USER_A, templateId: id });
+    expect(served.ok && served.data.contentType).toBe("image/svg+xml");
+    const listed = await asUser(USER_A, (tx) => listTemplates(tx, USER_A));
+    expect(listed.find((template) => template.id === id)).toMatchObject({
+      hasLogo: true,
+      logoIsSvg: true,
+    });
   });
 
   it("stores nothing for an invalid file or a trashed template", async () => {

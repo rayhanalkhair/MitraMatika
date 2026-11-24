@@ -18,6 +18,14 @@ import { card, control, noticeClass, secondaryButton } from "./styles";
 const TOP = "";
 // A long list of page numbers stops here (the OCR review of Task 6 walks through all of them).
 const FLAGGED_SHOWN = 30;
+// The page flags that have a reason in words (messages `materials.ocr.flags`), in reading order.
+const REASONS = [
+  "low_text",
+  "garbled",
+  "formula_text",
+  "uncertain_math",
+  "truncated",
+] as const;
 
 /**
  * What the teacher knows about one material: its file (type, size, pages, upload date), its status
@@ -90,6 +98,12 @@ export function MaterialDetail({
           <dd>{t(`library.kind.${kind}`)}</dd>
           <dt className="text-muted-foreground">{t("detail.sizeLabel")}</dt>
           <dd>{formatSize(detail.sizeBytes, format)}</dd>
+          {detail.pageImageBytes > 0 && (
+            <>
+              <dt className="text-muted-foreground">{t("detail.imagesLabel")}</dt>
+              <dd>{formatSize(detail.pageImageBytes, format)}</dd>
+            </>
+          )}
           {detail.pageCount !== null && (
             <>
               <dt className="text-muted-foreground">{t("detail.pagesLabel")}</dt>
@@ -101,13 +115,19 @@ export function MaterialDetail({
           <dt className="text-muted-foreground">{t("detail.folderLabel")}</dt>
           <dd className="break-words">{detail.folderName ?? t("detail.noFolder")}</dd>
         </dl>
+        <p className="text-sm text-muted-foreground">{t("detail.sizeNote")}</p>
         <form
           onSubmit={(event) => void move(event)}
           className="flex min-w-0 flex-col gap-2"
         >
-          <label className="flex min-w-0 flex-col gap-1 text-sm font-medium">
-            {t("detail.move.label")}
+          {/* A label of its own, not one around the select: the name stays "Pindahkan ke folder"
+              instead of also holding every option's text. */}
+          <div className="flex min-w-0 flex-col gap-1">
+            <label htmlFor={`${id}-folder`} className="text-sm font-medium">
+              {t("detail.move.label")}
+            </label>
             <select
+              id={`${id}-folder`}
               name="folderId"
               defaultValue={detail.folderId ?? TOP}
               className={control}
@@ -124,7 +144,7 @@ export function MaterialDetail({
                 </optgroup>
               ))}
             </select>
-          </label>
+          </div>
           <button
             type="submit"
             disabled={busy}
@@ -156,6 +176,15 @@ export function MaterialDetail({
                 low: detail.pages.low,
               })}
             </p>
+            {detail.flagReasons.length > 0 && (
+              <p className="text-sm break-words">
+                {t("detail.quality.reasons", {
+                  reasons: REASONS.filter((flag) => detail.flagReasons.includes(flag))
+                    .map((flag) => t(`ocr.flags.${flag}`))
+                    .join("; "),
+                })}
+              </p>
+            )}
             {detail.flaggedPages.length > 0 && (
               <p className="text-sm break-words">
                 {t("detail.quality.flagged", {

@@ -104,7 +104,7 @@ describe("createAuthEmails", () => {
       // Someone else may have signed up with this address (ruling S8): the owner is told not to
       // open the link.
       expect(fake.messages[0].text).toContain(
-        "Jika bukan kamu, jangan buka tautan ini dan abaikan email ini",
+        "Jika bukan Anda, jangan buka tautan ini dan abaikan email ini",
       );
     },
     DB_TEST_TIMEOUT,
@@ -132,7 +132,7 @@ describe("createAuthEmails", () => {
       await flush();
       expect(fake.messages).toHaveLength(1);
       expect(fake.messages[0].to).toBe(TEACHER);
-      expect(fake.messages[0].subject).toBe("Akun MitraMatika kamu sudah ada");
+      expect(fake.messages[0].subject).toBe("Akun MitraMatika Anda sudah ada");
       expect(fake.messages[0].text).toContain(`${APP}/sign-in`);
       expect(fake.messages[0].text).toContain(`${APP}/forgot-password`);
     },
@@ -193,7 +193,7 @@ describe("createAuthEmails", () => {
         advance(60);
       }
       // At most 3 account-exists emails in that hour...
-      expect(subjects()).toEqual(Array(3).fill("Akun MitraMatika kamu sudah ada"));
+      expect(subjects()).toEqual(Array(3).fill("Akun MitraMatika Anda sudah ada"));
       // ...and the victim's own reset requests still get through (3 per hour from one IP).
       for (let i = 0; i < 3; i += 1) {
         await emails.sendResetEmail({

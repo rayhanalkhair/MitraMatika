@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { normalizeAiText } from "@/lib/normalize-ai-text";
 
 export const claimSchema = z.discriminatedUnion("type", [
   z.object({
@@ -28,23 +29,26 @@ export const claimSchema = z.discriminatedUnion("type", [
 
 const optionLabel = z.enum(["A", "B", "C", "D"]);
 
+/** Displayed Markdown: a literal backslash-n the model wrote between formulas becomes a real line break. */
+const markdown = () => z.string().min(1).transform(normalizeAiText);
+
 const optionsSchema = z
-  .array(z.object({ label: optionLabel, text_md: z.string().min(1) }))
+  .array(z.object({ label: optionLabel, text_md: markdown() }))
   .length(4)
   .refine((options) => new Set(options.map((o) => o.label)).size === 4, {
     message: "Setiap label pilihan (A-D) harus muncul tepat satu kali.",
   });
 
 export const multipleChoiceQuestionSchema = z.object({
-  stem_md: z.string().min(1),
+  stem_md: markdown(),
   options: optionsSchema,
   correctLabel: optionLabel,
   answer: z.object({
-    display_md: z.string().min(1),
+    display_md: markdown(),
     machine: z.string().min(1),
   }),
-  explanation_md: z.string().min(1),
-  steps: z.array(z.string().min(1)).min(2),
+  explanation_md: markdown(),
+  steps: z.array(markdown()).min(2),
   verification_claims: z.array(claimSchema).min(1),
   metadata: z.object({
     difficulty: z.enum(["mudah", "sedang", "sulit"]),

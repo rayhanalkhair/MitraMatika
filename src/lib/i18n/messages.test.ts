@@ -96,11 +96,11 @@ describe("message catalogs", () => {
     }
   });
 
-  it("has the 22 argument-taking messages the old copy functions became, plus 3 account emails, the resend countdown and the account-deletion prompt and the daily limit, and 7 for the bank filters (page range, page label, grade, remove, three pills), and 7 for the question editor (choice text, key choice, the step limit hint, step label, and the remove, up and down labels of a step), and 4 for regeneration (hint length, daily limit, two version labels), and 1 for the history version label, and 6 for the trash (deleted date, days left, two button labels, version count, move label), and 4 for the document templates (make default, edit, header line number, preview subject), and 24 for the assessment builder (counts, dates, grade, template name, item numbers and versions, picker heading, result and paging, the new-questions offer), and 10 for scoring and approval (point label, scaled share, total, problem count, approval date, four item problems, the total problem), and 4 for the document preview (where a formula failed: question text, option, step, section), and 4 for the export panel (expiry date, download label, warning item, hourly limit), and 13 for the assessment and template trash (summary, two button labels each, three confirmation counts, in use by, two move labels, two in-use refusals, the pinned-question note), and 7 for the material upload (storage meter, uploading, checking, done, failed, cancelled, progress label), and 23 for the materials library (page count, grade, match page, folder, paging summary, page label, folder count, folder place, text-quality summary, pages to check, confirmation date, five chapter field labels, two material and two folder trash labels, chapter count, two move labels), and 1 for the structure proposal limit, and 3 for the structure editor (a chapter with a bad value, a chapter past the last page, the chapter limit), and 10 for OCR and page review (page of total, page image label, page text label, marked parts, text too long, pages left today, page checkbox, preparing progress, pages queued, too many pages), and 2 for OCR refusals (blank pages, overwriting a correction), and 4 for material sources (chapter page range, page list hint, source label, source without a page), and 13 for the solver (solves left, character count, chosen photo, upload progress, three refusals with limits, two uncertain-reading items, method, rounding, step count, step label, the disagreeing cross-check), and 3 for the solver trash (two button labels, solution count), and 3 for the shared vision cap (two counters left, the refusal)", () => {
+  it("has the 22 argument-taking messages the old copy functions became, plus 3 account emails, the resend countdown and the account-deletion prompt and the daily limit, and 7 for the bank filters (page range, page label, grade, remove, three pills), and 10 for the question editor (choice text, key choice, the step limit hint, step label, the remove, up and down labels of a step, the choice-required sentence, the too-long sentence and the too-many-steps sentence), and 4 for regeneration (hint length, daily limit, two version labels), and 1 for the history version label, and 6 for the trash (deleted date, days left, two button labels, version count, move label), and 4 for the document templates (make default, edit, header line number, preview subject), and 24 for the assessment builder (counts, dates, grade, template name, item numbers and versions, picker heading, result and paging, the new-questions offer), and 10 for scoring and approval (point label, scaled share, total, problem count, approval date, four item problems, the total problem), and 4 for the document preview (where a formula failed: question text, option, step, section), and 4 for the export panel (expiry date, download label, warning item, hourly limit), and 13 for the assessment and template trash (summary, two button labels each, three confirmation counts, in use by, two move labels, two in-use refusals, the pinned-question note), and 7 for the material upload (storage meter, uploading, checking, done, failed, cancelled, progress label), and 24 for the materials library (page count, grade, match page, folder, paging summary, page label, folder count, folder place, text-quality summary, pages to check, reasons, confirmation date, five chapter field labels, two material and two folder trash labels, chapter count, two move labels), and 1 for the structure proposal limit, and 3 for the structure editor (a chapter with a bad value, a chapter past the last page, the chapter limit), and 10 for OCR and page review (page of total, page image label, page text label, marked parts, text too long, pages left today, page checkbox, preparing progress, pages queued, too many pages), and 2 for OCR refusals (blank pages, overwriting a correction), and 4 for material sources (chapter page range, page list hint, source label, source without a page), and 13 for the solver (solves left, character count, chosen photo, upload progress, three refusals with limits, two uncertain-reading items, method, rounding, step count, step label, the disagreeing cross-check), and 3 for the solver trash (two button labels, solution count), and 3 for the shared vision cap (two counters left, the refusal), and 1 for the waiting page (the account line), and 3 for the admin notice, digest and storage alert emails", () => {
     const withArguments = Object.entries(id).filter(
       ([, v]) => icuArguments(v).length > 0,
     );
-    expect(withArguments).toHaveLength(183);
+    expect(withArguments).toHaveLength(191);
   });
 
   it("has the auth error keys the auth module maps to", () => {
@@ -133,6 +133,30 @@ describe("message catalogs", () => {
     }
   });
 
+  it("addresses the teacher as 'Anda' in the Indonesian catalog, never 'kamu' or its -mu forms (S-15)", () => {
+    // The Stitch designs and the product voice use the polite "Anda". Whole words that merely end
+    // in "mu" are ordinary Indonesian ("tamu" a guest, "ilmu" knowledge), not "kamu" with a clitic.
+    const ENDS_IN_MU = new Set(["tamu", "ilmu"]);
+    const informalWords = (text: string): string[] =>
+      (text.match(/\b(?:kamu|kalian|engkau|dikau|kau|[a-z]+-?mu)\b/gi) ?? []).filter(
+        (word) => !ENDS_IN_MU.has(word.toLowerCase()),
+      );
+    // The checker itself: clitics, hyphenated clitics and "kau" are caught, whole words are not.
+    expect(informalWords("Ilmu bagi tamu, dan ilmunya")).toEqual([]);
+    expect(informalWords("tanya-mu, akunmu, Kamu, kau, dikau")).toEqual([
+      "tanya-mu",
+      "akunmu",
+      "Kamu",
+      "kau",
+      "dikau",
+    ]);
+    const offenders = Object.entries(id).flatMap(([key, value]) =>
+      informalWords(value).map((word) => `${key}: ${word}`),
+    );
+    expect(offenders).toEqual([]);
+    expect(Object.values(id).some((value) => /\bAnda\b/.test(value))).toBe(true);
+  });
+
   it("writes the English catalog in sentence case", () => {
     // Only the curriculum name and the Times New Roman font name are exempt; the product name MitraMatika is a single word.
     const strip = (text: string): string =>
@@ -147,7 +171,18 @@ describe("message catalogs", () => {
       const caps = (text.match(/\b[A-Z]{3,}\b/g) ?? []).filter(
         (word) =>
           !/^[IVX]+$/.test(word) &&
-          !["SPLDV", "PNG", "JPG", "SVG", "PDF", "ZIP", "DOCX", "OCR"].includes(word),
+          ![
+            "SPLDV",
+            "PNG",
+            "JPG",
+            "JPEG",
+            "SVG",
+            "PDF",
+            "ZIP",
+            "DOCX",
+            "OCR",
+            "AWS",
+          ].includes(word),
       );
       expect(caps, key).toEqual([]);
     }

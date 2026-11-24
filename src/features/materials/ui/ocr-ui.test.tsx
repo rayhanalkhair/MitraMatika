@@ -395,13 +395,52 @@ describe("OcrReview", () => {
     expect(markedParts("tanpa tanda [[?]] tunggal")).toEqual([]);
   });
 
+  it("gives the real reason for a flagged page that has no [[?]] marks, never an 'uncertain parts' that contradicts the marks line", () => {
+    const view = renderWithIntl(
+      <OcrReview
+        materialId={ID}
+        kind="pdf"
+        total={5}
+        page={{
+          ...PAGE,
+          textMd: "x + y = 10, x - y = 2, 2x + 3y = 12",
+          confidence: "medium",
+          flags: ["formula_text"],
+        }}
+        nextFlagged={null}
+      />,
+    );
+    expect(
+      screen.getByText(
+        "Banyak simbol rumus; urutannya di teks bisa keliru, cocokkan dengan gambar halaman",
+      ),
+    ).toBeTruthy();
+    expect(screen.getByText("Tidak ada bagian bertanda [[?]].")).toBeTruthy();
+    expect(view.container.textContent).not.toContain("Ada bagian yang tidak pasti");
+  });
+
+  it("says a page with almost no text may be a scan, not that it is 'little text'", () => {
+    renderWithIntl(
+      <OcrReview
+        materialId={ID}
+        kind="pdf"
+        total={5}
+        page={{ ...PAGE, textMd: "", confidence: "low", flags: ["low_text"] }}
+        nextFlagged={null}
+      />,
+    );
+    expect(screen.getByText("Halaman ini hanya berisi sedikit teks")).toBeTruthy();
+  });
+
   it("shows the page beside its text, says 'perlu diperiksa' and never a percentage", () => {
     const view = renderWithIntl(
       <OcrReview materialId={ID} kind="pdf" total={5} page={PAGE} nextFlagged={4} />,
     );
     expect(screen.getByText("Perlu diperiksa")).toBeTruthy();
     expect(view.container.textContent).not.toMatch(/%/);
-    expect(screen.getByText("Ada bagian yang tidak pasti")).toBeTruthy();
+    expect(
+      screen.getByText("Ada bagian bertanda [[?]] atau rumus yang tidak terbaca"),
+    ).toBeTruthy();
     expect(screen.getByText("Teks terpotong, periksa akhir halaman")).toBeTruthy();
     expect(screen.getByText("Hasil OCR")).toBeTruthy();
     expect(screen.getByText("2 bagian bertanda [[?]].")).toBeTruthy();

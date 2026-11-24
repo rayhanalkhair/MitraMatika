@@ -77,7 +77,7 @@ describe("sign-in page", () => {
 
   it("confirms a deleted account with a neutral notice", async () => {
     await renderPage(undefined, "accountDeleted");
-    expect(screen.getByRole("status").textContent).toBe("Akun kamu sudah dihapus.");
+    expect(screen.getByRole("status").textContent).toBe("Akun Anda sudah dihapus.");
   });
 
   it("ignores an unknown notice", async () => {

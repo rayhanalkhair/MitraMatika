@@ -18,7 +18,8 @@ async function restricted(filePath: string, code: string): Promise<string[]> {
     .map((m) => m.message);
 }
 
-const TIMEOUT = 60_000;
+// Full-suite load made a 60 s limit flaky (62-65 s seen); alone these pass well inside it.
+const TIMEOUT = 180_000;
 
 describe("relative imports out of a feature", () => {
   it(

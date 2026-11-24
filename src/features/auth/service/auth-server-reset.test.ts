@@ -501,14 +501,14 @@ describe("password reset by email link", () => {
         h.advance(61);
       }
       const subjects = () => h.fake.messages.slice(before).map((m) => m.subject);
-      expect(subjects()).toEqual(Array(3).fill("Akun MitraMatika kamu sudah ada"));
+      expect(subjects()).toEqual(Array(3).fill("Akun MitraMatika Anda sudah ada"));
       expect(h.fake.messages.slice(before).map((m) => m.to)).toEqual(
         Array(3).fill("guru@example.test"),
       );
 
       await requestReset(h, "guru@example.test");
       expect(subjects()).toEqual([
-        ...Array<string>(3).fill("Akun MitraMatika kamu sudah ada"),
+        ...Array<string>(3).fill("Akun MitraMatika Anda sudah ada"),
         RESET_SUBJECT,
       ]);
       expect((await resetWith(h, resetLinkFrom(h.fake).token)).status).toBe(200);
@@ -600,7 +600,9 @@ describe("constant-time reset requests", () => {
         foreignKnown,
         foreignUnknown,
       ])
-        expect(outcome.ms).toBeGreaterThanOrEqual(FLOOR - 1);
+        // Timers can fire a little early and the clock is read before and after the call, so a
+        // measured 298.9 ms is a 300 ms floor; 10 ms of slack still separates it from no floor.
+        expect(outcome.ms).toBeGreaterThanOrEqual(FLOOR - 10);
     },
     DB_TEST_TIMEOUT,
   );

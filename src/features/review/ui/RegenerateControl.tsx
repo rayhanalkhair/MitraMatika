@@ -297,7 +297,12 @@ export function RegenerateControl({
       )}
 
       {/* One persistent polite region, so each change of the job is announced from the same node. */}
-      <div ref={statusRef} role="status" tabIndex={-1} className="text-sm outline-none">
+      <div
+        ref={statusRef}
+        role="status"
+        tabIndex={-1}
+        className="text-sm outline-none focus-visible:ring-2 focus-visible:ring-ring"
+      >
         {statusText && (
           <p className="rounded-lg border bg-card p-3 text-muted-foreground">
             {statusText}

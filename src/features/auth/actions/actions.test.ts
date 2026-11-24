@@ -7,14 +7,14 @@ const mocks = vi.hoisted(() => ({
   signOutUser: vi.fn(),
   getAuthPort: vi.fn(),
   clearFakeSession: vi.fn(),
-  authorizeAction: vi.fn(),
+  authorizeSignedIn: vi.fn(),
   auditSignOut: vi.fn(() => Promise.resolve()),
   forgetPendingEmail: vi.fn(() => Promise.resolve()),
 }));
 
 vi.mock("next/navigation", () => ({ redirect: mocks.redirect }));
 vi.mock("../service/port-server", () => ({ getAuthPort: mocks.getAuthPort }));
-vi.mock("../service/guard", () => ({ authorizeAction: mocks.authorizeAction }));
+vi.mock("../service/guard", () => ({ authorizeSignedIn: mocks.authorizeSignedIn }));
 vi.mock("../service/audit", () => ({ auditSignOut: mocks.auditSignOut }));
 vi.mock("../service/e2e-session-server", () => ({
   clearFakeSession: mocks.clearFakeSession,
@@ -41,7 +41,7 @@ describe("auth actions", () => {
 describe("signOutAction", () => {
   it("signs the user out and then redirects to /sign-in", async () => {
     mocks.signOutUser.mockResolvedValue({ ok: true });
-    mocks.authorizeAction.mockResolvedValue({
+    mocks.authorizeSignedIn.mockResolvedValue({
       ok: true,
       data: { status: "allowed", userId: "u1", email: "t@e.st", displayName: null },
     });
@@ -59,7 +59,7 @@ describe("signOutAction", () => {
 
   it("still signs out and redirects, without auditing, when nobody is signed in", async () => {
     mocks.signOutUser.mockResolvedValue({ ok: true });
-    mocks.authorizeAction.mockResolvedValue({ ok: false, error: "unauthenticated" });
+    mocks.authorizeSignedIn.mockResolvedValue({ ok: false, error: "unauthenticated" });
 
     await expect(signOutAction()).rejects.toThrow("NEXT_REDIRECT:/sign-in");
 
@@ -70,11 +70,26 @@ describe("signOutAction", () => {
 
   it("still redirects to /sign-in when signing out fails", async () => {
     mocks.signOutUser.mockResolvedValue({ ok: false, error: "generic" });
-    mocks.authorizeAction.mockResolvedValue({ ok: false, error: "unauthenticated" });
+    mocks.authorizeSignedIn.mockResolvedValue({ ok: false, error: "unauthenticated" });
 
     await expect(signOutAction()).rejects.toThrow("NEXT_REDIRECT:/sign-in");
 
     expect(mocks.signOutUser).toHaveBeenCalledTimes(1);
     expect(mocks.redirect).toHaveBeenCalledWith("/sign-in");
+  });
+});
+
+describe("signOutAction for a pending account", () => {
+  it("signs out and audits a pending user too", async () => {
+    mocks.signOutUser.mockResolvedValue({ ok: true });
+    mocks.authorizeSignedIn.mockResolvedValue({
+      ok: true,
+      data: { status: "pending", userId: "u2", email: "p@e.st", displayName: null },
+    });
+    await expect(signOutAction()).rejects.toThrow("NEXT_REDIRECT:/sign-in");
+    expect(mocks.signOutUser).toHaveBeenCalledTimes(1);
+    expect(mocks.auditSignOut).toHaveBeenCalledWith(
+      expect.objectContaining({ userId: "u2" }),
+    );
   });
 });

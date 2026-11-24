@@ -1,3 +1,4 @@
+import { like } from "drizzle-orm";
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { verification } from "@/lib/db/schema";
 import {
@@ -6,6 +7,8 @@ import {
   type TestDatabase,
 } from "@/lib/db/test-harness";
 import {
+  ADMIN_INDIVIDUAL_NOTICES_PER_DAY,
+  ADMIN_NOTICES_PER_DAY,
   AUTH_EMAILS_PER_DAY,
   createGlobalSendBudget,
   jakartaDay,
@@ -130,6 +133,136 @@ describe("createGlobalSendBudget", () => {
         if ((await budget.reserve("verify")) !== null) again += 1;
       // Only the confirmed one still counts.
       expect(again).toBe(AUTH_EMAILS_PER_DAY - RESET_EMAIL_RESERVE - 1);
+    },
+    DB_TEST_TIMEOUT,
+  );
+});
+
+describe("admin notices in the budget (ADR-0022)", () => {
+  const budgetAt = (clock = () => new Date(START)) => createGlobalSendBudget(t.db, clock);
+  const rows = (prefix: string) =>
+    t.db
+      .select()
+      .from(verification)
+      .where(like(verification.identifier, `${prefix}%`));
+
+  it("pins the numbers: 12 a day for the admin, 10 of them for single notices", () => {
+    expect(ADMIN_NOTICES_PER_DAY).toBe(12);
+    expect(ADMIN_INDIVIDUAL_NOTICES_PER_DAY).toBe(10);
+  });
+
+  it(
+    "30 notices in one day: 10 individual ones go, the 11th is refused, a digest still goes",
+    async () => {
+      const budget = budgetAt();
+      let sent = 0;
+      for (let i = 0; i < 30; i += 1) {
+        const reservation = await budget.reserve("adminNotice");
+        if (reservation !== null) {
+          sent += 1;
+          await budget.confirm(reservation);
+        }
+      }
+      expect(sent).toBe(ADMIN_INDIVIDUAL_NOTICES_PER_DAY);
+      // The last two of the sub-budget are for digests and storage alerts.
+      expect(await budget.reserve("adminDigest")).not.toBeNull();
+      expect(await budget.reserve("adminDigest")).not.toBeNull();
+      expect(await budget.reserve("adminDigest")).toBeNull();
+    },
+    DB_TEST_TIMEOUT,
+  );
+
+  it(
+    "never takes the reset reserve: at 60 verification emails notices are refused and 20 resets still go",
+    async () => {
+      const budget = budgetAt();
+      for (let i = 0; i < AUTH_EMAILS_PER_DAY - RESET_EMAIL_RESERVE; i += 1) {
+        expect(await budget.reserve("verify")).not.toBeNull();
+      }
+      expect(await budget.reserve("adminNotice")).toBeNull();
+      expect(await budget.reserve("adminDigest")).toBeNull();
+      let resets = 0;
+      for (let i = 0; i < 30; i += 1)
+        if ((await budget.reserve("reset")) !== null) resets += 1;
+      expect(resets).toBe(RESET_EMAIL_RESERVE);
+    },
+    DB_TEST_TIMEOUT,
+  );
+
+  it(
+    "counts in the app-wide label too: notices use slots of the 60",
+    async () => {
+      const budget = budgetAt();
+      for (let i = 0; i < 10; i += 1) {
+        expect(await budget.reserve("adminNotice")).not.toBeNull();
+      }
+      let verify = 0;
+      for (let i = 0; i < 80; i += 1)
+        if ((await budget.reserve("verify")) !== null) verify += 1;
+      expect(verify).toBe(AUTH_EMAILS_PER_DAY - RESET_EMAIL_RESERVE - 10);
+    },
+    DB_TEST_TIMEOUT,
+  );
+
+  it(
+    "a refusal leaves no row behind, in either label",
+    async () => {
+      const budget = budgetAt();
+      for (let i = 0; i < ADMIN_INDIVIDUAL_NOTICES_PER_DAY; i += 1) {
+        await budget.reserve("adminNotice");
+      }
+      const before = [
+        (await rows("auth-email-day:")).length,
+        (await rows("admin-notice-day:")).length,
+      ];
+      expect(before).toEqual([10, 10]);
+      expect(await budget.reserve("adminNotice")).toBeNull();
+      expect([
+        (await rows("auth-email-day:")).length,
+        (await rows("admin-notice-day:")).length,
+      ]).toEqual(before);
+    },
+    DB_TEST_TIMEOUT,
+  );
+
+  it(
+    "release and confirm settle both rows",
+    async () => {
+      let clock = START;
+      const budget = budgetAt(() => new Date(clock));
+      const held: NonNullable<Awaited<ReturnType<typeof budget.reserve>>>[] = [];
+      for (let i = 0; i < ADMIN_INDIVIDUAL_NOTICES_PER_DAY; i += 1) {
+        const r = await budget.reserve("adminNotice");
+        if (r === null) throw new Error("expected a reservation");
+        held.push(r);
+      }
+      expect(await budget.reserve("adminNotice")).toBeNull();
+      await budget.release(held[0]);
+      expect((await rows("auth-email-day:")).length).toBe(9);
+      expect((await rows("admin-notice-day:")).length).toBe(9);
+      await budget.confirm(held[1]);
+      // After the hold the unconfirmed eight lapse; the confirmed one still counts in both rows.
+      clock += RESERVATION_HOLD_SECONDS * 1000;
+      let again = 0;
+      for (let i = 0; i < 20; i += 1)
+        if ((await budget.reserve("adminNotice")) !== null) again += 1;
+      expect(again).toBe(ADMIN_INDIVIDUAL_NOTICES_PER_DAY - 1);
+    },
+    DB_TEST_TIMEOUT,
+  );
+
+  it(
+    "starts again the next Jakarta day",
+    async () => {
+      let clock = START;
+      const budget = budgetAt(() => new Date(clock));
+      for (let i = 0; i < 12; i += 1) {
+        const r = await budget.reserve("adminDigest");
+        if (r) await budget.confirm(r);
+      }
+      expect(await budget.reserve("adminDigest")).toBeNull();
+      clock = Date.parse("2026-11-17T17:00:00.000Z");
+      expect(await budget.reserve("adminNotice")).not.toBeNull();
     },
     DB_TEST_TIMEOUT,
   );

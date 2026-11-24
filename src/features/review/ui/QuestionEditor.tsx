@@ -280,16 +280,30 @@ export function QuestionEditor({
     setFailure("invalid");
   });
 
-  /** The text of a field's error: the server's "math" refusal, else a bad or empty value. */
-  const errorText = (name: string): string | undefined => {
+  /**
+   * The text of a field's error, saying which problem it is: the server's "math" refusal, an
+   * empty value (`required`: the sentence of that field), a value over its limit (with the limit
+   * and the count), else the generic sentence. Read from the typed value, so the browser's and
+   * the server's refusals of a field read the same.
+   */
+  const errorText = (
+    name: string,
+    limit: number,
+    required?: string,
+  ): string | undefined => {
     const error: unknown = get(errors, name);
     if (!error) return undefined;
-    return (error as { message?: unknown }).message === "math"
-      ? t("fieldMath")
-      : t("fieldInvalid");
+    if ((error as { message?: unknown }).message === "math") return t("fieldMath");
+    const value: unknown = get(values, name);
+    const length = typeof value === "string" ? value.trim().length : 0;
+    if (length === 0 && required) return required;
+    if (length > limit) return t("fieldTooLong", { max: limit, count: length });
+    return t("fieldInvalid");
   };
   const stepsError =
-    errors.steps?.root || errors.root?.steps ? t("fieldInvalid") : undefined;
+    errors.steps?.root || errors.root?.steps
+      ? t("fieldStepsTooMany", { limit: EDIT_LIMITS.maxSteps })
+      : undefined;
 
   const ids = {
     stem: `${base}-stem`,
@@ -369,7 +383,11 @@ export function QuestionEditor({
       )}
 
       <div className="flex min-w-0 flex-col gap-2">
-        <Field id={ids.stem} label={t("stem")} error={errorText("stemMd")}>
+        <Field
+          id={ids.stem}
+          label={t("stem")}
+          error={errorText("stemMd", EDIT_LIMITS.stem, t("fieldRequiredStem"))}
+        >
           {(a11y) => (
             <textarea
               id={ids.stem}
@@ -407,7 +425,11 @@ export function QuestionEditor({
                 <Field
                   id={id}
                   label={t("optionLabel", { label: option.label })}
-                  error={errorText(optionPath(index))}
+                  error={errorText(
+                    optionPath(index),
+                    EDIT_LIMITS.option,
+                    t("fieldRequiredOption", { label: option.label }),
+                  )}
                 >
                   {(a11y) => (
                     <input
@@ -431,7 +453,15 @@ export function QuestionEditor({
       </fieldset>
 
       <div className="flex min-w-0 flex-col gap-2">
-        <Field id={ids.answer} label={t("answer")} error={errorText("answerDisplayMd")}>
+        <Field
+          id={ids.answer}
+          label={t("answer")}
+          error={errorText(
+            "answerDisplayMd",
+            EDIT_LIMITS.option,
+            t("fieldRequiredAnswer"),
+          )}
+        >
           {(a11y) => (
             <input
               id={ids.answer}
@@ -453,7 +483,11 @@ export function QuestionEditor({
         <Field
           id={ids.explanation}
           label={t("explanation")}
-          error={errorText("explanationMd")}
+          error={errorText(
+            "explanationMd",
+            EDIT_LIMITS.explanation,
+            t("fieldRequiredExplanation"),
+          )}
         >
           {(a11y) => (
             <textarea
@@ -484,13 +518,13 @@ export function QuestionEditor({
         <ol className="flex min-w-0 flex-col gap-3">
           {stepFields.map((field, index) => {
             const number = index + 1;
-            const id = `${ids.steps}-${field.fieldKey}`;
+            const id = `${ids.steps}-${String(index)}`;
             return (
               <li key={field.fieldKey} className="flex min-w-0 flex-col gap-2">
                 <Field
                   id={id}
                   label={t("stepLabel", { number })}
-                  error={errorText(stepPath(index))}
+                  error={errorText(stepPath(index), EDIT_LIMITS.step)}
                 >
                   {(a11y) => (
                     <textarea

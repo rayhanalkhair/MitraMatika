@@ -1,6 +1,11 @@
 import { describe, expect, it } from "vitest";
 import { PROSE } from "../fixtures/ingest";
-import { cleanPageText, MAX_PAGE_CHARS, pageQuality } from "./page-quality";
+import {
+  cleanPageText,
+  MAX_PAGE_CHARS,
+  MIN_TEXT_CHARS,
+  pageQuality,
+} from "./page-quality";
 
 describe("pageQuality", () => {
   it("rates ordinary prose high with no flags", () => {
@@ -15,6 +20,17 @@ describe("pageQuality", () => {
     });
   });
 
+  it("keeps the 40-character floor: a scan whose only text is a running header is low and OCR-able", () => {
+    expect(MIN_TEXT_CHARS).toBe(40);
+    // About 25 letters and digits: a header and a page number over a scanned page.
+    const headerOnly = "Matematika SMP Kelas VIII Bab 3\n42";
+    expect(pageQuality(headerOnly)).toEqual({ confidence: "low", flags: ["low_text"] });
+    // Short but over the floor (a title and two lines) is not flagged for its length.
+    const shortPage =
+      "Sistem persamaan linear dua variabel\nContoh: x + y = 5 dan x - y = 1";
+    expect(pageQuality(shortPage)).toEqual({ confidence: "high", flags: [] });
+  });
+
   it("rates text full of replacement or private-use characters low (garbled)", () => {
     const broken = PROSE.replace(/[aeiou]/g, "\ufffd");
     expect(pageQuality(broken)).toEqual({ confidence: "low", flags: ["garbled"] });
@@ -27,14 +43,18 @@ describe("pageQuality", () => {
     expect(pageQuality(symbols)).toEqual({ confidence: "low", flags: ["garbled"] });
   });
 
-  it("flags formulas in a text layer as uncertain_math (medium): their order is unreliable", () => {
-    const formula = `${PROSE} Jadi x + y = 10 dan x − y = 2, sehingga x = 6.`;
+  it("flags a text layer dense with formulas as formula_text (medium): their order is unreliable", () => {
+    const formula = `${PROSE} Jadi x + y = 10, x − y = 2, 2x + 3y = 12, 4x − y = 7 dan x = 6.`;
     expect(pageQuality(formula)).toEqual({
       confidence: "medium",
-      flags: ["uncertain_math"],
+      flags: ["formula_text"],
     });
-    // One or two symbols in prose are not a formula.
+    // A few simple equations in prose are not a scrambled formula: the smoke test's clean
+    // SPLDV pages (two or three equations) were wrongly sent to review.
     expect(pageQuality(`${PROSE} Hasilnya 5 + 3 = 8.`).confidence).toBe("high");
+    expect(
+      pageQuality(`${PROSE} Jadi x + y = 10 dan x − y = 2, sehingga x = 6.`),
+    ).toEqual({ confidence: "high", flags: [] });
   });
 
   it("does not count LaTeX that is already delimited as uncertain or garbled", () => {
@@ -42,7 +62,7 @@ describe("pageQuality", () => {
     expect(pageQuality(docx)).toEqual({ confidence: "high", flags: [] });
   });
 
-  it("flags the [[?]] uncertainty marker as uncertain_math", () => {
+  it("keeps uncertain_math for the [[?]] marker only", () => {
     expect(pageQuality(`${PROSE} Matriks [[?]]1 2[[?]]`)).toEqual({
       confidence: "medium",
       flags: ["uncertain_math"],

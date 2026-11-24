@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 const mocks = vi.hoisted(() => ({
   ensureProfile: vi.fn(() => Promise.resolve({ ok: true as const })),
@@ -18,12 +18,17 @@ const profileFails = () =>
     error: "generic",
   } as never);
 
+afterEach(() => {
+  vi.unstubAllEnvs();
+});
+
 beforeEach(() => {
   vi.clearAllMocks();
 });
 
 describe("completeSignIn", () => {
-  it("creates the profile and succeeds for any signed-in account", async () => {
+  it("creates the profile and succeeds for an approved signed-in account", async () => {
+    vi.stubEnv("ADMIN_EMAIL", "teacher@example.com");
     const port = createFakeAuthPort(session("Teacher@Example.com", "Bu Guru"));
     expect(await completeSignIn(port)).toEqual({ ok: true });
     expect(port.calls.map((call) => call.method)).toEqual(["getSessionUser"]);
@@ -33,6 +38,16 @@ describe("completeSignIn", () => {
       email: "teacher@example.com",
       displayName: "Bu Guru",
     });
+  });
+
+  it("creates the profile and succeeds for a pending account too", async () => {
+    vi.stubEnv("ADMIN_EMAIL", "someone-else@example.com");
+    const port = createFakeAuthPort(session("new@example.com", "Bu Baru"));
+    expect(await completeSignIn(port)).toEqual({ ok: true });
+    expect(port.calls.map((call) => call.method)).toEqual(["getSessionUser"]);
+    expect(mocks.ensureProfile).toHaveBeenCalledWith(
+      expect.objectContaining({ status: "pending", userId: "user-1" }),
+    );
   });
 
   it("signs out and reports generic when there is no session after sign-in", async () => {
@@ -65,7 +80,10 @@ describe("completeSignIn", () => {
 });
 
 describe("completeSignIn onSignedIn callback", () => {
-  const allowedPort = () => createFakeAuthPort(session("teacher@example.com"));
+  const allowedPort = () => {
+    vi.stubEnv("ADMIN_EMAIL", "teacher@example.com");
+    return createFakeAuthPort(session("teacher@example.com"));
+  };
 
   it("is called once with the allowed user after the profile exists", async () => {
     let profileCallsAtCallback = -1;

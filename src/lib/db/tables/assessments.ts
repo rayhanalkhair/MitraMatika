@@ -1,5 +1,6 @@
 import { sql } from "drizzle-orm";
 import {
+  bigint,
   boolean,
   check,
   date,
@@ -58,6 +59,10 @@ export const schoolTemplates = pgTable.withRLS(
     // approval hash covers it (Ruling R26): a same-format replacement keeps the key. Null for a
     // template without a logo, and for a logo uploaded before the column existed.
     logoSha256: text("logo_sha256"),
+    // Bytes of the stored logo (at most 1 MB), written with logo_key by the upload path only; the
+    // app-wide storage total sums it (ADR-0022). Null for a template without a logo and for a logo
+    // stored before the column existed (counted as 0).
+    logoBytes: integer("logo_bytes"),
     subject: text("subject").notNull().default("Matematika"),
     studentFields: jsonb("student_fields")
       .notNull()
@@ -88,7 +93,7 @@ export const schoolTemplates = pgTable.withRLS(
     pgPolicy("school_templates_owner_insert", {
       for: "insert",
       to: authenticatedRole,
-      withCheck: sql`${t.ownerId} = auth.uid() and ${t.logoKey} is null and ${t.logoSha256} is null and ${t.deletedAt} is null and ${t.purgeAfter} is null`,
+      withCheck: sql`${t.ownerId} = auth.uid() and ${t.logoKey} is null and ${t.logoSha256} is null and ${t.logoBytes} is null and ${t.deletedAt} is null and ${t.purgeAfter} is null`,
     }),
     ownerUpdatePolicy("school_templates", t),
     ownerDeletePolicy("school_templates", t),
@@ -259,6 +264,9 @@ export const exports = pgTable.withRLS(
     document: text("document").notNull(),
     format: text("format").notNull(),
     objectKey: text("object_key").notNull(),
+    // Real byte length of the stored file, written by the export job (ADR-0022: the app-wide
+    // storage total sums it). 0 for a row stored before the column existed.
+    sizeBytes: bigint("size_bytes", { mode: "number" }).notNull().default(0),
     snapshotHash: text("snapshot_hash").notNull(),
     // Formulas the DOCX renderer had to fall back to plain text for, and the like.
     warnings: jsonb("warnings")

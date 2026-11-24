@@ -30,6 +30,7 @@ import { createRegistry } from "@/lib/jobs/registry";
 import type { ClaimedJob } from "@/lib/jobs/types";
 import { contains, jpegWithExif } from "@/lib/images/metadata-fixtures";
 import { logger } from "@/lib/logger";
+import { APP_STORAGE_CAP_BYTES, appStorageUsage } from "@/lib/storage/app-total";
 import { createMemoryStore, type MemoryStore } from "@/lib/storage/memory";
 import type { Gateway } from "@/features/generation";
 import { trashMaterial } from "@/features/trash";
@@ -348,6 +349,38 @@ describe("prepareOcrUploads", () => {
     expect(await usage()).toBe(0);
   });
 
+  it("refuses with appFull and signs nothing when the app has no room for the page images", async () => {
+    const id = await seedScanned();
+    const filler = crypto.randomUUID();
+    const { usedBytes } = await appStorageUsage(db());
+    await database.db.insert(materials).values({
+      id: filler,
+      ownerId: USER_B,
+      title: "Buku",
+      kind: "pdf",
+      mime: "application/pdf",
+      sizeBytes: APP_STORAGE_CAP_BYTES - usedBytes - 1000,
+      sha256: "0".repeat(64),
+      objectKey: `materials/${USER_B}/${filler}/source.pdf`,
+    });
+    vi.spyOn(logger, "warn").mockImplementation(() => undefined);
+    const sign = vi.spyOn(store, "signedPutUrl");
+    try {
+      const ask = (size: number) =>
+        prepareOcrUploads(db(), store, {
+          ownerId: USER_A,
+          materialId: id,
+          pages: [{ pageNo: 1, size }],
+          left: 20,
+        });
+      expect(await ask(1001)).toEqual({ ok: false, error: "appFull" });
+      expect(sign).not.toHaveBeenCalled();
+      expect((await ask(1000)).ok).toBe(true);
+    } finally {
+      await database.db.delete(materials).where(eq(materials.id, filler));
+    }
+  });
+
   it("refuses more pages than are left, too large images, foreign or small-image materials", async () => {
     const id = await seedScanned();
     const ask = (input: Partial<Parameters<typeof prepareOcrUploads>[2]>) =>
@@ -494,6 +527,42 @@ describe("ocrPageText", () => {
 describe("ocr_pages job", () => {
   const PAGE_ONE =
     "## Contoh 1\nTentukan nilai $x$ jika $2x + 3 = 11$. Hasilnya [[?]]$x = 4$[[?]] menurut buku siswa kelas delapan.";
+
+  it("fails for good as app_storage_full when the app has no room for the page image", async () => {
+    const id = await seedScanned();
+    await queue(id, [1]);
+    await store.put(pageStagingKey(USER_A, id, 1), PNG, "image/png");
+    const filler = crypto.randomUUID();
+    await database.db.insert(materials).values({
+      id: filler,
+      ownerId: USER_B,
+      title: "Buku",
+      kind: "pdf",
+      mime: "application/pdf",
+      sizeBytes: APP_STORAGE_CAP_BYTES - PNG.length + 1,
+      sha256: "0".repeat(64),
+      objectKey: `materials/${USER_B}/${filler}/source.pdf`,
+    });
+    vi.spyOn(logger, "warn").mockImplementation(() => undefined);
+    const provider = createFakeProvider("groq", [answer(PAGE_ONE)]);
+    const clock = fakeClock();
+    try {
+      await expect(
+        handlerWith(provider, clock)(ctxFor(await claim(), clock.ms() + 240_000)),
+      ).rejects.toMatchObject({
+        name: "PermanentJobError",
+        code: "app_storage_full",
+        message: "Penyimpanan MitraMatika penuh.",
+      });
+      expect(provider.calls).toHaveLength(0);
+      expect(await store.get(pageImageKey(USER_A, id, 1))).toBeNull();
+      expect(await store.get(pageStagingKey(USER_A, id, 1))).toBeNull();
+      expect((await page(id, 1)).imageBytes).toBeNull();
+      expect((await page(id, 1)).ocrStatus).toBe("failed");
+    } finally {
+      await database.db.delete(materials).where(eq(materials.id, filler));
+    }
+  });
 
   it("OCRs an uploaded PDF page: stores Markdown as ocr, flags markers, keeps the image", async () => {
     const id = await seedScanned();

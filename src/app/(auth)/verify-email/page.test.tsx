@@ -40,7 +40,7 @@ describe("verify-email page", () => {
     pending.read.mockResolvedValue("rina@example.test");
     await renderPage();
     expect(
-      screen.getByRole("heading", { level: 1, name: "Cek email kamu" }),
+      screen.getByRole("heading", { level: 1, name: "Cek email Anda" }),
     ).toBeTruthy();
     expect(screen.getByLabelText<HTMLInputElement>("Email").value).toBe(
       "rina@example.test",

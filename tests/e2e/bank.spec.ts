@@ -243,8 +243,12 @@ test.describe("question bank, editing and trash", () => {
     const stem = page.getByLabel("Teks soal", { exact: true });
     // Emptying the stem makes the form dirty (Save is enabled) and the client refuses it. A click
     // before React hydrates does not run the validation, so repeat it until the refusal shows.
+    // Hydration also writes the saved text back into the field, and a fill that races it can leave
+    // the stem cut short ("itung ..."): that is a valid edit, and Save would store it. So the click
+    // waits until the stem really is empty.
     await expect(async () => {
       await stem.fill("");
+      await expect(stem).toHaveValue("", { timeout: 1_000 });
       await page.getByRole("button", { name: "Simpan versi baru" }).click();
       await expect(stem).toHaveAttribute("aria-invalid", "true", { timeout: 2_000 });
     }).toPass({ timeout: NAVIGATION_TIMEOUT, intervals: [500, 1_000, 2_000] });

@@ -88,7 +88,7 @@ describe("SignInForm", () => {
     await userEvent.type(screen.getByLabelText("Kata sandi"), "rahasia123");
     await userEvent.click(screen.getByRole("button", { name: "Masuk" }));
     const alert = await screen.findByRole("alert");
-    expect(alert.textContent).toContain("Email kamu belum dikonfirmasi.");
+    expect(alert.textContent).toContain("Email Anda belum dikonfirmasi.");
     expect(
       screen
         .getByRole("link", { name: "Kirim ulang tautan konfirmasi" })

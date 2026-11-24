@@ -33,6 +33,8 @@ const ERROR_KEYS: Record<
   | "tooLarge"
   | "rendererUnavailable"
   | "renderFailed"
+  | "appFull"
+  | "quota"
 > = {
   export_not_approved: "notApproved",
   export_not_found: "notFound",
@@ -40,6 +42,8 @@ const ERROR_KEYS: Record<
   export_too_large: "tooLarge",
   export_renderer_unavailable: "rendererUnavailable",
   export_render_failed: "renderFailed",
+  app_storage_full: "appFull",
+  export_quota: "quota",
 };
 
 function whereText(t: TranslateWhere, where: WarningWhere): string {

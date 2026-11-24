@@ -20,6 +20,7 @@ import type { AnyDb } from "@/features/generation";
 import {
   INGEST_MATERIAL_JOB,
   materialSourceKey,
+  startUpload,
   OCR_PAGES_JOB,
   PROPOSE_STRUCTURE_JOB,
 } from "@/features/materials";
@@ -246,6 +247,37 @@ describe("material trash", () => {
       ok: false,
       error: "notFound",
     });
+  });
+
+  it("keeps a teacher above the new 300 MB cap able to delete, and frees room as they do", async () => {
+    // 400 MB was allowed under the old 1 GB cap; new uploads are refused, deleting still works.
+    const store = listingStore();
+    const big = await seedStoredMaterial(store, USER_A, { sizeBytes: 250 * 1024 * 1024 });
+    const other = await seedStoredMaterial(store, USER_A, {
+      sizeBytes: 150 * 1024 * 1024,
+    });
+    const start = () =>
+      startUpload(db(), store, {
+        ownerId: USER_A,
+        fileName: "baru.pdf",
+        declaredType: "",
+        size: 1024 * 1024,
+        now: NOW,
+      });
+    expect(await start()).toEqual({ ok: false, error: "quota" });
+
+    // Trashing does not free room (trash counts); deleting for good does.
+    await trashMaterial(db(), { ownerId: USER_A, materialId: big, now: NOW });
+    expect(await start()).toEqual({ ok: false, error: "quota" });
+    const deleted = await deleteMaterialPermanently(db(), () => store, {
+      ownerId: USER_A,
+      materialId: big,
+      now: NOW,
+    });
+    expect(deleted.ok).toBe(true);
+    expect(await materialRow(other)).toBeDefined();
+    // 150 MB left: below the cap again, so a new upload is accepted.
+    expect((await start()).ok).toBe(true);
   });
 
   it("deletes a trashed material for good with its file, page images, pages and sections", async () => {

@@ -1,6 +1,6 @@
 import type { PgAsyncDatabase, PgQueryResultHKT } from "drizzle-orm/pg-core";
 import type { AnyRelations } from "drizzle-orm/relations";
-import { eq } from "drizzle-orm";
+import { inArray } from "drizzle-orm";
 import { verification } from "@/lib/db/schema";
 import { forgetEvent, recordEvent } from "./attempt-counter";
 import type { SendPurpose } from "./send-limit";
@@ -14,8 +14,16 @@ import type { SendPurpose } from "./send-limit";
 // the real limit of the account must be verified at setup and these lowered if it is smaller.
 export const AUTH_EMAILS_PER_DAY = 80;
 export const RESET_EMAIL_RESERVE = 20;
+// The emails to the admin (new-account notices, the daily digest, the storage alert) count in the
+// same app-wide label, so they stop at the same 60 and can never take the reset reserve, and in a
+// label of their own: at most ADMIN_NOTICES_PER_DAY a day, of which single notices may use only the
+// first ADMIN_INDIVIDUAL_NOTICES_PER_DAY (the last two are for the digest and the storage alerts).
+// A flood of sign-ups is thus bounded at ten single notices and one digest a day (ADR-0022).
+export const ADMIN_NOTICES_PER_DAY = 12;
+export const ADMIN_INDIVIDUAL_NOTICES_PER_DAY = 10;
 
 const LABEL = "auth-email-day";
+const ADMIN_LABEL = "admin-notice-day";
 const JAKARTA_OFFSET_MS = 7 * 60 * 60 * 1000;
 
 /** The Asia/Jakarta day of `at` (UTC+7, no daylight saving) and the instant it ends. */
@@ -37,8 +45,13 @@ export function jakartaDay(at: Date): { key: string; end: Date } {
 // its own.
 export const RESERVATION_HOLD_SECONDS = 5 * 60;
 
+/** The kinds of email that count: the account emails and the admin's own. */
+export type BudgetPurpose = SendPurpose | "adminNotice" | "adminDigest";
+
 export interface Reservation {
   id: string;
+  /** The row of the admin sub-budget, for the admin's emails. */
+  subId?: string;
   /** The end of the Jakarta day the reservation counts against. */
   dayEnd: Date;
 }
@@ -48,12 +61,17 @@ export interface GlobalSendBudget {
    * Takes one email of this kind from today's budget, or answers null when the budget for this
    * kind is used up (nothing recorded). Rejects on a database error.
    */
-  reserve(purpose: SendPurpose): Promise<Reservation | null>;
+  reserve(purpose: BudgetPurpose): Promise<Reservation | null>;
   /** The email went out: the reservation counts until the end of its day. */
   confirm(reservation: Reservation): Promise<void>;
   /** The email was not sent after all: the reservation is given back. */
   release(reservation: Reservation): Promise<void>;
 }
+
+const idsOf = (reservation: Reservation): string[] =>
+  reservation.subId === undefined
+    ? [reservation.id]
+    : [reservation.id, reservation.subId];
 
 /**
  * The day's count lives in Better Auth's `verification` table like the other limits: one row per
@@ -88,16 +106,34 @@ export function createGlobalSendBudget<
         purpose === "reset"
           ? AUTH_EMAILS_PER_DAY
           : AUTH_EMAILS_PER_DAY - RESET_EMAIL_RESERVE;
-      if (live <= max) return { id, dayEnd: day.end };
-      await forgetEvent(db, id);
-      return null;
+      if (live > max) {
+        await forgetEvent(db, id);
+        return null;
+      }
+      if (purpose !== "adminNotice" && purpose !== "adminDigest") {
+        return { id, dayEnd: day.end };
+      }
+      // The admin's emails also count in their own label; a refusal there gives back both rows.
+      const sub = await recordEvent(db, `${ADMIN_LABEL}:${day.key}`, at, hold);
+      const subMax =
+        purpose === "adminNotice"
+          ? ADMIN_INDIVIDUAL_NOTICES_PER_DAY
+          : ADMIN_NOTICES_PER_DAY;
+      if (sub.live > subMax) {
+        await forgetEvent(db, sub.id);
+        await forgetEvent(db, id);
+        return null;
+      }
+      return { id, subId: sub.id, dayEnd: day.end };
     },
     async confirm(reservation) {
       await db
         .update(verification)
         .set({ expiresAt: reservation.dayEnd })
-        .where(eq(verification.id, reservation.id));
+        .where(inArray(verification.id, idsOf(reservation)));
     },
-    release: (reservation) => forgetEvent(db, reservation.id),
+    async release(reservation) {
+      await db.delete(verification).where(inArray(verification.id, idsOf(reservation)));
+    },
   };
 }

@@ -33,6 +33,7 @@ Ketentuan wajib:
   pada notasi LaTeX (mis. \\frac, \\times, \\pi, \\sqrt) HARUS ditulis dua kali di dalam JSON.
   Contoh yang benar: "\\\\frac{1}{2}". Contoh yang SALAH: "\\frac{1}{2}" (backslash tunggal akan
   diartikan sebagai escape character JSON seperti \\f atau \\t dan merusak notasi matematika).
+- Jangan menulis dua karakter \\n (garis miring terbalik lalu n) di luar rumus untuk pindah baris. Untuk baris baru pakai baris baru JSON biasa (satu escape JSON), atau letakkan rumus blok $$...$$ pada barisnya sendiri. Di dalam rumus, perintah LaTeX seperti \\\\neq tetap ditulis dengan backslash ganda.
 - Kembalikan objek JSON dengan bentuk persis:
   { "correctLabel": "A"|"B"|"C"|"D", "answer": { "display_md": string, "machine": string }, "steps": string[] }`;
 

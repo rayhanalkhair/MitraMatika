@@ -63,6 +63,7 @@ import {
   ocrAnswerSchema,
   type OcrPageFailure,
 } from "../schema/ocr";
+import { assertAppStorageRoom } from "@/lib/storage/app-total";
 import { refundOcrPages } from "./ocr-quota";
 import { cleanPageText, pageQuality, type PageConfidence } from "./page-quality";
 import { buildOcrPagePrompt, OCR_PAGE_PROMPT_VERSION } from "./prompts/ocr-page.id";
@@ -281,6 +282,7 @@ const FAILURE_MESSAGES = {
   ocr_invalid: "The OCR job payload is not valid.",
   ocr_not_found: "The material of the OCR job was not found.",
   ocr_blocked: "The material cannot be sent to the AI.",
+  app_storage_full: "Penyimpanan MitraMatika penuh.",
   provider_unavailable: "The AI service is not available; it will be retried.",
 } as const;
 
@@ -386,6 +388,13 @@ export function createOcrPagesHandler(deps: OcrPagesDeps): JobHandler {
     if (!checked.ok) {
       await store.delete(stagingKey);
       return checked.error;
+    }
+    // The app-wide cap (ADR-0022), without the lock (best effort: one page image). Nothing is kept
+    // when full: the staged object goes, the job fails for good and the pages end failed.
+    const room = await assertAppStorageRoom(db, staged.length, "ocr");
+    if (!room.ok) {
+      await store.delete(stagingKey);
+      throw new PermanentJobError("app_storage_full", FAILURE_MESSAGES.app_storage_full);
     }
     const live = await db.transaction(async (rawTx) => {
       const tx = rawTx as unknown as MaterialDb;
@@ -625,6 +634,8 @@ export function createOcrPagesHandler(deps: OcrPagesDeps): JobHandler {
           try {
             moved = await promoteStaged(material, pageNo);
           } catch (error) {
+            // A full app (app_storage_full) is final: retrying cannot make room.
+            if (error instanceof PermanentJobError) throw error;
             logger.error(
               { module: "materials", jobId: ctx.job.id, err: safeErrorSummary(error) },
               "materials: could not keep an OCR page image",
@@ -665,6 +676,8 @@ export function createOcrPagesHandler(deps: OcrPagesDeps): JobHandler {
         try {
           image = await loadPageImage(material, pageNo);
         } catch (error) {
+          // A full app (app_storage_full) is final: retrying cannot make room.
+          if (error instanceof PermanentJobError) throw error;
           logger.error(
             { module: "materials", jobId: ctx.job.id, err: safeErrorSummary(error) },
             "materials: could not load an OCR page image",

@@ -1,4 +1,5 @@
 // @vitest-environment jsdom
+import { StrictMode } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { cleanup, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
@@ -47,9 +48,9 @@ afterEach(() => {
 
 describe("UploadDropzone", () => {
   it("shows the privacy notice, the storage meter and labelled inputs (file and camera)", () => {
-    renderWithIntl(<UploadDropzone usedBytes={300 * 1024 * 1024} />);
+    renderWithIntl(<UploadDropzone usedBytes={120 * 1024 * 1024} />);
     expect(screen.getByText(/data pribadi siswa/)).toBeTruthy();
-    expect(screen.getByText(/300 MB dari 1 GB terpakai/)).toBeTruthy();
+    expect(screen.getByText(/120 MB dari 300 MB terpakai/)).toBeTruthy();
     const file = screen.getByLabelText("Pilih berkas");
     expect(file.getAttribute("type")).toBe("file");
     expect(file.getAttribute("accept")).toContain(".docx");
@@ -71,10 +72,10 @@ describe("UploadDropzone", () => {
     );
     await user.upload(
       screen.getByLabelText("Pilih berkas"),
-      pdf("besar.pdf", 50 * 1024 * 1024 + 1),
+      pdf("besar.pdf", 25 * 1024 * 1024 + 1),
     );
     await waitFor(() => {
-      expect(screen.getByRole("alert").textContent).toMatch(/50 MB/);
+      expect(screen.getByRole("alert").textContent).toMatch(/25 MB/);
     });
     expect(mocks.start).not.toHaveBeenCalled();
   });
@@ -162,6 +163,17 @@ describe("UploadDropzone", () => {
     }
   });
 
+  it("tells the teacher the app storage is full and does not send the file", async () => {
+    const user = userEvent.setup();
+    mocks.start.mockResolvedValue({ ok: false, error: "appFull" });
+    renderWithIntl(<UploadDropzone usedBytes={0} />);
+    await user.upload(screen.getByLabelText("Pilih berkas"), pdf("buku.pdf"));
+    expect((await screen.findByRole("alert")).textContent).toMatch(
+      /Penyimpanan MitraMatika sedang penuh/,
+    );
+    expect(mocks.put).not.toHaveBeenCalled();
+  });
+
   it("announces progress in steps of 10% while the bar shows the exact value", async () => {
     const user = userEvent.setup();
     let release: (sent: boolean) => void = () => undefined;
@@ -225,5 +237,34 @@ describe("UploadDropzone", () => {
     expect(mocks.start).toHaveBeenCalledTimes(1);
     expect(mocks.put).toHaveBeenCalledTimes(2);
     expect(mocks.finalize).toHaveBeenCalledTimes(2);
+  });
+
+  it("still uploads when React runs the effect twice (development): one reservation, one PUT", async () => {
+    const user = userEvent.setup();
+    // Like the real putFile: a transfer asked for with an aborted signal does not happen.
+    mocks.put.mockImplementation(
+      (
+        _url: string,
+        _file: File,
+        _type: string,
+        onProgress: (p: number) => void,
+        signal?: AbortSignal,
+      ) => {
+        if (signal?.aborted) return Promise.resolve(false);
+        onProgress(100);
+        return Promise.resolve(true);
+      },
+    );
+    renderWithIntl(
+      <StrictMode>
+        <UploadDropzone usedBytes={0} />
+      </StrictMode>,
+    );
+    await user.upload(screen.getByLabelText("Pilih berkas"), pdf());
+    expect(await screen.findByText(/Buku guru.pdf tersimpan/)).toBeTruthy();
+    expect(mocks.start).toHaveBeenCalledTimes(1);
+    expect(mocks.put).toHaveBeenCalledTimes(1);
+    expect((mocks.put.mock.calls[0][4] as AbortSignal).aborted).toBe(false);
+    expect(mocks.finalize).toHaveBeenCalledTimes(1);
   });
 });

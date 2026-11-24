@@ -71,6 +71,16 @@ describe("GET /api/materials/[id]/file", () => {
     expect(response.headers.get("content-security-policy")).toContain("sandbox");
   });
 
+  it("still serves a file of a teacher who is above the new storage cap", async () => {
+    const { id } = await seedPhoto();
+    await database.db
+      .update(materials)
+      .set({ sizeBytes: 400 * 1024 * 1024 })
+      .where(eq(materials.id, id));
+    const response = await handleMaterialFileRequest(id, deps(USER_A, true));
+    expect(response.status).toBe(200);
+  });
+
   it("redirects to a 5-minute signed URL when files are in R2", async () => {
     const { id, key } = await seedPhoto();
     const response = await handleMaterialFileRequest(id, deps(USER_A, false));

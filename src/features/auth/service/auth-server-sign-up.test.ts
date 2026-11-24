@@ -16,6 +16,7 @@ import { createFakeEmailSender, type FakeEmailSender } from "@/lib/email/fake";
 import { logger } from "@/lib/logger";
 import {
   createAuth,
+  createVerifiedAccountTriggers,
   RATE_LIMIT_RULES,
   RESPONSE_FLOOR_MS,
   USED_AUTH_PATHS,
@@ -48,6 +49,7 @@ beforeEach(() => {
   vi.spyOn(logger, "warn").mockImplementation(() => undefined);
 });
 afterEach(() => {
+  vi.unstubAllEnvs();
   vi.useRealTimers();
   vi.restoreAllMocks();
 });
@@ -375,7 +377,7 @@ describe("email and password sign-up", () => {
       // New address: the verification email. Existing address: the account-exists email.
       expect(fake.messages.map((m) => [m.to, m.subject])).toEqual([
         ["baru@example.test", "Konfirmasi email akun MitraMatika"],
-        ["pak@example.test", "Akun MitraMatika kamu sudah ada"],
+        ["pak@example.test", "Akun MitraMatika Anda sudah ada"],
       ]);
     },
     DB_TEST_TIMEOUT,
@@ -394,7 +396,7 @@ describe("email and password sign-up", () => {
       expect(await usersWithEmail(t, "guru@example.test")).toHaveLength(1);
       expect(fake.messages.map((m) => m.subject)).toEqual([
         "Konfirmasi email akun MitraMatika",
-        "Akun MitraMatika kamu sudah ada",
+        "Akun MitraMatika Anda sudah ada",
       ]);
       await get(linkFrom(fake));
       expect(
@@ -847,7 +849,9 @@ describe("constant-time sign-up responses", () => {
       ];
       expect(outcomes.map((o) => o.status)).toEqual([200, 200, 400, 400, 400, 400]);
       for (const outcome of outcomes)
-        expect(outcome.ms).toBeGreaterThanOrEqual(FLOOR - 1);
+        // Timers can fire a little early and the clock is read before and after the call, so a
+        // measured 298.9 ms is a 300 ms floor; 10 ms of slack still separates it from no floor.
+        expect(outcome.ms).toBeGreaterThanOrEqual(FLOOR - 10);
     },
     DB_TEST_TIMEOUT,
   );
@@ -940,5 +944,113 @@ describe("withResponseFloors", () => {
       await call(path);
     }
     expect(sleep).not.toHaveBeenCalled();
+  });
+});
+
+describe("the admin notice trigger (ADR-0022, hook: databaseHooks.user.update.after on /verify-email)", () => {
+  const ADMIN = "admin@example.test";
+  const toAdmin = (fake: FakeEmailSender) =>
+    fake.messages.filter((m) => m.subject.startsWith("Akun baru menunggu"));
+
+  it(
+    "mere sign-up sends no notice; opening the verification link sends exactly one, even twice",
+    async () => {
+      vi.stubEnv("ADMIN_EMAIL", ADMIN);
+      const { fake, post, get } = await harness();
+      await post(
+        "/sign-up/email",
+        signUpBody("guru@example.test", { schoolName: "SMP 9" }),
+      );
+      expect(toAdmin(fake)).toEqual([]);
+      const link = linkFrom(fake);
+      expect(sessionCookie(await get(link))).toBe(true);
+      expect(toAdmin(fake)).toHaveLength(1);
+      expect(toAdmin(fake)[0].subject).toBe(
+        "Akun baru menunggu persetujuan di MitraMatika",
+      );
+      expect(toAdmin(fake)[0].text).toContain("guru@example.test");
+      expect(toAdmin(fake)[0].text).toContain("SMP 9");
+      await get(link);
+      expect(toAdmin(fake)).toHaveLength(1);
+    },
+    DB_TEST_TIMEOUT,
+  );
+
+  it(
+    "an account whose address is the admin's own (approved) is verified without a notice",
+    async () => {
+      vi.stubEnv("ADMIN_EMAIL", ADMIN);
+      const { t, fake, post, get } = await harness();
+      await post("/sign-up/email", signUpBody(ADMIN));
+      await get(linkFrom(fake));
+      expect(toAdmin(fake)).toEqual([]);
+      const [user] = await usersWithEmail(t, ADMIN);
+      const [profile] = await t.db
+        .select()
+        .from(profiles)
+        .where(eq(profiles.id, user.id));
+      expect(profile.adminNotifiedAt).toBeInstanceOf(Date);
+    },
+    DB_TEST_TIMEOUT,
+  );
+
+  it(
+    "without ADMIN_EMAIL nothing is sent and the response is unchanged",
+    async () => {
+      const { fake, post, get } = await harness();
+      await post("/sign-up/email", signUpBody("guru@example.test"));
+      const response = await get(linkFrom(fake));
+      expect(response.status).toBe(302);
+      expect(fake.messages).toHaveLength(1);
+    },
+    DB_TEST_TIMEOUT,
+  );
+});
+
+describe("createVerifiedAccountTriggers", () => {
+  it("schedules only on /verify-email updates, non-sign-up creations and Google links", async () => {
+    const scheduled: string[] = [];
+    const triggers = createVerifiedAccountTriggers((id) => scheduled.push(id));
+    // Other user updates (a name change, another endpoint, no endpoint) schedule nothing.
+    await triggers.userUpdated(
+      { id: "u1", emailVerified: true },
+      { path: "/update-user" },
+    );
+    await triggers.userUpdated({ id: "u2", emailVerified: true }, null);
+    await triggers.userUpdated(
+      { id: "u3", emailVerified: false },
+      { path: "/verify-email" },
+    );
+    // The email sign-up creates an unverified user: nothing.
+    await triggers.userCreated(
+      { id: "u4", emailVerified: false },
+      { path: "/sign-up/email" },
+    );
+    await triggers.userCreated(
+      { id: "u5", emailVerified: true },
+      { path: "/sign-up/email" },
+    );
+    await triggers.accountCreated({ providerId: "credential", userId: "u6" });
+    expect(scheduled).toEqual([]);
+    await triggers.userUpdated(
+      { id: "u7", emailVerified: true },
+      { path: "/verify-email" },
+    );
+    await triggers.userCreated(
+      { id: "u8", emailVerified: true },
+      { path: "/callback/:id" },
+    );
+    await triggers.accountCreated({ providerId: "google", userId: "u9" });
+    expect(scheduled).toEqual(["u7", "u8", "u9"]);
+  });
+
+  it("never throws when scheduling does", async () => {
+    vi.spyOn(logger, "error").mockImplementation(() => undefined);
+    const triggers = createVerifiedAccountTriggers(() => {
+      throw new Error("boom");
+    });
+    await expect(
+      triggers.userUpdated({ id: "u1", emailVerified: true }, { path: "/verify-email" }),
+    ).resolves.toBeUndefined();
   });
 });

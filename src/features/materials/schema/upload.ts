@@ -2,11 +2,22 @@
 // typed reasons an upload is refused. Shared by the server (startUpload, finalizeUpload) and the
 // browser (the dropzone checks the same limits before it asks for a URL).
 import { z } from "zod";
+import { TEACHER_STORAGE_CAP_BYTES } from "@/lib/storage/limits";
 
-/** At most 50 MB per file (the signed PUT is for the exact size, never more). */
-export const MAX_MATERIAL_BYTES = 50 * 1024 * 1024;
-/** Stored materials (trashed ones too, until purged) plus pending uploads, per teacher. */
-export const STORAGE_CAP_BYTES = 1024 * 1024 * 1024;
+// The one place the upload limits live (ADR-0022): the server (startUpload, finalizeUpload), the
+// browser checks and the messages all follow these two numbers. They were 50 MB and 1 GB until
+// 22 Nov 2026; the app has no hard spending cap at the storage provider, so these are the cap.
+/** At most 25 MB per file (the signed PUT is for the exact size, never more). */
+export const MAX_MATERIAL_BYTES = 25 * 1024 * 1024;
+/**
+ * Everything one teacher keeps, per teacher: 300 MB (src/lib/storage/limits.ts): stored materials
+ * (trashed ones too, until purged), OCR page images, exports, template logos, solver photos and
+ * pending uploads. It only gates NEW files: a teacher already above it keeps and can download
+ * every file and can still delete, but every writer refuses until they are back under it.
+ */
+export const STORAGE_CAP_BYTES = TEACHER_STORAGE_CAP_BYTES;
+// The app-wide 6 GiB cap (APP_STORAGE_CAP_BYTES) lives in src/lib/storage/limits.ts too and is
+// summed from the database by src/lib/storage/app-total.ts (server-only).
 export const MAX_PDF_PAGES = 300;
 /** A DOCX may inflate to at most 20 times its size and never past 200 MB. */
 export const DOCX_INFLATE_RATIO = 20;
@@ -55,7 +66,12 @@ export const MATERIAL_ACCEPT = [
 /** The camera input: JPEG or PNG only (a phone converts its own format to one of them). */
 export const CAMERA_ACCEPT = "image/jpeg,image/png";
 
-export type StartUploadError = "type" | "doc" | "size" | "quota" | "pending";
+/**
+ * `appFull`: the whole app has reached its storage cap (ADR-0022), whoever the teacher is.
+ * `storageBusy`: the app-wide storage lock was not free in time; nothing was written, try again.
+ */
+export type StartUploadError =
+  "type" | "doc" | "size" | "quota" | "pending" | "appFull" | "storageBusy";
 export type FileValidationError =
   "type" | "doc" | "encrypted" | "pages" | "zipBomb" | "image" | "damaged";
 /**
