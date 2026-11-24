@@ -20,6 +20,9 @@ const ALLOWED_FILES = [
   "src/features/auth/service/load-access.test.ts",
   ".env.example",
   "playwright.config.ts",
+  // The admin spec asserts that the approval list does NOT name the admin, so it cannot pass for
+  // the wrong reason; it reads the variable the server was given, like playwright.config.ts.
+  "tests/e2e/admin-account.spec.ts",
   ".github/workflows/ci.yml",
 ];
 const TEXT = /\.(ts|tsx|js|mjs|cjs|json|yml|yaml)$/;
