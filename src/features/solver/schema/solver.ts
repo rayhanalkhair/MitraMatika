@@ -93,8 +93,10 @@ export type TextSessionError = "empty" | "tooLong" | "limit";
 /**
  * `visionLimit`: the day's 25 vision reads (OCR pages and photos together, R28) are used.
  * `appFull`: the app-wide storage cap is reached (ADR-0022). `quota`: the teacher's own 300 MB.
+ * `storageBusy`: the app-wide storage lock was not free in time; nothing was written, try again.
  */
-export type StartPhotoError = "limit" | "visionLimit" | "pending" | "appFull" | "quota";
+export type StartPhotoError =
+  "limit" | "visionLimit" | "pending" | "appFull" | "quota" | "storageBusy";
 export type FinalizePhotoError =
   | "notFound"
   | "missing"

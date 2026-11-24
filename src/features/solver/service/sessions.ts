@@ -16,6 +16,7 @@ import {
   assertAppStorageRoom,
   assertOwnerStorageRoom,
   lockAppStorage,
+  withAppStorageBusy,
 } from "@/lib/storage/app-total";
 import type { ObjectStore } from "@/lib/storage/types";
 import { fromDbStatus } from "@/features/generation";
@@ -204,69 +205,71 @@ export async function startPhotoSession(
   ) {
     throw new RangeError("solver: the photo size is outside the signed range");
   }
-  return db.transaction(async (rawTx) => {
-    const tx = rawTx as unknown as SolverDb;
-    await lockSolverOwner(tx, ownerId);
-    if ((await solvesUsedToday(tx, ownerId, now)) >= USER_DAILY_SOLVES) {
-      return err<StartPhotoError>("limit");
-    }
-    // R28: a photo read is one of the day's vision reads, shared with OCR pages (the OCR lock
-    // serialises both).
-    await lockVisionOwner(tx, ownerId);
-    if ((await visionReadsLeft(tx, { ownerId, now })) < 1) {
-      return err<StartPhotoError>("visionLimit");
-    }
-    const [pending] = await tx
-      .select({ n: count() })
-      .from(solverSessions)
-      .where(
-        and(
-          eq(solverSessions.ownerId, ownerId),
-          eq(solverSessions.status, "pending"),
-          gt(
-            solverSessions.createdAt,
-            new Date(now.getTime() - PHOTO_FINALIZE_WINDOW_MS),
+  return withAppStorageBusy(() =>
+    db.transaction(async (rawTx) => {
+      const tx = rawTx as unknown as SolverDb;
+      await lockSolverOwner(tx, ownerId);
+      if ((await solvesUsedToday(tx, ownerId, now)) >= USER_DAILY_SOLVES) {
+        return err<StartPhotoError>("limit");
+      }
+      // R28: a photo read is one of the day's vision reads, shared with OCR pages (the OCR lock
+      // serialises both).
+      await lockVisionOwner(tx, ownerId);
+      if ((await visionReadsLeft(tx, { ownerId, now })) < 1) {
+        return err<StartPhotoError>("visionLimit");
+      }
+      const [pending] = await tx
+        .select({ n: count() })
+        .from(solverSessions)
+        .where(
+          and(
+            eq(solverSessions.ownerId, ownerId),
+            eq(solverSessions.status, "pending"),
+            gt(
+              solverSessions.createdAt,
+              new Date(now.getTime() - PHOTO_FINALIZE_WINDOW_MS),
+            ),
           ),
-        ),
+        );
+      if (pending.n >= MAX_PENDING_PHOTOS) return err<StartPhotoError>("pending");
+      // The teacher's own 300 MB (every kind of file counts, security review F1), under her solver
+      // lock; then the app-wide cap (ADR-0022), last: every owner lock above is held, so the global lock
+      // comes second (one fixed order). Held until commit it covers the insert below, whose
+      // input_bytes is the declared size (replaced by the real one at finalise).
+      const own = await assertOwnerStorageRoom(tx, {
+        ownerId,
+        extraBytes: input.size,
+        now,
+      });
+      if (!own.ok) return err<StartPhotoError>("quota");
+      await lockAppStorage(tx);
+      const room = await assertAppStorageRoom(tx, input.size, "solver");
+      if (!room.ok) return err<StartPhotoError>("appFull");
+      const sessionId = randomUUID();
+      const stagingKey = photoStagingKey(
+        ownerId,
+        sessionId,
+        SOLVER_PHOTO_TYPES[input.mime],
       );
-    if (pending.n >= MAX_PENDING_PHOTOS) return err<StartPhotoError>("pending");
-    // The teacher's own 300 MB (every kind of file counts, security review F1), under her solver
-    // lock; then the app-wide cap (ADR-0022), last: every owner lock above is held, so the global lock
-    // comes second (one fixed order). Held until commit it covers the insert below, whose
-    // input_bytes is the declared size (replaced by the real one at finalise).
-    const own = await assertOwnerStorageRoom(tx, {
-      ownerId,
-      extraBytes: input.size,
-      now,
-    });
-    if (!own.ok) return err<StartPhotoError>("quota");
-    await lockAppStorage(tx);
-    const room = await assertAppStorageRoom(tx, input.size, "solver");
-    if (!room.ok) return err<StartPhotoError>("appFull");
-    const sessionId = randomUUID();
-    const stagingKey = photoStagingKey(
-      ownerId,
-      sessionId,
-      SOLVER_PHOTO_TYPES[input.mime],
-    );
-    await tx.insert(solverSessions).values({
-      id: sessionId,
-      ownerId,
-      inputKind: input.kind,
-      inputKey: stagingKey,
-      inputBytes: input.size,
-      status: "pending",
-      createdAt: now,
-      updatedAt: now,
-    });
-    const uploadUrl = await store.signedPutUrl(
-      stagingKey,
-      input.mime,
-      input.size,
-      PHOTO_UPLOAD_URL_SECONDS,
-    );
-    return ok({ sessionId, uploadUrl });
-  });
+      await tx.insert(solverSessions).values({
+        id: sessionId,
+        ownerId,
+        inputKind: input.kind,
+        inputKey: stagingKey,
+        inputBytes: input.size,
+        status: "pending",
+        createdAt: now,
+        updatedAt: now,
+      });
+      const uploadUrl = await store.signedPutUrl(
+        stagingKey,
+        input.mime,
+        input.size,
+        PHOTO_UPLOAD_URL_SECONDS,
+      );
+      return ok({ sessionId, uploadUrl });
+    }),
+  );
 }
 
 const startsWith = (bytes: Uint8Array, signature: number[]) =>
