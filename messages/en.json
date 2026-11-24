@@ -929,6 +929,7 @@
           "unauthenticated": "Your session has ended. Sign in again to continue.",
           "generic": "The logo could not be uploaded. Try again.",
           "appFull": "MitraMatika storage is full, so new uploads are paused for now. The admin has been told. Try again later.",
+          "storageBusy": "Many files are being uploaded right now. Try again in a moment.",
           "quota": "Your storage is full (300 MB, counting every file: materials, exports, logos and problem photos). Delete some files you no longer need, then try again."
         }
       },
@@ -1281,7 +1282,8 @@
         "unauthenticated": "Your session has ended. Sign in again to upload.",
         "generic": "The upload failed. Try again in a moment.",
         "busy": "The server is reading another file. Try again in a moment.",
-        "appFull": "MitraMatika storage is full, so new uploads are paused for now. The admin has been told. Try again later."
+        "appFull": "MitraMatika storage is full, so new uploads are paused for now. The admin has been told. Try again later.",
+        "storageBusy": "Many files are being uploaded right now. Try again in a moment."
       }
     },
     "library": {
@@ -1592,6 +1594,7 @@
       "generic": "Something went wrong. Try again.",
       "visionLimit": "All {limit} picture reads for today are used (OCR and problem photos together). Try again tomorrow.",
       "appFull": "MitraMatika storage is full, so new uploads are paused for now. The admin has been told. Try again later.",
+      "storageBusy": "Many files are being uploaded right now. Try again in a moment.",
       "quota": "Your storage is full (300 MB, counting every file: materials, exports, logos and problem photos). Delete some files you no longer need, then try again."
     },
     "confirm": {

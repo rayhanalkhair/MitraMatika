@@ -66,8 +66,12 @@ export const MATERIAL_ACCEPT = [
 /** The camera input: JPEG or PNG only (a phone converts its own format to one of them). */
 export const CAMERA_ACCEPT = "image/jpeg,image/png";
 
-/** `appFull`: the whole app has reached its storage cap (ADR-0022), whoever the teacher is. */
-export type StartUploadError = "type" | "doc" | "size" | "quota" | "pending" | "appFull";
+/**
+ * `appFull`: the whole app has reached its storage cap (ADR-0022), whoever the teacher is.
+ * `storageBusy`: the app-wide storage lock was not free in time; nothing was written, try again.
+ */
+export type StartUploadError =
+  "type" | "doc" | "size" | "quota" | "pending" | "appFull" | "storageBusy";
 export type FileValidationError =
   "type" | "doc" | "encrypted" | "pages" | "zipBomb" | "image" | "damaged";
 /**

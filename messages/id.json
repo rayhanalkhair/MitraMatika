@@ -929,6 +929,7 @@
           "unauthenticated": "Sesi Anda sudah berakhir. Masuk lagi untuk melanjutkan.",
           "generic": "Logo belum bisa diunggah. Coba lagi.",
           "appFull": "Penyimpanan MitraMatika sedang penuh, jadi unggahan baru ditutup sementara. Admin sudah diberi tahu. Coba lagi nanti.",
+          "storageBusy": "Sedang banyak unggahan masuk. Coba lagi sebentar lagi.",
           "quota": "Penyimpanan Anda sudah penuh (300 MB, semua berkas dihitung: materi, ekspor, logo, dan foto soal). Hapus berkas yang tidak dipakai, lalu coba lagi."
         }
       },
@@ -1281,7 +1282,8 @@
         "unauthenticated": "Sesi Anda berakhir. Masuk lagi untuk mengunggah.",
         "generic": "Unggahan gagal. Coba lagi sebentar lagi.",
         "busy": "Server sedang membaca berkas lain. Coba lagi sebentar lagi.",
-        "appFull": "Penyimpanan MitraMatika sedang penuh, jadi unggahan baru ditutup sementara. Admin sudah diberi tahu. Coba lagi nanti."
+        "appFull": "Penyimpanan MitraMatika sedang penuh, jadi unggahan baru ditutup sementara. Admin sudah diberi tahu. Coba lagi nanti.",
+        "storageBusy": "Sedang banyak unggahan masuk. Coba lagi sebentar lagi."
       }
     },
     "library": {
@@ -1592,6 +1594,7 @@
       "generic": "Terjadi kesalahan. Coba lagi.",
       "visionLimit": "Jatah {limit} pembacaan gambar hari ini sudah habis (OCR dan foto soal bersama). Coba lagi besok.",
       "appFull": "Penyimpanan MitraMatika sedang penuh, jadi unggahan baru ditutup sementara. Admin sudah diberi tahu. Coba lagi nanti.",
+      "storageBusy": "Sedang banyak unggahan masuk. Coba lagi sebentar lagi.",
       "quota": "Penyimpanan Anda sudah penuh (300 MB, semua berkas dihitung: materi, ekspor, logo, dan foto soal). Hapus berkas yang tidak dipakai, lalu coba lagi."
     },
     "confirm": {

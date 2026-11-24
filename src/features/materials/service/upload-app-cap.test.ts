@@ -9,11 +9,7 @@ import {
   type TestDatabase,
 } from "@/lib/db/test-harness";
 import { logger } from "@/lib/logger";
-import {
-  APP_STORAGE_CAP_BYTES,
-  AppStorageBusyError,
-  appStorageUsage,
-} from "@/lib/storage/app-total";
+import { APP_STORAGE_CAP_BYTES, appStorageUsage } from "@/lib/storage/app-total";
 import {
   APP_LOCK_EVENT,
   lockTimeoutError,
@@ -208,21 +204,20 @@ describe("startUpload and the app-wide cap", () => {
   );
 
   it(
-    "gives up with AppStorageBusyError when the app lock is not free in time, writing nothing",
+    "answers storageBusy when the app lock is not free in time, writing nothing",
     async () => {
       const busy = recordLocks(db(), [], (statement) => {
         if (statement.includes("app_storage_cap")) throw lockTimeoutError();
         return Promise.resolve();
       });
-      await expect(
-        startUpload(busy, store, {
-          ownerId: USER_A,
-          fileName: "buku.pdf",
-          declaredType: "",
-          size: MB,
-          now: NOW,
-        }),
-      ).rejects.toBeInstanceOf(AppStorageBusyError);
+      const result = await startUpload(busy, store, {
+        ownerId: USER_A,
+        fileName: "buku.pdf",
+        declaredType: "",
+        size: MB,
+        now: NOW,
+      });
+      expect(result).toEqual({ ok: false, error: "storageBusy" });
       expect(await reservations()).toBe(0);
     },
     DB_TEST_TIMEOUT,

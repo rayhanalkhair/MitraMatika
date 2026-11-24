@@ -11,6 +11,7 @@ import { stripImageMetadata } from "@/lib/images/strip-metadata";
 import {
   assertAppStorageRoom,
   lockAppStorage,
+  withAppStorageBusy,
   ownerStoredBytes,
 } from "@/lib/storage/app-total";
 import { assertSafeKey, type ObjectStore } from "@/lib/storage/types";
@@ -163,69 +164,76 @@ export async function startUpload(
   const ext = type.data;
   const { kind, mime } = MATERIAL_TYPES[ext];
 
-  return db.transaction(async (rawTx) => {
-    const tx = rawTx as unknown as MaterialDb;
-    await lockOwner(tx, ownerId);
+  return withAppStorageBusy(() =>
+    db.transaction(async (rawTx) => {
+      const tx = rawTx as unknown as MaterialDb;
+      await lockOwner(tx, ownerId);
 
-    const expired = await tx
-      .select({ id: materialUploads.id, objectKey: materialUploads.objectKey })
-      .from(materialUploads)
-      .where(
-        and(
-          eq(materialUploads.ownerId, ownerId),
-          lte(materialUploads.expiresAt, now),
-          // A finalise still checking this upload keeps it.
-          or(
-            isNull(materialUploads.claimedAt),
-            lte(materialUploads.claimedAt, new Date(now.getTime() - CLAIM_TTL_MS)),
+      const expired = await tx
+        .select({ id: materialUploads.id, objectKey: materialUploads.objectKey })
+        .from(materialUploads)
+        .where(
+          and(
+            eq(materialUploads.ownerId, ownerId),
+            lte(materialUploads.expiresAt, now),
+            // A finalise still checking this upload keeps it.
+            or(
+              isNull(materialUploads.claimedAt),
+              lte(materialUploads.claimedAt, new Date(now.getTime() - CLAIM_TTL_MS)),
+            ),
           ),
-        ),
-      )
-      .orderBy(asc(materialUploads.expiresAt))
-      .limit(SWEEP_LIMIT);
-    for (const row of expired) {
-      // A row whose object could not be deleted stays for the next start.
-      if (await deleteQuietly(store, ownerId, row.objectKey)) {
-        await tx.delete(materialUploads).where(eq(materialUploads.id, row.id));
+        )
+        .orderBy(asc(materialUploads.expiresAt))
+        .limit(SWEEP_LIMIT);
+      for (const row of expired) {
+        // A row whose object could not be deleted stays for the next start.
+        if (await deleteQuietly(store, ownerId, row.objectKey)) {
+          await tx.delete(materialUploads).where(eq(materialUploads.id, row.id));
+        }
       }
-    }
 
-    const [pending] = await tx
-      .select({
-        uploads: count(),
-        bytes: sql<string>`coalesce(sum(${materialUploads.sizeBytes}), 0)`,
-      })
-      .from(materialUploads)
-      .where(
-        and(eq(materialUploads.ownerId, ownerId), gt(materialUploads.expiresAt, now)),
+      const [pending] = await tx
+        .select({
+          uploads: count(),
+          bytes: sql<string>`coalesce(sum(${materialUploads.sizeBytes}), 0)`,
+        })
+        .from(materialUploads)
+        .where(
+          and(eq(materialUploads.ownerId, ownerId), gt(materialUploads.expiresAt, now)),
+        );
+      if (pending.uploads >= MAX_PENDING_UPLOADS) return err<StartUploadError>("pending");
+      const stored = await storedBytes(tx, ownerId);
+      if (stored + Number(pending.bytes) + size > STORAGE_CAP_BYTES) {
+        return err<StartUploadError>("quota");
+      }
+      // The app-wide cap (ADR-0022), last: the owner lock is held, so the global lock always comes
+      // second (one fixed order, no deadlock). Held until commit, it makes the check and the
+      // reservation below one step for every teacher at once.
+      await lockAppStorage(tx);
+      const room = await assertAppStorageRoom(tx, size, "materials");
+      if (!room.ok) return err<StartUploadError>("appFull");
+
+      const uploadId = crypto.randomUUID();
+      const objectKey = uploadStagingKey(ownerId, uploadId, ext);
+      await tx.insert(materialUploads).values({
+        id: uploadId,
+        ownerId,
+        objectKey,
+        kind,
+        mime,
+        sizeBytes: size,
+        expiresAt: new Date(now.getTime() + FINALIZE_WINDOW_MS),
+        createdAt: now,
+      });
+      const uploadUrl = await store.signedPutUrl(
+        objectKey,
+        mime,
+        size,
+        UPLOAD_URL_SECONDS,
       );
-    if (pending.uploads >= MAX_PENDING_UPLOADS) return err<StartUploadError>("pending");
-    const stored = await storedBytes(tx, ownerId);
-    if (stored + Number(pending.bytes) + size > STORAGE_CAP_BYTES) {
-      return err<StartUploadError>("quota");
-    }
-    // The app-wide cap (ADR-0022), last: the owner lock is held, so the global lock always comes
-    // second (one fixed order, no deadlock). Held until commit, it makes the check and the
-    // reservation below one step for every teacher at once.
-    await lockAppStorage(tx);
-    const room = await assertAppStorageRoom(tx, size, "materials");
-    if (!room.ok) return err<StartUploadError>("appFull");
-
-    const uploadId = crypto.randomUUID();
-    const objectKey = uploadStagingKey(ownerId, uploadId, ext);
-    await tx.insert(materialUploads).values({
-      id: uploadId,
-      ownerId,
-      objectKey,
-      kind,
-      mime,
-      sizeBytes: size,
-      expiresAt: new Date(now.getTime() + FINALIZE_WINDOW_MS),
-      createdAt: now,
-    });
-    const uploadUrl = await store.signedPutUrl(objectKey, mime, size, UPLOAD_URL_SECONDS);
-    return ok({ uploadUrl, objectKey, contentType: mime });
-  });
+      return ok({ uploadUrl, objectKey, contentType: mime });
+    }),
+  );
 }
 
 /** A claim older than this is taken over (its finalise died); longer than any honest check. */
